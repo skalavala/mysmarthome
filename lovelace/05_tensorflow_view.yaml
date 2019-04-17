@@ -1,0 +1,62 @@
+title: Tensorflow
+icon: mdi:camera
+cards:
+  - type: picture-entity
+    id: camera_frontdoor_latest_scan
+    title: Frontdoor Latest Scan
+    entity: camera.frontdoor_latest_scan
+    camera_image: camera.frontdoor_latest_scan
+    show_info: true
+    tap_action: 
+      action: more-info
+
+  - type: picture-entity
+    id: camera_patio_latest_scan
+    title: Patio Latest Scan
+    entity: camera.patio_latest_scan
+    camera_image: camera.patio_latest_scan
+    show_info: true
+    tap_action: 
+      action: more-info
+
+  - type: picture-entity
+    id: camera_driveway_latest_scan
+    title: Driveway Latest Scan
+    entity: camera.driveway_latest_scan
+    camera_image: camera.driveway_latest_scan
+    show_info: true
+    tap_action: 
+      action: more-info
+
+  - type: picture-entity
+    id: camera_playarea_latest_scan
+    title: Playarea Latest Scan
+    entity: camera.playarea_latest_scan
+    camera_image: camera.playarea_latest_scan
+    show_info: true
+    tap_action: 
+      action: more-info
+
+  - type: picture-entity
+    id: camera_garage_latest_scan
+    title: Garage Latest Scan
+    entity: camera.garage_latest_scan
+    camera_image: camera.garage_latest_scan
+    show_info: true
+    tap_action: 
+      action: more-info
+
+  - type: entities
+    title: Image Processing
+    show_header_toggle: false
+    entities:
+      - entity: image_processing.tensorflow_frontdoor_camera
+        name: Front Door Camera
+      - entity: image_processing.tensorflow_driveway_camera
+        name: Driveway Camera
+      - entity: image_processing.tensorflow_garage_camera
+        name: Garage Camera
+      - entity: image_processing.tensorflow_patio_camera
+        name: Patio Camera
+      - entity: image_processing.tensorflow_playarea_camera
+        name: Playarea Camera

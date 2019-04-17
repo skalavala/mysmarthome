@@ -1,0 +1,487 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/15/2017
+#   @package        :   Lights
+#   @description    :   Lights, Lights, Lights! All the Lights are here!
+###############################################################################
+homeassistant:
+  customize:
+
+    ################################################
+    ## Node Anchors
+    ################################################
+    package.node_anchors:
+      customize: &customize
+        package: 'lights'
+
+      exposed: &exposed
+        <<: *customize
+        emulated_hue_hidden: true
+        homebridge_hidden: false
+
+      not_exposed: &not_exposed
+        <<: *customize
+        emulated_hue_hidden: false
+        homebridge_hidden: true
+
+      hidden: &hidden
+        <<: *customize
+        hidden: true
+
+    switch.frontyard_light:
+      <<: *exposed
+      icon: mdi:lightbulb
+      friendly_name: Front Porch Lights
+      emulated_hue_name: Front Yard Lights
+      homebridge_name: Front Yard Lights
+
+    switch.wemoswitch1:
+      <<: *exposed
+      icon: mdi:lamp
+      friendly_name: TV Switch
+      emulated_hue_name: TV Switch
+      homebridge_name: TV Switch
+
+    switch.wemobackyardlightswitch:
+      <<: *exposed
+      icon: mdi:lightbulb
+      friendly_name: Backyard Lights
+      emulated_hue_name: Backyard Lights
+      homebridge_name: Backyard Lights
+
+    light.family_room:
+      <<: *exposed
+      friendly_name: Family Room Lights
+      emulated_hue_name: Family Room Lights
+      homebridge_name: Front Room Lights
+
+    light.master_bedroom:
+      <<: *exposed
+      friendly_name: Master Bedroom Lights
+      emulated_hue_name: Master Bedroom Lights
+      homebridge_name: Master Bedroom Lights
+
+    switch.guest_bedroom:
+      <<: *exposed
+      icon: mdi:lightbulb
+      friendly_name: Guest Bedroom 1
+      emulated_hue_name: Guest Bedroom 1
+      homebridge_name: Guest Bedroom 1
+
+    switch.prayer_room:
+      <<: *exposed
+      icon: mdi:lightbulb
+      friendly_name: Guest Bedroom 2
+      emulated_hue_name: Guest Bedroom 2
+      homebridge_name: Guest Bedroom 2
+    
+    switch.zwave_smart_switch_switch:
+      <<: *exposed
+      friendly_name: Office Room Accent Lights
+      emulated_hue_name: Office Room Accent Lights
+      homebridge_name: Office Room Accent Lights
+      assumed_state: false
+      icon: mdi:lightbulb
+
+    switch.basement_left:
+      <<: *exposed
+      friendly_name: Basement Theater Lights
+      assumed_state: false
+      icon: mdi:lightbulb
+    switch.basement_right:
+      <<: *exposed
+      friendly_name: Basement Right Side Lights
+      assumed_state: false
+      icon: mdi:lightbulb
+    switch.kitchen:
+      <<: *exposed
+      friendly_name: Kitchen Light
+      assumed_state: false
+      icon: mdi:lightbulb
+    switch.office_room:
+      <<: *exposed
+      friendly_name: Office Room Lights
+      assumed_state: false
+      icon: mdi:lightbulb
+    switch.kids_bedroom:
+      <<: *exposed
+      friendly_name: Kids Bedroom
+      icon: mdi:lightbulb
+    switch.garage:
+      <<: *exposed
+      friendly_name: Garage Lights
+      icon: mdi:lightbulb
+
+    # Xiaomi Gateway Light Scripts
+    script.xiaomi_red:
+      <<: *hidden
+    script.xiaomi_blue:
+      <<: *hidden
+    script.xiaomi_green:
+      <<: *hidden
+
+    light.all_hue_lights:
+      <<: *hidden
+
+    light.hue_color_lamp_1:
+      <<: *exposed
+      friendly_name: Family Room Light 1
+      color_set: false
+    light.hue_color_lamp_2:
+      <<: *exposed
+      friendly_name: Family Room Light 2
+      color_set: false
+    light.hue_color_lamp_3:
+      <<: *exposed
+      friendly_name: Family Room Light 3
+      color_set: false
+    input_boolean.short_flash:
+      <<: *not_exposed
+      icon: mdi:flash
+      friendly_name: Short Flash
+    input_boolean.long_flash:
+      <<: *not_exposed
+      icon: mdi:flash      
+      friendly_name: Long Flash
+    input_boolean.animate_downstairs_lights:
+      <<: *not_exposed
+      icon: mdi:flash-outline
+      friendly_name: Animate Family Room Lights    
+    input_boolean.animate_upstairs_lights:
+      <<: *not_exposed
+      icon: mdi:flash-outline
+      friendly_name: Animate Master Bedroom Lights
+
+    # Set assumed_state to false to show up as switch instead of two lightning symbols
+    switch.rf_switch_one:
+      friendly_name: Basement Light
+      assumed_state: false
+    switch.rf_switch_two:
+      friendly_name: Switch Two
+      assumed_state: false
+    switch.rf_switch_three:
+      friendly_name: Switch Three
+      assumed_state: false
+    switch.rf_switch_four:
+      friendly_name: Front Room Light
+      assumed_state: false
+    switch.rf_switch_five:
+      friendly_name: TV Switch
+      assumed_state: false
+
+hue:
+  bridges:
+    - host: !secret philips_hue_ipaddress
+
+tplink:
+  discovery: false
+  switch:
+
+# In-wall switches
+  - host: !secret tplink_kids_bedroom
+  - host: !secret tplink_guest_bedroom_1
+  - host: !secret tplink_guest_bedroom_2
+  - host: !secret tplink_garage
+  - host: !secret tplink_basement_left
+  - host: !secret tplink_basement_right
+  - host: !secret tplink_kitchen
+  - host: !secret tplink_office_room
+
+# Smart Outlets
+  - host: !secret tplink_smart_outlet1
+    #name: Downstairs Fragrance Outlet
+  - host: !secret tplink_smart_outlet2
+    #name: Downstairs Bathroom Fragrance Outlet
+  - host: !secret tplink_smart_outlet3
+    #name: Upstairs Fragrance Outlet
+  - host: !secret tplink_kids_bed_accent_light
+    #name: Kids Bed Accent Light
+
+switch:
+# RF Switches
+  # - platform: mqtt
+  #   name: RF Switch One
+  #   command_topic: '/home/rfswitches/switch_one'
+  #   payload_on: "on"
+  #   payload_off: "off"
+  #   retain: true
+
+  # - platform: mqtt
+  #   name: RF Switch Two
+  #   command_topic: '/home/rfswitches/switch_two'
+  #   payload_on: "on"
+  #   payload_off: "off"
+  #   retain: true
+
+  # - platform: mqtt
+  #   name: RF Switch Three
+  #   command_topic: '/home/rfswitches/switch_three'
+  #   payload_on: "on"
+  #   payload_off: "off"
+  #   retain: true
+
+  # - platform: mqtt
+  #   name: RF Switch Four
+  #   command_topic: '/home/rfswitches/switch_four'
+  #   payload_on: "on"
+  #   payload_off: "off"
+  #   retain: true
+
+  # - platform: mqtt
+  #   name: RF Switch Five
+  #   command_topic: '/home/rfswitches/switch_five'
+  #   payload_on: "on"
+  #   payload_off: "off"
+  #   retain: true
+
+wemo:
+  static:
+    - !secret wemo_switch_1
+    - !secret wemo_switch_2
+    - !secret wemo_switch_3
+    - !secret wemo_sharp_tv
+
+input_boolean:
+  animate_upstairs_lights:
+    name: Animate Master Bedroom Lights
+    initial: off
+  animate_downstairs_lights:
+    name: Animate Family Room Lights
+    initial: off
+  animate_kitchen_lights:
+    name: Animate Kitchen Lights
+    initial: off
+  long_flash:
+    name: Long Flash Lights
+    initial: off
+  short_flash:
+    name: Long Flash Lights
+    initial: off
+
+script:
+  xiaomi_red:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.gateway_light_34ce008ad65d
+          brightness: 255
+          rgb_color: [255,0,0]
+
+  xiaomi_blue:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.gateway_light_34ce008ad65d
+          brightness: 255
+          rgb_color: [0,0,255]
+
+  xiaomi_green:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.gateway_light_34ce008ad65d
+          brightness: 255
+          rgb_color: [0,255,0]
+
+  # start_colorloop:
+  #   sequence:
+  #     - service: light.lifx_effect_colorloop
+  #       data:
+  #         entity_id: light.dinette
+  #         brightness: 255
+  #         period: 2
+  #         spread: 360
+  #         change: 35
+
+  # stop_colorloop:
+  #   sequence:
+  #     - service: light.lifx_effect_stop
+  #       data:
+  #         entity_id: light.dinette
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+# Animate Master Bedroom Lights
+###############################################################################
+  - alias: Animate Master Bedroom Lights
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      seconds: '/5'
+    condition:
+      - condition: state
+        entity_id: input_boolean.animate_upstairs_lights
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: group.master_bedroom_lights
+          transition: 5
+          brightness: 255
+          color_temp: 366
+        data_template:
+          rgb_color: ['{{ "{0:d}".format(range(0, 255)|random) }}' , 
+                      '{{ "{0:d}".format(range(0, 255)|random) }}', 
+                      '{{ "{0:d}".format(range(0, 255)|random) }}']
+
+# Restore Master Bedroom Lights
+###############################################################################
+  - alias: Restore Masterbedroom Lights
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.animate_upstairs_lights
+      to: 'off'
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: group.master_bedroom_lights
+          transition: 5
+          rgb_color: [224,175,102]
+          brightness: 10
+          color_temp: 366
+
+# Animate Familyroom Lights
+###############################################################################
+  - alias: Animate Familyroom Lights
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      seconds: '/5'
+    condition:
+      - condition: state
+        entity_id: input_boolean.animate_downstairs_lights
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: group.family_room_lights
+          transition: 5
+          brightness: 255
+          color_temp: 366
+        data_template:
+          rgb_color: ['{{ "{0:d}".format(range(0, 255)|random) }}' , 
+                      '{{ "{0:d}".format(range(0, 255)|random) }}', 
+                      '{{ "{0:d}".format(range(0, 255)|random) }}']
+
+# Restore Familyroom Lights
+###############################################################################
+  - alias: Restore Familyroom Lights
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.animate_downstairs_lights
+      to: 'off'
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: group.family_room_lights
+          transition: 5
+          rgb_color: [255, 251, 245]
+          brightness: 255
+          color_temp: 162
+
+# Animate Kitchen Lights ON
+###############################################################################
+  # - alias: Animate Kitchen Lights ON
+  #   initial_state: true
+  #   trigger:
+  #     - platform: time_pattern
+  #       seconds: '/3'
+  #   condition:
+  #     - condition: state
+  #       entity_id: input_boolean.animate_kitchen_lights
+  #       state: 'on'
+  #   action:
+  #     - service: light.turn_on
+  #       entity_id: light.dinette
+  #       data_template:
+  #         rgb_color: ['{{ (range(0, 255)|random) }}', 
+  #                     '{{ (range(0, 255)|random) }}', 
+  #                     '{{ (range(0, 255)|random) }}']
+  #         brightness: 255
+  #         transition: '{{ (range(1, 2)|random) }}'
+
+# Animate Kitchen Lights OFF
+###############################################################################
+  # - alias: Animate Kitchen Lights OFF
+  #   initial_state: true
+  #   trigger:
+  #     - platform: state
+  #       entity_id: input_boolean.animate_kitchen_lights
+  #       to: 'off'
+  #   action:
+  #     - service: light.turn_on
+  #       entity_id: light.dinette
+  #       data:
+  #         rgb_color: [255, 255, 255]
+  #         brightness: 255
+  #         color_temp: 155
+
+# Long Flash All Lights
+###############################################################################
+  - alias: Long Flash All Lights
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.long_flash
+        to: 'on'
+        from: 'off'
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        entity_id:
+          - group.all_lights
+        data:
+          flash: long
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.long_flash
+
+# Short Flash All Lights
+###############################################################################
+  - alias: Short Flash All Lights
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.short_flash
+        to: 'on'
+        from: 'off'
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        entity_id:
+          - group.all_lights
+        data:
+          flash: short
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.short_flash

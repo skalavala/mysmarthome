@@ -1,0 +1,476 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/15/2017
+#   @package        :   Home Security 
+#   @description    :   Home Security System Sensors and Automations
+###############################################################################
+homeassistant:
+  customize:
+  
+    group.home_security_system:
+      order: 7
+
+    alarm_control_panel.simplisafe:
+      friendly_name: Home Security System
+      icon: mdi:security
+    sensor.my_alarm_control_panel:
+      friendly_name: Home Security System
+      icon: mdi:security
+
+simplisafe:
+  accounts:
+    - username: !secret simplisafe_username
+      password: !secret simplisafe_password
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+###############################################################################
+# Leeo light - color indication of Home Security System
+# BLUE for Secured (Home and Away), and RED for OFF or Trigerred
+###############################################################################
+  - alias: Home Security Status Leeo Color
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.simplisafe
+    condition:
+      - condition: template
+        value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
+      - condition: template
+        value_template: '{{ states.alarm_control_panel.simplisafe.state != "unknown" }}'
+      - condition: template
+        value_template: '{{ states.alarm_control_panel.simplisafe.state | trim != "" }}'
+    action:
+      - service_template: >
+          {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+            script.xiaomi_blue
+          {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+            script.xiaomi_green
+          {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+            script.xiaomi_red
+          {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
+            script.xiaomi_red
+          {% endif %}
+      - service: script.ifttt_leeo_color_change
+        data_template:
+          value1: >
+            {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+              "#0000FF"
+            {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+              "#00FF00"
+            {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+              "#FF0000"
+            {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
+              "#FF0000"
+            {% endif %}
+
+###############################################################################
+# Notify Security System State Change 
+###############################################################################
+  - alias: Notify Home Security Status Change
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.simplisafe
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
+      - condition: template
+        value_template: >
+          {%- if states.automation.notify_home_security_status_change.attributes.last_triggered -%}
+            {{ (as_timestamp(now()) - as_timestamp(states.automation.notify_home_security_status_change.attributes.last_triggered)) > 90 }}
+          {%- else -%}
+            true
+          {%- endif -%}
+    action:
+      - service: script.notify_me
+        data_template:
+          message: >
+            {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+              Your home is now secured!
+            {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+              Your Home Security System is now set to Away mode!
+            {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+              Attention!: Your Home Security System is triggered! It has been notified to the authorities.
+            {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
+              Attention!: Your Home Security System is turned OFF.
+            {% endif %}
+      - service: script.voice_notify
+        data_template:
+          message: >
+            {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+              Your home is now secured!
+            {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+              Your Home Security System is now set to Away mode!
+            {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+              Attention!: Your Home Security System is triggered! It has been notified to the authorities.
+            {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
+              Attention!: Your Home Security System is turned OFF. 
+            {% endif %}
+      - condition: template
+        value_template: '{{ states.alarm_control_panel.simplisafe.state != "disarmed" }}'
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.notify_camera_motion
+
+###############################################################################
+# A gentle 10 minute reminder that the Home Security system is OFF
+###############################################################################
+  - alias: Home Security System WatchDog 10 minutes
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - alarm_control_panel.simplisafe
+        to: 'disarmed'
+        for: 
+          minutes: 10
+    condition:
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+    action:
+      - service: script.notify_me
+        data:
+          message: "Home Security System is OFF for more than 10 minutes!"
+
+###############################################################################
+# A gentle reminder that the home security is OFF for more than 30 minutes
+###############################################################################
+  - alias: Home Security System WatchDog 30 minutes
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - alarm_control_panel.simplisafe
+        to: 'disarmed'
+        for: 
+          minutes: 30
+    condition:
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: template
+        value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
+    action:
+      - service: script.notify_me
+        data: 
+          message: "Home Security System is OFF for more than 30 minutes!"
+
+###############################################################################
+# When home security system is turned OFF or turned to Home mode from "away"
+# means, someone reached home from outside
+###############################################################################
+  - alias: Turn ON Thermostat upon reaching home
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.simplisafe
+    condition:
+      - condition: template
+        value_template: >
+          {% if trigger.from_state.state == 'armed_away' and  
+                (trigger.to_state.state == 'armed_home' or trigger.to_state.state == 'disarmed') %}
+            true
+          {% else %}
+            false
+          {% endif %}
+    action:
+      - service: climate.set_away_mode
+        data_template:
+          entity_id: climate.dining_room
+          away_mode: 'false'
+
+###############################################################################
+# TURN HOME SECURITY SYSTEM ON AT BED TIME
+###############################################################################
+  - alias: Night HomeSecurity On
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    condition:
+      - condition: template
+        value_template: '{{ states.sensor.bedtime_hour.state|int == now().hour|int }}'
+      - condition: template
+        value_template: '{{ states.sensor.bedtime_minute.state|int == now().minute|int }}'
+      - condition: template
+        value_template: "{{ states('alarm_control_panel.simplisafe') != 'away' }}"
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: template
+        value_template: "{{ states('alarm_control_panel.simplisafe') == 'disarmed' }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
+    action:
+      - service: alarm_control_panel.alarm_arm_home
+        data:
+          entity_id: alarm_control_panel.simplisafe
+      - service: script.notify_me
+        data: 
+          message: "It's bedtime, you forgot to turn ON Home Security System. Turned it ON for you."
+          
+###############################################################################
+# Check for Garage Door Status when Home Security System State changes
+###############################################################################
+  # - alias: Home Security System And Garage Door Check
+  #   initial_state: true
+  #   trigger:
+  #     - platform: time_pattern
+  #       minutes: '/15'
+  #       seconds: 00
+  #   condition:
+  #     condition: and
+  #     conditions:
+  #       - condition: template
+  #         value_template: '{{ states.alarm_control_panel.simplisafe.state == "armed_home" or states.alarm_control_panel.simplisafe.state == "armed_away" }}'
+  #       - condition: or
+  #         conditions:
+  #         - condition: template
+  #           value_template: '{{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" }}'
+  #         - condition: template
+  #           value_template: '{{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" }}'
+  #   action:
+  #     - service: switch.turn_on
+  #       entity_id: switch.garage
+  #     - service: script.notify_me
+  #       data_template:
+  #         message: >
+  #           Attention! Your home Security system is set to {{ states.alarm_control_panel.simplisafe.state.split('_')[1] | upper }} mode.
+  #           BUT THE {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
+  #     - service: camera.snapshot
+  #       data_template:
+  #         entity_id: "camera.garage_camera"
+  #         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+  #     - service: camera.snapshot
+  #       data_template:
+  #         entity_id: "camera.driveway_camera"
+  #         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+  #     - service: camera.snapshot
+  #       data_template:
+  #         entity_id: "camera.frontdoor_camera"
+  #         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+  #     - service: notify.notify_smtp
+  #       data_template:
+  #         title: 'Garage Picture {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
+  #         message: >-
+  #           {%- macro get_date(dt) %}
+  #             {%- set date_suffix = ["th", "st", "nd", "rd"] -%}
+  #             {{ dt.day }}
+  #             {%- if dt.day % 10 in [1, 2, 3] and dt.day not in [11, 12, 13] -%}
+  #               {{ date_suffix[dt.day%10] }}
+  #             {%- else -%}
+  #               {{ date_suffix[0] }}
+  #             {%- endif %} {{ dt.strftime("%B %Y")}}
+  #           {%- endmacro -%}
+  #           {% set doors = "" %}
+  #           {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on"  and states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
+  #             {% set doors = "Both garage doors" %}
+  #             {% elif states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"%}
+  #               {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
+  #             {% elif states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" %}
+  #               {% set doors = states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
+  #             {% endif %}
+  #           Your {{ doors }} seem to be open while your home security system is set to "{{ states.alarm_control_panel.simplisafe.state.split('_')[1]| title }}" mode. Today is {{ get_date(now()) }}, and time is {{ now().strftime("%I:%M:%S %p") }}. Please see the attached pictures and make sure everything is okay.
+  #         data:
+  #           images:
+  #             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+  #             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+  #             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+  #     - condition: template
+  #       value_template: '{{ states.alarm_control_panel.simplisafe.state == "armed_home" }}'
+  #     - service: script.voice_notify
+  #       data_template:
+  #         message: >
+  #           {% set doors = "" %}
+  #           {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on"  and states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
+  #             {% set doors = "Both garage doors" %}
+  #             {% elif states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"%}
+  #               {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
+  #             {% elif states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
+  #               {% set doors = states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
+  #             {% endif %}
+  #           Attention! Your home Security system is set to {{ states.alarm_control_panel.simplisafe.state.split('_')[1] | upper }} mode.
+  #           BUT the {{ doors }} {{ 'are' if doors.endswith('s') else 'is' }} open.
+
+###############################################################################
+# Turn Home Security System ON at sunset time
+###############################################################################
+  # - alias: Turn On Home Security System At Sunset
+  #   initial_state: true
+  #   trigger:
+  #     platform: sun
+  #     event: sunset
+  #     offset: '+00:00:00'
+  #   condition:
+  #     - condition: state
+  #       entity_id: group.all_devices
+  #       state: 'home'
+  #     - condition: state
+  #       entity_id: alarm_control_panel.simplisafe
+  #       state: 'disarmed'
+  #   action:
+  #     - service_template: >-
+  #         {% if states.binary_sensor.back_door_sensor_sensor.state == "off" and 
+  #               states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "off" and 
+  #               states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off" and
+  #               states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+  #           alarm_control_panel.alarm_arm_home
+  #         {% else %}
+  #           alarm_control_panel.disarm
+  #         {% endif %}
+  #       data:
+  #         entity_id: alarm_control_panel.simplisafe    
+  #     - service: script.voice_notify
+  #       data_template:
+  #         message: >
+  #           {% if states.binary_sensor.back_door_sensor_sensor.state == "off" and
+  #                 states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "off" and
+  #                 states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off" and
+  #                 states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+  #             It's getting dark outside, and your home security system is now set to HOME mode.
+  #           {% else %}
+  #              It is getting dark outside.
+  #              {%- if states.binary_sensor.back_door_sensor_sensor.state == "on" -%}
+  #                {%- set doors = doors ~ " Back Door" -%}
+  #              {%- endif -%}
+  #              {%- if states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "on" -%}
+  #                {% if doors | trim != "" %}
+  #                  {%- set doors = doors ~ " and Front Door" -%}
+  #                {% else %}
+  #                  {%- set doors = doors ~ " Front Door" -%}
+  #                {% endif %}
+  #              {%- endif -%}
+  #              {%- if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" -%}
+  #                {% if doors | trim != "" %}
+  #                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
+  #                {% else %}
+  #                  {%- set doors = doors ~ " Two Car Garage Door" -%}
+  #                {% endif %}
+  #              {%- endif -%}
+  #              {%- if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"  -%}
+  #                {% if doors | trim != "" %}
+  #                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
+  #                {% else %}
+  #                  {%- set doors = doors ~ " Single Car Garage Door" -%}
+  #                {% endif %}
+  #              {%- endif -%}
+  #              Your{{ doors }} {%- if 'and' in doors -%}s are {%- else %} is {%- endif %} open. Home Security System could not be turned on.
+  #           {% endif %}
+  #     - service: script.notify_me
+  #       data_template:
+  #         message: >
+  #           {% if states.binary_sensor.back_door_sensor_sensor.state == "off" and
+  #                 states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "off" and
+  #                 states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off" and
+  #                 states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+  #             It's getting dark outside, and your home security system is now set to HOME mode.
+  #           {% else %}
+  #              It is getting dark outside.
+  #              {%- if states.binary_sensor.back_door_sensor_sensor.state == "on" -%}
+  #                {%- set doors = doors ~ " Back Door" -%}
+  #              {%- endif -%}
+  #              {%- if states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "on" -%}
+  #                {% if doors | trim != "" %}
+  #                  {%- set doors = doors ~ " and Front Door" -%}
+  #                {% else %}
+  #                  {%- set doors = doors ~ " Front Door" -%}
+  #                {% endif %}
+  #              {%- endif -%}
+  #              {%- if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" -%}
+  #                {% if doors | trim != "" %}
+  #                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
+  #                {% else %}
+  #                  {%- set doors = doors ~ " Two Car Garage Door" -%}
+  #                {% endif %}
+  #              {%- endif -%}
+  #              {%- if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"  -%}
+  #                {% if doors | trim != "" %}
+  #                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
+  #                {% else %}
+  #                  {%- set doors = doors ~ " Single Car Garage Door" -%}
+  #                {% endif %}
+  #              {%- endif -%}
+  #              Your {{ doors}} {%- if 'and' in doors -%}s are {%- else %} is {%- endif %} open. Home Security System could not be turned on.
+  #           {% endif %}
+
+##############################################################################
+# Ask me if I want to turn off Home Security System upon reaching front door
+# Ask me only when the security system is ON or AWAY mode
+##############################################################################
+  # - alias: Turn Off Security Upon Reaching Home
+  #   initial_state: true
+  #   trigger:
+  #     - platform: state
+  #       entity_id: device_tracker.suresh_suresh
+  #       from: 'not_home'
+  #       to: 'home'
+  #   condition:
+  #     condition: or
+  #     conditions:
+  #       - condition: template
+  #         value_template: '{{ states.alarm_control_panel.simplisafe.state | lower == "armed_away" }}'
+  #       - condition: template
+  #         value_template: '{{ states.alarm_control_panel.simplisafe.state | lower == "armed_home" }}'
+  #   action:
+  #     - service: notify.ios_suresh
+  #       data_template:
+  #         title: 'Welcome Home, Suresh!'
+  #         message: 'Turn Off Home Security System?'
+  #         data:
+  #           push:
+  #             badge: 0
+  #             category: 'welcome_home'
+
+##############################################################################
+# Ask me if I want to turn off Home Security System when garage door is opened
+# Ask me only when the security system is ON or AWAY mode
+##############################################################################
+  # - alias: Notify Garage Status And Home Security System
+  #   initial_state: true
+  #   trigger:
+  #     platform: state
+  #     entity_id: 
+  #       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+  #       - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+  #     to: 'on'
+  #   condition:
+  #     - condition: template
+  #       value_template: '{{ states.alarm_control_panel.simplisafe.state == "armed_home" or states.alarm_control_panel.simplisafe.state == "armed_away" }}'
+  #   action:
+  #     - service: notify.ios_suresh
+  #       data_template:
+  #         title: >
+  #           Your Home is armed, and {{ trigger.entity_id.split('.')[1].split('_')[0]  |title }} Car Garage is just opened!
+  #         message: 'Turn Off Home Security System?'
+  #         data:
+  #           push:
+  #             badge: 0
+  #             category: 'welcome_home'
+
+##############################################################################
+# iOS Actionable Notification that disables Home Security System
+##############################################################################
+  # - alias: Disable Home Security iOS Action
+  #   initial_state: true
+  #   trigger:
+  #     platform: event
+  #     event_type: ios.notification_action_fired
+  #     event_data:
+  #       actionName: 'DISABLE_SECURITY'
+  #   action:
+  #     - service: alarm_control_panel.alarm_disarm
+  #       entity_id: alarm_control_panel.simplisafe
+  #     - service: notify.ios_suresh
+  #       data:
+  #         message: "Unlocked your home!"

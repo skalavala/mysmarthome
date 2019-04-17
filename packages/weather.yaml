@@ -1,0 +1,370 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/15/2017
+#   @package        :   Weather
+#   @description    :   Nothing But The Weather Stuff!
+###############################################################################
+homeassistant:
+  customize:
+  
+    sun.sun:
+      friendly_name: Sun 
+     
+    sensor.cold_flu:
+      friendly_name: Cold and Flu
+      hidden: true
+      homebridge_hidden: true
+    sensor.cold_flu_risk:
+      friendly_name: Cold and Flu Risk
+      homebridge_hidden: true
+    sensor.pollen:
+      friendly_name: Pollen
+      hidden: true
+      homebridge_hidden: true
+    sensor.pollen_level:
+      friendly_name: Pollen Level
+      homebridge_hidden: true
+    sensor.air_quality:
+      friendly_name: Air Quality    
+      homebridge_hidden: true
+
+    input_boolean.rain_alert:
+      hidden: true
+      homebridge_hidden: true
+    input_boolean.snow_alert:
+      hidden: true
+      homebridge_hidden: true
+    input_boolean.sleet_alert:
+      hidden: true
+      homebridge_hidden: true
+    input_boolean.nice_breeze_alert:
+      hidden: true
+      homebridge_hidden: true
+    input_boolean.moderate_wind_alert:
+      hidden: true
+      homebridge_hidden: true
+    input_boolean.heavy_wind_alert:
+      hidden: true
+      homebridge_hidden: true
+    input_boolean.super_heavy_wind_alert:
+      hidden: true
+      homebridge_hidden: true
+    input_boolean.hurricane_wind_alert:
+      hidden: true
+      homebridge_hidden: true
+    sensor.wind_direction:
+      icon: mdi:weather-windy-variant
+      homebridge_hidden: true
+    sensor.wind_direction_tts:
+      icon: mdi:weather-windy-variant
+      homebridge_hidden: true
+
+camera:
+  - platform: generic
+    name: Ohio Doppler Weather
+    still_image_url: !secret ohio_doppler_weather
+
+input_boolean:
+  nice_breeze_alert:
+    name: Nice Breeze Alert
+    initial: off
+  moderate_wind_alert:
+    name: Moderate Wind Alert
+    initial: off
+  heavy_wind_alert:
+    name: heavy Wind Alert
+    initial: off
+  super_heavy_wind_alert:
+    name: Super Heavy Wind Alert
+    initial: off
+  hurricane_wind_alert:
+    name: Hurricane Winds Alert
+    initial: off
+  rain_alert:
+    name: Rain Alert
+    initial: off
+  snow_alert:
+    name: Snow Alert
+    initial: off
+  sleet_alert:
+    name: Sleet Alert
+    initial: off
+
+#
+# Good Weather To Fly Drone?
+# Criteria: 
+#   - Wind Speed must be less than 12 mph 
+#   - No Rain, or Snow
+#   - No Thunderstorms, lightning
+#   - Visiblity must be more than 2 miles
+#   - Temperature must be above 32 degrees Fahrenheit - (avoid risk of batteries being dead in extreme cold temperature)
+#   - Cloud coverage must be above than 30% (I prefer good amount of sunlight or clear sky) - may have to tweak during winters :)
+#
+
+binary_sensor:
+  - platform: template
+    sensors:
+      good_weather_to_fly_drones:
+        friendly_name: Good Weather To Fly Drone?
+        value_template: >-
+          {% if states.sensor.dark_sky_wind_speed.state | round(0) | int > 12 or 
+                states.sensor.dark_sky_precip.state |lower == "rain" or 
+                states.sensor.dark_sky_precip.state |lower == "snow" or
+                states.sensor.dark_sky_visibility.state | round(0) | int < 2 or 
+                states.sensor.dark_sky_temperature.state | round(0) | int < 32 or 
+                states.sensor.dark_sky_cloud_coverage.state | round(0) | int > 30 %}
+            false
+          {% else %}
+            true
+          {% endif %}
+
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api_key
+
+sensor:
+  - platform: darksky
+    api_key: !secret darksky_api_key
+    monitored_conditions:
+      - summary
+      - icon
+      - nearest_storm_distance
+      - nearest_storm_bearing
+      - precip_type
+      - precip_intensity
+      - precip_probability
+      - temperature
+      - apparent_temperature
+      - dew_point
+      - wind_speed
+      - wind_bearing
+      - cloud_cover
+      - humidity
+      - pressure
+      - visibility
+      - ozone
+      - minutely_summary
+      - hourly_summary
+      - daily_summary
+      - precip_intensity_max
+
+  - platform: rest
+    name: pollen
+    resource: !secret weather_pollen_url
+    value_template: "{{value_json.Location.periods[1].Index}}"
+    scan_interval: 21600
+    headers:
+      Referer: "https://www.pollen.com"
+
+  - platform: rest
+    name: cold_flu
+    resource: !secret weather_cold_flu_url
+    value_template: "{{value_json.Location.periods[0].Index}}"
+    scan_interval: 21600
+    headers:
+      Referer: "https://www.pollen.com"      
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+          
+automation:
+
+  # Script to alert when enjoyable weather is outside
+  # For me, enjoyable is: 
+  #      1. Must be above 70 Degrees F
+  #      2. Alert me only during day time
+  #
+  # Only want to be notified every 15 minutes or so. Do not want to be bombarded with updates every minute wind speed changes
+  - alias: Remind me to enjoy warm and windy weather
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.dark_sky_wind_speed
+    condition:
+      - condition: template
+        value_template: '{{ states.input_boolean.enjoyable_weather_reminders.state == "on" }}'
+      - condition: state
+        entity_id: sun.sun
+        state: 'above_horizon'
+      - condition: template
+        value_template: '{% if states.sensor.dark_sky_apparent_temperature.state | round > 70 %} true {% else %} false {% endif %}'
+      - condition: template
+        value_template: '{% if states.sensor.dark_sky_wind_speed.state | round < 8 %} false {% else %} true {% endif %}'
+    action:
+      - service: script.notify_me
+        data_template:
+          message: >
+            {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
+            {% if ( windspeed > 7 and ( windspeed <= 15 ) and (states.input_boolean.nice_breeze_alert.state == 'off')) %}
+               {{ states.sensor.dark_sky_apparent_temperature.state | round }} degrees, and {{windspeed}} mph winds. You should go out and enjoy weather!
+            {% elif ( windspeed > 15 ) and ( windspeed <= 25 ) and (states.input_boolean.moderate_wind_alert.state == 'off') %}
+               {{ states.sensor.dark_sky_apparent_temperature.state | round }} degrees, and {{windspeed}} mph winds. You should go out and enjoy weather!
+            {% elif ( windspeed > 25 ) and ( windspeed <= 40 ) and (states.input_boolean.heavy_wind_alert.state == 'off') %}
+               HEAVY WINDS!!! Current Wind Speed is : {{windspeed}} mph! Be VERY careful outdoors!
+            {% elif ( windspeed > 40 ) and ( windspeed <= 60 ) and (states.input_boolean.super_heavy_wind_alert.state == 'off') %}
+               Warning! Wind speed is {{windspeed}} MPH. FIND SHELTER IMMEDIATELY!
+            {% elif ( windspeed > 60 ) and (states.input_boolean.hurricane_wind_alert.state == 'off') %}
+               HURRICANE WINDS. FIND SHELTER, AND STAY INDOORS!
+            {% endif %}
+      - service: input_boolean.turn_on
+        data_template:
+          entity_id: >
+            {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
+            {%- if ( windspeed > 7 and ( windspeed <= 15 ) ) -%}
+               input_boolean.nice_breeze_alert
+            {%- elif ( windspeed > 15 ) and ( windspeed <= 25 ) %}
+               input_boolean.moderate_wind_alert
+            {%- elif ( windspeed > 25 ) and ( windspeed <= 40 ) %}
+               input_boolean.heavy_wind_alert
+            {%- elif ( windspeed > 40 ) and ( windspeed <= 60 ) %}
+               input_boolean.super_heavy_wind_alert
+            {%- elif ( windspeed > 60 ) %}
+               input_boolean.hurricane_wind_alert
+            {%- endif %}
+
+  # #Turn off those wind speed alert booleans automatically after 15 minutes.
+  - alias: Weather Input Boolean Updates
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+        - input_boolean.nice_breeze_alert
+        - input_boolean.moderate_wind_alert
+        - input_boolean.heavy_wind_alert
+        - input_boolean.super_heavy_wind_alert
+        - input_boolean.hurricane_wind_alert
+        - input_boolean.rain_alert
+        - input_boolean.snow_alert
+        - input_boolean.sleet_alert
+        to: 'on'
+        for:
+          minutes: 15
+    action:
+      - service: input_boolean.turn_off
+        data_template:
+          entity_id: "{{ trigger.entity_id }}"
+
+  - alias: Alert Super Heavy Winds
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.dark_sky_wind_speed
+    condition:
+      - condition: template
+        value_template: >
+          {%- if states.sensor.dark_sky_wind_speed.last_changed -%}
+            {{ (as_timestamp(now()) - as_timestamp(states.sensor.dark_sky_wind_speed.last_changed)) > 120 }}
+          {%- else -%}
+            true
+          {%- endif -%}
+    action:
+      - service: script.notify_me
+        data_template:
+          message: >
+            {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
+            {% if ( windspeed > 40 ) and ( windspeed <= 60 ) and (states.input_boolean.super_heavy_wind_alert.state == 'off') %}
+               Warning! Wind speed is {{windspeed}} MPH. FIND SHELTER IMMEDIATELY!             
+            {% elif ( windspeed > 60 ) and ( windspeed <= 100 ) and (states.input_boolean.hurricane_wind_alert.state == 'off') %}
+               HURRICANE WINDS. FIND SHELTER, AND STAY INDOORS! DO NOT GO OUT AND RISK YOUR LIFE!
+            {% endif %}
+
+  - alias: Rain Alerts
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.dark_sky_precip
+    condition:
+      - condition: template
+        value_template: '{{ trigger.to_state.state | lower == "rain" }}'
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: state
+        entity_id: sun.sun
+        state: 'above_horizon'        
+      - condition: template
+        value_template: '{% if trigger.to_state.state == "unknown" or trigger.to_state.state == "" %} false {% else %} true {% endif %}'
+      - condition: template
+        value_template: '{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}'
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "{{ trigger.to_state.state | title }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float }} inches per hour"
+      - service: script.voice_notify
+        data_template:
+          message: "{{ trigger.to_state.state }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float}} inches per hour"
+      - service: input_boolean.turn_on
+        data_template:
+          entity_id: >
+            {% set curState = trigger.to_state.state | lower %}
+            {%- if curState == "rain" -%}
+               input_boolean.rain_alert
+            {%- endif %}
+
+  - alias: Snow And Sleet Alerts
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.dark_sky_precip
+    condition:
+      - condition: template
+        value_template: '{{ states.sensor.season.state | lower == "winter" }}'
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: state
+        entity_id: sun.sun
+        state: 'above_horizon'        
+      - condition: template
+        value_template: '{% if trigger.to_state.state == "unknown" or trigger.to_state.state == "" %} false {% else %} true {% endif %}'
+      - condition: template
+        value_template: '{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}'
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "{{ trigger.to_state.state | title }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float }} inches per hour"
+      - service: script.voice_notify
+        data_template:
+          message: "{{ trigger.to_state.state }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float}} inches per hour"
+      - service: input_boolean.turn_on
+        data_template:
+          entity_id: >
+            {% set curState = trigger.to_state.state | lower %}
+            {%- if curState == "snow" %}
+               input_boolean.snow_alert
+            {%- elif curState == "sleet" %}
+               input_boolean.sleet_alert
+            {%- endif %}
+
+  - alias: Update OpenUV every 30 minutes during the daytime
+    trigger:
+      platform: time_pattern
+      minutes: "/30"
+      seconds: 00
+    condition:
+      condition: and
+      conditions:
+        - condition: sun
+          after: sunrise
+        - condition: sun
+          before: sunset
+    action:
+      service: openuv.update_data
+
+# Weather sensors - TBD, too lazy to create them
+#
+# {{ states.sun.sun.state }}
+# {{ states.sun.sun.attributes.azimuth }}
+# {{ states.sun.sun.attributes.elevation }}
+# Next Dusk: {{ as_timestamp(strptime(states.sun.sun.attributes.next_dusk, '%Y-%m-%d %H:%M:%S')) |timestamp_custom('%I:%M %p', true) }}
+# Next Midnight: {{ as_timestamp(strptime(states.sun.sun.attributes.next_midnight, '%Y-%m-%d %H:%M:%S')) |timestamp_custom('%I:%M %p', true) }}
+# Next Dawn: {{ as_timestamp(strptime(states.sun.sun.attributes.next_dawn, '%Y-%m-%d %H:%M:%S')) |timestamp_custom('%I:%M %p', true) }}
+# Next Rising: {{ as_timestamp(strptime(states.sun.sun.attributes.next_rising, '%Y-%m-%d %H:%M:%S')) |timestamp_custom('%I:%M %p', true) }}
+# Next Setting: {{ as_timestamp(strptime(states.sun.sun.attributes.next_setting, '%Y-%m-%d %H:%M:%S')) |timestamp_custom('%I:%M %p', true) }}

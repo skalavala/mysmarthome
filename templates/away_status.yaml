@@ -1,0 +1,111 @@
+ >
+  {% macro weather_update() -%}
+  Outside temperature is {{ states.sensor.dark_sky_apparent_temperature.state | round(0) }} degrees.
+  {%- endmacro -%}
+  
+  {%- macro uv_levels() -%}
+  {%- set uv = states.sensor.pws_uv.state | int -%}
+  {%- if  uv >= 6 and uv <= 7 -%}
+  Current UV index is high. Please be careful outdoors.
+  {%- elif  uv >= 8 and uv <= 10 -%}
+  Current UV index is very high. It is not advised to go out.
+  {%- elif  uv >= 11 -%}
+  Current UV index is extremely high. It is highly advised to stay indoors.
+  {%- else -%}
+  Good UV levels.
+  {%- endif -%}
+  {%- endmacro -%}
+  
+  {%- macro USPS() -%}
+  USPS is going to deliver {{ states.sensor.usps_mail.state }} mails today.
+  {%- endmacro -%}
+  
+  {%- macro alert_battery_levels() %}
+  {% for item in states if 'battery_level' in item.attributes and item.attributes.battery_level | int > 0 and item.attributes.battery_level | float <= 10.0 -%}{{- item.attributes.friendly_name ~ " battery is less than 10 percent" -}}
+  {%- if loop.first %}, {% elif loop.last %}, {% else %}, {% endif -%}
+  {%- endfor -%}
+  {%- endmacro -%}
+  
+  {%- macro tesla_status() -%}
+  {%- if states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" -%}
+  Your Tesla car battery is at {{ states.sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor.state }} percent ({{ (states.sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor.state | int) | round(0) }} miles).
+  {%- endif -%}
+  {%- endmacro -%}
+  
+  {%- macro pollen_levels() -%}
+  Pollen level is {{ states.sensor.pollen_level.state }}.
+  {%- endmacro -%}
+  
+  {%- macro humidity_status() -%}
+  Home humidity is {{ states('sensor.dining_room_thermostat_humidity') }} percent.
+  {%- endmacro -%}
+  
+  {%- macro alarm_status() -%}
+  Your home is {{ "SECURED!" if states('alarm_control_panel.simplisafe') == "armed_away" or states('alarm_control_panel.simplisafe') == "armed_home" else "UNSECURED!" }}
+  {%- endmacro -%}
+  
+  {%- macro single_car_garage_door_status() -%} 
+  {%- if  states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state|lower == "on" -%}
+  {{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
+  {%- endif -%}
+  {%- endmacro -%}
+   
+  {%- macro two_car_garage_door_status() -%} 
+  {% if  states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state|lower == "on" %}
+  {{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
+  {% endif %}
+  {%- endmacro -%}
+  
+  {%- macro garage_status() -%}
+  {%- set single_car_garage = single_car_garage_door_status() -%}
+  {%- set two_car_garage = two_car_garage_door_status() -%}
+  {%- if single_car_garage | trim == "" and two_car_garage | trim == "" -%}
+    Both the garage doors are CLOSED!
+  {%- elif single_car_garage | trim != "" and two_car_garage | trim != "" -%}
+    Warning! Both garage doors are OPEN.
+  {% else %}
+    Warning! {{ single_car_garage }} {{ two_car_garage }}
+  {%- endif -%}
+  {%- endmacro -%}
+  
+  {%- macro plural(name) -%}
+  {{- "true" if name.endswith("s") else "false" -}}
+  {%- endmacro -%}
+  
+  {%- macro light_status() -%}
+    {%- set lights_switches = ["light.family_room",
+                              "light.master_bedroom",
+                              "switch.basement_left",
+                              "switch.basement_right",
+                              "switch.frontyard_light",
+                              "switch.garage",
+                              "switch.guest_bedroom",
+                              "switch.prayer_room",
+                              "switch.kids_bed_accent",
+                              "switch.kids_bedroom",
+                              "switch.kitchen",
+                              "switch.office_room",
+                              "switch.wemobackyardlightswitch",
+                              "switch.zwave_smart_switch_switch"] %}
+  {% for item in lights_switches -%}
+  {%- if states[item.split('.')[0]][item.split('.')[1]].state == "on" -%}
+  {%- set friendly_name = states[item.split('.')[0]][item.split('.')[1]].attributes.friendly_name -%}
+  {{ friendly_name }} {{ 'are' if plural(friendly_name) == "true" else 'is' }} ON.
+  {% endif %}
+  {%- endfor -%}
+  {%- endmacro -%}
+  
+  {%- macro mother_of_all_macros() -%}
+  {{ alarm_status() }}
+  {{ garage_status() }}
+  {{ USPS() }}
+  {{ tesla_status() }}
+  {{ weather_update() }}
+  {{ humidity_status() }}
+  {{ uv_levels() }}
+  {{ pollen_levels() }}
+  {{ alert_battery_levels() }}
+  {{ light_status() }}
+  {%- endmacro -%}
+  
+  {{- mother_of_all_macros() -}}

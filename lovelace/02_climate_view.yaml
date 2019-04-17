@@ -1,0 +1,70 @@
+title: Climate
+icon: mdi:oil-temperature
+cards:
+  - type: thermostat
+    entity: climate.dining_room
+  - type: horizontal-stack
+    cards:
+      - type: sensor
+        entity: sensor.dining_room_thermostat_temperature
+        name: Home Temperature
+        graph: line
+        detail: 1
+        hours_to_show: 12
+      - type: gauge
+        entity: sensor.dining_room_thermostat_humidity
+        unit: '%'
+        name: Home Humidity
+        severity:
+          green: 40
+          yellow: 30
+          red: 25
+
+  - type: entities
+    title: Climate
+    show_header_toggle: false
+    entities:
+      - climate.dining_room
+      - climate.tesla_model_3_5yj3e1ea8jf010610_hvac_climate_system
+      - binary_sensor.dining_room_thermostat_fan
+      - binary_sensor.dining_room_thermostat_has_leaf
+      - binary_sensor.dining_room_thermostat_is_locked
+      - binary_sensor.dining_room_thermostat_is_using_emergency_heat
+      - binary_sensor.dining_room_thermostat_online
+      - sensor.dining_room_thermostat_humidity
+      - sensor.dining_room_thermostat_hvac_state
+      - sensor.dining_room_thermostat_operation_mode
+      - sensor.dining_room_thermostat_target
+      - sensor.dining_room_thermostat_temperature
+
+  - type: history-graph
+    title: 'Temperature'
+    entities:
+      - entity: sensor.dark_sky_apparent_temperature
+        name: Outside
+      - entity: sensor.dining_room_thermostat_temperature
+        name: Inside
+
+  - type: entities
+    title: Temperature Levels
+    show_header_toggle: false
+    entities:
+      - entity: sensor.aeotec_water_sensor_temperature
+        name: Basement Temperature in HVAC Room
+      - entity: sensor.audio_detector_temperature
+        name: Hallway Temperature
+      - sensor.downstairs_multi_sensor_temperature
+      - sensor.front_room_multi_sensor_temperature
+      - sensor.tv_multi_sensor_temperature
+      - sensor.upstairs_multi_sensor_temperature
+
+  - type: entities
+    title: Humidity Levels
+    show_header_toggle: false
+    entities:
+      - sensor.downstairs_multi_sensor_relative_humidity
+      - sensor.front_room_multi_sensor_relative_humidity
+      - sensor.tv_multi_sensor_relative_humidity
+      - sensor.upstairs_multi_sensor_relative_humidity
+      - entity: sensor.pws_relative_humidity
+        name: Outdoor Humidity

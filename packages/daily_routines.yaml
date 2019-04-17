@@ -1,0 +1,297 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/15/2017
+#   @package        :   Daily Light Routine around the house 
+#   @description    :   Daily light routine stuff
+###############################################################################
+
+automation:
+
+#  ÛÛÛÛÛÛ   ÛÛÛÛÛÛ                                ÛÛÛ                     
+# °°ÛÛÛÛÛÛ ÛÛÛÛÛÛ                                °°°                      
+#  °ÛÛÛ°ÛÛÛÛÛ°ÛÛÛ   ÛÛÛÛÛÛ  ÛÛÛÛÛÛÛÛ  ÛÛÛÛÛÛÛÛ   ÛÛÛÛ  ÛÛÛÛÛÛÛÛ    ÛÛÛÛÛÛÛ
+#  °ÛÛÛ°°ÛÛÛ °ÛÛÛ  ÛÛÛ°°ÛÛÛ°°ÛÛÛ°°ÛÛÛ°°ÛÛÛ°°ÛÛÛ °°ÛÛÛ °°ÛÛÛ°°ÛÛÛ  ÛÛÛ°°ÛÛÛ
+#  °ÛÛÛ °°°  °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ °°°  °ÛÛÛ °ÛÛÛ  °ÛÛÛ  °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ
+#  °ÛÛÛ      °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ      °ÛÛÛ °ÛÛÛ  °ÛÛÛ  °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ
+#  ÛÛÛÛÛ     ÛÛÛÛÛ°°ÛÛÛÛÛÛ  ÛÛÛÛÛ     ÛÛÛÛ ÛÛÛÛÛ ÛÛÛÛÛ ÛÛÛÛ ÛÛÛÛÛ°°ÛÛÛÛÛÛÛ
+# °°°°°     °°°°°  °°°°°°  °°°°°     °°°° °°°°° °°°°° °°°° °°°°°  °°°°°ÛÛÛ
+#                                                                 ÛÛÛ °ÛÛÛ
+#                                                                °°ÛÛÛÛÛÛ 
+#                                                                 °°°°°°  
+###############################################################################
+# Turn Indoor lights ON only during weekdays
+###############################################################################
+  - alias: Morning Indoor Lights ON
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    condition:
+      - condition: state
+        entity_id: 'binary_sensor.workday_sensor'
+        state: 'on'
+      - condition: template
+        value_template: '{{ states.sensor.wakeup_hour.state |int == now().hour |int }}'
+      - condition: template
+        value_template: '{{ states.sensor.wakeup_minute.state|int == now().minute|int }}'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.kitchen
+
+###############################################################################
+# Turn ON Master Bedroom lights ON in the morning
+# Turn On Bedroom Lights 10 minutes after wake up time
+###############################################################################
+  - alias: Morning Master Bedroom Lights ON (Mallika)
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    condition:
+      - condition: state
+        entity_id: 'binary_sensor.workday_sensor'
+        state: 'on'
+      - condition: template
+        value_template: '{{ states.sensor.wakeup_hour.state |int == now().hour|int }}'
+      - condition: template
+        value_template: '{{ now().minute | int == (states.sensor.wakeup_minute.state | int + 10) }}'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.master_bedroom_2
+          transition: 15
+          brightness: 25
+          color_temp: 154
+
+  - alias: Morning Master Bedroom Lights OFF (Mallika)
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    condition:
+      - condition: state
+        entity_id: 'binary_sensor.workday_sensor'
+        state: 'on'
+      - condition: template
+        value_template: '{{ states.sensor.wakeup_hour.state|int == now().hour|int }}'
+      - condition: template
+        value_template: '{{ now().minute|int == (states.sensor.wakeup_minute.state|int + 15) }}'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.master_bedroom_2
+
+###############################################################################
+# Turn off outdoor lights 15 minutes after sunrise
+###############################################################################
+  - alias: Morning Outdoor Lights OFF
+    initial_state: true
+    trigger:
+      platform: sun
+      event: sunrise
+      offset: '00:15:00'
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: switch.turn_off
+        entity_id: switch.frontyard_light
+      - service: switch.turn_off
+        entity_id: switch.wemobackyardlightswitch
+
+###############################################################################
+# Turn OF Kitchen Lights after 3 hours of wake up time during school/work days
+###############################################################################
+  - alias: Morning Kitchen Light OFF
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    condition:
+      - condition: state
+        entity_id: 'binary_sensor.workday_sensor'
+        state: 'on'
+      - condition: template
+        value_template: '{{ now().hour|int == (states.sensor.wakeup_hour.state|int + 3) }}'
+      - condition: template
+        value_template: '{{ states.sensor.wakeup_minute.state|int == now().minute|int }}'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+     - service: switch.turn_off
+       entity_id: switch.kitchen
+
+#  ÛÛÛÛÛÛÛÛÛÛ                                  ÛÛÛ                     
+# °°ÛÛÛ°°°°°Û                                 °°°                      
+#  °ÛÛÛ  Û °  ÛÛÛÛÛ ÛÛÛÛÛ  ÛÛÛÛÛÛ  ÛÛÛÛÛÛÛÛ   ÛÛÛÛ  ÛÛÛÛÛÛÛÛ    ÛÛÛÛÛÛÛ
+#  °ÛÛÛÛÛÛ   °°ÛÛÛ °°ÛÛÛ  ÛÛÛ°°ÛÛÛ°°ÛÛÛ°°ÛÛÛ °°ÛÛÛ °°ÛÛÛ°°ÛÛÛ  ÛÛÛ°°ÛÛÛ
+#  °ÛÛÛ°°Û    °ÛÛÛ  °ÛÛÛ °ÛÛÛÛÛÛÛ  °ÛÛÛ °ÛÛÛ  °ÛÛÛ  °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ
+#  °ÛÛÛ °   Û °°ÛÛÛ ÛÛÛ  °ÛÛÛ°°°   °ÛÛÛ °ÛÛÛ  °ÛÛÛ  °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ
+#  ÛÛÛÛÛÛÛÛÛÛ  °°ÛÛÛÛÛ   °°ÛÛÛÛÛÛ  ÛÛÛÛ ÛÛÛÛÛ ÛÛÛÛÛ ÛÛÛÛ ÛÛÛÛÛ°°ÛÛÛÛÛÛÛ
+# °°°°°°°°°°    °°°°°     °°°°°°  °°°° °°°°° °°°°° °°°° °°°°°  °°°°°ÛÛÛ
+#                                                              ÛÛÛ °ÛÛÛ
+#                                                             °°ÛÛÛÛÛÛ 
+#                                                              °°°°°°  
+###############################################################################
+# Turn outdoor lights on 15 minutes before sunset
+###############################################################################
+  - alias: Evening Outdoor Lights ON (At Sunset)
+    initial_state: true
+    trigger:
+      platform: sun
+      event: sunset
+      offset: '+00:00:00'
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.frontyard_light
+      - service: switch.turn_on
+        entity_id: switch.wemobackyardlightswitch
+
+###############################################################################
+# Turn indoor lights on 30 minutes before sunset
+###############################################################################
+  - alias: Evening Indoor Lights ON Before Sunset
+    initial_state: true
+    trigger:
+      platform: sun
+      event: sunset
+      offset: '-00:30:00'
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.kitchen
+      - service: light.turn_on
+        data:
+          entity_id: light.hue_color_lamp_1
+          transition: 15
+          brightness: 255
+          color_temp: 154
+      - service: light.turn_on
+        data:
+          entity_id: light.hue_color_lamp_2
+          transition: 15
+          brightness: 255
+          color_temp: 154
+      - service: light.turn_on
+        data:
+          entity_id: light.hue_color_lamp_3
+          transition: 15
+          brightness: 255
+          color_temp: 154
+      - service: light.turn_on
+        data:
+          entity_id: light.master_bedroom_1
+          brightness: 25
+          color_temp: 366
+      - service: light.turn_on
+        data:
+          entity_id: light.master_bedroom_2
+          brightness: 25
+          color_temp: 366
+      - service: switch.turn_on
+        entity_id: switch.zwave_smart_switch_switch
+      - service: switch.turn_on
+        entity_id: switch.kids_bed_accent
+
+#  ÛÛÛÛÛÛ   ÛÛÛÛÛ  ÛÛÛ           ÛÛÛÛÛ       ÛÛÛÛÛ   
+# °°ÛÛÛÛÛÛ °°ÛÛÛ  °°°           °°ÛÛÛ       °°ÛÛÛ    
+#  °ÛÛÛ°ÛÛÛ °ÛÛÛ  ÛÛÛÛ   ÛÛÛÛÛÛÛ °ÛÛÛÛÛÛÛ   ÛÛÛÛÛÛÛ  
+#  °ÛÛÛ°°ÛÛÛ°ÛÛÛ °°ÛÛÛ  ÛÛÛ°°ÛÛÛ °ÛÛÛ°°ÛÛÛ °°°ÛÛÛ°   
+#  °ÛÛÛ °°ÛÛÛÛÛÛ  °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ   °ÛÛÛ    
+#  °ÛÛÛ  °°ÛÛÛÛÛ  °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ °ÛÛÛ   °ÛÛÛ ÛÛÛ
+#  ÛÛÛÛÛ  °°ÛÛÛÛÛ ÛÛÛÛÛ°°ÛÛÛÛÛÛÛ ÛÛÛÛ ÛÛÛÛÛ  °°ÛÛÛÛÛ 
+# °°°°°    °°°°° °°°°°  °°°°°ÛÛÛ°°°° °°°°°    °°°°°  
+#                       ÛÛÛ °ÛÛÛ                     
+#                      °°ÛÛÛÛÛÛ                      
+#                       °°°°°°                       
+###############################################################################
+# Set the mood for bed time - Dim Family Room lights if they are ON
+###############################################################################
+  - alias: Night Dim TV Lights
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    condition:
+      - condition: template
+        value_template: '{{ states.sensor.bedtime_hour.state|int == now().hour|int }}'
+      - condition: template
+        value_template: '{{ (states.sensor.bedtime_minute.state|int - 15 ) == now().minute|int }}'
+      - condition: state
+        entity_id: light.family_room
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.family_room
+          brightness: 30
+          color_temp: 154
+          transition: 15
+
+###############################################################################
+# TURN INDOOR LIGHTS OFF AFTER BED TIME
+###############################################################################
+  - alias: Night Turn Lights Off
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    condition:
+      - condition: template
+        value_template: '{{ states.sensor.bedtime_hour.state|int == now().hour|int }}'
+      - condition: template
+        value_template: '{{ states.sensor.bedtime_minute.state|int == now().minute|int }}'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: 'on'
+    action:
+      - service: script.all_indoor_lights_off
+      - service: script.notify_me
+        data: 
+          message: "It is bed time, turned lights off!"
+
+###############################################################################
+# Provide Bed time Report via TTS
+###############################################################################
+  - alias: Night Bedtime Report
+    initial_state: true
+    trigger:
+      platform: time
+      at: '22:10:00'
+    condition:
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: template
+        value_template: "{{ states('input_boolean.nightly_report') == 'on' }}"
+    action:
+      - service: script.good_night_tts

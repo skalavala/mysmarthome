@@ -1,0 +1,9 @@
+homeassistant:
+
+
+sensor:
+  - platform: mqtt
+    name: "Master Bed Sensor"
+    state_topic: "/master_bed/master_bed/WeightChanA"
+    value_template: "{{ value }}"
+    unit_of_measurement: load

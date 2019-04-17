@@ -1,0 +1,103 @@
+homeassistant:
+  customize:
+
+    ################################################
+    ## Node Anchors
+    ################################################
+
+    package.node_anchors:
+      customize: &customize
+        package: 'xiaomi'
+
+      exposed: &exposed
+        <<: *customize
+        emulated_hue_hidden: true
+        homebridge_hidden: false
+
+      not_exposed: &not_exposed
+        <<: *customize
+        emulated_hue_hidden: false
+        homebridge_hidden: true
+
+      hidden: &hidden
+        <<: *customize
+        hidden: true
+
+    binary_sensor.motion_sensor_158d0001a662fe:
+      friendly_name: Kitchen Motion Sensor (Xiaomi)
+    sensor.Illumination_158d0001a662fe:
+      friendly_name: Kitchen Luminance (Xiaomi)
+     
+    binary_sensor.motion_sensor_158d0001a25041:
+      friendly_name: Family Room Motion Sensor (xiaomi)
+    sensor.Illumination_158d0001a25041:
+      friendly_name: Family Room Luminance (xiaomi)
+ 
+    binary_sensor.motion_sensor_158d00016db6d2:
+      friendly_name: Study Room Motion Sensor (Xiaomi)
+    sensor.Illumination_158d00016db6d2:
+      friendly_name: Study Room Luminance (Xiaomi)
+    
+    binary_sensor.motion_sensor_158d00016c2d0e:
+      friendly_name: Dining Room Motion Sensor (Xiaomi)
+    sensor.Illumination_158d00016c2d0e:
+      friendly_name: Dining Room Luminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d00024e57d3:
+      friendly_name: Master Bedroom Motion Sensor (Xiaomi)
+    sensor.illumination_158d00024e57d3:
+      friendly_name: Master Bedroom Luminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d00024ee084:
+      friendly_name: Front Door Motion Sensor (Xiaomi)
+    sensor.illumination_158d00024ee084:
+      friendly_name: Front Door Luminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d00024e842c:
+      friendly_name: Backyard Motion Sensor (Xiaomi)
+    sensor.illumination_158d00024e842c:
+      friendly_name: Backyard's Luminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d00024e57fb:
+      friendly_name: Driveway Motion Sensor (Xiaomi)
+    sensor.illumination_158d00024e57fb:
+      friendly_name: Driveway's Luminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d000272bf48:
+      friendly_name: Garage Motion Sensor (Xiaomi)
+    sensor.illumination_158d000272bf48:
+      friendly_name: Garage's Luminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d000272bfd7:
+      friendly_name: Office Room Motion Sensor (Xiaomi)
+    sensor.illumination_158d000272bfd7:
+      friendly_name: Office Room Liminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d000272bed1:
+      friendly_name: Srinika's Bedroom Motion Sensor (Xiaomi)
+    sensor.illumination_158d000272bed1:
+      friendly_name: Srinika's Bedroom Liminance (Xiaomi)
+
+    sensor.Illumination_34ce008ad65d:
+      friendly_name: Hallway Luminance (Xiaomi Aqara)
+
+    light.gateway_light_34ce008ad65d:
+      friendly_name: Hallway Light (Xiaomi Aqara Gateway)
+
+    binary_sensor.cube_158d0002794cd6:
+      friendly_name: Family Room Cube (Xiaomi)
+    binary_sensor.cube_158d000278eb6a:
+      friendly_name: Master Bedroom Cube (Xiaomi)
+    binary_sensor.cube_158d000276e3e8:
+      friendly_name: Basement Cube (Xiaomi)
+    binary_sensor.cube_158d00027c0276:
+      friendly_name: Front Room Cube (Xiaomi)
+    binary_sensor.cube_158d00027ce15c:
+      friendly_name: Hasika's Bedroom Cube (Xiaomi)
+    binary_sensor.cube_158d00027cf60d:     
+      friendly_name: Srinika's Bedroom Cube (Xiaomi)
+
+xiaomi_aqara:
+  discovery_retry: 5
+  gateways:
+    - key: !secret xiaomi_key

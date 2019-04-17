@@ -1,0 +1,206 @@
+ >
+  {%- macro alert_battery_levels() -%}
+    {%- for item in states if 'battery_level' in item.attributes and item.attributes.battery_level | int > 0 and item.attributes.battery_level | float <= 10.0 %}
+      {{- item.attributes.friendly_name}} battery is less than 10 percent.
+    {%- endfor %}
+  {%- endmacro %}
+
+  {# Birthday notifications #}
+  {%- macro birthday_countdown( name, days2go ) -%}
+    {%- if days2go == 0 -%}
+      Today is {{name}}'s Birthday!. Happy Birthday to you, my dear {{name}}!!!.
+    {%- elif days2go == 1 -%}
+      Tomorrow is {{name}}'s Birthday! HURRAY!!!
+    {%- elif days2go > 1 and days2go <= 10 -%}
+      {{name}}'s Birthday is in {{days2go}} days! HURRAY!!!
+    {%- endif -%}
+  {%- endmacro -%}
+
+  {%- macro tesla_status() -%}
+    {% if states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" %}
+    {%- if (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) < 75 -%}
+      Attention!. Your Tesla car battery is at {{ states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') }} percent. and you can only drive about {{ (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) }} miles. Please charge your car if you want to go anywhere.
+    {%- endif -%}
+    {% endif %}
+  {%- endmacro -%}
+
+  {# USPS mail notifications - only when I have 1 or more mails #}
+  {%- macro USPS() -%}
+    {% if now().hour  | int <= 16 %}
+      {%- if states("sensor.usps_mail") != "unknown" -%}
+        {% if states('sensor.usps_mail') | int > 0 -%}
+          {%- if states('sensor.usps_mail') | int == 1 -%}
+            USPS is going to deliver {{ states('sensor.usps_mail') }} mail today.
+          {%- else -%}
+            USPS is going to deliver {{ states('sensor.usps_mail') }} mails today.
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if states("sensor.usps_packages") != "unknown" -%}
+        {%- if states('sensor.usps_packages') | int > 0 -%}
+          {%- if states('sensor.usps_packages') | int == 1 -%}
+            USPS is going to deliver {{ states('sensor.usps_packages') }} package today.
+          {%- else -%}
+            USPS is going to deliver {{ states('sensor.usps_packages') }} packages today.
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    {% endif %}
+  {%- endmacro -%}
+
+  {# Calendar notifications #}
+  {%- macro calendar_reminder() -%}
+    {% set days2NextEvent = 0 %}
+      {% if state_attr('calendar.suresh_kalavala', 'start_time') != None and state_attr('calendar.suresh_kalavala', 'message') != None %}
+      {% if now().year == strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').year %}
+        {% set days2NextEvent = strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) %}
+      {% else %}
+        {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
+      {% endif -%}  
+      {% if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int)  %}
+        Your next event. {{ states.calendar.suresh_kalavala.attributes.message }} . starts 
+        {% if days2NextEvent == 0 | int %}
+           today at {{ strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%I:%M %p') }}.
+        {% elif days2NextEvent == 1 %}
+           tomorrow at {{ strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%I:%M %p') }}.
+        {% elif days2NextEvent == 2 %}
+           day after tomorrow {{ strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%A') }} 
+           at {{ strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%I:%M %p') }}.
+        {% else %}
+          in {{ days2NextEvent }} days.
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {%- endmacro -%}
+
+  {# Indian Holidays notifications #}  
+  {%- macro IndianHolidays() -%}
+    {% set days2NextEvent = 0 %}
+      {% if state_attr('calendar.holidays_in_india', 'start_time') != None and state_attr('calendar.holidays_in_india', 'message') != None %}
+      {% if now().year == strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').year %}
+        {% set days2NextEvent = strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) %}
+      {% else %}
+        {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
+      {% endif -%}  
+      {% if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int)  %}
+        {% if days2NextEvent == 0 | int %}
+           Today is {{ states.calendar.holidays_in_india.attributes.message | replace(".", "")}}.
+        {%- elif days2NextEvent == 1 %}
+           Tomorrow is {{ states.calendar.holidays_in_india.attributes.message | replace(".", "")}}.
+        {%- elif days2NextEvent == 2 -%}
+           {{ states.calendar.holidays_in_india.attributes.message | replace(".", "") }}. is day after tomorrow.
+        {%- else -%}
+          {{ states.calendar.holidays_in_india.attributes.message | replace(".", "") }}. is in {{ days2NextEvent }} days.
+        {%- endif -%}
+      {%- endif %}
+    {%- endif %}
+  {%- endmacro -%}
+
+  {# USA Holidays notifications #}  
+  {%- macro USHolidays() -%}
+    {% set days2NextEvent = 0 %}
+      {% if state_attr('calendar.holidays_in_united_states', 'start_time') != None and state_attr('calendar.holidays_in_united_states', 'message') != None %}
+      {% if now().year == strptime(states.calendar.holidays_in_united_states.attributes.start_time, '%Y-%m-%d %H:%M:%S').year %}
+        {% set days2NextEvent = strptime(states.calendar.holidays_in_united_states.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) %}
+      {% else %}
+        {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_united_states.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
+      {% endif -%}  
+      {% if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int)  %}
+        {% if days2NextEvent == 0 | int %}
+           Today is {{ states.calendar.holidays_in_united_states.attributes.message | replace(".", "")}}.
+        {%- elif days2NextEvent == 1 %}
+           Tomorrow is {{ states.calendar.holidays_in_united_states.attributes.message | replace(".", "")}}.
+        {%- elif days2NextEvent == 2 -%}
+           {{ states.calendar.holidays_in_united_states.attributes.message | replace(".", "")}} is day after tomorrow.
+        {%- else -%}
+          {{ states.calendar.holidays_in_united_states.attributes.message | replace(".", "")}} is in {{ days2NextEvent }} days.
+        {%- endif -%}
+      {%- endif %}
+      {%- endif %}
+  {%- endmacro -%}
+
+  {# Only notify when high levels of UV #}
+  {%- macro uv_levels() -%}
+    {%- set uv = states('sensor.current_uv_index') | int -%}
+    {%- if  uv >= 6 and uv <= 7 -%}
+      Current UV index is high. Please be careful outdoors.
+    {%- elif  uv >= 8 and uv <= 10 -%}
+      Current UV index is very high. It is not advised to go out.
+    {%- elif  uv >= 11 -%}
+      Current UV index is extremely high. It is highly advised to stay indoors.
+    {%- endif -%}
+  {%- endmacro -%}
+
+  {# weather summary #}
+  {%- macro weather_update() -%}
+    {% if states('sensor.dark_sky_minutely_summary') |lower != "unknown" %}
+      {% if '.' in states('sensor.dark_sky_minutely_summary') %}
+        It is going to be {{ states('sensor.dark_sky_minutely_summary') }}
+      {% else %}
+        It is going to be {{ states('sensor.dark_sky_minutely_summary') }}.
+      {% endif %}
+    {% endif %}
+    {% if states('sensor.dark_sky_apparent_temperature') | lower != "unknown" %}
+      Outside temperature is {{ states('sensor.dark_sky_apparent_temperature') | round(0) }} degrees. 
+    {% endif %}
+  {%- endmacro -%}
+
+  {# Only notify pollen levels in spring #}
+  {%- macro pollen_levels() -%}
+  {% if states('sensor.season') | lower == "spring" %}
+    {% if states('sensor.pollen_level') | lower != "low" %}
+      Pollen level is {{ states('sensor.pollen_level') }}.
+    {% endif %}
+  {% endif %}
+  {%- endmacro -%}
+
+  {# Drone Flying Weather #}
+  {%- macro drone_weather() -%}
+  {% if states.binary_sensor.good_weather_to_fly_drones.state| lower == "on" and 
+        states.device_tracker.suresh_suresh.state == "home" and 
+        states.sun.sun.state == "above_horizon" %}
+    It is now a great weather to fly drone outside.
+  {% endif %}
+  {%- endmacro -%}
+
+  {# Check for low humidity levels in autumn, winter and high levels during rest of the year #}
+  {# exclude weather service humidity sensors 'pws' from the loop #}
+  {%- macro humidity_status() -%}
+    {%- if states('sensor.season') | lower == "autumn" or states('sensor.season') | lower == "winter" %}
+      {%- if states('sensor.dining_room_thermostat_humidity') | int < 30 -%}
+        Home humidity is less than 30%.
+      {%- endif -%}
+    {% else %}
+      {%- if states('sensor.dining_room_thermostat_humidity') | default(0) | int > 60 -%}
+        Home humidity is more than 60%.
+      {%- endif -%}
+    {%- endif -%}
+  {%- endmacro -%}
+
+  {# a macro that removes all newline characters, empty spaces, and returns formatted text  #}
+  {%- macro cleanup(data) -%}
+    {%- for item in data.split("\n")  if item | trim != "" -%}
+      {{ item | trim }} {% endfor -%}
+  {%- endmacro -%}
+
+  {# a macro to call all macros :)  #}
+  {%- macro mother_of_all_macros() -%}
+    It is {{ now().strftime("%I:%M %p") }}.
+    {{ USHolidays() }}
+    {{ weather_update() }}
+    {{ pollen_levels() }}
+    {{ uv_levels() }}
+    {{ humidity_status() }}
+    {{ calendar_reminder() }}
+    {{ IndianHolidays() }}
+    {{ alert_battery_levels() }}
+    {{ USPS() }}
+    {{ tesla_status() }}
+    {{ drone_weather() }}
+    {{ birthday_countdown("Mallika", states.input_label.mallika_birthday_days2go.state | int ) }}
+    {{ birthday_countdown("Srinika", states.input_label.srinika_birthday_days2go.state | int ) }}
+    {{ birthday_countdown("Hasika", states.input_label.hasika_birthday_days2go.state | int ) }}
+  {%- endmacro -%}
+  
+  {# Call the macro  #}
+  {{- cleanup(mother_of_all_macros()) -}}

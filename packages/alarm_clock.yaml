@@ -1,0 +1,172 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   09/30/2017
+#   @package        :   Alarm Clock
+#   @description    :   Alarm Clock; Added AM/PM Selects
+#                       TBD: Restore and Save previous values in MQTT
+###############################################################################
+homeassistant:
+  customize:
+
+    automation.alarm_clock:
+      icon: mdi:alarm-check
+
+input_number:
+  slider_hours:
+    name: Hours
+    initial: 6
+    min: 0
+    max: 11
+    step: 1
+
+  slider_minutes:
+    name: Minutes
+    initial: 0
+    min: 0
+    max: 59
+    step: 5
+
+input_boolean:
+  week_day_only:
+    name: Weekdays Only
+    initial: on
+    icon: mdi:calendar-check
+
+  am:
+    name: AM
+    initial: on
+    icon: mdi:weather-sunny
+
+  pm:
+    name: PM
+    initial: off
+    icon: mdi:weather-night
+
+input_label:
+  alarm_current_time:
+    name: Current Alarm Time
+    icon: mdi:timer
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+  - alias: Update Current Alarm Time
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: 
+          - input_boolean.am
+          - input_boolean.pm
+          - input_number.slider_hours
+          - input_number.slider_minutes
+    action:
+      - service: input_label.set_value
+        entity_id: input_label.alarm_current_time
+        data_template:
+          value: >
+            {%- if states.input_number.slider_hours.state | int < 10 -%}
+              {%- if states.input_number.slider_hours.state|int == 0 %}
+                12
+              {%- else -%}
+                {{- 0 ~ states.input_number.slider_hours.state|int -}}
+              {%- endif -%}
+            {%- else -%}
+              {{- states.input_number.slider_hours.state |int -}}
+            {% endif -%}:
+            {%- if states.input_number.slider_minutes.state | int < 10 -%}
+              {{- 0 ~ states.input_number.slider_minutes.state |int -}}
+            {%- else -%}
+              {{- states.input_number.slider_minutes.state|int -}}
+            {%- endif -%}{%- if states.input_boolean.am.state == "on" %} AM{%- else %} PM{%- endif -%}          
+  
+  - alias: AM Change OFF
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.am
+      from: 'on'
+      to: 'off'
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.pm
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.am
+
+  - alias: AM Change ON
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.am
+      from: 'off'
+      to: 'on'
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.pm
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.am
+
+  - alias: PM Change OFF
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.pm
+      from: 'on'
+      to: 'off'
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.am
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.pm
+
+  - alias: PM Change ON
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.pm
+      from: 'off'
+      to: 'on'
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.am
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.pm
+
+  - alias: Alarm Clock
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: '/1'
+      seconds: 00
+    condition:
+      - condition: template
+        value_template: "{{ states('binary_sensor.workday_sensor') == 'on' }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.alarm_clock') == 'on' }}"
+      - condition: template
+        value_template: >
+          {% if states('input_boolean.am') == 'on' %}
+            {% set hour = (states('input_number.slider_hours') | int) %}
+          {% else %}
+            {% set hour = (states('input_number.slider_hours') | int) + 12 %}
+          {% endif %}
+          {{ 'true' if states('sensor.time').split(':')[0] |int == hour else 'false' }}
+      - condition: template
+        value_template: "{{ 'true' if (states('sensor.time').split(':')[1]  |int == states('input_number.slider_minutes') |int) else 'false' }}"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "Alarm Clock: Wake Up!!!"
+      - service: script.voice_notify
+        data_template:
+          message: >
+            "Hello! This is an alarm clock reminder! Have a great day!"

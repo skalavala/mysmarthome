@@ -1,0 +1,52 @@
+title: Scripts
+icon: mdi:script
+cards:
+
+  - type: horizontal-stack
+    cards:
+      - type: "custom:button-card"
+        name: Update HASS
+        entity: inout_boolean.dummy
+        icon: mdi:home-assistant
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: update_hass
+
+      - type: "custom:button-card"
+        name: Restart HASS
+        entity: inout_boolean.dummy
+        icon: mdi:home-assistant
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: restart_hass
+
+  - type: entities
+    title: Scripts
+    show_header_toggle: false
+    entities:
+      - script.home_mode_away
+      - entity: script.xiaomi_blue
+        name: Xiaomi Gateway Blue Light
+      - entity: script.xiaomi_green
+        name: Xiaomi Gateway Green Light
+      - entity: script.xiaomi_red
+        name: Xiaomi Gateway Red Light
+
+  - type: entities
+    title: Home Status/Report
+    show_header_toggle: false
+    entities:
+      - entity: script.good_night_tts
+        name: Bedtime Report
+      - entity: script.home_status
+        name: Hourly Report

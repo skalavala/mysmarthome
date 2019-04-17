@@ -1,0 +1,409 @@
+#
+# I COMMENTED OUT ALL THE TAGBOX RELATED STUFF AS I USE TENSORFLOW COMPONENT FOR IT.
+#
+homeassistant:
+  customize:
+    image_processing.facebox_frontdoor_camera:
+      friendly_name: People @ Front Door
+    image_processing.facebox_driveway_camera:
+      friendly_name: People @ Driveway
+    image_processing.facebox_patio_camera:
+      friendly_name: People @ Patio
+    image_processing.facebox_playarea_camera:
+      friendly_name: People @ Playarea
+    image_processing.facebox_garage_camera:
+      friendly_name: People @ Garage
+
+    image_processing.tagbox_frontdoor_camera:
+      friendly_name: Frontdoor Tag
+    image_processing.tagbox_driveway_camera:
+      friendly_name: Driveway Tag
+    image_processing.tagbox_playarea_camera:
+      friendly_name: Playarea Tag
+    image_processing.tagbox_patio_camera:
+      friendly_name: Patio Tag
+    image_processing.tagbox_garage_camera:
+      friendly_name: Garage Tag
+
+    sensor.frontdoor_camera_objects:
+      friendly_name: Things At Front Door
+    sensor.driveway_camera_objects:
+      friendly_name: Things At Driveway
+    sensor.playarea_camera_objects:
+      friendly_name: Things At Playarea
+    sensor.patio_camera_objects:
+      friendly_name: Things At Patio
+    sensor.garage_camera_objects:
+      friendly_name: Things in Garage
+    sensor.frontdoor_camera_people:
+      friendly_name: People At Front Door
+    sensor.driveway_camera_people:
+      friendly_name: People Driveway
+    sensor.playarea_camera_people:
+      friendly_name: People Playarea
+    sensor.patio_camera_people:
+      friendly_name: People Patio
+    sensor.garage_camera_people:
+      friendly_name: Garage Patio
+
+image_processing:
+  - platform: facebox
+    ip_address: !secret ha_ip_address
+    scan_interval: 360
+    port: 8080
+    source:
+      - entity_id: camera.frontdoor_camera
+      - entity_id: camera.driveway_camera
+      - entity_id: camera.patio_camera
+      - entity_id: camera.playarea_camera
+      - entity_id: camera.garage_camera
+  # - platform: tagbox
+  #   scan_interval: 10000 # Default 10
+  #   ip_address: !secret ha_ip_address
+  #   port: 8081
+  #   source:
+  #     - entity_id: camera.frontdoor_camera
+  #     - entity_id: camera.driveway_camera
+  #     - entity_id: camera.patio_camera
+  #     - entity_id: camera.playarea_camera
+  #     - entity_id: camera.garage_camera
+
+sensor:
+
+##
+#Facebox related sensors
+##
+  - platform: template
+    sensors:
+      frontdoor_camera_people:
+        value_template: >-
+          {% set faces = state_attr('image_processing.facebox_frontdoor_camera', 'matched_faces') %}
+          {% if None != faces %}
+            {% if faces | list | count == 0 %}
+              Clear
+             {% else %}
+            {%- for face in faces | list %}{%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{ face }}{%- endfor %}
+            {% endif %}
+          {% endif %}
+        icon_template: mdi:cctv
+
+  - platform: template
+    sensors:
+      driveway_camera_people:
+        value_template: >-
+          {% set faces = state_attr('image_processing.facebox_driveway_camera', 'matched_faces') %}
+          {% if None != faces %}
+            {% if faces | list | count == 0 %}
+              Clear
+             {% else %}
+            {%- for face in faces | list %}{%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{ face }}{%- endfor %}
+            {% endif %}
+          {% endif %}
+        icon_template: mdi:cctv
+
+  - platform: template
+    sensors:
+      patio_camera_people:
+        value_template: >-
+          {% set faces = state_attr('image_processing.facebox_patio_camera', 'matched_faces') %}
+          {% if None != faces %}
+            {% if faces | list | count == 0 %}
+              Clear
+             {% else %}
+            {%- for face in faces | list %}{%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{ face }}{%- endfor %}
+            {% endif %}
+          {% endif %}
+        icon_template: mdi:cctv
+
+  - platform: template
+    sensors:
+      playarea_camera_people:
+        value_template: >-
+          {% set faces = state_attr('image_processing.facebox_playarea_camera', 'matched_faces') %}
+          {% if None != faces %}
+            {% if faces | list | count == 0 %}
+              Clear
+             {% else %}
+            {%- for face in faces | list %}{%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{ face }}{%- endfor %}
+            {% endif %}
+          {% endif %}
+        icon_template: mdi:cctv
+
+  - platform: template
+    sensors:
+      garage_camera_people:
+        value_template: >-
+          {% set faces = state_attr('image_processing.facebox_garage_camera', 'matched_faces') %}
+          {% if None != faces %}
+            {% if faces | list | count == 0 %}
+              Clear
+             {% else %}
+            {%- for face in faces | list %}{%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{ face }}{%- endfor %}
+            {% endif %}
+          {% endif %}
+        icon_template: mdi:cctv
+
+# ###########################################################################################################################
+# # Tagbox related Sensors; Please don't go crazy looking at the code. Here is the simple explanation.
+# # The tagbox gives a bunch of tags for each picture, and I eliminate a bunch of unwanted tags by filtering them out
+# # The unwanted tags are something that I really don't care - like a Tree in the front yard.
+# # Then I do custom mapping of the tags that fits my needs. That way I can display what I want rather than what I was given.
+# # I have no control over what tagbox gives, I want to pick and choose tags irrespective of confidence level. 
+# ###########################################################################################################################
+
+  # - platform: template
+  #   sensors:
+  #     frontdoor_camera_objects:
+  #       value_template: >-
+  #         {% set attribs = state_attr('image_processing.tagbox_frontdoor_camera', 'tags') %}
+  #         {%- if None != attribs -%}
+  #           {%- set tag_map = {'Vehicle':'Car', 'Sedan':'Car', 'Luxury vehicle':'Car', 'Driving':'Car',
+  #                              'Wheel':'Car', 'Automotive design':'Car', 'Automotive exterior':'Car', 
+  #                              'Transport':'Car', 'Sports car':'Car', 'Land vehicle':'Car', 'Supercar':'Car',
+  #                              'Waterway':'Rain', 'Super car': 'Car'
+  #                            } -%}
+  #           {%- set unwanted_tags = ['Asphalt', 'Backyard', 'City', 'Estate', 'Flower', 'Garden', 'Grass', 'Tree', 'Car', 'Vehicle', 'Suburb', 'Street',
+  #                                    'Highway', 'Infrastructure', 'Lane', 'Lawn', 'Neighbourhood', 'Public space', 'Super car', 'Snow', 'Winter', 'Supercar',
+  #                                    'Residential area', 'Road', 'Road surface', 'Sidewalk', 'Tarmac', 'Race track', 'Sport venue', 'Soil', 'Outdoor structure', 'Cartoon', 'Poster', 'Illustration',
+  #                                    'Transport', 'Walkway', 'Yard', 'Screenshot', 'Night', 'Lighting and Light', 'Drawing', 'Sketch', 'Stadium',
+  #                                    'Black-and-white', 'Monochrome', 'Monochrome photography', 'Black and White', 'Parking lot', 'Parking',
+  #                                    'Black', 'White', 'Darkness', 'Light', 'Text'] -%}
+  #           {%- macro filter_unwanted(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in unwanted_tags -%}{{- comma() -}}{{- item -}}{% endfor %}{%- endmacro -%}
+  #           {%- macro mapped_items(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in tag_map -%}{{- comma() -}}{{- item -}}
+  #             {%- endfor -%}
+  #           {%- for item in tags if item in tag_map -%}{{- comma() -}}{{- tag_map[item] -}}{%- endfor -%}
+  #           {%- endmacro -%}
+  #           {% macro get_final_output(output_list) %}
+  #             {%- for x in output_list if x != "" -%}
+  #             {%- if loop.first %}{% elif loop.last %},{% else %},{% endif -%}{{- x -}}
+  #             {%- endfor -%}            
+  #           {% endmacro %}
+  #           {%- set result =  filter_unwanted(attribs| map(attribute='name')|list).split(',') -%}
+  #           {%- set output = get_final_output(mapped_items(result).split(',') | unique|list) -%}
+  #           {{- "Clear" if output |trim == "" else output -}}
+  #         {% endif %}
+  #       icon_template: mdi:cctv
+
+  # - platform: template
+  #   sensors:
+  #     driveway_camera_objects:
+  #       value_template: >-
+  #         {%- set attribs = state_attr('image_processing.tagbox_driveway_camera', 'tags') -%}
+  #         {%- if None != attribs -%}
+  #           {%- set tag_map = {'Vehicle':'Car', 'Sedan':'Car', 'Luxury vehicle':'Car', 'Driving':'Car',
+  #                              'Wheel':'Car', 'Automotive design':'Car', 'Automotive exterior':'Car', 
+  #                              'Transport':'Car', 'Sports car':'Car', 'Land vehicle':'Car','Supercar':'Car',
+  #                              'Waterway':'Rain', 'Super car': 'Car'
+  #                            } -%}
+  #           {%- set unwanted_tags = ['Asphalt', 'Backyard', 'City', 'Estate', 'Flower', 'Garden', 'Grass', 'Tree', 'Car', 'Vehicle', 'Suburb', 'Street',
+  #                                    'Highway', 'Infrastructure', 'Lane', 'Lawn', 'Neighbourhood', 'Public space', 'Super car', 'Sport venue', 'Supercar',
+  #                                    'Residential area', 'Road', 'Road surface', 'Sidewalk', 'Tarmac', 'Race track', 'Snow', 'Winter', 'Soil', 'Outdoor structure', 'Cartoon', 'Poster', 'Illustration',
+  #                                    'Transport', 'Walkway', 'Yard', 'Screenshot', 'Night', 'Lighting and Light', 'Drawing', 'Sketch', 'Stadium',
+  #                                    'Black-and-white', 'Monochrome', 'Monochrome photography', 'Black and White',
+  #                                    'Black', 'White', 'Darkness', 'Light', 'Text'] -%}
+  #           {%- macro filter_unwanted(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in unwanted_tags -%}{{- comma() -}}{{- item -}}{% endfor %}{%- endmacro -%}
+  #           {%- macro mapped_items(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in tag_map -%}{{- comma() -}}{{- item -}}
+  #             {%- endfor -%}
+  #           {%- for item in tags if item in tag_map -%}{{- comma() -}}{{- tag_map[item] -}}{%- endfor -%}
+  #           {%- endmacro -%}
+  #           {% macro get_final_output(output_list) %}
+  #             {%- for x in output_list if x != "" -%}
+  #             {%- if loop.first %}{% elif loop.last %},{% else %},{% endif -%}{{- x -}}
+  #             {%- endfor -%}            
+  #           {% endmacro %}
+  #           {%- set result =  filter_unwanted(attribs| map(attribute='name')|list).split(',') -%}
+  #           {%- set output = get_final_output(mapped_items(result).split(',') | unique|list) -%}
+  #           {{- "Clear" if output |trim == "" else output -}}
+  #         {% endif %}
+  #       icon_template: mdi:cctv
+
+  # - platform: template
+  #   sensors:
+  #     patio_camera_objects:
+  #       value_template: >-
+  #         {% set attribs = state_attr('image_processing.tagbox_patio_camera', 'tags') %}
+  #         {%- if None != attribs -%}
+  #           {%- set tag_map = {'Waterway':'Rain'} -%}
+  #           {%- set unwanted_tags = ['Asphalt', 'Backyard', 'City', 'Estate', 'Flower', 'Garden', 'Grass', 'Tree', 'Vehicle','Driving', 'Transport', 'Car', 'Vehicle', 'Suburb', 'Street',
+  #                                    'Highway', 'Infrastructure', 'Lane', 'Lawn', 'Neighbourhood', 'Public space', 'Car', 'Wheel', 'Sports car','Super car', 'Sport venue', 'Outdoor structure', 'Cartoon', 'Poster', 'Illustration',
+  #                                    'Residential area', 'Road', 'Road surface', 'Sidewalk', 'Tarmac', 'Race track', 'Sedan', 'Automotive design', 'Snow', 'Winter', 'Soil', 'Stadium',
+  #                                    'Transport', 'Walkway', 'Yard', 'Screenshot', 'Night', 'Lighting and Light', 'Luxury vehicle', 'Automotive exterior', 'Drawing', 'Sketch',
+  #                                    'Black-and-white', 'Monochrome', 'Monochrome photography', 'Black and White', 'Black', 'White', 'Light', 'Text'] -%}
+  #           {%- macro filter_unwanted(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in unwanted_tags -%}{{- comma() -}}{{- item -}}{% endfor %}{%- endmacro -%}
+  #           {%- macro mapped_items(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in tag_map -%}{{- comma() -}}{{- item -}}
+  #             {%- endfor -%}
+  #           {%- for item in tags if item in tag_map -%}{{- comma() -}}{{- tag_map[item] -}}{%- endfor -%}
+  #           {%- endmacro -%}
+  #           {% macro get_final_output(output_list) %}
+  #             {%- for x in output_list if x != "" -%}
+  #             {%- if loop.first %}{% elif loop.last %},{% else %},{% endif -%}{{- x -}}
+  #             {%- endfor -%}            
+  #           {% endmacro %}
+  #           {%- set result =  filter_unwanted(attribs| map(attribute='name')|list).split(',') -%}
+  #           {%- set output = get_final_output(mapped_items(result).split(',') | unique|list) -%}
+  #           {{- "Clear" if output |trim == "" else output -}}
+  #         {% endif %}
+  #       icon_template: mdi:cctv
+
+  # - platform: template
+  #   sensors:
+  #     playarea_camera_objects:
+  #       value_template: >-
+  #         {% set attribs = state_attr('image_processing.tagbox_playarea_camera', 'tags') %}
+  #         {%- if None != attribs -%}
+  #           {%- set tag_map = {'Waterway':'Rain'} -%}
+  #           {%- set unwanted_tags = ['Asphalt', 'Backyard', 'City', 'Estate', 'Flower', 'Garden', 'Grass', 'Tree', 'Vehicle','Driving', 'Transport', 'Car', 'Vehicle', 'Suburb', 'Street',
+  #                                    'Highway', 'Infrastructure', 'Lane', 'Lawn', 'Neighbourhood', 'Public space', 'Car', 'Wheel', 'Sports car', 'Super car', 'Winter', 'Soil', 'Stadium',
+  #                                    'Residential area', 'Road', 'Road surface', 'Sidewalk', 'Tarmac', 'Race track', 'Sedan', 'Automotive design', 'Snow', 'Sport venue', 'Outdoor structure', 'Cartoon', 'Poster', 'Illustration',
+  #                                    'Transport', 'Walkway', 'Yard', 'Screenshot', 'Night', 'Lighting and Light', 'Luxury vehicle', 'Automotive exterior', 'Drawing', 'Sketch',
+  #                                    'Black-and-white', 'Monochrome', 'Monochrome photography', 'Black and White', 'Black', 'White', 'Light', 'Text'] -%}
+  #           {%- macro filter_unwanted(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in unwanted_tags -%}{{- comma() -}}{{- item -}}{% endfor %}{%- endmacro -%}
+  #           {%- macro mapped_items(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in tag_map -%}{{- comma() -}}{{- item -}}{%- endfor -%}
+  #           {%- for item in tags if item in tag_map -%}{{- comma() -}}{{- tag_map[item] -}}{%- endfor -%}
+  #           {%- endmacro -%}
+  #           {% macro get_final_output(output_list) %}
+  #             {%- for x in output_list if x != "" -%}
+  #             {%- if loop.first %}{% elif loop.last %},{% else %},{% endif -%}{{- x -}}
+  #             {%- endfor -%}            
+  #           {% endmacro %}
+  #           {%- set result =  filter_unwanted(attribs| map(attribute='name')|list).split(',') -%}
+  #           {%- set output = get_final_output(mapped_items(result).split(',') | unique|list) -%}
+  #           {{- "Clear" if output |trim == "" else output -}}
+  #         {% endif %}
+  #       icon_template: mdi:cctv
+
+  # - platform: template
+  #   sensors:
+  #     garage_camera_objects:
+  #       value_template: >-
+  #         {% set attribs = state_attr('image_processing.tagbox_garage_camera', 'tags') %}
+  #         {%- if None != attribs -%}
+  #           {%- set tag_map = {'Waterway':'Rain'} -%}
+  #           {%- set unwanted_tags = ['Asphalt', 'Backyard', 'City', 'Estate', 'Flower', 'Garden', 'Grass', 'Tree', 'Driving', 'Transport', 'Suburb', 'Street',
+  #                                    'Highway', 'Infrastructure', 'Lane', 'Lawn', 'Neighbourhood', 'Public space', 'Winter', 'Soil', 'Stadium',
+  #                                    'Residential area', 'Road', 'Road surface', 'Sidewalk', 'Tarmac', 'Race track', 'Sedan', 'Automotive design', 'Snow', 'Sport venue', 'Outdoor structure', 'Cartoon', 'Poster', 'Illustration',
+  #                                    'Transport', 'Walkway', 'Yard', 'Screenshot', 'Night', 'Lighting and Light', 'Luxury vehicle', 'Automotive exterior', 'Drawing', 'Sketch',
+  #                                    'Black-and-white', 'Monochrome', 'Monochrome photography', 'Black and White', 'Black', 'White', 'Light', 'Text'] -%}
+  #           {%- macro filter_unwanted(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in unwanted_tags -%}{{- comma() -}}{{- item -}}{% endfor %}{%- endmacro -%}
+  #           {%- macro mapped_items(tags) -%}
+  #            {%- set comma = joiner(',') -%}
+  #             {%- for item in tags if item not in tag_map -%}{{- comma() -}}{{- item -}}{%- endfor -%}
+  #           {%- for item in tags if item in tag_map -%}{{- comma() -}}{{- tag_map[item] -}}{%- endfor -%}
+  #           {%- endmacro -%}
+  #           {% macro get_final_output(output_list) %}
+  #             {%- for x in output_list if x != "" -%}
+  #             {%- if loop.first %}{% elif loop.last %},{% else %},{% endif -%}{{- x -}}
+  #             {%- endfor -%}            
+  #           {% endmacro %}
+  #           {%- set result =  filter_unwanted(attribs| map(attribute='name')|list).split(',') -%}
+  #           {%- set output = get_final_output(mapped_items(result).split(',') | unique|list) -%}
+  #           {{- "Clear" if output |trim == "" else output -}}
+  #         {% endif %}
+  #       icon_template: mdi:cctv
+
+automation:
+
+  - alias: Alert Family Member Activity
+    trigger:
+      - platform: state
+        entity_id: 
+          - sensor.frontdoor_camera_people
+          - sensor.driveway_camera_people
+          - sensor.patio_camera_people
+          - sensor.playarea_camera_people
+          - sensor.garage_camera_people
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
+      - condition: template
+        value_template: '{{ trigger.to_state.state | trim != "" and 
+                            trigger.to_state.state | lower | trim != "unknown" and 
+                            trigger.to_state.state | lower | trim != "clear" }}'
+    action:
+      - service: script.notify_me
+        data_template:
+          message: >-
+            {% set camera_name = states['camera'][trigger.entity_id.split('.')[1].split('_')[0] ~ '_camera'].attributes.friendly_name %}
+            {{ trigger.to_state.state }} is at the {{ camera_name }}.
+
+  # - alias: Alert Object Activity
+  #   trigger:
+  #     - platform: state
+  #       entity_id: 
+  #         - sensor.frontdoor_camera_objects
+  #         - sensor.driveway_camera_objects
+  #         - sensor.patio_camera_objects
+  #         - sensor.playarea_camera_objects
+  #         - sensor.garage_camera_objects
+  #   condition:
+  #     - condition: template
+  #       value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
+  #     - condition: template
+  #       value_template: '{{ trigger.to_state.state | trim != "" and 
+  #                           trigger.to_state.state | lower | trim != "unknown" and 
+  #                           trigger.to_state.state | lower | trim != "clear" }}'
+  #   action:
+  #     - service: script.notify_me
+  #       data_template:
+  #         message: >-
+  #           {% set camera_name = states['camera'][trigger.entity_id.split('.')[1].split('_')[0] ~ '_camera'].attributes.friendly_name %}
+  #           {{ trigger.to_state.state }} detected at the {{ camera_name }}.
+
+#
+# This automation basically scans image and keeps a count of people from each camera view and notifies using iOS notification
+# There is another automation that alerts in the house (using TTS) based on the data
+#
+  - alias: Scan People and Objects
+    initial_state: true
+    trigger:
+     - platform: state
+       entity_id:
+         - binary_sensor.frontdoor_camera_motion
+         - binary_sensor.driveway_camera_motion
+         - binary_sensor.patio_camera_motion
+         - binary_sensor.playarea_camera_motion
+         - binary_sensor.frontdoor_camera_field_detection
+         - binary_sensor.driveway_camera_field_detection
+         - binary_sensor.patio_camera_field_detection
+         - binary_sensor.playarea_camera_field_detection
+         - binary_sensor.frontdoor_camera_line_crossing
+         - binary_sensor.driveway_camera_line_crossing
+         - binary_sensor.patio_camera_line_crossing
+         - binary_sensor.playarea_camera_line_crossing
+         - binary_sensor.garage_motion
+       to: 'on'
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
+      - condition: template
+        value_template: >
+          {% macro last_triggered(entity) %}
+            {% set time_in_seconds = 30 %}
+            {{ ( (as_timestamp(now()) - as_timestamp(states["binary_sensor"][entity].attributes.last_tripped_time)))|round|abs < time_in_seconds }}
+          {% endmacro %}
+          {{ last_triggered(trigger.entity_id.split('.')[1].split('_')[0] ~ '_camera_motion')}}
+    action:
+      - service: image_processing.scan
+        data_template:
+          entity_id: "image_processing.facebox_{{- trigger.entity_id.split('.')[1].split('_')[0] -}}_camera"
+      # - service: image_processing.scan
+      #   data_template:
+      #     entity_id: "image_processing.tagbox_{{- trigger.entity_id.split('.')[1].split('_')[0] -}}_camera"

@@ -1,0 +1,91 @@
+frontend:
+  themes:
+    dark_red:
+      dark-primary-color: "#c66900"
+      disabled-text-color: "#545454"
+      divider-color: "rgba(255, 255, 255, 0.12)"
+      light-primary-color: "#e06c6c"
+      paper-card-background-color: "#1d1d1d"
+      paper-grey-200: "#191919"
+      paper-item-icon-color: "#d3d3d3"
+      paper-listbox-background-color: "#202020"
+      primary-background-color: "#303030"
+      primary-color: "#d32f2f"
+      primary-text-color: "#cfcfcf"
+      secondary-background-color: "#131313"
+      sidebar-text_-_background: "#62717b"
+      paper-card-header-color: "var(--paper-item-icon-color)"
+      paper-item-icon-active-color: "var(--primary-color)"
+      paper-item-icon_-_color: "var(--primary-text-color)"
+      paper-listbox-color: "var(--primary-text-color)"
+      paper-grey-50: "var(--primary-text-color)"
+      paper-slider-active-color: "var(--primary-color)"
+      paper-slider-knob-color: "var(--primary-color)"
+      paper-slider-knob-start-color: "var(--primary-color)"
+      paper-slider-pin-color: "var(--primary-color)"
+      paper-slider-secondary-color: "var(--light-primary-color)"
+      paper-toggle-button-checked-ink-color: "var(--dark-primary-color)"
+      paper-toggle-button-checked-button-color: "var(--primary-color)"
+      paper-toggle-button-checked-bar-color: "var(--light-primary-color)"
+      paper-toggle-button-unchecked-bar-color: "var(--primary-text-color)"
+      secondary-text-color: "var(--primary-color)"
+      table-row-background-color: "var(--paper-card-background-color)"
+      table-row-alternative-background-color: "var(--sidebar-text_-_background)"
+    light_pink:
+      dark-primary-color: "#ff084a"
+      primary-color: "#fc3468"
+      light-primary-color: "#ffc2cd"
+      paper-toggle-button-checked-ink-color: "#ff6289"
+      paper-toggle-button-checked-button-color: "#ff084a"
+      paper-toggle-button-checked-bar-color: "#ffc2cd"
+      paper-slider-knob-color: "#ff084a"
+      paper-slider-knob-start-color: "#ff084a"
+      paper-slider-pin-color: "#ff084a"
+      paper-slider-active-color: "#ff084a"
+      paper-slider-secondary-color: "#ff93ac"
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+automation:
+
+  - alias: Random Theme At Startup
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+       - service_template: frontend.set_theme
+         data_template:
+           name: >
+             {% if states.sun.sun.state == "above_horizon" %}
+             {{ ["light_pink", "default"] | random  }}
+             {% else %}
+             {{ [ "dark_red" ] | random  }}
+             {% endif %}
+
+  - alias: Random Darker Theme At Sunset
+    initial_state: true
+    trigger:
+      platform: sun
+      event: sunset
+    action:
+      - service: frontend.set_theme
+        data_template:
+          name: '{{ ["dark_red"] | random  }}'
+
+  - alias: Random Lighter Theme At Sunrise
+    initial_state: true
+    trigger:
+      platform: sun
+      event: sunrise
+    action:
+      - service: frontend.set_theme
+        data_template:
+          name: '{{ ["light_pink", "default"] | random  }}'

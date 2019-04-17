@@ -1,0 +1,239 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/28/2017
+#   @package        :   Birthday
+#   @description    :   Birthday reminders, greetings/wishes - all good stuff!
+#
+#   THREE IMPORTANT THINGS YOU NEED:
+#     1. Copy birtday_wishes.yaml file from templates folder to your templates folder
+#     2. Copy this file to Packages folder & add following to configuration.yaml
+#        packages: !include_dir_named packages
+#     3. Add the following to your secrets.yaml file, change name and date
+#        name_birthday: "MM-DD". See below for example:
+#
+#        srinika_birthday: "04-01"
+#        hasika_birthday:  "07-25"
+#        mallika_birthday: "12-31"
+#
+#    Update: I added mqtt code to refresh the sensor values dynamically.
+#    The sensor values update on hourly basis.
+#
+#    PLEASE NOTE THAT THIS PACKAGE USES "DATE" SENSOR. IF YOU SEE THE BIRTHDAY 
+#    VALUES AS "NOT SET", YOU NEED TO ADD THE FOLLOWING TO YOUR CONFIGURATION FILE
+#
+# sensor:
+#   - platform: time_date
+#     display_options:
+#       - 'time'
+#       - 'date'
+#       - 'date_time'
+#       - 'time_date'      
+#
+###############################################################################
+homeassistant:
+  customize:
+
+    ################################################
+    ## Node Anchors
+    ################################################
+
+    package.node_anchors:
+      customize: &customize
+        package: 'birthday'
+
+      hidden: &hidden
+        <<: *customize
+        hidden: true
+  
+    input_label.srinika_birthday:
+      <<: *hidden
+    input_label.hasika_birthday:
+      <<: *hidden
+    input_label.mallika_birthday:
+      <<: *hidden
+
+input_label:
+  srinika_birthday:
+    value: !secret srinika_birthday
+  hasika_birthday:
+    value: !secret hasika_birthday
+  mallika_birthday:
+    value: !secret mallika_birthday
+
+  srinika_birthday_days2go:
+    icon: mdi:cake-variant
+    name: Srinika's Birthday
+  hasika_birthday_days2go:
+    icon: mdi:cake-variant
+    name: Hasika's Birthday
+  mallika_birthday_days2go:
+    icon: mdi:cake-variant
+    name: Mallika's Birthday
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+###############################################################################
+# Build the excitement
+###############################################################################
+  - alias: Birthday Countdown 30 Days
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: 
+        - input_label.srinika_birthday_days2go
+        - input_label.hasika_birthday_days2go
+        - input_label.mallika_birthday_days2go
+    condition:
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: template
+        value_template: "{{ trigger.to_state.state | int > 0 and trigger.to_state.state | int < 30 }}"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "{{ trigger.entity_id.split('.')[1].split('_')[0] | title }}'s Birthday is only {{ trigger.to_state.state }} days to go!"
+
+###############################################################################
+# Celebrate Birthday!!!
+###############################################################################
+  - alias: Today is the Birthday
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: 
+        - input_label.srinika_birthday_days2go
+        - input_label.hasika_birthday_days2go
+        - input_label.mallika_birthday_days2go
+    condition:
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: template
+        value_template: "{{ trigger.to_state.state | int == 0 }}"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "Hurray! Today is {{ trigger.entity_id.split('.')[1].split('_')[0] | title }}'s Birthday!"
+
+###############################################################################
+# Announce Happy Birthday message every hour starting 7 am until 9 PM
+###############################################################################
+  - alias: Random Birthday Wishes
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      hours: '/1'
+      minutes: 3
+      seconds: 00
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: group.all_devices
+          state: 'home'
+        - condition: time
+          after: '07:00:00'
+          before: '21:00:00'
+        - condition: or
+          conditions:
+            - condition: template
+              value_template: "{{ states.input_label.srinika_birthday_days2go.state | int == 0 }}"
+            - condition: template
+              value_template: "{{ states.input_label.hasika_birthday_days2go.state | int == 0 }}"
+            - condition: template
+              value_template: "{{ states.input_label.mallika_birthday_days2go.state | int == 0 }}"
+    action:
+      - service: script.voice_notify
+        data_template:
+          message: !include ../templates/birthday_wishes.yaml
+      - delay:
+          minutes: 1
+      - service: script.voice_notify
+        data_template:
+          message: "Alexa, Sing Happy Birthday Song."
+          greeting: 'no'
+
+  - alias: Update Birthdays
+    initial_state: true
+    trigger:
+      - platform: time_pattern
+        minutes: '/5'
+        seconds: 00
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: template
+        value_template: "{{ states.input_label.srinika_birthday.state.split('-') | length  > 0 }}"
+      - condition: template
+        value_template: "{{ states.input_label.hasika_birthday.state.split('-') | length  > 0 }}"
+      - condition: template
+        value_template: "{{ states.input_label.mallika_birthday.state.split('-') | length  > 0 }}"
+    action:
+      - service: input_label.set_value
+        data_template:
+          entity_id: input_label.srinika_birthday_days2go
+          value: >
+            {% set year = states.sensor.date.state.split('-')[0] %}
+            {% set month = states.sensor.date.state.split('-')[1] %}
+            {% set date = states.sensor.date.state.split('-')[2] %}
+            {% if states('input_label.srinika_birthday') != "unknown" %}
+              {%- set bDayMonth = states.input_label.srinika_birthday.state.split('-')[0] -%}
+              {%- set bDayDate = states.input_label.srinika_birthday.state.split('-')[1] -%}
+              {%- set numOfDays = ((as_timestamp(strptime(year ~ '-' ~ bDayMonth ~ '-' ~ bDayDate , '%Y-%m-%d')) | timestamp_custom('%j', true) | int ) - (as_timestamp(strptime(year ~ '-' ~ month~ '-' ~ date , '%Y-%m-%d')) | timestamp_custom('%j', true) | int)) -%}
+              {%- if numOfDays < 0 -%}
+                {{ numOfDays + 365 }}
+              {%- else -%}
+                {{ numOfDays }}
+              {%- endif -%}
+            {% else %}
+              -
+            {% endif %}
+      - service: input_label.set_value
+        data_template:
+          entity_id: input_label.hasika_birthday_days2go
+          value: >
+            {% set year = states.sensor.date.state.split('-')[0] %}
+            {% set month = states.sensor.date.state.split('-')[1] %}
+            {% set date = states.sensor.date.state.split('-')[2] %}
+            {% if states('input_label.hasika_birthday') != "unknown" %}
+              {%- set bDayMonth = states.input_label.hasika_birthday.state.split('-')[0] -%}
+              {%- set bDayDate = states.input_label.hasika_birthday.state.split('-')[1] -%}
+              {%- set numOfDays = ((as_timestamp(strptime(year ~ '-' ~ bDayMonth ~ '-' ~ bDayDate , '%Y-%m-%d')) | timestamp_custom('%j', true) | int ) - (as_timestamp(strptime(year ~ '-' ~ month~ '-' ~ date , '%Y-%m-%d')) | timestamp_custom('%j', true) | int)) -%}
+              {%- if numOfDays < 0 -%}
+                {{ numOfDays + 365 }}
+              {%- else -%}
+                {{ numOfDays }}
+              {%- endif -%}
+            {% else %}
+              -
+            {% endif %}
+      - service: input_label.set_value
+        data_template:
+          entity_id: input_label.mallika_birthday_days2go
+          value: >
+            {% set year = states.sensor.date.state.split('-')[0] %}
+            {% set month = states.sensor.date.state.split('-')[1] %}
+            {% set date = states.sensor.date.state.split('-')[2] %}
+            {% if states('input_label.mallika_birthday') != "unknown" %}
+              {%- set bDayMonth = states.input_label.mallika_birthday.state.split('-')[0] -%}
+              {%- set bDayDate = states.input_label.mallika_birthday.state.split('-')[1] -%}
+              {%- set numOfDays = ((as_timestamp(strptime(year ~ '-' ~ bDayMonth ~ '-' ~ bDayDate , '%Y-%m-%d')) | timestamp_custom('%j', true) | int ) - (as_timestamp(strptime(year ~ '-' ~ month~ '-' ~ date , '%Y-%m-%d')) | timestamp_custom('%j', true) | int)) -%}
+              {%- if numOfDays < 0 -%}
+                {{ numOfDays + 365 }}
+              {%- else -%}
+                {{ numOfDays }}
+              {%- endif -%}
+            {% else %}
+              -
+            {% endif %}

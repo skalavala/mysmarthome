@@ -1,0 +1,407 @@
+#########################################################################################################
+# Wrote this code for @norien, where he wanted to set specific color to all the bulbs based on holiday 
+#########################################################################################################
+# homeassistant:
+#   customize:
+
+#     script.set_random_color_2_all_bulbs:
+#       hidden: false
+#     script.light_set_color:
+#       hidden: true
+
+# input_label:
+#   hue_color_lamp_1_random_color:
+#     value: "no"
+#   hue_color_lamp_2_random_color:
+#     value: "no"
+#   hue_color_lamp_3_random_color:
+#     value: "no"
+
+# group:
+#   Family Room Hue Bulbs:
+#     entities:
+#       - light.hue_color_lamp_1
+#       - light.hue_color_lamp_2
+#       - light.hue_color_lamp_3
+#   Input Labels:
+#     entities:
+#       - input_label.hue_color_lamp_1_random_color
+#       - input_label.hue_color_lamp_2_random_color
+#       - input_label.hue_color_lamp_3_random_color
+
+# script:
+#   set_random_color_2_all_bulbs:
+#     sequence:
+#       - condition: template
+#         value_template: >
+#             {%- macro get_next_entity_id() -%}
+#               {%- for item in states.group.input_labels.attributes.entity_id if is_state(item, "no") -%}
+#                 {{- "," if not loop.first-}}{{- item -}}{{-endif-}}
+#               {%- endfor -%}              
+#             {%- endmacro -%}
+#             {%- set entity_ids = get_next_entity_id() -%}
+#             {% if entity_ids | trim != "" and entity_ids.split(',') | length | int == 0 %}
+#               false
+#             {% else %}
+#               true
+#             {% endif %}
+#       - delay: '00:00:01'
+#       - service: script.light_set_color
+#         data_template:
+#           entity_id: >-
+#             {%- macro get_next_entity_id() -%}
+#               {%- for item in states.group.input_labels.attributes.entity_id if is_state(item, "no") -%}
+#                 {{- "," if not loop.first-}}{{- item -}}{{-endif-}}
+#               {%- endfor -%}              
+#             {%- endmacro -%}
+#             {%- set entity_ids = get_next_entity_id() -%}
+#             {% if entity_ids | trim != "" %}
+#               {%- if entity_ids.split(',') | length > 0 -%}
+#                 {{- 'light.' ~ entity_ids.split(',')[0].split('.')[1].replace('_random_color', '') -}}
+#               {%- endif -%}
+#             {% endif %}
+#           brightness: 254
+#           r: '{{ "{0:d}".format(range(210, 238)|random) }}'
+#           g: '{{ "{0:d}".format(range(100, 132)|random) }}'
+#           b: '{{ "{0:d}".format(range(240, 254)|random) }}'
+
+#   light_set_color:
+#     sequence:
+#       - condition: template
+#         value_template: '{{ entity_id | trim != "" }}'
+#       - condition: template
+#         value_template: '{{ brightness | trim != "" }}'
+#       - service: light.turn_on
+#         data_template:
+#           entity_id: '{{ entity_id }}'
+#           brightness: '{{ brightness }}'
+#           rgb_color: ['{{"{0:d}".format(range(210, 238)|random)|int}}', '{{"{0:d}".format(range(210, 238)|random)|int}}', '{{"{0:d}".format(range(210, 238)|random)|int}}']
+#       - service: input_label.set_value
+#         data_template:
+#           entity_id: "input_label.{{- entity_id.split('.')[1] -}}_random_color"
+#           value: 'yes'
+#       - delay: '00:00:01'
+#       - service: script.set_random_color_2_all_bulbs
+
+#########################################################################################################
+# Wrote this for @chags, to show how to raise and handle custom events with dynamic data using templates
+#########################################################################################################
+# automation:
+#   - alias: Fire Event
+#     trigger:
+#       platform: state
+#       entity_id: switch.kitchen
+#     action:
+#       event: my_test_event
+#       event_data:
+#         foo: "bar"
+
+#   - alias: Capture Event
+#     trigger:
+#       platform: event
+#       event_type: my_test_event
+#     action:
+#       - service: script.notify_me
+#         data_template:
+#           message: "Test Event Captured with data foo: {{ trigger.event.data.foo }}"
+
+#########################################################################################################
+# Wrote this code for @roystervi, where it turns on a group of media players/speakers based on where
+# the motion is detected, and when there is no motion, it turns off the speakers
+#########################################################################################################
+
+# automation:
+#   - alias: Speakers On During Presence
+#     trigger:
+#       - platform: state
+#         entity_id:
+#           - binary_sensor.masterbed_motion
+#           - binary_sensor.masterbath_motion
+#           - binary_sensor.bathroom_motion
+#           - binary_sensor.kitchen_motion
+#           - binary_sensor.den_motion
+#     action:
+#       - service_template: 'switch.turn_{{ trigger.to_state.state }}'
+#         data_template:
+#             entity_id: '{{ trigger.entity_id.replace("binary_sensor", "group") }}'
+
+#########################################################################################################
+# Wrote this code for someone, to help set scenes based on sun elevation and time combination
+#########################################################################################################
+
+#- id: Sunset_if_home
+# automation:
+#   - alias: 'Hemkomst'
+#     trigger:
+#       platform: state
+#       entity_id: 'group.telefoner'
+#       state: 'home' 
+#     condition:
+#       - condition: time
+#         after: '12:00:00'
+#         before: '02:00:00'          
+#     action:
+#       - service_template: scene.turn_on
+#         data_template:
+#           entity_id: >-
+#             {%set elevation = states.sun.sun.attributes.elevation | int %}
+#             {% if elevation > -10 and elevation | int < 5 %}
+#               scene.normalvit
+#             {% elif elevation | int > 5 %}
+#               scene.dimmad_vit
+#             {% endif %}
+
+#########################################################################################################
+# Wrote this code for someone, to show servcie_template example
+#########################################################################################################
+
+# automation:
+#   - alias: Run every 15 seconds
+#     hide_entity: false
+#     initial_state: true
+#     trigger:
+#       - platform: time_pattern
+#         seconds: '/15'
+#     action:
+#       - service_template: >-
+#           {% if states.switch.kitchen.state == 'on' %}
+#           switch.turn_off
+#           {% else %}
+#           switch.turn_on
+#           {% endif %}
+#         entity_id: switch.kitchen
+
+
+#########################################################################################################
+# Wrote this code for someone, where they wanted to drop a message to MQTT with topic name based on sensor 
+#########################################################################################################
+
+# automation:
+#   - alias: ResetMotionSensors
+#     trigger:
+#       - platform: state
+#         entity_id: binary_sensor.hallway_motion
+#         to: 'on'
+#         for:
+#           seconds: 30
+#       - platform: state
+#         entity_id: binary_sensor.livingroom_motion
+#         to: 'on'
+#         for:
+#           seconds: 30
+#       - platform: state
+#         entity_id: binary_sensor.kitchen_motion
+#         to: 'on'
+#         for:
+#           seconds: 30
+#     action:
+#       - service: mqtt.publish
+#         data_template:
+#           payload: '{"state": "open"}'
+#           topic: >-
+#             {% set mapping = '{ "hallway": "985335", "livingroom": "854267", "kitchen": "699555" }' %}
+#             {{ 'Hassio/433/Honeywell/Honeywell_Door/Window_Sensor/' ~ mapping[trigger.entity_id.split('.')[1].split('_')[0] ~ ''] }}
+
+
+#########################################################################################################
+# Wrote code for @chags - to pass a list of variables from an automation to a script
+#########################################################################################################
+
+# automation:
+#   - alias: 'Pass list to script'
+#     trigger:
+#       - platform: state
+#         entity_id: switch.kitchen
+#     action:
+#       - service: script.test_script
+#         data:
+#           entities_list:
+#             - light.hue_color_lamp_1
+#             - light.hue_color_lamp_2
+#             - light.hue_color_lamp_3
+# script:
+#   test_script:
+#     sequence:
+#       - service_template: light.turn_on
+#         data_template:
+#           entity_id: >
+#             {% for e in entities_list %}
+#             {%- if loop.first %}{% elif loop.last %}, {% else %}, {% endif -%}
+#             {{ e }}
+#             {%- endfor %}
+
+#########################################################################################################
+# Wrote code for @IxsharpxI#4883 - he wanted to call REST api and extract various values for APCUPS! 
+#########################################################################################################
+
+# https://raw.githubusercontent.com/awesome-automations/home/master/apcups.html
+
+# sensor:
+#   - platform: rest
+#     resource: https://raw.githubusercontent.com/awesome-automations/home/master/apcups.html
+#     name: BATTERY_MODEL
+#     scan_interval: 60
+#     value_template: >
+#       {%- macro GetValue(str) -%}
+#       {%- if str in value -%}
+#         {%- set index = value.split(str)[0]|length -%}
+#         {{ value[index+str|length:value|length].split('\n')[0] }}
+#       {%- endif -%}
+#       {%- endmacro %}
+#       {{ GetValue('MODEL    : ') }}
+
+
+#########################################################################################################
+# Wrote this code for someone, where they wanted to have an input_boolean that controls effects
+#########################################################################################################
+
+# input_boolean:
+#   color_loop:
+#     initial: off
+
+# automation:
+#   - alias: Colorloop Automation
+#     trigger:
+#       - platform: state
+#         entity_id: input_boolean.color_loop
+#     action:
+#       - service_template: script.color_loop_ "{{- trigger.to_state.state -}}"
+
+# script:
+#   color_loop_on:
+#     sequence:
+#       - service: light.turn_on
+#         data:
+#           entity_id: light.xxx
+#           effect: colorloop
+
+#   color_loop_off:
+#     sequence:
+#       - service: light.turn_off
+#         entity_id: light.xxx
+
+#########################################################################################################
+# @xxKira wanted to call a service in a loop by passing an alphabet each time from a string, 
+# so that the service inserts that alphabet using remote on TV
+#########################################################################################################
+
+# homeassistant:
+
+# input_number:
+#   text_index:
+#     name: "Text Index"
+#     initial: 0
+#     min: 0
+#     max: 255
+
+# script:
+#   input_text:
+#     alias: Text to Enter on Remote
+#     sequence:
+#       - service_template: script.text_loop
+#         data_template:
+#           text: "Netflix"
+
+#   text_loop:
+#     alias: Loops Text
+#     sequence:
+#       - condition: template
+#         value_template: "{{ 'true' if (states.input_number.text_index.state |int < text|length | int) else 'false' }}"
+#       - service_template: script.key_input
+#         data_template:
+#           command: >-
+#             {%- set index = states.input_number.text_index.state | int -%}
+#             {{ text[index:index+1] }}
+#           text: "{{ text }}"
+
+#   key_input:
+#     alias: Send Key Input
+#     sequence:
+#       - service: media_player.firetv_adb_shell
+#         data_template:
+#           entity_id: media_player.televisione_camera
+#           cmd: "input keyevent {{ command | upper }}"
+#       - delay: '00:00:01'
+#       - service: input_number.set_value
+#         data_template:
+#           entity_id: input_number.text_index
+#           value: "{{ (states.input_number.text_index.state | int + 1) }}"
+#       - service: script.text_loop
+#         data_template:
+#           text: "{{ text }}"
+
+#########################################################################################################
+# Wrote this for @quadflight - automation alerts when any of the sensor's battery is less than 25
+# it announces in the house!
+#########################################################################################################
+# automation:
+#   - alias: Alert Low Battery
+#     trigger:
+#       - platform: template
+#         value_template: >
+#           {% set ns = namespace(lowBattery=false) %}
+#           {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
+#           {% set ns.lowBattery = true %}{% endfor %}
+#           {{ ns.lowBattery }}
+#     action:
+#       - service: script.voice_notify
+#         data_template:
+#           message: >
+#             {% set ns = namespace(lowBattery) %}
+#             {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
+#               {% set ns.lowBattery = ns.lowBattery ~ ',' ~ x.name %}
+#             {%- endfor %}
+#             {{ ns.lowBattery -}} 
+#             {{- ' battery is ' if ns.lowBattery.split(',')|count == 1 else ' batteries are ' -}} less than 25 percent.
+
+
+##############################################################################################################################
+# Wrote this for @marmar63#0271 - he wanted to run a script `x` number of times
+# - reduce volume, restore volume level...etc
+#
+##############################################################################################################################
+input_number:
+  loop_index:
+    initial: 0
+    min: 0
+    step: 1
+    max: 9999
+
+script:
+  run_x_times:
+    alias: Run X Times
+    sequence:
+      - service: input_number.set_value
+        data_template:
+          entity_id: input_number.loop_index
+          value: 0
+      - service_template: script.loop_one
+        data_template:
+          count: "{{ count }}"
+
+  loop_one:
+    alias: Loops X times
+    sequence:
+      - condition: template
+        value_template: "{{ 'true' if (states.input_number.loop_index.state |int < count | int) else 'false' }}"
+      - service: mqtt.publish
+        data_template:
+          topic: "/loop/test"
+          payload: "{{ states.input_number.loop_index.state | int }}"
+          retain: false
+      - delay: '00:00:00'
+      - service: script.loop_two
+        data_template:
+          count: "{{ count |int}}"
+
+  loop_two:
+    alias: A loop that calls first loop
+    sequence:
+      - delay: '00:00:00'
+      - service: input_number.set_value
+        data_template:
+          entity_id: input_number.loop_index
+          value: "{{ (states.input_number.loop_index.state | int + 1) |int }}"
+      - service: script.loop_one
+        data_template:
+          count: "{{ count|int }}"

@@ -1,0 +1,56 @@
+# General File Extensions
+
+*.pid
+*.csr
+*.crt
+*.key
+*.conf
+*.db-journal
+*.log
+*.db
+*.txt
+*.deb
+*.sh
+*.pickle
+
+# Folders
+www
+lib
+deps
+tts
+test
+conf
+apps
+tensorflow
+docker/streamer
+
+# Files
+
+OZW_Log.txt
+secrets.yaml
+known_devices.yaml
+pyozw.sqlite
+clear_mqtt_topics
+google_calendars.yaml
+known_devices.yaml
+updatesnapcast
+usps_cookies.pickle
+zwave_device_config.yaml
+fixperms
+usps_cache.sqlite
+pi_mqtt_cmds.py
+pi_mqtt_cmds.pyc
+
+# Other Github Related Files
+.*
+!/.gitignore
+usps_cookies.pickle
+packages/zones_private.yaml
+packages/device_tracker.yaml
+packages/bitcoins.yaml
+custom_components/*/__pycache__/*
+custom_components/__pycache__/*
+docs/_site
+private/*
+apps/__pycache__/*.pyc
+docker/streamer

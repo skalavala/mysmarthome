@@ -1,0 +1,191 @@
+>
+  {#- returns "true" if the name ends with 's' -#}
+  {%- macro plural(name) -%}
+    {{- "true" if name.endswith("s") else "false" -}}
+  {%- endmacro -%}
+
+  {#- Alerts low battery (below 30%), ONLY when the phone is not already pluggedin -#}
+  {%- macro low_battery_check() -%}
+   {%- set level = 30 -%}
+   {%- for item in states.device_tracker if '_' in item.entity_id.split('.')[1] and state_attr(item.entity_id, "battery") |lower != "none" -%}
+     {%- if item.attributes.battery|int < level -%}
+       {%- if states("sensor." ~ item.friendly_name |lower ~"s_iphone_battery_state") | lower != "charging" %}
+         {{- item.attributes.friendly_name}}s iPhone battery is at {{ item.attributes.battery }} percent.
+       {%- endif %}
+     {%- endif %}
+   {%- endfor -%}
+  {%- endmacro -%}
+
+  {#- Provides Light Status -#}
+  {%- macro light_status() -%}
+  {%- set lights_switches = ["light.family_room",
+                            "light.master_bedroom",
+                            "switch.basement_left",
+                            "switch.basement_right",
+                            "switch.frontyard_light",
+                            "switch.garage",
+                            "switch.guest_bedroom",
+                            "switch.prayer_room",
+                            "switch.kids_bed_accent",
+                            "switch.kids_bedroom",
+                            "switch.kitchen",
+                            "switch.office_room",
+                            "switch.wemobackyardlightswitch",
+                            "switch.zwave_smart_switch_switch"] %}
+  {%- for item in lights_switches -%}
+    {%- if states[item.split('.')[0]][item.split('.')[1]].state == "on" -%}
+      {%- set friendly_name = states[item.split('.')[0]][item.split('.')[1]].attributes.friendly_name %}
+      {%- if plural(friendly_name) == "true" %}
+        {{- friendly_name }} are ON.
+      {%- else -%}
+        {{- friendly_name }} is ON.
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- endmacro -%}
+
+  {#- Provides Home Security System Status -#}
+  {%- macro alarm_status() -%}
+    {%- if states.alarm_control_panel.simplisafe.state | lower == "disarmed" -%}
+      Your home security system is switched OFF. You may want to turn it ON.
+    {%- elif states.alarm_control_panel.simplisafe.state | lower == "armed_away" -%}
+      Your home security system is set to away mode.
+    {%- elif states.alarm_control_panel.simplisafe.state | lower == "armed_home" -%}
+      Your home security system is ON, and your home is secured.
+    {%- endif %}
+  {%- endmacro -%}
+  
+  {#- Provides Trash and Recycle Reminder -#}
+  {%- macro trash_recycle_status() -%}
+    {%- set flag = false -%}
+    {%- if states.sensor.trash_day.state | lower == "yes" -%}
+      Your trash will be picked up tomorrow. Did you leave the trash bin outside?.
+      {%- set flag = true -%}
+    {%- endif %}
+    {%- if states.sensor.recycle_day.state | lower == "yes" -%}
+      {%- if flag -%}
+        Also, your recycle stuff will be picked up tomorrow as well! Please leave both recycle bin and trash cans outside if you haven't!.
+      {%- else -%}
+        Your recycle stuff will be picked up tomorrow. Please leave the recycle bin outside if you haven't done so!.
+      {%- endif -%}
+    {%- endif %}
+  {%- endmacro -%}
+  
+  {%- macro outside_weather() -%}
+    {%- if states('sensor.dark_sky_minutely_summary') != "unknown" -%}
+      Outside, it is going to be {{states('sensor.dark_sky_minutely_summary')}}.
+    {%- endif -%}
+    {%- if states('sensor.dark_sky_apparent_temperature') != "unknown" %}
+    The temperature outside is around {{ states.sensor.dark_sky_apparent_temperature.state | round(0)}} degrees.
+    {%- endif -%}
+  {%- endmacro -%}
+  
+  {%- macro pihole() -%}
+    {%- if states.sensor.ads_blocked_today.state|int > 100 -%}
+      Our internet blocking system has blocked {{states.sensor.ads_blocked_today.state}} ads today.
+    {%- endif -%}
+  {%- endmacro -%}
+
+  {%- macro charging_status() -%}
+    {%- for item in states if "iphone_battery_state" in item.entity_id and item.state != "Charging" %}
+      {%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{- item.name.split(' ')[0] -}}
+    {%- endfor -%}
+  {%- endmacro -%}
+
+  {%- macro battery_status() -%}
+    {% set value = charging_status() %}
+    {% if ' and ' in value or ',' in value %}
+      {{ value }}'s phones are not plugged in.
+    {% elif value != '' %}
+      {{ value }}'s phone is not plugged in.
+    {% endif %}
+  {%- endmacro -%}
+
+  {#- Provides Garage Doors Status -#}
+  {%- macro single_car_garage_door_status() -%} 
+    {% if  states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state|lower == "on" %}
+      {{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
+    {% endif %}
+  {%- endmacro -%}
+ 
+  {%- macro two_car_garage_door_status() -%} 
+    {% if  states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state|lower == "on" %}
+      {{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
+    {% endif %}
+  {%- endmacro -%}
+
+  {%- macro tesla_status() %}
+    {%- if states("binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor") != "unknown" -%}
+      Your Tesla Car is {{ 'not' if states.binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor.state == "off" }} plugged in.
+    {% endif %}
+
+    {%- if states("sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor") != "unknown" and states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" -%}
+    Tesla Car battery is at {{ states.sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor.state }}%, and you can drive about {{ (states.sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor.state | int) | round(0) }} miles.
+    {% endif %}
+  {%- endmacro %}
+
+  {#- Check for low humidity levels in autumn, winter and high levels during rest of the year -#}
+  {%- macro humidity_status() -%}
+    {%- if states.sensor.season.state| lower == "autumn" or states.sensor.season.state| lower == "winter" %}
+      {%- if states.sensor.dining_room_thermostat_humidity.state | int < 30 -%}
+        Home humidity is less than 30%.
+      {%- endif -%}
+    {% else %}
+      {%- if states.sensor.dining_room_thermostat_humidity.state | default(0) | int > 60 -%}
+        Home humidity is more than 60%.
+      {%- endif -%}
+    {%- endif -%}
+  {%- endmacro -%}
+
+  {%- macro clean_up(data) -%}
+    {%- for item in data.split("\n")  if item | trim != "" -%}
+      {{ item | trim }} {% endfor -%}
+  {%- endmacro -%}
+
+  {%- macro getGreeting() -%}
+    {%- if greeting | default('yes', true ) == "yes" -%}
+      {% if now().hour|int < 12 %}
+        Have a great day!
+      {% elif now().hour|int < 18 %}
+        Enjoy your afternoon!
+      {% elif now().hour|int < 20 %}
+        Enjoy your evening!
+      {% else %}
+        Have a good night!
+      {% endif %}
+    {%- endif -%}
+  {%- endmacro -%}
+
+  {#- Main macro that runs all other macros and combines the information -#}
+  {%- macro run_script() -%}
+   It is {% if now().hour > 12 %}{{ now().hour | int - 12 }}: {{- now().minute }} PM{% else %}{{ now().hour }}: {{- now().minute }} PM{% endif %}. Here is the status of your home.{{- alarm_status() -}}
+   {%- set battery_output = low_battery_check() -%}
+   {%- if battery_output | trim != "" -%}
+   {{- battery_output -}} Please make sure you put the phones to charge.
+   {%- endif -%}
+
+   {%- set light_output = light_status() -%}
+   {%- if light_output | trim == "" -%}
+   All the lights in the house are OFF.
+   {%- else -%}
+   {{- light_output -}}
+   {%- endif -%}
+
+   {%- set single_car_garage = single_car_garage_door_status() -%}
+   {%- set two_car_garage = two_car_garage_door_status() -%}
+   {%- if single_car_garage | trim == "" and two_car_garage | trim == "" -%}
+     The garage doors are closed.
+   {%- elif single_car_garage | trim != "" and two_car_garage | trim != "" -%}
+     Warning! Both garage doors are OPEN.
+   {% else %}
+     Warning! {{ single_car_garage }} {{ two_car_garage }}
+   {%- endif -%}
+   
+   {%- set trash_output = trash_recycle_status() -%}{{- trash_recycle_status() -}}
+   {{- battery_status() -}}
+   {{- tesla_status() -}}
+   {{- humidity_status() -}}
+   {{- outside_weather() }} Everything else looks good. {{ getGreeting() }}
+  {%- endmacro -%}
+ 
+  {{- clean_up(run_script()) -}}

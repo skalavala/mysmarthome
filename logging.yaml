@@ -1,0 +1,40 @@
+default: error
+logs:
+  gsp: critical
+  root: error
+  pyhap: error
+  openzwave: error
+  py.warnings: error
+  pywemo.ssdp: error
+  libopenzwave: error
+  simplipy.api: error
+  netdisco.ssdp: error
+  aiohttp.server: error
+  homeassistant.core: critical
+  homeassistant.setup: error
+  homeassistant.loader: error # hide custom_component warnings
+  homeassistant.exceptions: error
+  homeassistant.helpers.script: error  
+  homeassistant.helpers.entity: error
+  homeassistant.components.wemo: critical
+  homeassistant.components.cloud.iot: error
+  homeassistant.components.hue: critical
+  homeassistant.components.http: error
+  homeassistant.components.camera: error
+  homeassistant.components.zwave: error
+  homeassistant.components.sensor: error
+  homeassistant.components.image_processing: error
+  homeassistant.components.homekit: error
+  custom_components.sensor.life360: error
+  custom_components.sensor.paloalto: error
+  homeassistant.components.recorder: error
+  homeassistant.components.discovery: error
+  homeassistant.components.automation: error
+  custom_components.sensor.command_line: error
+  homeassistant.components.climate.nest: error
+  homeassistant.components.media_player: error
+  custom_components.media_player.sharptv: error
+  homeassistant.components.switch.tplink: error
+  homeassistant.components.emulated_hue: error
+  homeassistant.components.device_tracker: error
+  homeassistant.components.camera.generic: error

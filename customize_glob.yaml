@@ -1,0 +1,74 @@
+'sensor.*_temperature':
+  hidden: false
+'sensor.*_humidity':
+  hidden: false
+'sensor.*_luminance':
+  hidden: false
+
+# Z Wave Stuff
+'zwave.aeotec_zw074_*':
+  hidden: true
+'sensor.aeotec_zw074_multisensor_gen5_*':
+  hidden: true
+'sensor.aeotec_zw100_multisensor_6_*':
+  hidden: true
+'sensor.*_access_control*':
+  hidden: true
+'sensor.*_alarm_level*':
+  hidden: true
+'sensor.*_alarm_type*':
+  hidden: true
+'sensor.*_burglar*':
+  hidden: true
+'sensor.*_power_management*':
+  hidden: true
+'sensor.*_sourcenodeid*':
+  hidden: true
+
+# Calendar Stuff
+'calendar.*':
+  hidden: true
+
+# Camera Stuff, hide from UI
+'binary_sensor.*_camera_tamper_detection':
+  hidden: true
+'binary_sensor.*_camera_field_detection':
+  hidden: true
+'binary_sensor.*_camera_line_crossing':
+  hidden: true
+'binary_sensor.*_camera_face_detection':
+  hidden: true
+
+# Weather Stuff
+# 'sensor.dark_sky_*':
+#   hidden: true
+
+'sensor.waqi_columbus__fairgrounds_*':
+  hidden: true
+
+'sensor.pws_*':
+  hidden: true
+
+'sensor.pollen*':
+  hidden: true
+
+'sensor.cold_flu_*':
+  hidden: true
+
+'sensor.air_quality':
+  hidden: true
+
+'sensor.uv_*':
+  hidden: true
+
+'sensor.sun':
+  hidden: true
+
+# Hide WiFi Stuff
+'sensor.*_iphone_wifi_state':
+  hidden: true
+
+zwave.unknown_*:
+  hidden: true
+sensor.unknown_*:
+  hidden: true

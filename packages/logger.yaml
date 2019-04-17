@@ -1,0 +1,102 @@
+# ###############################################################################
+# # @Description    : Logger Package  to set log level on the fly at runtime
+# ###############################################################################
+
+# homeassistant:
+#   customize:
+#     sensor.current_log_level:
+#       friendly_name: Current Log Level
+#       hidden: true
+
+# logger:
+#   default: warning
+#   logs:
+#     gsp: critical
+#     aiohttp.server: critical
+#     simplipy.system: critical
+#     homeassistant.components.light: critical
+#     openzwave: debug
+#     pywemo.ssdp: error
+#     libopenzwave: error
+#     netdisco.ssdp: error
+#     homeassistant.core: error
+#     homeassistant.setup: error
+#     homeassistant.loader: error
+#     homeassistant.components.api: error 
+#     homeassistant.helpers.script: error
+#     homeassistant.components.mqtt: error 
+#     homeassistant.components.http: error 
+#     homeassistant.helpers.entity: error
+#     homeassistant.components.zwave: error 
+#     homeassistant.components.sensor: error 
+#     homeassistant.helpers.condition: error
+#     homeassistant.components.recorder: error 
+#     homeassistant.components.discovery: error
+#     homeassistant.components.automation: error
+#     homeassistant.components.light.lifx: error
+#     homeassistant.components.emulated_hue: error
+#     homeassistant.components.media_player: error 
+#     homeassistant.components.device_tracker: error
+#     custom_components.sensor.life360: error
+#     custom_components.sensor.command_line: error 
+#     custom_components.media_player.sharptv: error 
+
+# ###############################################################################
+# # Logger level
+# input_select:  
+#   log_level:
+#     name: Log Level
+#     options:
+#      - critical
+#      - fatal
+#      - error
+#      - warning
+#      - warn
+#      - info
+#      - debug
+#      - notset
+#     initial: warning
+
+# sensor:
+#   - platform: mqtt
+#     state_topic: '/homeassistant/log_level'
+#     name: "Current Log Level"
+#     value_template: "{{ value }}"
+
+# automation:
+# ###############################################################################
+# # Sets Logging Level
+# ###############################################################################
+#   - alias: Log Level
+#     initial_state: true
+#     hide_entity: true
+#     trigger:
+#       - platform: state
+#         entity_id: input_select.log_level
+#     action:
+#       - service: logger.set_level
+#         data_template:
+#           homeassistant.components: "{{ trigger.to_state.state }}"
+#       - service: mqtt.publish
+#         data_template:
+#           topic: '/homeassistant/log_level'
+#           payload: '{{ trigger.to_state.state }}'
+#           retain: true
+
+# ###############################################################################
+# # Restore Log Level
+# ###############################################################################
+#   - alias: Restore Log Level on Startup
+#     initial_state: true
+#     hide_entity: true
+#     trigger:
+#       platform: homeassistant
+#       event: start
+#     action:
+#       - delay:
+#           minutes: 0
+#           seconds: 15
+#       - service: input_select.select_option
+#         data_template:
+#           entity_id: input_select.log_level
+#           option: '{{ states.sensor.current_log_level.state | default("warning") }}'

@@ -1,0 +1,54 @@
+title: Tesla
+icon: mdi:car
+cards:
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: Tesla Battery
+            unit: '%'
+            entity: sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor
+            severity:
+              green: 75
+              yellow: 40
+              red: 25
+          - type: gauge
+            name: Battery Range
+            unit: 'miles'
+            entity: sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor
+            max: 320
+            min: 0
+            severity:
+              green: 200
+              yellow: 100
+              red: 75
+      - type: thermostat
+        entity: climate.tesla_model_3_5yj3e1ea8jf010610_hvac_climate_system
+      - type: horizontal-stack
+        cards:
+          - type: sensor
+            entity: sensor.tesla_model_3_5yj3e1ea8jf010610_temperature_sensor_inside
+            name: Temperature Inside
+            graph: line
+          - type: sensor
+            entity: sensor.tesla_model_3_5yj3e1ea8jf010610_temperature_sensor_outside
+            name: Temperature outside
+            graph: line
+
+  - type: entities
+    title: Tesla Car
+    show_header_toggle: false
+    entities:
+      - device_tracker.tesla_model_3_5yj3e1ea8jf010610_location_tracker
+      - binary_sensor.tesla_model_3_5yj3e1ea8jf010610_parking_brake_sensor
+      - lock.tesla_model_3_5yj3e1ea8jf010610_door_lock
+      - sensor.tesla_model_3_5yj3e1ea8jf010610_mileage_sensor
+
+  - type: entities
+    title: Charging
+    show_header_toggle: false
+    entities:
+      - binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor
+      - switch.tesla_model_3_5yj3e1ea8jf010610_charger_switch
+      - switch.tesla_model_3_5yj3e1ea8jf010610_maxrange_switch

@@ -1,0 +1,288 @@
+title: Settings
+icon: mdi:settings
+cards:
+
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            name: Home Alarm Clock
+            entity: input_boolean.alarm_clock
+            icon: mdi:alarm
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: alarm_clock
+
+          - type: "custom:button-card"
+            name: Light Automations
+            entity: input_boolean.light_automations
+            icon: mdi:lightbulb-on
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: light_automations
+
+          - type: "custom:button-card"
+            name: Do Not Disturb
+            entity: input_boolean.do_not_disturb
+            icon: mdi:do-not-disturb
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: do_not_disturb
+
+          - type: "custom:button-card"
+            name: Home TTS/Sounds
+            entity: input_boolean.voice_notifications
+            icon: mdi:volume-high
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: voice_notifications
+
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            name: Trash Notifications
+            entity: input_boolean.trash_reminders
+            icon: mdi:recycle
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: trash_reminders
+
+          - type: "custom:button-card"
+            name: Camera Alerts
+            entity: input_boolean.notify_camera_alerts
+            icon: mdi:cctv
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: notify_camera_alerts
+
+          - type: "custom:button-card"
+            name: Location Alerts
+            entity: input_boolean.zone_alerts
+            icon: mdi:map-marker
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: zone_alerts
+
+          - type: "custom:button-card"
+            name: Movie Time Popcorn
+            entity: input_boolean.movie_time
+            icon: mdi:filmstrip
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: movie_time
+
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            name: Security System
+            entity: input_boolean.security_system_alerts
+            icon: mdi:shield-outline
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: security_system_alerts
+
+          - type: "custom:button-card"
+            name: Hourly Report
+            entity: input_boolean.hourly_report
+            icon: mdi:timer-sand
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: hourly_report
+
+          - type: "custom:button-card"
+            name: Nightly Report
+            entity: input_boolean.nightly_report
+            icon: mdi:weather-night
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: nightly_report
+
+          - type: "custom:button-card"
+            name: Working in Garage
+            entity: input_boolean.working_in_garage
+            icon: mdi:garage-alert
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: working_in_garage
+
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            name: Working in Office
+            entity: input_boolean.working_in_office_room
+            icon: mdi:office-building
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: working_in_office_room
+
+          - type: "custom:button-card"
+            name: Battery Notifications
+            entity: input_boolean.battery_notifications
+            icon: mdi:battery-charging-wireless-60
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: battery_notifications
+
+          - type: "custom:button-card"
+            name: Good Weather
+            entity: input_boolean.enjoyable_weather_reminders
+            icon: mdi:weather-windy-variant
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: enjoyable_weather_reminders
+
+          - type: "custom:button-card"
+            name: Text/IFTTT Alerts
+            entity: input_boolean.text_alerts
+            icon: mdi:message-text
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: text_alerts
+
+  - type: entities
+    title: Control Panel
+    show_header_toggle: false
+    entities:
+      - input_number.calendar_remind_before_days
+
+  - type: entities
+    title: Bed & Wakeup Times
+    show_header_toggle: false
+    entities:
+      - input_datetime.autumn_bed_time
+      - input_datetime.autumn_wakeup_time
+      - input_datetime.spring_bed_time
+      - input_datetime.spring_wakeup_time
+      - input_datetime.summer_bed_time
+      - input_datetime.summer_wakeup_time
+      - input_datetime.winter_bed_time
+      - input_datetime.winter_wakeup_time

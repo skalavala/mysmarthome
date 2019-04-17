@@ -1,0 +1,31 @@
+title: Trash & Recycle
+icon: mdi:recycle
+cards:
+  - type: entities
+    title: Recycle Schedule
+    show_header_toggle: false
+    entities:
+      - input_select.recycle_pickup_day
+      - input_select.recycle_pickup_week
+      - sensor.current_week
+      - sensor.recycle_day
+      - sensor.recycle_pickup_day
+      - sensor.recycle_pickup_week
+
+  - type: vertical-stack
+    cards:
+      - type: entities
+        title: Trash Schedule
+        show_header_toggle: false
+        entities:
+          - input_select.trash_pickup_day
+          - sensor.trash_day
+          - sensor.trash_pickup_day
+      - type: horizontal-stack
+        cards:
+          - type: glance
+            entities:
+              - sensor.recycle_day
+          - type: glance
+            entities:
+              - sensor.trash_day

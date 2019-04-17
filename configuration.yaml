@@ -1,0 +1,207 @@
+###############################################################################
+# THE HOME ASSISTANT CONFIGURATION FILE - MOTHER OF ALL CONFIG FILES
+# @Author   :   Mahasri Kalavala
+###############################################################################
+homeassistant:
+  name: Home 
+  temperature_unit: F
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  elevation: !secret home_elevation
+  
+  unit_system: imperial
+  time_zone: !secret time_zone
+  customize_glob: !include customize_glob.yaml
+  customize_domain: !include customize_domain.yaml
+  packages: !include_dir_named packages
+  
+  whitelist_external_dirs:
+    - '/home/homeassistant/.homeassistant/www/downloads/camera/patio/'
+    - '/home/homeassistant/.homeassistant/www/downloads/camera/garage/'
+    - '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/'
+    - '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/'
+    - '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/'
+    - '/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/'
+    - '/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/'
+
+sun:
+alexa:
+config:
+cloud:
+  alexa:
+    filter:
+      include_entities:
+        - light.family_room
+        - light.master_bedroom
+        - light.gateway_light_34ce008ad65d
+        - switch.basement_left
+        - switch.basement_right
+        - switch.frontyard_light
+        - switch.garage_lights
+        - switch.guest_bedroom
+        - switch.prayer_room
+        - switch.kids_bed_accent
+        - switch.kids_bedroom
+        - switch.kitchen
+        - switch.office_room
+        - switch.wemobackyardlightswitch
+        - switch.wemoswitch1
+      include_domains:
+        - light
+        - switch
+
+    entity_config:
+      light.gateway_light_34ce008ad65d:
+        name: Gateway Light
+        description: Xiaomi Gateway Light
+
+discovery:
+homekit:
+  autostart: true
+  filter:
+    include_domains:
+      - alarm_control_panel
+      - light
+      - switch
+      - input_boolean
+
+map:
+updater:
+logbook:
+history:
+websocket_api:
+python_script:
+recorder:
+ db_url: !secret my_sql_url
+logger: !include logging.yaml
+
+owntracks:
+system_health:
+
+mqtt:
+  broker: !secret mqtt_server
+  port: !secret mqtt_port
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  keepalive: 60
+  client_id: pi_ha
+
+binary_sensor:
+  - platform: workday
+    country: US
+
+person:
+  - name: Suresh
+    id: suresh
+    device_trackers:
+      - device_tracker.suresh
+      - device_tracker.suresh_suresh
+      - device_tracker.tesla_model_3_5yj3e1ea8jf010610_location_tracker
+
+  - name: Mallika
+    id: mallika
+    device_trackers:
+      - device_tracker.mallika
+      - device_tracker.mallika_mallika
+
+  - name: Srinika
+    id: srinika
+    device_trackers:
+      - device_tracker.srinika
+      - device_tracker.srinika_srinika
+
+  - name: Hasika
+    id: hasika
+    device_trackers:
+      - device_tracker.hasika
+      - device_tracker.hasika_hasika
+
+default_config:
+
+lovelace:
+  mode: yaml
+
+emulated_hue:
+  expose_by_default: false
+  host_ip: !secret ha_ip_address
+  listen_port: 8300
+  exposed_domains:
+    - light
+    - switch
+    - input_boolean
+
+panel_iframe:
+  front_room_ha:
+    title: Front Room HA
+    icon: mdi:home-assistant
+    url: !secret front_room_ha_url
+  tv_room_ha:
+    title: TV Room HA
+    icon: mdi:home-assistant
+    url: !secret tv_room_ha_url
+  snapcast_server:
+    title: Snapcast Server
+    icon: mdi:music
+    url: !secret snapcast_server_url
+
+ios:
+  push:
+    categories:
+      - name: Single Car Garage Door
+        identifier: '1CAR_GARAGE'
+        actions:
+          - identifier: '1CAR_GARAGE_CLOSE'
+            title: 'Close Garage Door'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: yes
+            behavior: 'default'
+      - name: Two Car Garage Door
+        identifier: '2CAR_GARAGE'
+        actions:
+          - identifier: '2CAR_GARAGE_CLOSE'
+            title: 'Close Garage Door'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: yes
+            behavior: 'default'
+      - name: Trash Recycle
+        identifier: 'trash_recycle'
+        actions:
+          - identifier: 'TRASH_LEFT'
+            title: 'Done'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: yes
+            behavior: 'default'
+          - identifier: 'TRASH_REMIND_LATER'
+            title: 'Remind Later'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: yes
+            behavior: 'default'
+      - name: Welcome Home
+        identifier: 'welcome_home'
+        actions:
+          - identifier: 'DISABLE_SECURITY'
+            title: 'Yes'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: yes
+            behavior: 'default'
+
+telegram_bot:
+  - platform: broadcast
+    api_key: !secret telegram_apikey
+    allowed_chat_ids:
+      - !secret telegram_chatid
+
+# influxdb:
+#  host: 192.168.1.125
+#  include:
+#    entities:
+#      - sensor.dining_room_thermostat_temperature
+#      - sensor.downstairs_multi_sensor_temperature
+#      - sensor.front_room_multi_sensor_temperature
+#      - sensor.guest_bedroom_multi_sensor_temperature
+#      - sensor.tv_multi_sensor_temperature

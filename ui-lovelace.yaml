@@ -1,0 +1,27 @@
+
+# This code is auto-generated using my Jinja lovelace migration script
+# visit: https://github.com/skalavala/smarthome/blob/master/jinja_helpers/jinja_lovelace.md
+# Or visit https://sharethelove.io/tools/jinja-magic-scripts
+#
+# I use custom:button card, for two button, credits to https://github.com/kuuji/button-card
+#
+title: Kalavala's Home
+resources:
+  - url: /local/button-card.js
+    type: module
+
+views:
+  - !include lovelace/00_myhome_view.yaml
+  - !include lovelace/01_lights_view.yaml
+  - !include lovelace/02_climate_view.yaml
+  - !include lovelace/03_camera_view.yaml
+  - !include lovelace/04_trash_view.yaml
+  - !include lovelace/05_tensorflow_view.yaml
+  - !include lovelace/06_tesla_view.yaml
+  - !include lovelace/07_system_view.yaml
+  - !include lovelace/08_multimedia_view.yaml
+  - !include lovelace/09_settings_view.yaml
+  - !include lovelace/10_raspberrypi_view.yaml
+  - !include lovelace/11_scripts_view.yaml
+  - !include lovelace/12_automations_view.yaml
+  - !include lovelace/13_qnap_view.yaml

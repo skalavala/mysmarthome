@@ -1,0 +1,90 @@
+homeassistant:
+  customize:
+
+    ################################################
+    ## Node Anchors
+    ################################################
+
+    package.node_anchors:
+      customize: &customize
+        package: 'tts'
+
+      exposed: &exposed
+        <<: *customize
+        emulated_hue_hidden: true
+        homebridge_hidden: false
+
+      not_exposed: &not_exposed
+        <<: *customize
+        emulated_hue_hidden: false
+        homebridge_hidden: true
+
+      hidden: &hidden
+        <<: *customize
+        hidden: true
+
+      not_hidden: &not_hidden
+        <<: *customize
+        hidden: false
+
+    input_text.tts:
+      <<: *not_hidden
+      icon: mdi:speaker
+    input_boolean.greeting:
+      <<: *not_exposed
+
+    group.text_to_speech:
+      name: TTS
+      <<: *not_hidden
+
+input_text:
+  tts:
+    name: Text To Speech
+    initial: Initial text
+
+input_boolean:
+  greeting:
+    name: Greeting
+    initial: off
+
+input_number:
+  tts_volume_level_morning:
+    name: Morning TTS Volume
+    initial: 0.3
+    min: 0
+    max: 1
+    step: 0.1  
+  tts_volume_level_afternoon:
+    name: Afternoon TTS Volume
+    initial: 0.5
+    min: 0
+    max: 1
+    step: 0.1  
+  tts_volume_level_evening:
+    name: Evening TTS Volume
+    initial: 0.3
+    min: 0
+    max: 1
+    step: 0.1  
+  tts_volume_level_alert:
+    name: TTS Volume Alert Mode
+    initial: 1
+    min: 0
+    max: 1
+    step: 0.1
+
+automation:
+
+###############################################################################
+# The text entered in the text box will be announced in the house
+###############################################################################
+  - alias: Text Changed Event
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_text.tts
+    action:
+      - service: script.voice_notify
+        data_template:
+          message: "{{ trigger.to_state.state }}"
+          greeting: "{{ 'yes' if states.input_boolean.greeting.state == 'on' else 'no' }}"

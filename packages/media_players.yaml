@@ -1,0 +1,209 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/15/2017
+#   @package        :   Media Player
+#   @description    :   Media Player Sensors, Automations
+###############################################################################
+
+homeassistant:
+  customize:
+
+    package.node_anchors:
+      customize: &customize
+        package: 'media_players'
+
+      exposed: &exposed
+        <<: *customize
+        emulated_hue_hidden: true
+        homebridge_hidden: false
+
+      not_exposed: &not_exposed
+        <<: *customize
+        emulated_hue_hidden: false
+        homebridge_hidden: true
+
+      hidden: &hidden
+        <<: *customize
+        hidden: true
+
+# Media Players
+    media_player.snapcast_client_b827eb8604f5:
+      friendly_name: Front Room Music
+    media_player.snapcast_client_b827ebaa08f7:
+      friendly_name: Kitchen Music
+    media_player.snapcast_client_b827eb011e00:
+      friendly_name: TV Room Music
+    media_player.snapcast_client_b827eb4445b1:
+      friendly_name: Master Bedroom Music
+    media_player.snapcast_client_b827eba8e7ef:
+      friendly_name: Guest Bedroom 1 Music
+    media_player.snapcast_client_b827eb505e2d:
+      friendly_name: Guest Bedroom 2 Music
+    media_player.snapcast_client_001e8c40c713:
+      friendly_name: Basement Music
+    media_player.snapcast_client_b827ebf10965:
+      friendly_name: Office Room Music
+    media_player.snapcast_client_0018e7c4488f:
+      friendly_name: HA Server (Basement)
+
+    script.stop_snapcast_server:
+      friendly_name: Stop Snapcast Server
+    script.start_snapcast_server:
+      friendly_name: Start Snapcast Server
+    script.restart_snapcast_server:
+      friendly_name: Restart Snapcast Server
+
+    media_player.denon_avrx2400h:
+      friendly_name: Denon AVRX2400H
+      hidden: false
+    media_player.mpd:
+      friendly_name: Mopidy Media Player
+      hidden: false
+    media_player.gstreamer:
+      friendly_name: Gstreamer Media Player
+      hidden: false
+    media_player.attic_tv:
+      friendly_name: Chromecast Media Player
+      hidden: false
+
+    binary_sensor.sharp_tv:
+      <<: *not_exposed
+      hidden: true
+    binary_sensor.sharp_tv_command_state:
+      <<: *not_exposed
+      hidden: true
+
+media_player:
+  - platform: snapcast
+    host: !secret snapcast_server_ip
+  - platform: mpd
+    name: mpd
+    host: !secret mopidy_server_ip
+    port: !secret mopidy_server_port
+
+  - platform: denon
+    host: !secret denon_avr_ip_address
+    name: DENON
+
+
+  - platform: denonavr
+    host: !secret denon_avr_ip_address
+    name: MY DENON RECEIVER
+    show_all_sources: true
+    timeout: 5
+
+  - platform: plex
+    entity_namespace: 'plex'
+    include_non_clients: true
+    scan_interval: 5
+    use_episode_art: true
+    remove_unavailable_clients: true
+    client_remove_interval: 600
+
+# If you get errors about GI not found, run the command below to link gsp/gi path to HA for Gstreamer to function properly
+
+# For python 3.4:
+# sudo ln -s /usr/lib/python3/dist-packages/gi /srv/homeassistant/lib/python3.6/site-packages
+
+# If you get GST not found error, run the following command
+# sudo apt-get install python-gst-1.0 \
+#     gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0 \
+#     gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly \
+#     gstreamer1.0-tools
+
+# Steps to set it up:
+#
+# 1. Setup venv using correct version of python - in this case, it is python3.6
+# 2. As homeassistant user, inside the venv, run python3.6 command
+#  $ sudo -u homeassistant -H -s
+#  $ source /srv/homeassistant/bin/activate
+#  $ python3.6
+#  Inside the python CLI, run 
+#  >>> import gi 
+#  >>> print (gi)
+# 3. That should print something like 
+# <module 'gi' from '/srv/homeassistant/lib/python3.6/site-packages/gi/__init__.py'>
+# 4. Map that path to the GI location
+# $ sudo ln -s /usr/lib/python3/dist-packages/gi /srv/homeassistant/lib/python3.6/site-packages
+# restart machine
+
+  - platform: gstreamer
+    pipeline: "audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! wavenc ! filesink location=/tmp/snapfifo"
+
+binary_sensor:
+  - platform: mqtt
+    name: Sharp TV
+    state_topic: '/home/sharptv'
+    payload_on: 'on'
+    payload_off: 'off'
+    value_template: '{{ value }}'
+
+  - platform: mqtt
+    name: Sharp TV Command State
+    state_topic: '/home/sharp_tv_cmd'
+    payload_on: 'on'
+    payload_off: 'off'
+    value_template: '{{ value }}'
+
+input_select:
+  snapcast_server:
+    name: Snapcast Server
+    options:
+      - Select One
+      - Stop
+      - Start
+      - Restart
+    initial: Select One
+    icon: mdi:music
+
+shell_command:
+  stop_snapserver: >-
+    sudo systemctl stop snapserver
+  start_snapserver: >-
+    sudo systemctl start snapserver
+  restart_snapserver: >-
+    sudo systemctl restart snapserver
+
+script:
+  stop_snapcast_server:
+    sequence:
+      - service: shell_command.stop_snapserver
+  start_snapcast_server:
+    sequence:
+      - service: shell_command.start_snapserver
+  restart_snapcast_server:
+    sequence:
+      - service: shell_command.restart_snapserver
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+###############################################################################
+# Snapcast Server Management
+###############################################################################
+  - alias: Snapcast Action
+    initial_state: true  
+    trigger:
+      platform: state
+      entity_id: input_select.snapcast_server
+    condition:
+      - condition: template
+        value_template: '{{ states.input_select.snapcast_server.state | lower != "select one" }}'      
+    action:
+      - service_template: >-
+          {% if states.input_select.snapcast_server.state | lower == "stop" %}
+            shell_command.stop_snapserver
+          {% elif states.input_select.snapcast_server.state | lower == "start" %}
+            shell_command.start_snapserver
+          {% else %}
+            shell_command.restart_snapserver
+          {% endif %}

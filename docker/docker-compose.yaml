@@ -1,0 +1,84 @@
+version: '2'
+services:
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: "MQTT"
+    restart: always
+    network_mode: "host"
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - /home/suresh/docker/mqtt/data:/mosquitto/data
+      - /home/suresh/docker/mqtt/config:/mosquitto/config
+      - /home/suresh/docker/mqtt/log:/mosquitto/log
+
+  home-assistant:
+    image: homeassistant/home-assistant:latest
+    container_name: "home_assistant"
+    restart: always
+    network_mode: "host"
+    devices:
+      - /dev/ttyACM0
+    depends_on:
+      - mqtt
+    ports:
+      - "8123:8123"
+    volumes:
+      - /home/homeassistant/.homeassistant/:/config
+
+  homebridge:
+    image: oznu/homebridge:latest
+    container_name: "homebridge_docker"
+    restart: always
+    network_mode: host
+    environment:
+      - TZ=America/New_York
+      - PGID=1000
+      - PUID=1000
+    volumes:
+      - /home/suresh/docker/homebridge:/homebridge
+    depends_on:
+      - home-assistant
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: always
+    network_mode: host
+    ports:
+      - 8086:8086
+      - 8083:8083
+    volumes:
+      - /home/suresh/docker/influxdb/:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    network_mode: host
+    ports:
+      - 3000:3000
+    volumes:
+      - /home/suresh/docker/grafana/:/var/lib/grafana
+    depends_on:
+      - influxdb
+    restart: always
+
+  docker_mon:
+    image: philhawthorne/ha-dockermon
+    container_name: ha_dockermon
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /path/to/config:/config
+    ports:
+      - 8126:8126
+
+  docker_machinebox:
+    image: machinebox/tagbox
+    container_name: machine_box
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      MB_KEY: !secret MB_KEY

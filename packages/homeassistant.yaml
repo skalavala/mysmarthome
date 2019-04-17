@@ -1,0 +1,214 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/15/2017
+#   @package        :   Home Assistant
+#   @description    :   Bunch of Sensors that are system or environment related
+###############################################################################
+homeassistant:
+  customize:  
+    package.node_anchors:
+      customize: &customize
+        package: 'homeassistant'
+
+      hidden: &hidden
+        hidden: true
+
+    group.system_monitor:
+      order: 3
+    group.internet_speed:
+      order: 4
+
+    group.home_assistant_automations:
+      order: 50
+      
+    group.manuals:
+      order: 70
+    group.common_urls:
+      order: 71
+
+    binary_sensor.workday_sensor:
+      <<: *hidden
+
+    sensor.external_ip:
+      friendly_name: External IP Address
+
+# System Info Sensor
+    sensor.cpu_speed:
+      friendly_name: CPU Speed
+
+    sensor.disk_free:
+      friendly_name: Disk Free Space
+
+    sensor.ipv4_address_ens160:
+      friendly_name: Local IP Address
+
+    sensor.last_boot:
+      friendly_name: Last Boot
+
+    sensor.ha_installed_version:
+      icon: mdi:home-assistant
+    sensor.ha_current_version:
+      icon: mdi:home-assistant
+    sensor.ha_last_restart:
+      icon: mdi:home-assistant
+
+    automation.login_failure:
+      friendly_name: Alert Login Failures
+
+    automation.startup_notification:
+      friendly_name: Notify Startup Events
+      icon: mdi:thumb-up
+
+    automation.update_available_notification:
+      friendly_name: Notify of new updates
+      icon: mdi:update
+
+    script.update_hass:
+      friendly_name: Update Home Assistant
+      icon: mdi:home-assistant
+
+    script.restart_hass:
+      friendly_name: Restart Home Assistant
+      icon: mdi:home-assistant
+
+    script.stop_hass:
+      friendly_name: Stop Home Assistant
+      icon: mdi:home-assistant
+
+    sensor.my_domain:
+      hidden: true
+
+script:
+  stop_hass:
+    sequence:
+      - service: shell_command.stop_hass
+  update_hass:
+    sequence:
+      - service: shell_command.update_hass
+  restart_hass:
+    sequence:
+      - service: shell_command.restart_hass
+
+shell_command:
+  stop_hass: >-
+    hassctl stop
+
+  restart_hass: >-
+    hassctl restart
+
+  update_hass: >-
+    hassctl update-hass && hassctl config && hassctl restart
+
+speedtestdotnet:
+  scan_interval:
+    hours: 1
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+
+sensor:
+
+  - platform: uptime
+    name: Home Assistant Up Time
+    unit_of_measurement: hours
+
+  - platform: whois
+    domain: !secret namecheap_domain_name
+    name: My Domain
+
+  - platform: rest
+    resource: http://icanhazip.com
+    name: external_ip
+    value_template: '{{ value }}'
+    scan_interval: 86400
+
+  - platform: systemmonitor
+    resources:
+      - type: disk_free
+        arg: /
+      - type: memory_free
+      - type: processor_use
+      - type: ipv4_address
+        arg: ens160
+      - type: last_boot
+
+  - platform: rest
+    resource: https://pypi.python.org/pypi/homeassistant/json
+    name: HA Current Version
+    value_template: '{{ value_json.info.version }}'
+
+  - platform: command_line
+    name: HA Installed Version
+    command: /srv/homeassistant/bin/hass --version
+    scan_interval: 86400
+
+  - platform: pi_hole
+    host: !secret pi_hole_ip
+    ssl: false
+    verify_ssl: false
+    monitored_conditions:
+      - ads_blocked_today
+      - ads_percentage_today
+      - dns_queries_today
+      - domains_being_blocked
+      - queries_cached
+      - queries_forwarded
+      - unique_clients
+      - unique_domains
+      - clients_ever_seen
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+# Notify me when I get a new public IP from my ISP
+######################################################
+
+  - alias: Notify Of New External IP
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.external_ip
+    condition:
+      - condition: template
+        value_template: "{% if trigger.from_state and trigger.to_state %} true {% else %} false {% endif %}"
+      - condition: template
+        value_template: "{% if trigger.from_state.state == 'unknown' %} false {% else %} true {% endif %}"
+      - condition: template
+        value_template: "{% if trigger.to_state.state == 'unknown' %} false {% else %} true {% endif %}"
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "Your External IP changed from {{ trigger.from_state.state }} to {{ trigger.to_state.state }}"
+
+  - alias: Update Available Notification
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: updater.updater
+    action:
+      - service: script.notify_me
+        data: {"message":"New HASS update is available. Please update!"}
+
+  - alias: Remind domain renewal
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.my_domain
+        below: 30
+    action:
+      - service: persistent_notification.create
+        data:
+          title: 'Domain Renew'
+          message: 'It is time to renew your domain. The domain will expire in {{ states.sensor.my_domain.state  }} days.'

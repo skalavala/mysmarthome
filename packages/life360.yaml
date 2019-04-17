@@ -1,0 +1,46 @@
+###############################################################################
+# PACKAGE:      LIFE360 SENSOR
+# Description:  The Life360 sensor requires username, password and mqtt topic.
+#               Whatever the topic you specify, the data will be dumped there.
+#               Use the exact topic name in the Parse Life360 Data automation.
+###############################################################################
+
+homeassistant:
+  customize:
+    sensor.life360_sensor:
+      friendly_name: Life 360
+      hidden: true
+
+sensor:
+  - platform: life360
+    username: !secret life360_username
+    password: !secret life360_password
+    mqtt_topic: "/life360/data"
+    scan_interval: 15
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+###############################################################################
+# Alert me When the sensor fails
+###############################################################################
+  - alias: Alert Life360 Error
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.life360_sensor
+      to: 'error'
+      for: '00:05:00'
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "Life360 Sensor state changed to: {{ trigger.to_state.state| upper }}."

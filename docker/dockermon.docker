@@ -1,0 +1,6 @@
+docker run -d \
+	--name=ha-dockermon --restart=always \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	-v /path/to/config:/config \
+	-p 8126:8126 \
+	philhawthorne/ha-dockermon

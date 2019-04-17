@@ -1,0 +1,94 @@
+###############################################################################
+# @Author  : Mahasri Kalavala
+# @Date    : 01/27/2018
+# @Package : USPS Package - notifies me of mails and packages.
+###############################################################################
+homeassistant:
+  customize:
+    sensor.usps_mail:
+      friendly_name: USPS Mail
+      icon: mdi:email-outline
+    sensor.usps_packages:
+      friendly_name: USPS Packages
+      icon: mdi:package-variant
+
+sensor:
+  - platform: mqtt
+    name: 'USPS Mail'
+    state_topic: '/usps/mails'
+    value_template: "{{ value }}"
+
+  - platform: mqtt
+    name: USPS Packages
+    state_topic: '/usps/packages'
+    value_template: "{{ value }}"
+
+camera:
+  - platform: generic
+    name: USPS Mail Pictures
+    still_image_url: !secret usps_camera_url
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+automation:
+
+# Notify USPS mails via TTS, and iOS notification with attachment
+###############################################################################
+  - alias: Notify USPS Mail
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.usps_mail
+    condition:
+      - condition: template
+        value_template: '{{ states.sensor.usps_mail.state | int > 0 }}'
+      - condition: template
+        value_template: '{{ ((now().hour | int) > 7) and ((now().hour | int) < 16) }}'
+    action:
+      - service: script.voice_notify
+        data_template:
+          message: >
+            {%- if states.sensor.usps_mail.state | int == 1 -%}
+              Attention: USPS is delivering {{ states.sensor.usps_mail.state }} mail today.
+            {%- else -%}
+              Attention: USPS is delivering {{ states.sensor.usps_mail.state }} mails today.
+            {%- endif -%}
+      - service: notify.ios_devices
+        data_template:
+          message: "USPS will be delivering {{ states.sensor.usps_mail.state }} mail(s) today."
+          data:
+            push:
+              category: camera
+            entity_id: "camera.usps_mail_pictures"
+            attachment:
+              url: "{{ states.camera.usps_mail_pictures.attributes.entity_picture }}"
+              content-type: jpg
+
+# Notify USPS packages via TTS. Usually there are no pictures for packages
+###############################################################################
+  - alias: Notify USPS Packages
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.usps_packages
+    condition:
+      - condition: template
+        value_template: '{{ states.sensor.usps_packages.state | int > 0 }}'
+      - condition: template
+        value_template: '{{ ((now().hour | int) > 7) and ((now().hour | int) < 16) }}'
+    action:
+      - service: script.voice_notify
+        data_template:
+          message: >
+            {%- if states.sensor.usps_packages.state | int == 1 -%}
+              Attention: USPS is delivering {{ states.sensor.usps_packages.state }} package today.
+            {%- else -%}
+              Attention: USPS is delivering {{ states.sensor.usps_packages.state }} packages today.
+            {%- endif -%}

@@ -1,0 +1,382 @@
+homeassistant:
+  customize:
+
+    ################################################
+    ## Node Anchors
+    ################################################
+
+    package.node_anchors:
+      customize: &customize
+        package: 'settings'
+
+      exposed: &exposed
+        <<: *customize
+        emulated_hue_hidden: true
+        homebridge_hidden: false
+
+      not_exposed: &not_exposed
+        <<: *customize
+        emulated_hue_hidden: false
+        homebridge_hidden: true
+
+      hidden: &hidden
+        <<: *customize
+        hidden: true
+
+    group.control_panel:
+      <<: *not_exposed
+
+    input_boolean.working_in_garage:
+      <<: *exposed
+      friendly_name: Working in Garage
+      icon: mdi:worker
+    input_boolean.working_in_office_room:
+      <<: *exposed
+      friendly_name: Working in Office Room
+      icon: mdi:worker
+    input_boolean.voice_notifications:
+      <<: *exposed
+      icon: mdi:microphone-off
+      emulated_hue_name: Home Assistant Announcements
+      homebridge_name: Home Assistant Announcements
+    input_boolean.do_not_disturb:
+      <<: *exposed
+      homebridge_name: Do Not Disturb
+    input_boolean.alarm_clock:
+      <<: *exposed
+      homebridge_name: Alarm Clock
+
+    input_datetime.summer_bed_time:
+      icon: mdi:beach
+    input_datetime.summer_wakeup_time:
+      icon: mdi:beach
+      
+    input_datetime.autumn_bed_time:
+      icon: mdi:leaf
+    input_datetime.autumn_wakeup_time:
+      icon: mdi:leaf
+
+    input_datetime.winter_bed_time:
+      icon: mdi:snowflake
+    input_datetime.winter_wakeup_time:
+      icon: mdi:snowflake
+
+    input_datetime.spring_bed_time:
+      icon: mdi:tree
+    input_datetime.spring_wakeup_time:
+      icon: mdi:tree
+
+    sensor.wakeup_hour:
+      <<: *hidden
+    sensor.wakeup_minute:
+      <<: *hidden
+    sensor.bedtime_hour:
+      <<: *hidden
+    sensor.bedtime_minute:
+      <<: *hidden
+    input_boolean.dummy:
+      <<: *hidden
+
+# Input DateTime Options:
+# I set the minutes to something that is divisible by 5, so that the automations
+# can check once every 5 minutes without any performance penalty 
+###############################################################################
+
+input_datetime:
+  summer_bed_time:
+    name: Summer Bed Time
+    has_date: false
+    has_time: true
+    initial: '23:00:00'
+  summer_wakeup_time:
+    name: Summer Wakeup Time
+    has_date: false
+    has_time: true
+    initial: '06:00:00'
+
+  autumn_bed_time:
+    name: Autumn Bed Time
+    has_date: false
+    has_time: true
+    initial: '22:00:00'
+  autumn_wakeup_time:
+    name: Autumn Wakeup Time
+    has_date: false
+    has_time: true
+    initial: '05:30:00'
+
+  winter_bed_time:
+    name: Winter Bed Time
+    has_date: false
+    has_time: true
+    initial: '22:00:00'
+  winter_wakeup_time:
+    name: Winter Wakeup Time
+    has_date: false
+    has_time: true
+    initial: '05:30:00'
+
+  spring_bed_time:
+    name: Spring Bed Time
+    has_date: false
+    has_time: true
+    initial: '22:00:00'
+  spring_wakeup_time:
+    name: Spring Wakeup Time
+    has_date: false
+    has_time: true
+    initial: '05:30:00'
+
+input_number:
+  calendar_remind_before_days:
+    name: Calendar Remind Before Days
+    initial: 2
+    min: 1
+    max: 15
+    step: 1
+
+sensor:
+  - platform: template
+    sensors:
+      wakeup_hour:
+        friendly_name: Wakeup Hour
+        value_template: >
+          {% if states.sensor.season.state | lower == "summer" %}
+            {{ states.input_datetime.summer_wakeup_time.state.split(':')[0] }}
+          {% elif states.sensor.season.state | lower == "autumn" %}
+            {{ states.input_datetime.autumn_wakeup_time.state.split(':')[0] }}
+          {% elif states.sensor.season.state | lower == "winter" %}
+            {{ states.input_datetime.winter_wakeup_time.state.split(':')[0] }}
+          {% elif states.sensor.season.state | lower == "spring" %}
+            {{ states.input_datetime.spring_wakeup_time.state.split(':')[0] }}
+          {% else %}
+            6
+          {% endif %}
+      wakeup_minute:
+        friendly_name: Wakeup Minute
+        value_template: >
+          {% if states.sensor.season.state | lower == "summer" %}
+            {{ states.input_datetime.summer_wakeup_time.state.split(':')[1] }}
+          {% elif states.sensor.season.state | lower == "autumn" %}
+            {{ states.input_datetime.autumn_wakeup_time.state.split(':')[1] }}
+          {% elif states.sensor.season.state | lower == "winter" %}
+            {{ states.input_datetime.winter_wakeup_time.state.split(':')[1] }}
+          {% elif states.sensor.season.state | lower == "spring" %}
+            {{ states.input_datetime.spring_wakeup_time.state.split(':')[1] }}
+          {% else %}
+            0
+          {% endif %}
+      bedtime_hour:
+        friendly_name: Bedtime Hour
+        value_template: >
+          {% if states.sensor.season.state | lower == "summer" %}
+            {{ states.input_datetime.summer_bed_time.state.split(':')[0] }}
+          {% elif states.sensor.season.state | lower == "autumn" %}
+            {{ states.input_datetime.autumn_bed_time.state.split(':')[0] }}
+          {% elif states.sensor.season.state | lower == "winter" %}
+            {{ states.input_datetime.winter_bed_time.state.split(':')[0] }}
+          {% elif states.sensor.season.state | lower == "spring" %}
+            {{ states.input_datetime.spring_bed_time.state.split(':')[0] }}
+          {% else %}
+            0
+          {% endif %}
+      bedtime_minute:
+        friendly_name: Bedtime Minute
+        value_template: >
+          {% if states.sensor.season.state | lower == "summer" %}
+            {{ states.input_datetime.summer_bed_time.state.split(':')[1] }}
+          {% elif states.sensor.season.state | lower == "autumn" %}
+            {{ states.input_datetime.autumn_bed_time.state.split(':')[1] }}
+          {% elif states.sensor.season.state | lower == "winter" %}
+            {{ states.input_datetime.winter_bed_time.state.split(':')[1] }}
+          {% elif states.sensor.season.state | lower == "spring" %}
+            {{ states.input_datetime.spring_bed_time.state.split(':')[1] }}
+          {% else %}
+            0
+          {% endif %}
+
+# Input Booleans Options
+###############################################################################
+
+input_boolean:
+  voice_notifications:
+    name: Home Assistant Announcements
+    initial: on
+    icon: mdi:volume-off
+
+  do_not_disturb:
+    name: Do Not Disturb
+    initial: off
+    icon: mdi:do-not-disturb
+
+  movie_time:
+    name: 'Movie Time'
+    initial: off
+    icon: mdi:movie-roll
+
+  home_security:
+    name: Home Security System
+    initial: off
+    icon: mdi:verified
+
+  home_assistant_status:
+    name: Home Status
+    initial: off
+    icon: mdi:home-assistant
+
+  working_in_garage:
+    name: Working in Garage
+    initial: off
+    icon: mdi:worker
+
+  working_in_office_room:
+    name: Working in Office Room
+    initial: off
+    icon: mdi:worker
+
+  hourly_report:
+    name: Hourly Report
+    initial: on
+    icon: mdi:file-chart
+
+  nightly_report:
+    name: Nightly Report
+    initial: on
+    icon: mdi:file-chart
+
+  notify_camera_alerts:
+    name: Notify Camera Alerts
+    initial: on
+    icon: mdi:camera
+
+  trash_reminders:
+    name: Remind Trash Notifications
+    initial: on
+    icon: mdi:recycle
+
+  enjoyable_weather_reminders:
+    name: Remind me to enjoy Good Weather
+    initial: on
+    icon: mdi:weather-sunny
+
+  security_system_alerts:
+    name: Notify Security System Status Change
+    initial: on
+    icon: mdi:verified
+
+  zone_alerts:
+    name: Zone Alerts
+    initial: on
+    icon: mdi:map-marker
+
+  alarm_clock:
+    name: Alarm Clock
+    initial: on
+    icon: mdi:calendar-check
+
+  battery_notifications:
+    name: Battery Notifications
+    initial: on
+    icon: mdi:battery
+
+  sharp_tv:
+    name: TV
+    initial: on
+    icon: mdi:television-classic
+
+  dummy:
+    name: "Dummy Input Boolean!"
+    icon: mdi:sticker-emoji
+    initial: on
+
+  light_automations:
+    name: Light Automations
+    icon: mdi:lightbulb-on
+    initial: on
+
+  text_alerts:
+    name: Text Alerts
+    initial: on
+    icon: mdi:map-marker
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+# Do not disturb for 2 hours
+# Simply turns ON the Do Not Disturb Flag ad resets 
+# after 2 hours. The Do Not Disturb flag is used in
+# voice_notify script
+######################################################
+  - alias: Do Not Disturb For 2 hours
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.do_not_disturb
+        to: 'on'
+        for:
+          hours: 2
+          minutes: 0
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.do_not_disturb
+
+######################################################
+# Reset Movie time after 3 hours
+  - alias: Reset Movie Time After 3 Hours
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.movie_time
+        to: 'on'
+        for:
+          hours: 3
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.movie_time
+
+# Notify me when DO NOT DISTURB mode is changed
+######################################################
+  - alias: Do Not Disturb State Change
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.do_not_disturb
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "The Do Not Disturb Mode is {{ trigger.to_state.state |upper }}."
+
+# Hourly Reports
+######################################################
+  - alias: Hourly Report During Day Time
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      hours: '/01'
+      minutes: 05
+      seconds: 00
+    condition:
+      - condition: template
+        value_template: '{{ states.input_boolean.hourly_report.state == "on" }}'
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: template
+        value_template: >
+          {% set hour = now().hour | int %}
+          {% if  hour > 7 and hour < 21 %}
+            true
+          {% else %}
+            false
+          {% endif %}
+    action:
+      - service: script.home_status

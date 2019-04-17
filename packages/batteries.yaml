@@ -1,0 +1,509 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   04/15/2017
+#   @package        :   Batteries
+#   @description    :   Status about various baterries (iphones, sensors...etc)
+###############################################################################
+homeassistant:
+  customize:
+
+    group.batteries:
+      order: 2
+
+    sensor.suresh_iphone_battery_state:
+      hidden: true
+    sensor.mallika_iphone_battery_state:
+      hidden: true
+    sensor.srinika_iphone_battery_state:
+      hidden: true
+    sensor.hasika_iphone_battery_state:
+      hidden: true
+
+    sensor.suresh_iphone_battery_ot:
+      hidden: true
+    sensor.mallika_iphone_battery_ot:
+      hidden: true
+    sensor.srinika_iphone_battery_ot:
+      hidden: true
+    sensor.hasika_iphone_battery_ot:
+      hidden: true
+
+    sensor.hasika_iphone_wifi_state:
+      friendly_name: Hasika Phone Wi-Fi Status
+    sensor.mallika_iphone_wifi_state:
+      friendly_name: Mallika Phone Wi-Fi Status
+    sensor.srinika_iphone_wifi_state:
+      friendly_name: Srinika Phone Wi-Fi Status
+    sensor.suresh_iphone_wifi_state:
+      friendly_name: Suresh Phone Wi-Fi Status
+
+sensor:
+
+  - platform: mqtt
+    state_topic: "owntracks/mallika/mallika"
+    name: "Mallika iPhone Battery (OT)"
+    unit_of_measurement: "%"
+    value_template: "{{ value_json.batt }}"
+    
+  - platform: mqtt
+    state_topic: "owntracks/suresh/suresh"
+    name: "Suresh iPhone Battery (OT)"
+    unit_of_measurement: "%"
+    value_template: "{{ value_json.batt }}"
+  
+  - platform: mqtt
+    state_topic: "owntracks/srinika/srinika"
+    name: "Srinika iPhone Battery (OT)"
+    unit_of_measurement: "%"
+    value_template: "{{ value_json.batt }}"
+      
+  - platform: mqtt
+    state_topic: "owntracks/hasika/hasika"
+    name: "Hasika iPhone Battery (OT)"
+    unit_of_measurement: "%"
+    value_template: "{{ value_json.batt }}"
+
+  - platform: mqtt
+    state_topic: "owntracks/mallika/mallika"
+    name: "Mallika iPhone Battery State"
+    value_template: >
+      {% if value_json.charging == 1 %}
+        Charging
+      {% else %}
+        Not Charging
+      {% endif %}
+    icon: "mdi:battery-charging"
+
+  - platform: mqtt
+    state_topic: "owntracks/suresh/suresh"
+    name: "Suresh iPhone Battery State"
+    value_template: >
+      {% if value_json.charging == 1 %}
+        Charging
+      {% else %}
+        Not Charging
+      {% endif %}
+    icon: "mdi:battery-charging"
+  
+  - platform: mqtt
+    state_topic: "owntracks/srinika/srinika"
+    name: "Srinika iPhone Battery State"
+    value_template: >
+      {% if value_json.charging == 1 %}
+        Charging
+      {% else %}
+        Not Charging
+      {% endif %}
+    icon: "mdi:battery-charging"
+
+  - platform: mqtt
+    state_topic: "owntracks/hasika/hasika"
+    name: "Hasika iPhone Battery State"
+    value_template: >
+      {% if value_json.charging == 1 %}
+        Charging
+      {% else %}
+        Not Charging
+      {% endif %}
+    icon: "mdi:battery-charging"
+
+  - platform: mqtt
+    state_topic: "owntracks/mallika/mallika"
+    name: "Mallika iPhone Wifi State"
+    value_template: >
+      {% if value_json.conn == "w" %}
+        Connected
+      {% else %}
+        Not Connected
+      {% endif %}
+    icon: "mdi:wifi"
+
+  - platform: mqtt
+    state_topic: "owntracks/suresh/suresh"
+    name: "Suresh iPhone Wifi State"
+    value_template: >
+      {% if value_json.conn == "w" %}
+        Connected
+      {% else %}
+        Not Connected
+      {% endif %}
+    icon: "mdi:wifi"
+
+  - platform: mqtt
+    state_topic: "owntracks/srinika/srinika"
+    name: "Srinika iPhone Wifi State"
+    value_template: >
+      {% if value_json.conn == "w" %}
+        Connected
+      {% else %}
+        Not Connected
+      {% endif %}
+    icon: "mdi:wifi"
+
+  - platform: mqtt
+    state_topic: "owntracks/hasika/hasika"
+    name: "Hasika iPhone Wifi State"
+    value_template: >
+      {% if value_json.conn == "w" %}
+        Connected
+      {% else %}
+        Not Connected
+      {% endif %}
+    icon: "mdi:wifi"
+
+  - platform: mqtt
+    state_topic: "owntracks/mallika/mallika"
+    name: "Mallika Driving Speed"
+    value_template: '{{ value_json.vel |int|round}}'
+    unit_of_measurement: miles
+
+  - platform: mqtt
+    state_topic: "owntracks/suresh/suresh"
+    name: "Suresh Driving Speed"
+    value_template: '{{ value_json.vel |int|round}}'
+    unit_of_measurement: miles
+
+  - platform: mqtt
+    state_topic: "owntracks/srinika/srinika"
+    name: "Srinika Driving Speed"
+    value_template: '{{ value_json.vel |int|round}}'
+    unit_of_measurement: miles
+
+  - platform: mqtt
+    state_topic: "owntracks/hasika/hasika"
+    name: "Hasika Driving Speed"
+    value_template: '{{ value_json.vel |int|round}}'
+    unit_of_measurement: miles
+
+  - platform: template
+    sensors:
+      suresh_iphone_battery_ot:
+        unit_of_measurement: '%'
+        value_template: >
+          {% if states('sensor.suresh_iphone_battery_ot') != "unknown" %}
+            {{ states('sensor.suresh_iphone_battery_ot')| int }}
+          {% else %}
+            0
+          {% endif %}
+        icon_template: >-
+          {% if states('sensor.suresh_iphone_battery_ot') != "unknown" %}
+            {% set battery_level = states('sensor.suresh_iphone_battery_ot')|int (-1)%}
+            {% set battery_round = (battery_level|int / 10)|int * 10 %}
+            {% if states.sensor.suresh_iphone_battery_state.state | lower == "charging" %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery-charging-100
+                {% elif battery_round > 0 %}
+                  mdi:battery-charging-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}
+            {% else %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery
+                {% elif battery_round > 0 %}
+                  mdi:battery-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}            
+            {% endif %}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+
+  - platform: template
+    sensors:
+      mallika_iphone_battery_ot:
+        unit_of_measurement: '%'
+        value_template: "{{ states('sensor.mallika_iphone_battery_ot')|int(-1) }}"
+        icon_template: >-
+          {% if states('sensor.mallika_iphone_battery_ot') != "unknown" %}
+            {% set battery_level = states('sensor.mallika_iphone_battery_ot')|int (-1)%}
+            {% set battery_round = (battery_level|int / 10)|int * 10 %}
+            {% if states.sensor.mallika_iphone_battery_state.state | lower == "charging" %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery-charging-100
+                {% elif battery_round > 0 %}
+                  mdi:battery-charging-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}
+            {% else %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery
+                {% elif battery_round > 0 %}
+                  mdi:battery-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}            
+            {% endif %}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+  
+  - platform: template
+    sensors:
+      srinika_iphone_battery_ot:
+        unit_of_measurement: '%'
+        value_template: "{{ states('sensor.srinika_iphone_battery_ot')|int(-1) }}"
+        icon_template: >-
+          {% if states('sensor.srinika_iphone_battery_ot') != "unknown" %}
+            {% set battery_level = states('sensor.srinika_iphone_battery_ot')|int (-1)%}
+            {% set battery_round = (battery_level|int / 10)|int * 10 %}
+            {% if states.sensor.srinika_iphone_battery_state.state | lower == "charging" %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery-charging-100
+                {% elif battery_round > 0 %}
+                  mdi:battery-charging-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}
+            {% else %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery
+                {% elif battery_round > 0 %}
+                  mdi:battery-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}            
+            {% endif %}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+  
+  - platform: template
+    sensors:
+      hasika_iphone_battery_ot:
+        unit_of_measurement: '%'
+        value_template: "{{ states('sensor.hasika_iphone_battery_ot')|int(-1) }}"
+        icon_template: >-
+          {% if states('sensor.hasika_iphone_battery_ot') != "unknown" %}
+            {% set battery_level = states('sensor.hasika_iphone_battery_ot')|int (-1)%}
+            {% set battery_round = (battery_level|int / 10)|int * 10 %}
+            {% if states.sensor.hasika_iphone_battery_state.state | lower == "charging" %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery-charging-100
+                {% elif battery_round > 0 %}
+                  mdi:battery-charging-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}
+            {% else %}
+              {% if battery_level == -1 %}
+                mdi:battery-unknown
+              {% else %}
+                {% if battery_round >= 100 %}
+                  mdi:battery
+                {% elif battery_round > 0 %}
+                  mdi:battery-{{ battery_round }}
+                {% else %}
+                  mdi:battery-alert
+                {% endif %}
+              {% endif %}            
+            {% endif %}
+          {% else %}
+            mdi:battery-alert
+          {% endif %}
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+#
+# This automation alerts family members when they are "moving" - meaning either in driving from work,
+# kids got on the school bus, and bus is moving...etc
+# This will only announces/ alert when someone is at home.
+#
+  - alias: Alert When Moving
+    trigger: 
+      platform: numeric_state
+      entity_id:
+      - sensor.suresh_driving_speed
+      - sensor.mallika_driving_speed
+      - sensor.srinika_driving_speed
+      - sensor.hasika_driving_speed
+      above: 8
+    condition:
+      - condition: template
+        value_template: >
+          {%- if states.automation.alert_when_moving.attributes.last_triggered -%}
+            {{ (as_timestamp(now()) - as_timestamp(states.automation.alert_when_moving.attributes.last_triggered)) > 300 }}
+          {%- else -%}
+            true
+          {%- endif -%}
+      - condition: template
+        value_template: "{{ states.input_boolean.home_mode_away.state == 'off' }}"
+      - condition: template
+        value_template: "{{ states.alarm_control_panel.simplisafe.state | lower != 'armed_away' }}"
+    action:
+      - service: script.voice_notify
+        data_template:
+          message: >-
+            {% set apostrophe = "\'" %}
+            {{ trigger.entity_id.split('.')[1].split('_')[0] |title ~ apostrophe ~ 's' }} vehicle is in motion.
+      - service: script.notify_me
+        data_template:
+          message: >-
+            {% set apostrophe = "\'" %}
+            {{ trigger.entity_id.split('.')[1].split('_')[0] |title ~ apostrophe ~ 's' }} vehicle is going at {{ trigger.to_state.state |round *2 }} mph.
+
+###############################################################################
+# Automation: Notify of iPhone Low Battery
+###############################################################################
+  - alias: Notify Low battery
+    initial_state: true
+    trigger:
+      platform: numeric_state
+      entity_id:
+      - device_tracker.suresh_suresh
+      - device_tracker.mallika_mallika
+      - device_tracker.srinika_srinika
+      - device_tracker.hasika_hasika
+      value_template: '{{ state.attributes.battery }}'
+      below: 25
+    condition:
+      - condition: template
+        value_template: '{{ states.input_boolean.battery_notifications.state == "on" }}'
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "{{ trigger.to_state.attributes.friendly_name }}'s phone battery is less than: {{ trigger.to_state.attributes.battery }}%."
+      - service: script.voice_notify
+        data_template:
+          message: "{{ trigger.to_state.attributes.friendly_name }}'s phone battery is less than: {{ trigger.to_state.attributes.battery }}%."
+
+
+  - alias: Alert Low Battery
+    trigger:
+      - platform: template
+        value_template: >
+          {% set ns = namespace(lowBattery=false) %}
+          {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
+          {% set ns.lowBattery = true %}{% endfor %}
+          {{ ns.lowBattery }}
+    action:
+      - service: script.voice_notify
+        data_template:
+          message: >
+            {% set ns = namespace(lowBattery) %}
+            {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
+              {% set ns.lowBattery = ns.lowBattery ~ ',' ~ x.name %}
+            {%- endfor %}
+            {{ ns.lowBattery -}} 
+            {{- ' battery is ' if ns.lowBattery.split(',')|count == 1 else ' batteries are ' -}} less than 25 percent.
+
+# ###############################################################################
+# # Automation: Notify of Sensor's Low Battery
+# ###############################################################################
+  # - alias: Alert Low Battery Level of Sensors
+  #   initial_state: true
+  #   trigger:
+  #     platform: state
+  #     entity_id:
+  #       - binary_sensor.motion_sensor_158d00016c2d0e
+  #       - binary_sensor.motion_sensor_158d00016db6d2
+  #       - binary_sensor.motion_sensor_158d0001a25041
+  #       - binary_sensor.motion_sensor_158d0001a662fe
+  #       - sensor.illumination_158d00016c2d0e
+  #       - sensor.illumination_158d00016db6d2
+  #       - sensor.illumination_158d0001a25041
+  #       - sensor.illumination_158d0001a662fe
+  #       - zwave.aeotec_water_sensor
+  #       - zwave.audio_detector
+  #       - zwave.back_door_sensor
+  #       - zwave.basement_door_sensor
+  #       - zwave.downstairs_multi_sensor
+    #       - zwave.front_room_multi_sensor
+  #       - zwave.front_room_window_sensor
+  #       - zwave.garage_door_sensor
+  #       - zwave.guest_bedroom_multi_sensor
+  #       - zwave.kitchen_motion_sensor
+  #       - zwave.single_car_garage_door_tilt_sensor
+  #       - zwave.stairs_motion_sensor
+  #       - zwave.tv_multi_sensor
+  #       - zwave.two_car_garage_door_tilt_sensor
+  #       - zwave.upstairs_multi_sensor
+  #       - zwave.wallmote
+  #   action:
+  #     - service: script.voice_notify
+  #       data_template:
+  #         message: >-
+  #           {%- for item in states if item.entity_id.split('.')[0] != "device_tracker"  -%}
+  #           {%- for attrib in item.attributes|sort() if 'battery' in attrib and item.attributes[attrib] | int < 10 %}
+  #           {{ item.name }} Battery is at {{ item.attributes[attrib] }} percent
+  #           {%- endfor -%}
+  #           {%- endfor -%}
+
+  - alias: Check Wi-Fi Status of iPhones At Home
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - device_tracker.mallika_mallika
+          - device_tracker.suresh_suresh
+          - device_tracker.srinika_srinika
+          - device_tracker.hasika_hasika
+        from: 'not_home'
+        to: 'home'
+        for: '00:05:00'
+    condition:
+      condition: or
+      conditions:
+        - condition: state
+          entity_id: sensor.hasika_iphone_wifi_state
+          state: 'Not Connected'
+        - condition: state
+          entity_id: sensor.mallika_iphone_wifi_state
+          state: 'Not Connected'
+        - condition: state
+          entity_id: sensor.srinika_iphone_wifi_state
+          state: 'Not Connected'
+        - condition: state
+          entity_id: sensor.suresh_iphone_wifi_state
+          state: 'Not Connected'
+    action:
+      - service: script.notify_me
+        data_template:
+          message: >
+            {% set member = trigger.entity_id.split('.')[1].split('_')[0] %}
+            {{ member | title }}'s iPhone is not connected to Wi-Fi at home!
+      - service: script.voice_notify
+        data_template:
+          message: >
+            {% set member = trigger.entity_id.split('.')[1].split('_')[0] %}
+            {{ member | title }}'s iPhone is not connected to Wi-Fi at home!

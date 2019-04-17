@@ -1,0 +1,95 @@
+title: Raspberry PI
+icon: mdi:pig
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: "custom:button-card"
+        name: Query Wifi
+        entity: inout_boolean.dummy
+        icon: mdi:wifi
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: query_wifi_info
+      - type: "custom:button-card"
+        name: Query Disk
+        entity: inout_boolean.dummy
+        icon: mdi:harddisk
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: query_disk_info
+
+  - type: entities
+    title: Raspberry Pi Commands
+    show_header_toggle: false
+    entities:
+      - input_select.raspberry_pis
+      - input_select.rpi_commands
+
+  - type: entities
+    title: WiFi Signal Strength
+    show_header_toggle: false
+    entities:
+      - sensor.kitchen_pi_signal_level
+      - sensor.family_room_pi_signal_level
+      - sensor.front_room_pi_signal_level
+      - sensor.garage_pi_signal_level
+      - sensor.guest_1_pi_signal_level
+      - sensor.guest_2_pi_signal_level
+      - sensor.master_bedroom_pi_signal_level
+
+  - type: entities
+    title: WiFi Link Quality
+    show_header_toggle: false
+    entities:
+      - sensor.kitchen_pi_link_quality
+      - sensor.family_room_pi_link_quality
+      - sensor.front_room_pi_link_quality
+      - sensor.garage_pi_link_quality
+      - sensor.guest_1_pi_link_quality
+      - sensor.guest_2_pi_link_quality
+      - sensor.master_bedroom_pi_link_quality
+
+  - type: entities
+    title: RPi Disk Available
+    show_header_toggle: false
+    entities:
+      - sensor.kitchen_pi_available_disk
+      - sensor.family_room_pi_available_disk
+      - sensor.front_room_pi_available_disk
+      - sensor.garage_pi_available_disk
+      - sensor.guest_1_pi_available_disk
+      - sensor.guest_2_pi_available_disk
+      - sensor.master_bedroom_pi_available_disk
+
+  - type: entities
+    title: RPi Disk Used
+    show_header_toggle: false
+    entities:
+      - sensor.kitchen_pi_disk_used
+      - sensor.family_room_pi_disk_used
+      - sensor.front_room_pi_disk_used
+      - sensor.garage_pi_disk_used
+      - sensor.guest_1_pi_disk_used
+      - sensor.guest_2_pi_disk_used
+      - sensor.master_bedroom_pi_disk_used
+
+  - type: entities
+    title: RPi Scripts
+    show_header_toggle: false
+    entities:
+      - script.restart_all_raspberrypis
+      - script.restart_all_snapclients
+      - script.shutdown_all_raspberrypis
+      - script.restart_snapcast_server
+      - script.start_snapcast_server
+      - script.stop_snapcast_server

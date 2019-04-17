@@ -1,0 +1,110 @@
+title: QNAP NAS
+icon: mdi:harddisk
+cards:
+  - type: entities
+    title: QNAP Server
+    show_header_toggle: false
+    entities:
+      - sensor.kalavala_nas_status
+      - sensor.kalavala_nas_network_up_eth0
+      - sensor.kalavala_nas_network_up_eth1
+      - sensor.kalavala_nas_system_temperature
+      - sensor.kalavala_nas_cpu_temperature
+
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.kalavala_nas_smart_status_drive_0_1
+            name: Drive 1
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: 'OK'
+                color: rgb(0, 128, 0)
+              - value: 'FAIL'
+                color: rgb(255, 0, 0)
+            action: more_info
+          - type: "custom:button-card"
+            entity: sensor.kalavala_nas_smart_status_drive_0_2
+            name: Drive 2
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: 'OK'
+                color: rgb(0, 128, 0)
+              - value: 'FAIL'
+                color: rgb(255, 0, 0)
+            action: more_info
+          - type: "custom:button-card"
+            entity: sensor.kalavala_nas_smart_status_drive_0_3
+            name: Drive 3
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: 'OK'
+                color: rgb(0, 128, 0)
+              - value: 'FAIL'
+                color: rgb(255, 0, 0)
+            action: more_info
+          - type: "custom:button-card"
+            entity: sensor.kalavala_nas_smart_status_drive_0_4
+            name: Drive 4
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: 'OK'
+                color: rgb(0, 128, 0)
+              - value: 'FAIL'
+                color: rgb(255, 0, 0)
+            action: more_info
+
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            entity: sensor.kalavala_nas_cpu_usage
+            unit: "%"
+            name: CPU
+            severity:
+              green: 0
+              yellow: 50
+              red: 75
+          - type: gauge
+            entity: sensor.kalavala_nas_memory_usage
+            unit: "%"
+            name: Memory
+            severity:
+              green: 0
+              yellow: 50
+              red: 75
+          - type: gauge
+            entity: sensor.kalavala_nas_volume_used_datavol1
+            unit: "%"
+            name: Disk Used
+            severity:
+              green: 0
+              yellow: 50
+              red: 75
+      - type: entities
+        title: QNAP Drives
+        show_header_toggle: false
+        entities:
+          - sensor.kalavala_nas_temperature_drive_0_1
+          - sensor.kalavala_nas_temperature_drive_0_2
+          - sensor.kalavala_nas_temperature_drive_0_3
+          - sensor.kalavala_nas_temperature_drive_0_4

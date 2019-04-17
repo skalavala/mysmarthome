@@ -1,0 +1,66 @@
+title: Lights
+icon: mdi:lightbulb-on
+cards:
+  - type: entities
+    title: Upstairs
+    show_header_toggle: true
+    entities:
+      - light.master_bedroom 
+      - entity: light.master_bedroom_1
+        name: Suresh's Bedside Light
+      - entity: light.master_bedroom_2
+        name: Mallika's Bedside Light
+      - entity: switch.kids_bedroom
+        name: Hasika's Bedroom
+      - entity: switch.kids_bed_accent
+        name: Hasika's Bed Accent Lights
+      - entity: switch.guest_bedroom
+        name: Srinika's Bedroom
+      - entity: switch.prayer_room
+        name: Study Room
+
+  - type: entities
+    title: Downstairs
+    show_header_toggle: true
+    entities:
+      - switch.basement_left
+      - switch.basement_right
+      - switch.kitchen
+      - switch.office_room
+      - switch.zwave_smart_switch_switch
+      - light.family_room
+      - light.hue_color_lamp_1
+      - light.hue_color_lamp_2
+      - light.hue_color_lamp_3
+
+  - type: entities
+    title: Fragrance Outlets
+    show_header_toggle: true
+    entities:
+      - switch.bathroom_fragrance
+      - switch.downstairs_fragrance
+      - switch.upstairs_fragrance
+
+  - type: entities
+    title: Garage
+    show_header_toggle: false
+    entities:
+      - switch.garage
+      - entity: switch.tesla_model_3_5yj3e1ea8jf010610_charger_switch
+        name: Tesla Charger Switch
+      - entity: switch.tesla_model_3_5yj3e1ea8jf010610_maxrange_switch
+        name: Tesla Max Range Switch
+
+  - type: entities
+    title: Always On
+    show_header_toggle: false
+    entities:
+      - light.gateway_light_34ce008ad65d
+      - switch.wemoswitch1
+
+  - type: entities
+    title: Outdoor Lights
+    show_header_toggle: true
+    entities:
+      - switch.frontyard_light
+      - switch.wemobackyardlightswitch

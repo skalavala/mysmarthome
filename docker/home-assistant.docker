@@ -1,0 +1,6 @@
+docker run -it \
+	-p 8123:8123 \
+	-v /home/homeassistant/.homeassistant/:/config \
+	--net=host \
+	--device=/dev/ttyACM0 \
+	homeassistant/home-assistant:latest

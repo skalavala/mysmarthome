@@ -1,0 +1,106 @@
+title: Date & Time
+icon: mdi:desktop-tower
+cards:
+
+  - type: entities
+    title: Date & Time
+    show_header_toggle: false
+    entities:
+      - sensor.date
+      - sensor.date_time
+      - sensor.time
+      - sensor.time_date
+      - sensor.time_utc
+
+  - type: entities
+    title: System Monitor
+    show_header_toggle: false
+    entities:
+      - sensor.disk_free
+      - sensor.ipv4_address_ens160
+      - sensor.external_ip
+      - sensor.last_boot
+      - sensor.processor_use
+      - sensor.memory_free
+      - binary_sensor.workday_sensor
+      - sensor.ha_installed_version
+      - sensor.ha_current_version
+      - sensor.home_assistant_up_time
+
+  - type: entities
+    title: Alarm Clock
+    show_header_toggle: false
+    entities:
+      - automation.alarm_clock
+      - input_boolean.am
+      - input_boolean.pm
+      - input_boolean.week_day_only
+      - input_label.alarm_current_time
+      - input_number.slider_hours
+      - input_number.slider_minutes
+
+  - type: entities
+    title: Pi-Hole
+    show_header_toggle: false
+    entities:
+      - sensor.pi_hole_ads_blocked_today
+      - sensor.pi_hole_ads_percentage_blocked_today
+      - sensor.pi_hole_dns_queries_cached
+      - sensor.pi_hole_dns_queries_forwarded
+      - sensor.pi_hole_dns_queries_today
+      - sensor.pi_hole_dns_unique_clients
+      - sensor.pi_hole_dns_unique_domains
+      - sensor.pi_hole_domains_blocked
+      - sensor.pi_hole_seen_clients
+
+  - type: horizontal-stack
+    cards:
+      - type: gauge
+        entity: sensor.speedtest_ping
+        name: Ping Speed
+        unit: ms
+        severity:
+          green: 0
+          yellow: 45
+          red: 85
+      - type: gauge
+        entity: sensor.speedtest_upload
+        name: Upload Speed
+        unit: Mbit/s
+        severity:
+          green: 10
+          yellow: 7
+          red: 5
+      - type: gauge
+        entity: sensor.speedtest_download
+        name: Download Speed
+        unit: Mbit/s
+        severity:
+          green: 70
+          yellow: 50
+          red: 35
+
+  - type: entities
+    title: Battery/UPS
+    show_header_toggle: false
+    entities:
+      - sensor.ups_battery
+      - sensor.ups_input_voltage
+      - sensor.ups_load
+      - sensor.ups_nominal_input_voltage
+      - sensor.ups_status
+      - sensor.ups_time_left
+      - sensor.ups_time_on_battery
+      - sensor.ups_transfer_count
+
+  - type: entities
+    title: ESXi Vmware Server
+    show_header_toggle: false
+    entities:
+      - sensor.esxi_memory_used
+      - sensor.esxi_number_of_network_interfaces
+      - sensor.esxi_server_description
+      - sensor.esxi_system_memory_size
+      - sensor.esxi_system_uptime
+      - sensor.esxi_total_ram
+      - sensor.esxi_used_ram

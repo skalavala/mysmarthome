@@ -1,0 +1,78 @@
+# ###############################################################################
+# #   @author         :   Mahasri Kalavala
+# #   @date           :   11/27/2017
+# #   @package        :   APC UPS Backup 
+# #   @description    :   UPS Backup
+# ###############################################################################
+ apcupsd:
+   host: 127.0.0.1
+   port: 3551
+
+ sensor:
+   - platform: apcupsd
+    #  name: Network Backup UPS
+     resources:
+       - bcharge
+       - linev
+       - loadpct
+       - nominv
+       - numxfers
+       - status
+       - timeleft
+       - tonbatt
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+ automation:
+
+   - alias: UPS State Change
+     initial_state: true
+     trigger:
+       - platform: state
+         entity_id: sensor.ups_status
+     action:
+       - service: script.notify_me
+         data_template:
+           message: "UPS Status changed from {{ trigger.from_state.state }} 
+                                        to {{ trigger.to_state.state }} 
+                                        at {{ as_timestamp(now()) | timestamp_custom('%I:%M:%S %p, %B %d,%Y', true) }}."
+
+# # Power Failure Notification
+# ###############################################################################
+   - alias: Power Failure
+     initial_state: true
+     trigger:
+       - platform: state
+         entity_id: sensor.ups_status
+         from: 'ONLINE'
+         to: 'ONBATT'
+     action:
+       - service: script.notify_me
+         data_template:
+           message: 
+             Power failure at {{ as_timestamp(now()) | timestamp_custom('%I:%M:%S %p %B-%d,%Y', true) }}.
+             Battery can last for {{ states.sensor.ups_time_left.state }} minutes.
+
+# # Power Restored Notification
+# ###############################################################################
+   - alias: Power Restored
+     initial_state: true
+     trigger:
+       - platform: state
+         entity_id: sensor.ups_status
+         from: 'ONBATT'
+         to: 'ONLINE'
+     action:
+       - service: script.notify_me
+         data_template:
+           message: 
+             Power restored at {{ as_timestamp(now()) | timestamp_custom('%I:%M:%S %p %B-%d,%Y', true) }}.
+             Ran on battery for {{ "%0.2f" % (states.sensor.ups_time_on_battery.state | int / 60  |float) }} minutes.

@@ -1,0 +1,88 @@
+title: Multi Room Audio & TTS
+icon: mdi:television
+cards:
+  - type: entities
+    title: Snapcast Server Commands
+    show_header_toggle: false
+    entities:
+      - entity: input_select.snapcast_server
+        name: Snapcast Server Command
+
+  - type: entities
+    title: Raspberry Pi Commands
+    show_header_toggle: false
+    entities:
+      - entity: input_select.raspberry_pis
+        name: Select a Raspberry Pi
+      - entity: input_select.rpi_commands
+        name: Select Command To Execute
+
+  - type: entities
+    title: Raspberry Pi Scripts
+    show_header_toggle: false
+    entities:
+      - script.query_disk_info
+      - script.query_wifi_info
+      - script.restart_all_raspberrypis
+      - script.restart_all_snapclients
+      - script.shutdown_all_raspberrypis
+
+  - type: entities
+    title: Text To Speech
+    show_header_toggle: false
+    entities:
+      - input_boolean.greeting
+      - input_number.tts_volume_level_afternoon
+      - input_number.tts_volume_level_alert
+      - input_number.tts_volume_level_evening
+      - input_number.tts_volume_level_morning
+      - input_text.tts
+
+  - type: entities
+    title: Media Players
+    show_header_toggle: false
+    entities:
+      - media_player.denon_avr_x2400h
+      - media_player.gstreamer
+      - media_player.mpd
+      - media_player.attic_tv
+      - media_player.my_denon_receiver
+
+  - type: vertical-stack
+    cards:
+      - type: media-control
+        entity: media_player.mpd
+
+      - type: media-control
+        entity: media_player.denon_avr_x2400h
+
+      - type: media-control
+        entity: media_player.gstreamer
+
+      - type: media-control
+        entity: media_player.attic_tv
+
+      - type: media-control
+        entity: media_player.my_denon_receiver
+
+  - type: entities
+    title: Snapcast Clients
+    show_header_toggle: false
+    entities:
+      - media_player.snapcast_client_b827eb011e00
+      - media_player.snapcast_client_b827eb4445b1
+      - media_player.snapcast_client_b827eb505e2d
+      - media_player.snapcast_client_b827eb8604f5
+      - media_player.snapcast_client_b827eba8e7ef
+      - media_player.snapcast_client_b827ebaa08f7
+
+  - type: entities
+    title: Snapcast Group
+    show_header_toggle: false
+    entities:
+      - media_player.snapcast_group_11d5f9f4e9a4bc3bf4f38b6d7e1517c6
+      - media_player.snapcast_group_23dcee584dd2a739fcf92f4a4444a02f
+      - media_player.snapcast_group_380a4b3f93e3f9711a672ccec499dc82
+      - media_player.snapcast_group_601c73870a93e628a9afb6c31fd59921
+      - media_player.snapcast_group_81a1c2dfa612e1718fe4084b641344fd
+      - media_player.snapcast_group_bde597975a001d05519d2ae52103dba1

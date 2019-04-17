@@ -1,0 +1,12 @@
+Step 1:
+Copy /etc/mosquitto/conf.d/mosquitto.conf to /home/suresh/docker/mqtt/config/ directory
+Copy /etc/mosquitto/passwd to /mqtt/config directory
+
+Step 2:
+Run `sudo chown mosquitto:mosquitto mosquitto.conf` 
+
+Step 3:
+Edit mosquitto.conf and set the passwd file path to /mqtt/config file
+
+# Run the following command	
+docker run -it -p 1883:1883 -p 9001:9001 -v /home/suresh/docker/mqtt/config:/mosquitto/config/ eclipse-mosquitto:latest	

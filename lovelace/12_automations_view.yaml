@@ -1,0 +1,299 @@
+title: Automations
+icon: mdi:arrow-decision-auto
+cards:
+  - type: entities
+    title: Magic Cube Automations
+    show_header_toggle: false
+    entities:
+      - automation.family_room_cube_event_flip180
+      - automation.family_room_cube_event_flip180_2
+      - automation.family_room_cube_event_flip90
+      - automation.family_room_cube_event_move
+      - automation.family_room_cube_event_move_2
+      - automation.family_room_cube_event_shake
+      - automation.family_room_cube_event_shake_2
+      - automation.family_room_cube_event_tap_twice
+      - automation.front_room_cube_event_flip90
+      - automation.hasika_room_cube_event_flip90
+      - automation.hasika_room_cube_event_shake
+      - automation.master_bedroom_cube_event_flip180
+      - automation.master_bedroom_cube_event_flip90
+      - automation.master_bedroom_cube_event_move
+      - automation.master_bedroom_cube_event_shake
+      - automation.master_bedroom_cube_event_tap_twice
+      - automation.srinika_room_cube_event_flip90
+      - automation.srinika_room_cube_event_shake
+      - automation.study_room_cube_event_flip90
+      - automation.study_room_cube_event_shake
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.alarm_clock
+        state: 'on'
+    card:
+      type: entities
+      title: Alarm Clock
+      show_header_toggle: false
+      entities:
+        - automation.alarm_clock
+        - automation.am_change_off
+        - automation.am_change_on
+        - automation.pm_change_off
+        - automation.pm_change_on
+        - automation.update_current_alarm_time
+
+  - type: entities
+    title: Zone Based Alerts
+    show_header_toggle: false
+    entities:
+      - automation.alert_life360_error
+      - automation.alert_private_zone_enter
+      - automation.alert_private_zone_leaves
+      - automation.alert_when_everyone_is_away
+      - automation.alert_when_moving
+      - automation.alert_when_someone_enters_a_zone
+      - automation.alert_when_someone_leaves_a_zone
+      - automation.send_a_message_as_i_get_closer_to_home
+      - automation.update_phone_battery_levels
+      - automation.welcome_family
+
+  - type: entities
+    title: Misc. Notifications
+    show_header_toggle: false
+    entities:
+      - automation.notify_charger_switch_state
+      - automation.notify_charging_status
+      - automation.notify_door_status
+      - automation.notify_entry_door_status
+      - automation.notify_holiday_state_change
+      - automation.notify_indian_holidays
+      - automation.notify_low_battery
+      - automation.notify_of_new_external_ip
+      - automation.notify_thermostat_state_change
+      - automation.notify_usps_mail
+      - automation.notify_usps_packages
+
+  - type: entities
+    title: Watch Dog Automations
+    show_header_toggle: false
+    entities:
+      - automation.backyard_light_watchdog
+      - automation.frontyard_light_watchdog
+      - automation.guest_bedroom_1_light_watchdog
+      - automation.guest_bedroom_2_light_watchdog
+      - automation.kids_bedroom_light_watchdog
+
+  - type: entities
+    title: Timer Automations
+    show_header_toggle: false
+    entities:
+      - automation.bathroom_aroma_timer_elapsed
+      - automation.bathroom_aroma_timer_finish
+      - automation.bathroom_aroma_timer_start
+      - automation.cancel_wfh_timer_when_suresh_leaves_home
+      - automation.downstairs_aroma_timer_elapsed
+      - automation.downstairs_aroma_timer_finish
+      - automation.downstairs_aroma_timer_start
+      - automation.family_room_motion_timer
+      - automation.family_room_timer_elapsed
+      - automation.frontroom_motion_timer
+      - automation.frontroom_timer_elapsed
+      - automation.kitchen_motion_timer
+      - automation.kitchen_timer_elapsed
+      - automation.master_bedroom_motion_timer
+      - automation.master_bedroom_timer_elapsed
+      - automation.officeroom_motion_timer
+      - automation.officeroom_timer_elapsed
+      - automation.timer_elapsed_take_a_walk
+      - automation.upstairs_aroma_timer_elapsed
+      - automation.upstairs_aroma_timer_finish
+      - automation.upstairs_aroma_timer_start
+      - automation.wfh_timer_start
+
+  - type: entities
+    title: Garage Automations
+    show_header_toggle: false
+    entities:
+      - automation.garage_lights_on_when_door_is_opened
+      - automation.garage_motion_reset
+      - automation.garage_motion_timer
+      - automation.garage_timer_elapsed
+      - automation.garage_timer_start_when_garage_lights_on
+      - automation.notify_garage_door_status
+      - automation.scan_garage_camera_when_motion
+      - automation.single_car_garage_door_watchdog
+      - automation.two_car_garage_door_watchdog
+      - automation.working_in_garage_watchdog
+
+  - type: entities
+    title: Birthday Automations
+    show_header_toggle: false
+    entities:
+      - automation.birthday_countdown_30_days
+      - automation.random_birthday_wishes
+      - automation.today_is_the_birthday
+      - automation.update_birthdays
+
+  - type: entities
+    title: Home Security Automations
+    show_header_toggle: false
+    entities:
+      - automation.disable_emergency_mode_upon_disabling_home_security
+      - automation.home_security_away_motion_deteted_inside
+      - automation.home_security_status_leeo_color
+      - automation.home_security_system_watchdog_10_minutes
+      - automation.home_security_system_watchdog_30_minutes
+      - automation.notify_home_security_status_change
+      - automation.night_homesecurity_on
+      - automation.turn_on_thermostat_upon_reaching_home
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.light_automations
+        state: 'on'
+    card:
+      type: entities
+      title: Light Automations
+      show_header_toggle: false
+      entities:
+        - automation.animate_familyroom_lights
+        - automation.restore_familyroom_lights
+        - automation.animate_master_bedroom_lights
+        - automation.restore_masterbedroom_lights
+        - automation.basement_accent_lights_off_after_5_minutes
+        - automation.basement_accent_lights_on_when_basement_door_opened
+        - automation.evening_indoor_lights_on_before_sunset
+        - automation.evening_outdoor_lights_on_at_sunset
+        - automation.garage_lights_on_when_door_is_opened
+        - automation.long_flash_all_lights
+        - automation.morning_indoor_lights_on
+        - automation.morning_master_bedroom_lights_off_mallika
+        - automation.morning_master_bedroom_lights_on_mallika
+        - automation.morning_outdoor_lights_off
+        - automation.night_dim_tv_lights
+        - automation.night_turn_lights_off
+        - automation.short_flash_all_lights
+        - automation.tv_dim_indoor_lights_when_tv_is_on
+        - automation.tv_restore_family_room_lights_to_tv_mode
+        - automation.tv_turn_lights_on_when_tv_is_turned_off
+
+  - type: entities
+    title: Wallmote Automations
+    show_header_toggle: false
+    entities:
+      - automation.wallmote_button_1_pressed
+      - automation.wallmote_button_2_pressed
+      - automation.wallmote_button_3_pressed
+      - automation.wallmote_button_4_pressed
+
+  - type: entities
+    title: Trash & Recycle Automations
+    show_header_toggle: false
+    entities:
+      - automation.reset_trash_reminders
+      - automation.restore_trash_recycle_settings_on_startup
+      - automation.trash_and_recycle_bin_left_outside_already
+      - automation.trash_and_recycle_pickup_reminder
+      - automation.trash_pickup_day_changed
+      - automation.recycle_pickup_day_changed
+      - automation.recycle_pickup_week_changed
+      - automation.remind_later
+
+  - type: entities
+    title: Camera Automations
+    show_header_toggle: false
+    entities:
+      - automation.notify_backyard_camera_snapshots
+      - automation.notify_driveway_camera_snapshots
+      - automation.notify_frontdoor_camera_snapshots
+      - automation.scan_backyard_camera_when_motion
+      - automation.scan_driveway_camera_when_motion
+      - automation.scan_frontdoor_camera_on_motion
+      - automation.scan_garage_camera_when_motion
+      - automation.show_outdoor_temperature_on_camera
+      - automation.restore_frontyard_stream
+
+  - type: entities
+    title: TV Automations
+    show_header_toggle: false
+    entities:
+      - automation.night_dim_tv_lights
+      - automation.tv_backlight_is_on_when_tv_is_on
+      - automation.tv_backlight_off_when_tv_is_off
+      - automation.tv_dim_indoor_lights_when_tv_is_on
+      - automation.tv_restore_family_room_lights_to_tv_mode
+      - automation.tv_turn_lights_on_when_tv_is_turned_off
+      - automation.reset_movie_time_after_3_hours
+
+  - type: entities
+    title: Weather Automations
+    show_header_toggle: false
+    entities:
+      - automation.remind_me_to_enjoy_warm_and_windy_weather
+      - automation.weather_alert
+      - automation.weather_input_boolean_updates
+      - automation.rain_alerts
+      - automation.snow_and_sleet_alerts
+      - automation.update_openuv_every_30_minutes_during_the_daytime
+      - automation.alert_super_heavy_winds
+
+  - type: entities
+    title: Qnap Automations
+    show_header_toggle: false
+    entities:
+      - automation.notify_nas_cpu_temperature
+      - automation.notify_nas_cpu_usage
+      - automation.notify_nas_disk_usage
+      - automation.notify_nas_drive_status_change
+      - automation.notify_nas_memory_usage
+      - automation.notify_nas_status_change
+
+  - type: entities
+    title: Alerts
+    show_header_toggle: false
+    entities:
+      - automation.notify_home_status_when_away
+      - automation.emergency_mode_disabled
+      - automation.home_mode_away_on
+      - automation.hourly_report_during_day_time
+      - automation.check_wi_fi_status_of_iphones_at_home
+      - automation.night_bedtime_report
+
+  - type: entities
+    title: Raspberry Pi Automations
+    show_header_toggle: false
+    entities:
+      - automation.query_rpi_disk_data
+      - automation.query_rpi_wifi_data
+      - automation.raspberry_pi_command
+
+  - type: entities
+    title: Media Player Automations
+    show_header_toggle: false
+    entities:
+      - automation.keep_chromecast_on
+      - automation.snapcast_action
+
+  - type: entities
+    title: Home Assistant Automations
+    show_header_toggle: false
+    entities:
+      - automation.power_failure
+      - automation.power_restored
+      - automation.random_darker_theme_at_sunset
+      - automation.random_lighter_theme_at_sunrise
+      - automation.random_theme_at_startup
+      - automation.remind_domain_renewal
+      - automation.season_change_notification
+      - automation.turn_off_ac_after_3_hours_of_cooling
+      - automation.update_available_notification
+      - automation.update_zwave_battery_levels
+      - automation.ups_state_change
+      - automation.water_leak_detected
+
+  - type: entities
+    title: Misc Automations
+    show_header_toggle: false
+    entities:
+      - automation.count_motions
+      - automation.reset_motion_counters_at_midnight

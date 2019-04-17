@@ -1,0 +1,160 @@
+title: Camera Live
+icon: mdi:cctv
+cards:
+
+  - type: horizontal-stack
+    cards:
+      - type: "custom:button-card"
+        name: Porch
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: 'frontyard'
+            color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: stream_frontdoor_camera_to_chromecast
+
+      - type: "custom:button-card"
+        name: Driveway
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: 'driveway'
+            color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: stream_driveway_camera_to_chromecast
+
+      - type: "custom:button-card"
+        name: Patio
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: 'patio'
+            color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: stream_patio_camera_to_chromecast
+
+      - type: "custom:button-card"
+        name: Playarea
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: 'playarea'
+            color: var(--primary-color)
+        action: service
+        service:
+          domain: script
+          action: stream_playarea_camera_to_chromecast
+
+  - type: picture-glance
+    id: camera_frontdoor_camera
+    title: Frontdoor Camera
+    entity: camera.frontdoor_camera
+    camera_image: camera.frontdoor_camera
+    show_info: true
+    tap_action: 
+      action: more-info
+    entities:
+      - switch.frontyard_light
+      - binary_sensor.frontdoor_camera_motion
+      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+
+  - type: picture-glance
+    id: camera_patio_camera
+    title: Patio Camera
+    entity: camera.patio_camera
+    camera_image: camera.patio_camera
+    show_info: true
+    tap_action: 
+      action: more-info
+    entities:
+      - switch.wemobackyardlightswitch
+      - binary_sensor.patio_camera_motion
+      - binary_sensor.back_door_sensor_sensor
+
+  - type: picture-glance
+    id: camera_driveway_camera
+    title: Driveway Camera
+    entity: camera.driveway_camera
+    camera_image: camera.driveway_camera
+    show_info: true
+    tap_action: 
+      action: more-info
+    entities:
+      - switch.frontyard_light
+      - binary_sensor.driveway_camera_motion
+      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+
+  - type: picture-glance
+    id: camera_playarea_camera
+    title: Playarea Camera
+    entity: camera.playarea_camera
+    camera_image: camera.playarea_camera
+    show_info: true
+    tap_action: 
+      action: more-info
+    entities:
+      - switch.wemobackyardlightswitch
+      - binary_sensor.playarea_camera_motion
+      - binary_sensor.back_door_sensor_sensor
+
+  - type: picture-glance
+    id: camera_garage_camera
+    title: Garage Camera
+    entity: camera.garage_camera
+    camera_image: camera.garage_camera
+    show_info: true
+    tap_action: 
+      action: more-info
+    entities:
+      - switch.garage
+      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+
+  - type: picture-glance
+    id: camera_kitchen_camera
+    title: Kitchen Camera
+    entity: camera.kitchen_camera
+    camera_image: camera.kitchen_camera
+    show_info: true
+    tap_action: 
+      action: more-info
+    entities:
+      - switch.kitchen
+      - binary_sensor.kitchen_camera_motion
+      - binary_sensor.back_door_sensor_sensor
+
+  - type: picture-glance
+    id: camera_frontroom_camera
+    title: FrontDoor Camera
+    entity: camera.frontroom_camera
+    camera_image: camera.frontroom_camera
+    show_info: true
+    tap_action: 
+      action: more-info
+    entities:
+      - binary_sensor.frontdoor_camera_motion
+      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor

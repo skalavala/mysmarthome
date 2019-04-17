@@ -1,0 +1,312 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   11/22/2017
+#   @package        :   Emergency Stuff
+#   @description    :   When $hit hapens, this package gets called!
+#
+#   In case of emergency - turn on the emergency_mode (input boolean)
+#   lights, crazy sounds and alarms repeatedly until someone turns off
+#   input boolean and/or Home Security System is turned OFF.
+#
+#   All automations that alert during emerency situations, will turn on
+#   input boolean emergency_mode and notify using standard notification
+#   
+#   My Home TTS/voice notifications will not work when music is being played
+#   The automations will stop MPD media player ( just to makesure), so that 
+#   the TTS notifications will be played in case if someone plays music and
+#   forgot to turn if off.
+###############################################################################
+
+homeassistant:
+  customize:
+      script.emergency_script:
+        friendly_name: Emergency Script
+        hidden: true
+      script.emergency_script_loop:
+        friendly_name: Emergency Script Loop
+        hidden: true
+      script.emergency_all_lights_switches_on:
+        friendly_name: All Lights & Switches ON
+      script.all_indoor_lights_off:
+        friendly_name: All Indoor Lights OFF
+
+input_boolean:
+  emergency_mode:
+    name: Emergency Mode
+    initial: 'off'
+
+###############################################################################
+#                _                        _   _                 
+#     /\        | |                      | | (_)                
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#                                                                              
+###############################################################################
+
+automation:
+
+###############################################################################
+# When emergency mode is OFF, Keep the lights ON
+###############################################################################
+  - alias: Emergency Mode Disabled
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.emergency_mode
+      from: 'on'
+      to: 'off'
+    action:
+      - delay: '00:00:05'
+      - service: script.voice_notify
+        data_template:
+          message: "Attention! Emergency mode is now deactivated!"
+      - service: script.notify_me
+        data_template:
+          message: "Emergency mode is now deactivated!"
+
+# Water Leak detected - initiate the emergency process
+###############################################################################
+  - alias: Water Leak Detected
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.aeotec_water_sensor_flood
+        from: '0'
+        to: '2'
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.emergency_mode
+      - service: script.emergency_all_lights_switches_on
+      - service: script.notify_me
+        data_template:
+          message: "EMERGENCY! Water Leak Detected in the Basement!"
+      - service: script.emergency_script
+        data:
+          volume_level: 25
+          alarm_code: 2
+          message: "ALERT! Water Leak Detected in the Basement!"
+
+# # Carbon Monoxide Detected in the house
+# ###############################################################################
+#   - alias: CO Detected
+#     initial_state: true
+#     trigger:
+#       - platform: state
+#         entity_id: sensor.audio_detector_carbon_monoxide
+#         from: '0'
+#     condition:
+#       - condition: template
+#         value_template: "{{ trigger.to_state.state != '0' }}"
+#     action:
+#       - service: script.voice_notify
+#         data_template:
+#           message: "Attention!: CARBON MONOXIDE DETECTED! GET THE HELL OUT OF THE HOUSE!"
+#       - service: script.notify_me
+#         data_template:
+#           message: "Attention!: CARBON MONOXIDE DETECTED!. GET THE HELL OUT OF THE HOUSE!"
+#       - service: input_boolean.turn_on
+#         entity_id: input_boolean.emergency_mode
+#       - service: media_player.media_stop
+#         entity_id: media_player.mpd
+#       - service: script.emergency_script
+#         data:
+#           volume_level: 99
+#           alarm_code: 2
+#           message: "Attention! Cabon Monoxide detected. Leave the house immediately!"
+
+# # Smoke Detected in the house
+# ###############################################################################
+#   - alias: Smoke Detected
+#     initial_state: true
+#     trigger:
+#       - platform: state
+#         entity_id: sensor.audio_detector_smoke
+#         from: '0'
+#     condition:
+#       - condition: template
+#         value_template: "{{ trigger.to_state.state != '0' }}"        
+#     action:
+#       - service: script.voice_notify
+#         data_template:
+#           message: "Attention!: SMOKE DETECTED! CALL 911!"
+#       - service: script.notify_me
+#         data_template:
+#           message: "Attention!: SMOKE DETECTED!. CALL 911!"
+#       - service: input_boolean.turn_on
+#         entity_id: input_boolean.emergency_mode
+#       - service: media_player.media_stop
+#         entity_id: media_player.mpd
+#       - service: script.emergency_script
+#         data:
+#           volume_level: 99
+#           alarm_code: 2
+#           message: "Smoke Detected. Please get out of the home and call 911 immediately!"
+
+# Disable Emergency Mode upon Disabling Home Security System
+###############################################################################
+  - alias: Disable Emergency Mode Upon Disabling Home Security
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.simplisafe
+      to: 'disarmed'
+    condition:
+      - condition: template
+        value_template: '{{ states.input_boolean.emergency_mode.state == "on" }}'
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.emergency_mode
+
+  - alias: Home Security Away Motion Deteted Inside
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.back_door_sensor_sensor
+        - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+        - binary_sensor.basement_door_sensor_sensor
+        - binary_sensor.garage_door_sensor_sensor
+        - binary_sensor.front_room_multi_sensor_sensor
+        - binary_sensor.tv_multi_sensor_sensor
+        - binary_sensor.kitchen_motion_sensor_sensor
+        - binary_sensor.stairs_motion_sensor_sensor
+        - binary_sensor.upstairs_multi_sensor_sensor
+        - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+        - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+        - binary_sensor.motion_sensor_158d0001a662fe
+        - binary_sensor.motion_sensor_158d0001a25041
+        - binary_sensor.motion_sensor_158d00016db6d2
+        - binary_sensor.motion_sensor_158d00016c2d0e
+      from: 'off'
+      to: 'on'
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state }}"
+      - condition: template
+        value_template: >
+          {% set state = states.alarm_control_panel.simplisafe.state %}
+          {% if state != "" and state != "unknown" and state == "armed_away" %}
+            true
+          {% else %}
+            false
+          {% endif %}
+      - condition: template
+        value_template: >
+          {% set suresh = states.device_tracker.suresh_suresh.state %}
+          {% set mallika = states.device_tracker.mallika_mallika.state %}
+          {% set srinika = states.device_tracker.srinika_srinika.state %}
+          {% set hasika = states.device_tracker.hasika_hasika.state %}
+          {% if suresh != "home" and mallika != "home" and srinika != "home" and hasika != "home" %}
+            True
+          {% else %}
+            False
+          {% endif %}
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.emergency_mode
+      - service: script.emergency_all_lights_switches_on
+      - service: script.notify_me
+        data_template:
+          message: "MOTION DETECTED '{{ trigger.to_state.attributes.friendly_name | upper }}', 
+                    BUT NO ONE IS HOME. CALL FOR EMERGENCY!"
+      - service: notify.ios_devices
+        data_template:
+          title: >
+            {{ trigger.to_state.attributes.friendly_name }}
+          message: >
+            Attention: "MOTION DETECTED '{{ trigger.to_state.attributes.friendly_name | upper }}', 
+                        BUT NO ONE IS HOME. CALL FOR EMERGENCY!"
+      - service: script.emergency_script
+        data:
+          volume_level: 99
+          alarm_code: 1
+          message: "Police are on the way!...Police are on the way!...Police are on the way!...Police are on the way!...Police are on the way!"
+
+script:
+
+# Main Emergency Script
+###############################################################################
+  emergency_script:
+    sequence:
+      - condition: template
+        value_template: '{{ states.input_boolean.emergency_mode.state | lower == "on" }}'
+      - service: script.voice_notify
+        data_template:
+          message: '{{ message }}'
+          greeting: 'no'
+      - service: xiaomi_aqara.play_ringtone
+        data_template:
+          ringtone_id: '{{ alarm_code }}'
+          ringtone_vol: '{{ volume_level }}'
+      - delay: '00:00:01'
+      - service: script.emergency_script_loop
+        data_template:
+          message: '{{ message }}'
+          alarm_code: '{{ alarm_code }}'
+          volume_level: '{{ volume_level }}'
+
+# This script checks for the emergency_mode input_boolean and continue to
+# stay in emergency mode based on the input_boolean value
+###############################################################################
+  emergency_script_loop:
+    sequence:
+      - condition: template
+        value_template: '{{ states.input_boolean.emergency_mode.state == "on" }}'
+      - delay: '00:00:02'
+      - service: script.emergency_script
+        data_template:
+          message: '{{ message }}'
+          alarm_code: '{{ alarm_code }}'
+          volume_level: '{{ volume_level }}'
+
+# Turns ALL lights & Switches ON (Lights in RED where possible)
+###############################################################################
+  emergency_all_lights_switches_on:
+    sequence:
+      - service: script.xiaomi_red
+      - service: script.ifttt_leeo_color_change
+        data_template:
+          value1: "#FF0000"
+      - service: light.turn_on
+        entity_id: light.family_room
+        data:
+          transition: 0
+          brightness: 255
+          rgb_color: [255,0,0]
+      - service: light.turn_on
+        entity_id: light.master_bedroom
+        data:
+          transition: 0
+          brightness: 255
+          rgb_color: [255,0,0]
+      - service: switch.turn_on
+        entity_id:
+          - switch.basement_left
+          - switch.basement_right
+          - switch.garage
+          - switch.guest_bedroom
+          - switch.prayer_room
+          - switch.kids_bed_accent
+          - switch.kids_bedroom
+          - switch.office_room
+          - switch.smart_outlet_1
+          - switch.kitchen
+          - switch.zwave_smart_switch_switch
+          - switch.rf_switch_five
+          - switch.rf_switch_four
+          - switch.rf_switch_one
+          - switch.rf_switch_three
+          - switch.rf_switch_two
+          - switch.wemobackyardlightswitch
+          - switch.frontyard_light
+          - switch.downstairs_bathroom_fragrance_outlet
+          - switch.downstairs_fragrance
+          - switch.upstairs_fragrance
+          - switch.kitchen_siren_switch
+          - switch.kitchen_siren_switch_2
+          - switch.kitchen_siren_switch_3
+          - switch.kitchen_siren_switch_4
+          - switch.kitchen_siren_switch_5
+          - switch.wemoswitch1

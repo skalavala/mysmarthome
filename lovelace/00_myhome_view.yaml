@@ -1,0 +1,313 @@
+title: My Home
+icon: mdi:home
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: "custom:button-card"
+        entity: alarm_control_panel.simplisafe
+        icon: mdi:security
+        color_type: card
+        show_state: true
+        style:
+          - font-weight: bold
+          - color: rgb(255, 255, 255)
+        state:
+          - value: 'disarmed'
+            color: rgb(255,0,0)
+          - value: 'armed_home'
+            color: rgb(0, 128, 0)
+          - value: 'armed_away'
+            color: rgb(0, 0, 255)
+        action: more_info
+
+      - type: "custom:button-card"
+        entity: climate.dining_room
+        icon: mdi:thermometer-lines
+        color_type: card
+        show_state: true
+        style:
+          - font-weight: bold
+          - color: rgb(255, 255, 255)
+        state:
+          - value: 'heat'
+            color: rgb(255,0,0)
+          - value: 'eco'
+            color: rgb(0, 128, 0)
+          - value: 'cool'
+            color: rgb(0, 0, 255)
+        action: service
+        service:
+          domain: script
+          action: toggle_climate
+
+  - type: entity-filter
+    title: Device Trackers
+    show_header_toggle: false
+    entities:
+      - device_tracker.hasika_hasika
+      - device_tracker.mallika_mallika
+      - device_tracker.srinika_srinika
+      - device_tracker.suresh_suresh
+      - entity: device_tracker.tesla_model_3_5yj3e1ea8jf010610_location_tracker
+        name: Tesla
+    state_filter:
+      - 'home'
+    card:
+      type: glance
+      title: Kalavala Family
+
+  - type: entities
+    title: Master Bedroom Occupancy Value
+    show_header_toggle: false
+    entities:
+      - sensor.master_bed_sensor
+
+  - type: entity-filter
+    title: For Your Information
+    show_empty: false
+    show_header_toggle: false
+    entities:
+      - entity: sensor.hasika_iphone_battery_state
+        name: Hasika
+      - entity: sensor.mallika_iphone_battery_state
+        name: Mallika
+      - entity: sensor.srinika_iphone_battery_state
+        name: Srinika
+      - entity: sensor.srinika_iphone_battery_state
+        name: Suresh
+      - entity: sensor.hasika_iphone_wifi_state
+        name: Hasika
+      - entity: sensor.mallika_iphone_wifi_state
+        name: Mallika
+      - entity: sensor.srinika_iphone_wifi_state
+        name: Srinika
+      - entity: sensor.srinika_iphone_wifi_state
+        name: Suresh
+      - sensor.recycle_day
+      - sensor.trash_day
+    state_filter:
+      - 'Charging'
+      - 'yes'
+      - 'Not Connected'
+    card:
+      type: glance
+      title: FYI
+
+  - type: entities
+    title: Where Is Everyone
+    show_header_toggle: false
+    entities:
+      - sensor.hasika_location
+      - sensor.mallika_location
+      - sensor.srinika_location
+      - sensor.suresh_location
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.emergency_mode
+        state: 'on'
+    card:
+      type: entities
+      title: Emergency Scripts
+      show_header_toggle: false
+      entities:
+        - script.all_indoor_lights_off
+        - script.emergency_all_lights_switches_on
+        - script.emergency_script
+        - script.emergency_script_loop
+
+  - type: horizontal-stack
+    cards:
+      - type: glance
+        entities:
+          - input_label.mallika_birthday_days2go
+      - type: glance
+        entities:
+          - input_label.srinika_birthday_days2go
+      - type: glance
+        entities:
+          - input_label.hasika_birthday_days2go
+
+  - type: entity-filter
+    title: Doors
+    show_empty: false
+    entities:
+      - alarm_control_panel.simplisafe
+      - entity: binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+        name: Front Door
+      - entity: binary_sensor.back_door_sensor_sensor
+        name: Back Door
+      - entity: binary_sensor.basement_door_sensor_sensor
+        name: Basement Door
+      - entity: binary_sensor.garage_door_sensor_sensor
+        name: Garage Door
+      - entity: sensor.single_car_garage_door_sensor_status
+        name: Single Car Garage Door
+      - entity: binary_sensor.two_car_garage_door_tilt_sensor_sensor
+        name: Double Car Garage Door
+    state_filter:
+      - 'on'
+      - 'opened'
+      - 'Open'
+    card:
+      type: glance
+      title: Doors
+
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: Suresh Phone
+            unit: '%'
+            entity: input_label.suresh_battery
+            severity:
+              green: 75
+              yellow: 50
+              red: 30
+          - type: gauge
+            name: Mallika Phone
+            unit: '%'
+            entity: input_label.mallika_battery
+            severity:
+              green: 75
+              yellow: 50
+              red: 30
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: Srinika Phone
+            unit: '%'
+            entity: input_label.srinika_battery
+            severity:
+              green: 75
+              yellow: 50
+              red: 30
+          - type: gauge
+            name: Hasika Phone
+            unit: '%'
+            entity: input_label.hasika_battery
+            severity:
+              green: 75
+              yellow: 50
+              red: 30
+
+  - type: weather-forecast
+    entity: weather.dark_sky
+
+  - type: picture-entity
+    id: camera_ohio_doppler_weather
+    title: Ohio Doppler Weather
+    entity: camera.ohio_doppler_weather
+    camera_image: camera.ohio_doppler_weather
+    show_info: true
+    tap_action:
+      action: more-info
+  
+  - type: conditional
+    conditions:
+      - entity: sensor.usps_mail
+        state_not: "0"
+    card:
+      type: picture-entity
+      id: camera_usps_mail_pictures
+      title: USPS Mail Pictures
+      entity: camera.usps_mail_pictures
+      camera_image: camera.usps_mail_pictures
+      show_info: true
+      tap_action:
+        action: more-info
+
+  - type: entities
+    title: Light Levels
+    show_header_toggle: false
+    entities:
+      - sensor.downstairs_multi_sensor_luminance
+      - sensor.front_room_multi_sensor_luminance
+      - sensor.tv_multi_sensor_luminance
+      - sensor.upstairs_multi_sensor_luminance
+
+  - type: entity-filter
+    title: Motion Sensors
+    show_empty: false
+    entities:
+      - binary_sensor.motion_sensor_158d0001a662fe
+      - binary_sensor.motion_sensor_158d0001a25041
+      - binary_sensor.motion_sensor_158d00016db6d2
+      - binary_sensor.motion_sensor_158d00016c2d0e
+      - binary_sensor.garage_motion
+      - binary_sensor.patio_camera_motion
+      - binary_sensor.playarea_camera_motion
+      - binary_sensor.frontdoor_camera_motion
+      - binary_sensor.driveway_camera_motion
+      - binary_sensor.aeotec_water_sensor_sensor
+      - binary_sensor.audio_detector_sensor
+      - binary_sensor.basement_door_sensor_sensor
+      - binary_sensor.downstairs_multi_sensor_sensor
+      - binary_sensor.front_room_multi_sensor_sensor
+      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+      - binary_sensor.garage_door_sensor_sensor
+      - binary_sensor.kitchen_motion_sensor_sensor
+      - binary_sensor.back_door_sensor_sensor
+      - binary_sensor.stairs_motion_sensor_sensor
+      - binary_sensor.tv_multi_sensor_sensor
+      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+      - binary_sensor.upstairs_multi_sensor_sensor
+    state_filter:
+      - 'on'
+      - 'detected'
+      - 'opened'
+      - 'Open'
+    card:
+      type: entities
+      title: Motion Sensors
+      show_header_toggle: false
+
+  - type: entities
+    title: Z-Wave Batteries
+    show_header_toggle: false
+    entities:
+      - input_label.aeotec_water_sensor
+      - input_label.audio_detector
+      - input_label.back_door_sensor
+      - input_label.basement_door_sensor
+      - input_label.downstairs_multi_sensor
+      - input_label.front_room_multi_sensor
+      - input_label.garage_door_sensor
+      - input_label.kitchen_motion_sensor
+      - input_label.single_car_garage_door_tilt_sensor
+      - input_label.stairs_motion_sensor
+      - input_label.tv_multi_sensor
+      - input_label.two_car_garage_door_tilt_sensor
+      - input_label.upstairs_multi_sensor
+      - input_label.wallmote
+
+  - type: entities
+    title: Motion Counters
+    show_header_toggle: false
+    entities:
+      - input_label.aeotec_zw120_door_window_sensor_gen5_sensor
+      - input_label.back_door_sensor_sensor
+      - input_label.basement_door_sensor_sensor
+      - input_label.garage_door_sensor_sensor
+      - input_label.single_car_garage_door_tilt_sensor_sensor
+      - input_label.two_car_garage_door_tilt_sensor_sensor
+      - input_label.downstairs_multi_sensor_sensor
+      - input_label.front_room_multi_sensor_sensor
+      - input_label.front_room_window_sensor_sensor
+      - input_label.kitchen_motion_sensor_sensor
+      - input_label.motion_sensor_158d00016c2d0e
+      - input_label.motion_sensor_158d00016db6d2
+      - input_label.motion_sensor_158d0001a25041
+      - input_label.motion_sensor_158d0001a662fe
+      - input_label.motion_sensor_158d00024e57d3
+      - input_label.motion_sensor_158d00024e57fb
+      - input_label.motion_sensor_158d00024e842c
+      - input_label.motion_sensor_158d00024ee084
+      - input_label.motion_sensor_158d000272bed1
+      - input_label.motion_sensor_158d000272bf48
+      - input_label.motion_sensor_158d000272bfd7
+      - input_label.garage_motion
+      - input_label.stairs_motion_sensor_sensor
+      - input_label.upstairs_multi_sensor_sensor

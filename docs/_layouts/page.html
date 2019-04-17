@@ -1,0 +1,42 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+{% include head.html %}
+</head>
+
+<body id="page">
+{% include browser-upgrade.html %}
+{% include navigation.html %}
+
+<div class="entry-header">
+    <center>
+        <h1>{{ page.title }}</h1>
+        <span class="entry-header-description">{{ page.description }}</span>
+    </center>
+</div>
+
+<div id="main" role="main">
+  <article class="hentry">
+    
+    <div class="entry-content">
+      {% if page.url != "/" %}
+      <span class="bread-crums"><a class="bread-crums" href="{{site.url}}">Home</a> » {{ page.title }}</span>
+      {% endif %}
+      {{ content }}
+    </div>
+  </article>
+</div>
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    {% include footer.html %}
+  </footer>
+</div>
+
+{% include scripts.html %}          
+
+</body>
+</html>
