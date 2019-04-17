@@ -292,8 +292,8 @@ The Life360 component uses Life360 API and retrieves information about the circl
 
 I wrote a Palo Alto component to keep an eye on who is logging into my firewall and VPN at home. Below is the screenshot and you can find the code in the `custom_components` folder and corresponding `Packages` folder.
 
-<img src="https://raw.githubusercontent.com/skalavala/smarthome/master/images/paloalto.png"/>
+<img src="https://raw.githubusercontent.com/skalavala/mysmarthome/master/images/paloalto.png"/>
 
 ### Tesla 
 
-<img src="https://raw.githubusercontent.com/skalavala/smarthome/master/images/Tesla.png" />
+<img src="https://raw.githubusercontent.com/skalavala/mysmarthome/master/images/Tesla.png" />
