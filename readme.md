@@ -274,7 +274,7 @@ The following are some of the smart devices that I use for my current Smart Home
 
 ## Here is a sample view of my dashboard
 
-<img src="https://github.com/skalavala/smarthome/blob/master/images/skalavala-smarthome-dashboard.jpg" alt="Home Assistat" />
+<img src="https://github.com/skalavala/mysmarthome/blob/master/images/skalavala-smarthome-dashboard.jpg" alt="Home Assistat" />
 
 ## Custom Components:
 
