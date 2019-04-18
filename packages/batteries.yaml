@@ -416,6 +416,9 @@ automation:
           {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
           {% set ns.lowBattery = true %}{% endfor %}
           {{ ns.lowBattery }}
+    condition:
+      - condition: template
+        value_template: "{{ ((trigger.to_state.state | int) < states('sensor.battery_alert_threshold') | int) }}"
     action:
       - service: script.voice_notify
         data_template:

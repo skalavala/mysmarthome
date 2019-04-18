@@ -134,6 +134,14 @@ input_number:
     min: 1
     max: 15
     step: 1
+    mode: box
+  battery_alert_threshold:
+    name: Notify Low Battery if goes below
+    initial: 4
+    min: 1
+    max: 100
+    step: 1
+    mode: box
 
 sensor:
   - platform: template
@@ -298,6 +306,11 @@ input_boolean:
     name: Text Alerts
     initial: on
     icon: mdi:map-marker
+
+  garage_door_notifications:
+    name: Garage Door Notifications
+    initial: on
+    icon: mdi:garage
 
 ###############################################################################
 #                _                        _   _                 

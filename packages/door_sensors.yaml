@@ -169,6 +169,8 @@ automation:
         value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
       - condition: template
         value_template: "{{ trigger.to_state.state != 'unknown' }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
     action:
       - service: switch.turn_on
         entity_id: switch.garage

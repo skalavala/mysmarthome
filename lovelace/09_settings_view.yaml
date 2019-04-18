@@ -1,27 +1,10 @@
 title: Settings
 icon: mdi:settings
 cards:
-
   - type: vertical-stack
     cards:
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
-            name: Home Alarm Clock
-            entity: input_boolean.alarm_clock
-            icon: mdi:alarm
-            color_type: card
-            style:
-              - font-weight: bold
-              - color: rgb(0, 0, 5)
-            state:
-              - value: 'on'
-                color: var(--primary-color)
-            action: toggle
-            toggle:
-              domain: input_boolean
-              action: alarm_clock
-
           - type: "custom:button-card"
             name: Light Automations
             entity: input_boolean.light_automations
@@ -70,40 +53,6 @@ cards:
               domain: input_boolean
               action: voice_notifications
 
-      - type: horizontal-stack
-        cards:
-          - type: "custom:button-card"
-            name: Trash Notifications
-            entity: input_boolean.trash_reminders
-            icon: mdi:recycle
-            color_type: card
-            style:
-              - font-weight: bold
-              - color: rgb(0, 0, 5)
-            state:
-              - value: 'on'
-                color: var(--primary-color)
-            action: toggle
-            toggle:
-              domain: input_boolean
-              action: trash_reminders
-
-          - type: "custom:button-card"
-            name: Camera Alerts
-            entity: input_boolean.notify_camera_alerts
-            icon: mdi:cctv
-            color_type: card
-            style:
-              - font-weight: bold
-              - color: rgb(0, 0, 5)
-            state:
-              - value: 'on'
-                color: var(--primary-color)
-            action: toggle
-            toggle:
-              domain: input_boolean
-              action: notify_camera_alerts
-
           - type: "custom:button-card"
             name: Location Alerts
             entity: input_boolean.zone_alerts
@@ -120,6 +69,9 @@ cards:
               domain: input_boolean
               action: zone_alerts
 
+      - type: horizontal-stack
+        cards:
+
           - type: "custom:button-card"
             name: Movie Time Popcorn
             entity: input_boolean.movie_time
@@ -135,24 +87,6 @@ cards:
             toggle:
               domain: input_boolean
               action: movie_time
-
-      - type: horizontal-stack
-        cards:
-          - type: "custom:button-card"
-            name: Security System
-            entity: input_boolean.security_system_alerts
-            icon: mdi:shield-outline
-            color_type: card
-            style:
-              - font-weight: bold
-              - color: rgb(0, 0, 5)
-            state:
-              - value: 'on'
-                color: var(--primary-color)
-            action: toggle
-            toggle:
-              domain: input_boolean
-              action: security_system_alerts
 
           - type: "custom:button-card"
             name: Hourly Report
@@ -187,9 +121,9 @@ cards:
               action: nightly_report
 
           - type: "custom:button-card"
-            name: Working in Garage
-            entity: input_boolean.working_in_garage
-            icon: mdi:garage-alert
+            name: Good Weather
+            entity: input_boolean.enjoyable_weather_reminders
+            icon: mdi:weather-windy-variant
             color_type: card
             style:
               - font-weight: bold
@@ -200,7 +134,7 @@ cards:
             action: toggle
             toggle:
               domain: input_boolean
-              action: working_in_garage
+              action: enjoyable_weather_reminders
 
       - type: horizontal-stack
         cards:
@@ -219,11 +153,11 @@ cards:
             toggle:
               domain: input_boolean
               action: working_in_office_room
-
+              
           - type: "custom:button-card"
-            name: Battery Notifications
-            entity: input_boolean.battery_notifications
-            icon: mdi:battery-charging-wireless-60
+            name: Working in Garage
+            entity: input_boolean.working_in_garage
+            icon: mdi:garage-alert
             color_type: card
             style:
               - font-weight: bold
@@ -234,45 +168,27 @@ cards:
             action: toggle
             toggle:
               domain: input_boolean
-              action: battery_notifications
+              action: working_in_garage
 
-          - type: "custom:button-card"
-            name: Good Weather
-            entity: input_boolean.enjoyable_weather_reminders
-            icon: mdi:weather-windy-variant
-            color_type: card
-            style:
-              - font-weight: bold
-              - color: rgb(0, 0, 5)
-            state:
-              - value: 'on'
-                color: var(--primary-color)
-            action: toggle
-            toggle:
-              domain: input_boolean
-              action: enjoyable_weather_reminders
-
-          - type: "custom:button-card"
-            name: Text/IFTTT Alerts
-            entity: input_boolean.text_alerts
-            icon: mdi:message-text
-            color_type: card
-            style:
-              - font-weight: bold
-              - color: rgb(0, 0, 5)
-            state:
-              - value: 'on'
-                color: var(--primary-color)
-            action: toggle
-            toggle:
-              domain: input_boolean
-              action: text_alerts
 
   - type: entities
     title: Control Panel
     show_header_toggle: false
     entities:
       - input_number.calendar_remind_before_days
+      - input_number.battery_alert_threshold
+
+  - type: entities
+    title: Alerts & Notifications
+    show_header_toggle: false
+    entities:
+      - input_boolean.garage_door_notifications
+      - input_boolean.battery_notifications
+      - input_boolean.text_alerts
+      - input_boolean.security_system_alerts
+      - input_boolean.notify_camera_alerts
+      - input_boolean.alarm_clock
+      - input_boolean.trash_reminders
 
   - type: entities
     title: Bed & Wakeup Times
