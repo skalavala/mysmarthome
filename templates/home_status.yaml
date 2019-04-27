@@ -18,7 +18,8 @@
 
   {%- macro tesla_status() -%}
     {% if states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" %}
-    {%- if (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) < 75 -%}
+    {%- if (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) < 75 and 
+           (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) > 0 -%}
       Attention!. Your Tesla car battery is at {{ states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') }} percent. and you can only drive about {{ (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) }} miles. Please charge your car if you want to go anywhere.
     {%- endif -%}
     {% endif %}
@@ -148,7 +149,8 @@
   {# Only notify pollen levels in spring #}
   {%- macro pollen_levels() -%}
   {% if states('sensor.season') | lower == "spring" %}
-    {% if states('sensor.pollen_level') | lower != "low" %}
+    {% if states('sensor.pollen_level') | lower != "low" and 
+          states('sensor.pollen_level') | lower != "unknown" %}
       Pollen level is {{ states('sensor.pollen_level') }}.
     {% endif %}
   {% endif %}
