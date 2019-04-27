@@ -230,7 +230,6 @@ cards:
     show_header_toggle: false
     entities:
       - automation.remind_me_to_enjoy_warm_and_windy_weather
-      - automation.weather_alert
       - automation.weather_input_boolean_updates
       - automation.rain_alerts
       - automation.snow_and_sleet_alerts

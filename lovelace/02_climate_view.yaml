@@ -66,5 +66,3 @@ cards:
       - sensor.front_room_multi_sensor_relative_humidity
       - sensor.tv_multi_sensor_relative_humidity
       - sensor.upstairs_multi_sensor_relative_humidity
-      - entity: sensor.pws_relative_humidity
-        name: Outdoor Humidity

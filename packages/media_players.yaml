@@ -85,20 +85,11 @@ media_player:
     host: !secret denon_avr_ip_address
     name: DENON
 
-
   - platform: denonavr
     host: !secret denon_avr_ip_address
     name: MY DENON RECEIVER
     show_all_sources: true
     timeout: 5
-
-  - platform: plex
-    entity_namespace: 'plex'
-    include_non_clients: true
-    scan_interval: 5
-    use_episode_art: true
-    remove_unavailable_clients: true
-    client_remove_interval: 600
 
 # If you get errors about GI not found, run the command below to link gsp/gi path to HA for Gstreamer to function properly
 

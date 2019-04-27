@@ -360,50 +360,637 @@
 # - reduce volume, restore volume level...etc
 #
 ##############################################################################################################################
-input_number:
-  loop_index:
-    initial: 0
-    min: 0
-    step: 1
-    max: 9999
+# input_number:
+#   loop_index:
+#     initial: 0
+#     min: 0
+#     step: 1
+#     max: 9999
 
-script:
-  run_x_times:
-    alias: Run X Times
-    sequence:
-      - service: input_number.set_value
-        data_template:
-          entity_id: input_number.loop_index
-          value: 0
-      - service_template: script.loop_one
-        data_template:
-          count: "{{ count }}"
+# script:
+#   run_x_times:
+#     alias: Run X Times
+#     sequence:
+#       - service: input_number.set_value
+#         data_template:
+#           entity_id: input_number.loop_index
+#           value: 0
+#       - service_template: script.loop_one
+#         data_template:
+#           count: "{{ count }}"
 
-  loop_one:
-    alias: Loops X times
-    sequence:
-      - condition: template
-        value_template: "{{ 'true' if (states.input_number.loop_index.state |int < count | int) else 'false' }}"
-      - service: mqtt.publish
-        data_template:
-          topic: "/loop/test"
-          payload: "{{ states.input_number.loop_index.state | int }}"
-          retain: false
-      - delay: '00:00:00'
-      - service: script.loop_two
-        data_template:
-          count: "{{ count |int}}"
+#   loop_one:
+#     alias: Loops X times
+#     sequence:
+#       - condition: template
+#         value_template: "{{ 'true' if (states.input_number.loop_index.state |int < count | int) else 'false' }}"
+#       - service: mqtt.publish
+#         data_template:
+#           topic: "/loop/test"
+#           payload: "{{ states.input_number.loop_index.state | int }}"
+#           retain: false
+#       - delay: '00:00:00'
+#       - service: script.loop_two
+#         data_template:
+#           count: "{{ count |int}}"
 
-  loop_two:
-    alias: A loop that calls first loop
-    sequence:
-      - delay: '00:00:00'
-      - service: input_number.set_value
-        data_template:
-          entity_id: input_number.loop_index
-          value: "{{ (states.input_number.loop_index.state | int + 1) |int }}"
-      - service: script.loop_one
-        data_template:
-          count: "{{ count|int }}"
+#   loop_two:
+#     alias: A loop that calls first loop
+#     sequence:
+#       - delay: '00:00:00'
+#       - service: input_number.set_value
+#         data_template:
+#           entity_id: input_number.loop_index
+#           value: "{{ (states.input_number.loop_index.state | int + 1) |int }}"
+#       - service: script.loop_one
+#         data_template:
+#           count: "{{ count|int }}"
 
-# This is a test!!
+#######################################################################
+# Package for Robotic mower named Bob
+# https://www.robonect-shop.de/
+#######################################################################
+
+# homeassistant:
+# #
+#   customize:
+
+#     group.robotic_mower:
+#       icon: mdi:signal-variant
+#       friendly_name: Robotgräsklippare
+#       assumed_state: false
+# #
+#     group.robotic_mower_scheduling:
+#       icon: mdi-calendar-clock
+#       friendly_name: Robotgräsklippare Schemaläggning
+#       assumed_state: false
+# #
+#     group.robotic_mower_automations:
+#       icon: mdi:signal-variant
+#       friendly_name: Robotgräsklippare automation
+#       assumed_state: false
+# #
+#     input_datetime.bob_start_time_7:
+#       friendly_name: Starttid Söndag
+#       assumed_state: false
+# #
+#     input_datetime.bob_stop_time_7:
+#       friendly_name: Stopptid Söndag
+#       assumed_state: false
+# #
+#   customize_domain:
+#     input_datetime:
+#       icon: mdi:calendar-clock
+# #
+#   customize_glob:
+#     "automation.bob_run_start*":
+#       icon: mdi:calendar-check
+
+#     "automation.bob_run_stop*":
+#       icon: mdi:calendar-remove
+
+# ######################################################################
+# ## Group
+# ######################################################################
+# group:
+
+#   robotic_mower:
+#     view: no
+#     name: Robotic Mower
+#     control: hidden
+#     entities:
+#       - input_select.bob_command
+#       - binary_sensor.bob
+#       - sensor.bob_battery
+#       - sensor.bob_battery_voltage
+#       - sensor.bob_mode_raw
+#       - sensor.bob_operating_voltage_mower
+#       - sensor.bob_operating_voltage_robonect
+#       - sensor.bob_operation_hours
+#       - sensor.bob_status_friendly
+#       - sensor.bob_status_raw
+#       - sensor.bob_stopped
+#       - sensor.bob_time_in_current_status
+#       - sensor.bob_wifi_signal
+#       - sensor.bob_humidity
+#       - sensor.bob_temperature
+#       - sensor.robotic_mower_name
+#       - sensor.robotic_mower_serial
+
+
+#   robotic_mower_scheduling:
+#     view: no
+#     name: 'Robotic mower scheduling'
+#     control: hidden
+#     entities:
+#       - input_datetime.bob_start_time
+#       - input_datetime.bob_stop_time
+#       - input_datetime.bob_start_time_2
+#       - input_datetime.bob_stop_time_2
+#       - input_datetime.bob_start_time_3
+#       - input_datetime.bob_stop_time_3
+#       - input_datetime.bob_start_time_4
+#       - input_datetime.bob_stop_time_4
+#       - input_datetime.bob_start_time_5
+#       - input_datetime.bob_stop_time_5
+#       - input_datetime.bob_start_time_6
+#       - input_datetime.bob_stop_time_6
+#       - input_datetime.bob_start_time_7
+#       - input_datetime.bob_stop_time_7
+
+
+#   robotic_mower_automations:
+#     view: no
+#     name: 'Robotic mower Automations'
+#     control: hidden
+#     entities:
+#       - automation.bob_nofity_front_collision
+#       - automation.bob_command_control
+#       - automation.bob_command_control_mode
+#       - automation.bob_run_start
+#       - automation.bob_run_stop
+#       - automation.bob_run_start
+#       - automation.bob_run_start_2
+#       - automation.bob_run_start_2
+#       - automation.bob_run_start_3
+#       - automation.bob_run_start_4
+#       - automation.bob_run_start_5
+#       - automation.bob_run_start_6
+#       - automation.bob_run_start_7
+#       - automation.bob_run_stop
+#       - automation.bob_run_stop_2
+#       - automation.bob_run_stop_3
+#       - automation.bob_run_stop_4
+#       - automation.bob_run_stop_5
+#       - automation.bob_run_stop_6
+#       - automation.bob_run_stop_7
+#       # - automation.set_bob_mode_selector
+# ######################################################################
+# # Sensor
+# ######################################################################
+# sensor:
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/mower/battery/charge"
+#     name: "Bob Battery"
+#     #unit_of_measurement: '%'
+#     device_class: battery
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/mower/stopped"
+#     name: "Bob Stopped"
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/wlan/rssi"
+#     name: "Bob wifi signal"
+#     #unit_of_measurement: 'dBm'
+#     icon: mdi:signal-variant
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/mower/status"
+#     name: "Bob status raw"
+
+#   - platform: template
+#     sensors:
+#       bob_status_friendly:
+#         friendly_name: "Bob Status"
+#         value_template: >
+#           {% if is_state("sensor.bob_status_raw", "1") -%}
+#             Parked
+#           {% elif is_state("sensor.bob_status_raw", "2") -%}
+#             Mowing
+#           {% elif is_state("sensor.bob_status_raw", "4") -%}
+#             Charging
+#           {% elif is_state("sensor.bob_status_raw", "5") -%}
+#             Searching
+#           {% elif is_state("sensor.bob_status_raw", "17") -%}
+#             Sleeping
+#           {% elif is_state("sensor.bob_status_raw", "3") -%}
+#             Heading Home
+#           {% elif is_state("sensor.bob_status_raw", "7") -%}
+#             Front Collision
+#           {% else -%}
+#             Figure out what state {{ states("sensor.bob_status_raw") }} means
+#           {%- endif %}
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/mower/status/duration"
+#     name: "Bob time in current status"
+#     #unit_of_measurement: 'minutes'
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/mower/mode"
+#     name: "Bob mode raw"
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/mower/statistic/hours"
+#     name: "Bob Operation Hours"
+#     #unit_of_measurement: 'hours'
+#     icon: mdi:timer-sand
+
+#   - platform: mqtt
+#     state_topic: 'robotic_mower/health/voltage/int33'
+#     name: "Bob Operating Voltage Robonect"
+#     #unit_of_measurement: '%'
+
+#   - platform: mqtt
+#     state_topic: 'robotic_mower/health/voltage/ext33'
+#     name: "Bob Operating Voltage Mower"
+#     #unit of measurement: '%'
+
+#   - platform: mqtt
+#     state_topic: 'robotic_mower/health/voltage/batt'
+#     name: "Bob Battery Voltage"
+#     #unit_of_measurement: '%'
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/health/climate/temperature"
+#     name: "Bob temperature"
+#     #unit_of_measurement: '°C'
+#     device_class: temperature
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/health/climate/humidity"
+#     name: "Bob humidity"
+#     #unit_of_measurement: '%'
+#     device_class: humidity
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/device/name"
+#     name: "Robotic mower name"
+
+#   - platform: mqtt
+#     state_topic: "robotic_mower/device/serial"
+#     name: "Robotic mower Serial"
+
+
+# ###########################################################
+# ## binary_sensor
+# ###########################################################
+# binary_sensor:
+
+#   - platform: mqtt
+#     name: "Bob"
+#     state_topic: "robotic_mower/mqtt"
+#     payload_on: "online"
+#     payload_off: "offline"
+#     device_class: "connectivity"
+#  ###########################################################
+#  ## input select
+#  ###########################################################
+# input_select:
+#   bob_command:
+#     name: Bob Set State
+#     options:
+#      - status_quo
+#      - start
+#      - stop
+#      - auto
+#      - home
+#      - man
+#      - eod
+#     initial: status_quo
+#     icon: mdi:robot
+
+# ################################################################
+# # Input datetime
+# ################################################################
+# input_datetime:
+#   bob_start_time:
+#     name: Bob Start Time
+#     has_date: false
+#     has_time: true
+
+#   bob_stop_time:
+#     name: Bob Stop Time
+#     has_date: false
+#     has_time: true
+
+#   bob_start_time_2:
+#     name: Bob Start Time 2
+#     has_date: false
+#     has_time: true
+
+#   bob_stop_time_2:
+#     name: Bob Stop Time 2
+#     has_date: false
+#     has_time: true
+
+#   bob_start_time_3:
+#     name: Bob Start Time 3
+#     has_date: false
+#     has_time: true
+
+#   bob_stop_time_3:
+#     name: Bob Stop Time 3
+#     has_date: false
+#     has_time: true
+
+#   bob_start_time_4:
+#     name: Bob Start Time 4
+#     has_date: false
+#     has_time: true
+
+#   bob_stop_time_4:
+#     name: Bob Stop Time 4
+#     has_date: false
+#     has_time: true
+
+#   bob_start_time_5:
+#     name: Bob Start Time 5
+#     has_date: false
+#     has_time: true
+
+#   bob_stop_time_5:
+#     name: Bob Stop Time 5
+#     has_date: false
+#     has_time: true
+
+#   bob_start_time_6:
+#     name: Bob Start Time 6
+#     has_date: false
+#     has_time: true
+
+#   bob_stop_time_6:
+#     name: Bob Stop Time 6
+#     has_date: false
+#     has_time: true
+
+#   bob_start_time_7:
+#     name: Bob Start Time 7
+#     has_date: false
+#     has_time: true
+
+#   bob_stop_time_7:
+#     name: Bob Stop Time 7
+#     has_date: false
+#     has_time: true
+    
+# ################################################################
+# # Automation
+# ################################################################
+# automation:
+ 
+#   - alias: Bob Command Control
+#     initial_state: 'on'
+#     trigger:
+#       - platform: state
+#         entity_id: input_select.bob_command
+#         from: status_quo
+#         to: start
+#       - platform: state
+#         entity_id: input_select.bob_command
+#         from: status_quo
+#         to: stop
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload_template: '{{ states(''input_select.bob_command'') }}'
+#           topic: robotic_mower/control
+#       - service: input_select.select_option
+#         data:
+#           entity_id: input_select.bob_command
+#           option: status_quo
+# #
+#   - alias: Bob Command Control Mode
+#     initial_state: 'on'
+#     trigger:
+#       - platform: state
+#         entity_id: input_select.bob_command
+#         from: status_quo
+#         to: auto
+#       - platform: state
+#         entity_id: input_select.bob_command
+#         from: status_quo
+#         to: home
+#       - platform: state
+#         entity_id: input_select.bob_command
+#         from: status_quo
+#         to: man
+#       - platform: state
+#         entity_id: input_select.bob_command
+#         from: status_quo
+#         to: eod
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload_template: '{{ states(''input_select.bob_command'') }}'
+#           topic: robotic_mower/control/mode
+#       - service: input_select.select_option
+#         data:
+#           entity_id: input_select.bob_command
+#           option: status_quo
+
+# # #automation.set_bob_mode_selector
+#   # - alias: Set Bob Mode Selector
+#     # initial_state: 'on'
+#     # trigger:
+#       # - platform: mqtt
+#         # topic: "robotic_mower/control/mode"
+#     # action:
+#       # - service: input_select.select_option
+#         # data_template:
+#           # entity_id: input_select.bob_command
+#           # option: "{{ trigger.payload }}"
+
+# #automation.bob_nofity_front_collision
+#   - alias: 'Bob nofity Front Collision'
+#     initial_state: 'on'
+#     trigger:
+#       - platform: state
+#         entity_id: sensor.bob_status_friendly
+#         to: 'Front Collision'
+#     action:
+#       - service: notify.leandro
+#         data_template:
+#          message: "Robotgräsklippare har kolliderat"
+#          data:
+#           priority: '1'
+#           sound: updown
+#       - service: media_player.volume_set
+#         entity_id:
+#           - media_player.living_room
+#           - media_player.kitchen
+#           - media_player.upstairs
+#         data:
+#           volume_level: '0.7'
+#       - service: notify.alexa_media
+#         data_template:
+#           data:
+#             type: announce
+#             method: speak
+#           target:
+#           - media_player.living_room
+#           - media_player.kitchen
+#           - media_player.upstairs
+#           message: >
+#             Warning {{ trigger.to_state.attributes.name}} is now {{  trigger.to_state.attributes.state  }}
+# #
+
+# ################################################################################
+# ## automation scheduling
+# ################################################################################
+# #Bob Run Start
+# ################################################################################
+# #Bob Run 1
+#   - alias: Bob Run Start
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_start_time.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'start'
+#           topic: 'robotic_mower/control'
+
+#   - alias: Bob Run Stop
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_stop_time.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'stop'
+#           topic: 'robotic_mower/control'
+# #Bob Run 2
+#   - alias: Bob Run Start 2
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_start_time_2.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'start'
+#           topic: 'robotic_mower/control'
+
+#   - alias: Bob Run Stop 2
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_stop_time_2.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'stop'
+#           topic: 'robotic_mower/control'
+# #Bob Run 3
+#   - alias: Bob Run Start 3
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_start_time_3.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'start'
+#           topic: 'robotic_mower/control'
+
+#   - alias: Bob Run Stop 3
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_stop_time_3.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'stop'
+#           topic: 'robotic_mower/control'
+# #Bob Run 4
+#   - alias: Bob Run Start 4
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_start_time_4.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'start'
+#           topic: 'robotic_mower/control'
+
+#   - alias: Bob Run Stop 4
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_stop_time_4.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'stop'
+#           topic: 'robotic_mower/control'
+# #Bob Run 5
+#   - alias: Bob Run Start 5
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_start_time_5.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'start'
+#           topic: 'robotic_mower/control'
+
+#   - alias: Bob Run Stop 5
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_stop_time_5.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'stop'
+#           topic: 'robotic_mower/control'
+# #Bob Run 6
+#   - alias: Bob Run Start 6
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_start_time_6.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'start'
+#           topic: 'robotic_mower/control'
+
+#   - alias: Bob Run Stop 6
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_stop_time_6.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'stop'
+#           topic: 'robotic_mower/control'
+# #Bob Run 7
+#   - alias: Bob Run Start 7
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_start_time_7.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     condition:
+#       - condition: time
+#         weekday:
+#           - sun
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'start'
+#           topic: 'robotic_mower/control'
+
+#   - alias: Bob Run Stop 7
+#     initial_state: 'off'
+#     trigger:
+#     - platform: template
+#       value_template: "{{ states('sensor.time') == (states.input_datetime.bob_stop_time_7.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#     condition:
+#       - condition: time
+#         weekday:
+#           - sun
+#     action:
+#       - service: mqtt.publish
+#         data:
+#           payload: 'stop'
+#           topic: 'robotic_mower/control'
