@@ -73,6 +73,7 @@ cards:
     title: Frontdoor Camera
     entity: camera.frontdoor_camera
     camera_image: camera.frontdoor_camera
+    camera_view: live
     show_info: true
     tap_action: 
       action: more-info
