@@ -994,3 +994,12 @@
 #         data:
 #           payload: 'stop'
 #           topic: 'robotic_mower/control'
+
+# sensor:
+#   - platform: rest
+#     resource: https://pollenkontroll.no/api/pollen-count?country=no&location=126
+#     name: Pollen
+#     value_template: >-
+#       {% for city in value_json.cities if city.id == '126' %}
+#       {{ city.id }}
+#       {% endfor %}

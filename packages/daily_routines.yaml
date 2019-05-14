@@ -180,6 +180,9 @@ automation:
       - condition: state
         entity_id: input_boolean.light_automations
         state: 'on'
+      - condition: state
+        entity_id: input_boolean.movie_time
+        state: 'off'
     action:
       - service: switch.turn_on
         data:

@@ -53,11 +53,11 @@ notify:
     sender: !secret smtp_sender 
     recipient: !secret smtp_recipient
 
-  - name: notify_aws_sns
-    platform: aws_sns
-    aws_access_key_id: !secret aws_access_key_id
-    aws_secret_access_key: !secret aws_secret_access_key
-    region_name: 'us-east-1'
+  # - name: notify_aws_sns
+  #   platform: aws_sns
+  #   aws_access_key_id: !secret aws_access_key_id
+  #   aws_secret_access_key: !secret aws_secret_access_key
+  #   region_name: 'us-east-1'
 
   - name: file_notify
     platform: file

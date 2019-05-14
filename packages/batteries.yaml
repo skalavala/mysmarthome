@@ -402,7 +402,7 @@ automation:
     action:
       - service: script.notify_me
         data_template:
-          message: "{{ trigger.to_state.attributes.friendly_name }}'s phone battery is less than: {{ trigger.to_state.attributes.battery }}%."
+          message: "{{ trigger.to_state.attributes.friendly_name | title }}'s phone battery is less than: {{ trigger.to_state.attributes.battery }}%."
       - service: script.voice_notify
         data_template:
           message: "{{ trigger.to_state.attributes.friendly_name }}'s phone battery is less than: {{ trigger.to_state.attributes.battery }}%."

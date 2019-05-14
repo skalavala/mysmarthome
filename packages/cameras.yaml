@@ -17,9 +17,6 @@ homeassistant:
       customize: &customize
         package: 'cameras'
 
-      hidden: &hidden
-        <<: *customize
-        hidden: true
 
 #
 # The camera url format in secrets.yaml would look like this: 
@@ -294,7 +291,18 @@ automation:
       - service: notify.notify_smtp
         data_template:
           title: 'Front door motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
-          message: 'Motion detected at the front door on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
+          message: >
+            {%- set e_id = "image_processing.tensorflow_frontdoor_camera" -%}
+            {%- if state_attr(e_id, 'summary') -%}
+              {%- set count = state_attr(e_id, 'summary') | count -%}
+              {%- for x in state_attr(e_id, 'summary') | list -%}
+                {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+                {{- state_attr(e_id, 'summary')[x]}} {{ x ~ 's' if state_attr(e_id, 'summary')[x] > 1 else x }}
+              {%- endfor -%}
+            {{ " detected in the front yard on " ~ now().strftime("%d %h %Y, at %I:%M:%S %p") ~ ". Please see the images below." }}
+            {% else %}
+              Motion detected in the front door on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
+            {%- endif -%}
           data:
             images:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
@@ -362,7 +370,18 @@ automation:
       - service: notify.notify_smtp
         data_template:
           title: 'Driveway motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
-          message: 'Motion detected at the driveway on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
+          message: >
+            {%- set e_id = "image_processing.tensorflow_driveway_camera" -%}
+            {%- if state_attr(e_id, 'summary') -%}
+              {%- set count = state_attr(e_id, 'summary') | count -%}
+              {%- for x in state_attr(e_id, 'summary') | list -%}
+                {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+                {{- state_attr(e_id, 'summary')[x]}} {{ x ~ 's' if state_attr(e_id, 'summary')[x] > 1 else x }}
+              {%- endfor -%}
+            {{ " detected in the driveway on " ~ now().strftime("%d %h %Y, at %I:%M:%S %p") ~ ". Please see the images below." }}
+            {% else %}
+              Motion detected at the driveway on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
+            {%- endif -%}
           data:
             images:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_latest.jpg"
@@ -439,7 +458,18 @@ automation:
       - service: notify.notify_smtp
         data_template:
           title: 'Garage motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
-          message: 'Motion detected in the garage on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
+          message: >
+            {%- set e_id = "image_processing.tensorflow_garage_camera" -%}
+            {%- if state_attr(e_id, 'summary') -%}
+              {%- set count = state_attr(e_id, 'summary') | count -%}
+              {%- for x in state_attr(e_id, 'summary') | list -%}
+                {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+                {{- state_attr(e_id, 'summary')[x]}} {{ x ~ 's' if state_attr(e_id, 'summary')[x] > 1 else x }}
+              {%- endfor -%}
+              {{ " detected in the garage on " ~  now().strftime("%d %h %Y, at %I:%M:%S %p") ~ ". Please see the images below." }}
+            {% else %}
+              Motion detected in the garage on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
+            {%- endif -%}
           data:
             images:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_latest.jpg"
@@ -496,7 +526,18 @@ automation:
       - service: notify.notify_smtp
         data_template:
           title: 'Backyard motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
-          message: 'Motion detected in the backyard on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
+          message: >
+            {%- set e_id = "image_processing.tensorflow_patio_camera" -%}
+            {%- if state_attr(e_id, 'summary') -%}
+              {%- set count = state_attr(e_id, 'summary') | count -%}
+              {%- for x in state_attr(e_id, 'summary') | list -%}
+                {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+                {{- state_attr(e_id, 'summary')[x]}} {{ x ~ 's' if state_attr(e_id, 'summary')[x] > 1 else x }}
+              {%- endfor -%}
+            {{ " detected in the backyard on " ~  now().strftime("%d %h %Y, at %I:%M:%S %p") ~ ". Please see the images below." }}
+            {% else %}
+              Motion detected in the backyard on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
+            {%- endif -%}
           data:
             images:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_latest.jpg"
