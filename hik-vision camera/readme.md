@@ -1,5 +1,12 @@
 ## The following are the screenshots of HikVision camera setup.
 </br>
+
+### If you get "Parameter Error" when saving the settings, that means you are not using the right browser with correct plug-in.
+
+The HikVision cameras work best on IE11 browsers, where it will install an active-x plug-in. This plug-in lets you see the live view, and also lets you play the recorded content. HikVision requires that plug-in to be installed to save settings. If you are on Windows 10, just go to run command, and type `iexplore.exe` to open old internet explorer, and go to your camera URL. It will then ask you to install that active-x plugin.
+
+Also, for the text overlay to work, the authentication for web must be digest/basic. 
+
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_001.jpg"></img></br>
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_002.jpg"></img></br>
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_003.jpg"></img></br>
