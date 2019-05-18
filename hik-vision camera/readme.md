@@ -45,6 +45,12 @@ Also, for the text overlay to work, the authentication for web must be digest/ba
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_035.jpg"></img></br>
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_036.jpg"></img></br>
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_037.jpg"></img></br>
+
+Make sure you check the "1" checkbox under **Text Overlay** and enter some text and save settings if you want to update the text programmatically. 
+AlsoIf you get the "Parameter Error" while saving, that means you mus be using wrong browser. Make sure you use IE11 browser with the ActiveX plugin installed.
+
+**Hikvision settings are best updated using IE11 browser!** When something doesn't work the way it is expected, this is something to keep an eye on.
+
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_038.jpg"></img></br>
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_039.jpg"></img></br>
 <img src="https://raw.githubusercontent.com/skalavala/smarthome/master/hik-vision%20camera/images/screenshot_040.jpg"></img></br>
