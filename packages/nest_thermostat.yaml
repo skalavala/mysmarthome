@@ -73,7 +73,21 @@ automation:
           message: "Nest Thermostat changed from '{{ trigger.from_state.state }}' to '{{ trigger.to_state.state }}'."
       - service: script.voice_notify
         data_template:
-          message: "Your home's thermostat is now changed to '{{ trigger.to_state.state }}' mode."
+          message: >
+            {% set state = trigger.to_state.state %}
+            {% if state == "off" %}
+              Your home's thermostat is switched off.
+            {% elif state == "eco" %}
+              Your home's thermostat  is set to eco or away mode.
+            {% elif state == "heat" %}
+              Your central heating is ON.
+            {% elif state == "cool" %}
+              Your central air condition is switched ON
+            {% elif state == "heat-cool" %}
+              Your home's thermostat is set to automatic mode.
+            {% else %}
+              Your home's thermostat is set to {{ state }} mode. 
+            {% endif %}
 
 ###############################################################################
 # A script that toggles Nest Thermostat between eco/away & non-eco/away modes
