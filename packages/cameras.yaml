@@ -139,8 +139,50 @@ input_label:
 
 # frontdoor_camera_text_overlay_url: http://192.168.xxx.xxx/Video/inputs/channels/1/overlays/text/1
 rest_command:
-  set_camera_text_left_bottom:
+  set_frontdoor_camera_text_left_bottom:
     url: !secret frontdoor_camera_text_overlay_url
+    username: !secret camera_username
+    password: !secret camera_password
+    method: PUT
+    content_type: 'text/xml'
+    payload: >-
+      <?xml version="1.0" encoding="UTF-8"?>
+      <TextOverlay version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
+      <id>1</id><enabled>true</enabled>
+      <posX>45</posX><posY>520</posY>
+      <message>{{ message }} </message>
+      </TextOverlay>
+
+  set_driveway_camera_text_left_bottom:
+    url: !secret driveway_camera_text_overlay_url
+    username: !secret camera_username
+    password: !secret camera_password
+    method: PUT
+    content_type: 'text/xml'
+    payload: >-
+      <?xml version="1.0" encoding="UTF-8"?>
+      <TextOverlay version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
+      <id>1</id><enabled>true</enabled>
+      <posX>45</posX><posY>520</posY>
+      <message>{{ message }} </message>
+      </TextOverlay>
+
+  set_patio_camera_text_left_bottom:
+    url: !secret patio_camera_text_overlay_url
+    username: !secret camera_username
+    password: !secret camera_password
+    method: PUT
+    content_type: 'text/xml'
+    payload: >-
+      <?xml version="1.0" encoding="UTF-8"?>
+      <TextOverlay version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
+      <id>1</id><enabled>true</enabled>
+      <posX>45</posX><posY>520</posY>
+      <message>{{ message }} </message>
+      </TextOverlay>
+
+  set_playarea_camera_text_left_bottom:
+    url: !secret playarea_camera_text_overlay_url
     username: !secret camera_username
     password: !secret camera_password
     method: PUT
@@ -168,9 +210,27 @@ script:
 ###############################################################################
 # Camera Text Overlay Script - sets a given text as an overlay on camera feed
 #
-  camera_text_overlay:
+  frontdoor_camera_text_overlay:
     sequence:
-      - service: rest_command.set_camera_text_left_bottom
+      - service: rest_command.set_frontdoor_camera_text_left_bottom
+        data_template:
+          message: "{{text}}"
+
+  driveway_camera_text_overlay:
+    sequence:
+      - service: rest_command.set_driveway_camera_text_left_bottom
+        data_template:
+          message: "{{text}}"
+
+  patio_camera_text_overlay:
+    sequence:
+      - service: rest_command.set_patio_camera_text_left_bottom
+        data_template:
+          message: "{{text}}"
+
+  playarea_camera_text_overlay:
+    sequence:
+      - service: rest_command.set_playarea_camera_text_left_bottom
         data_template:
           message: "{{text}}"
 
@@ -795,14 +855,35 @@ automation:
     condition:
       - condition: template
         value_template: >
-          {% if state_attr('script.camera_text_overlay', 'last_triggered') != None %}
+          {% if state_attr('script.frontdoor_camera_text_overlay', 'last_triggered') != None %}
             {{ (as_timestamp(now()) - as_timestamp(
-                state_attr('script.camera_text_overlay', 'last_triggered'))) | int > 120 }}
+                state_attr('script.frontdoor_camera_text_overlay', 'last_triggered'))) | int > 120 }}
           {% else %}
             true
           {% endif %}
     action:
-    - service: script.camera_text_overlay
+    - service: script.frontdoor_camera_text_overlay
+      data_template:
+        text: >
+          {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+                     states('alarm_control_panel.simplisafe') == 'armed_away' -}}
+          {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+          {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
+    - service: script.driveway_camera_text_overlay
+      data_template:
+        text: >
+          {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+                     states('alarm_control_panel.simplisafe') == 'armed_away' -}}
+          {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+          {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
+    - service: script.playarea_camera_text_overlay
+      data_template:
+        text: >
+          {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+                     states('alarm_control_panel.simplisafe') == 'armed_away' -}}
+          {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+          {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
+    - service: script.patio_camera_text_overlay
       data_template:
         text: >
           {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
