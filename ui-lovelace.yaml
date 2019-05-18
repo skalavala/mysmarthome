@@ -1,6 +1,6 @@
 
 # This code is auto-generated using my Jinja lovelace migration script
-# visit: https://github.com/skalavala/smarthome/blob/master/jinja_helpers/jinja_lovelace.md
+# visit: https://github.com/skalavala/mysmarthome/blob/master/jinja_helpers/jinja_lovelace.md
 # Or visit https://sharethelove.io/tools/jinja-magic-scripts
 #
 # I use custom:button card, for two button, credits to https://github.com/kuuji/button-card

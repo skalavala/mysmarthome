@@ -280,13 +280,13 @@ The following are some of the smart devices that I use for my current Smart Home
 
 ### Custom Variables:
 
-I called it `input_label`, it is basically a `label` type component, where you can store any value you want, and can be used in automations, scripts and more. [check out the code here](https://github.com/skalavala/smarthome/blob/master/custom_components/input_label.py). Search for [input_label](https://github.com/skalavala/smarthome/search?utf8=%E2%9C%93&q=input_label) in my repo on how to use it.
+I called it `input_label`, it is basically a `label` type component, where you can store any value you want, and can be used in automations, scripts and more. [check out the code here](https://github.com/skalavala/mysmarthome/blob/master/custom_components/input_label.py). Search for [input_label](https://github.com/skalavala/mysmarthome/search?utf8=%E2%9C%93&q=input_label) in my repo on how to use it.
 
 ### Life360 Custom Component:
 
 The Life360 component uses Life360 API and retrieves information about the circle you created in the same format as OwnTracks. You just ned to setup OwnTracks, and drop-in the custom component, and you are all set!
 
-[Click Here](https://github.com/skalavala/smarthome/blob/master/custom_components/sensor/life360.py) for the Life360 custom component code. Make sure you check out the [Packages](https://github.com/skalavala/smarthome/blob/master/packages/life360.yaml) section on how to use the Life360 Component.
+[Click Here](https://github.com/skalavala/mysmarthome/blob/master/custom_components/sensor/life360.py) for the Life360 custom component code. Make sure you check out the [Packages](https://github.com/skalavala/mysmarthome/blob/master/packages/life360.yaml) section on how to use the Life360 Component.
 
 ### Palo Alto Component:
 

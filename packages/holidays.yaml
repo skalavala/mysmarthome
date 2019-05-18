@@ -21,7 +21,7 @@ homeassistant:
 ###############################################################################
 sensor:
   - platform: rest
-    resource: https://raw.githubusercontent.com/skalavala/smarthome/master/holidays.json
+    resource: https://raw.githubusercontent.com/skalavala/mysmarthome/master/holidays.json
     name: Holiday
     scan_interval: 14400
     value_template: >

@@ -79,7 +79,7 @@
 # # All the URLs below use the following format
 # # For ex: paloalto_clear_traffic_logs: "curl -k 'https://192.xxx.xxx.xxx/api/?type=op&cmd=<clear><log><traffic></traffic></log></clear>&key=YOUR_API_KEY'"
 # # Check out secrets.example file for additional details about the commands
-# # https://github.com/skalavala/smarthome/blob/master/secrets.example
+# # https://github.com/skalavala/mysmarthome/blob/master/secrets.example
 # #
 # shell_command:
 #   paloalto_clear_traffic_logs: !secret paloalto_clear_traffic_logs
