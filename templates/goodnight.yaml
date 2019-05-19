@@ -119,7 +119,7 @@
       Your Tesla Car is {{ 'not' if states.binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor.state == "off" }} plugged in.
     {% endif %}
 
-    {%- if states("sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor") != "unknown" and states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" -%}
+    {%- if states("sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor") != "unknown" and states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" and states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') | int > 0  -%}
     Tesla Car battery is at {{ states.sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor.state }}%, and you can drive about {{ (states.sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor.state | int) | round(0) }} miles.
     {% endif %}
   {%- endmacro %}
