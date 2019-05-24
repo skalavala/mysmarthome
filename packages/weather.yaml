@@ -122,6 +122,18 @@ weather:
   - platform: darksky
     api_key: !secret darksky_api_key
 
+iqvia:
+  zip_code: !secret zip_code
+  monitored_conditions:
+    - allergy_average_forecasted
+    - allergy_index_today
+    - allergy_index_tomorrow
+    - asthma_average_forecasted
+    - asthma_index_today
+    - asthma_index_tomorrow
+    - disease_average_forecasted
+    - disease_index_today
+
 sensor:
   - platform: darksky
     api_key: !secret darksky_api_key

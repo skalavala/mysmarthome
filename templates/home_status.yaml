@@ -136,7 +136,7 @@
   {%- macro weather_update() -%}
     {% if states('sensor.dark_sky_minutely_summary') |lower != "unknown" %}
       {% if '.' in states('sensor.dark_sky_minutely_summary') %}
-        It is going to be {{ states('sensor.dark_sky_minutely_summary') }}
+        It is going to be {{ states('sensor.dark_sky_minutely_summary') |replace("min.", "minutes")}}.
       {% else %}
         It is going to be {{ states('sensor.dark_sky_minutely_summary') }}.
       {% endif %}
@@ -148,12 +148,12 @@
 
   {# Only notify pollen levels in spring #}
   {%- macro pollen_levels() -%}
-  {% if states('sensor.season') | lower == "spring" %}
-    {% if states('sensor.pollen_level') | lower != "low" and 
-          states('sensor.pollen_level') | lower != "unknown" %}
-      Pollen level is {{ states('sensor.pollen_level') }}.
+    {% if states('sensor.season') | lower == "spring" %}
+      Pollen level for today is {{ state_attr('sensor.allergy_index_today', 'rating') -}}.
+      {%- if states('sensor.allergy_index_tomorrow') | float > 7.0 -%}
+        Tomorrow's pollen levels are going to be Medium to High. 
+      {%- endif -%}
     {% endif %}
-  {% endif %}
   {%- endmacro -%}
 
   {# Drone Flying Weather #}
