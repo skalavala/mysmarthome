@@ -42,19 +42,19 @@ cards:
     title: Media Players
     show_header_toggle: false
     entities:
-      - media_player.denon_avr_x2400h
+      # - media_player.denon_avr_x2400h
       - media_player.gstreamer
       - media_player.mpd
       - media_player.attic_tv
-      - media_player.my_denon_receiver
+      # - media_player.my_denon_receiver
 
   - type: vertical-stack
     cards:
       - type: media-control
         entity: media_player.mpd
 
-      - type: media-control
-        entity: media_player.denon_avr_x2400h
+      # - type: media-control
+        # entity: media_player.denon_avr_x2400h
 
       - type: media-control
         entity: media_player.gstreamer
@@ -62,8 +62,8 @@ cards:
       - type: media-control
         entity: media_player.attic_tv
 
-      - type: media-control
-        entity: media_player.my_denon_receiver
+      # - type: media-control
+      #   entity: media_player.my_denon_receiver
 
   - type: entities
     title: Snapcast Clients

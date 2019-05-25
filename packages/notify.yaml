@@ -167,8 +167,8 @@ script:
               {% endif %}
             {% endif %}
       - service: tts.amazon_polly_say
+        entity_id: media_player.gstreamer
         data_template:
-          entity_id: media_player.gstreamer
           cache: true
           message: >
             {% set msg = "" %}
@@ -202,8 +202,8 @@ script:
   voice_greeting:
     sequence:
       - service: tts.amazon_polly_say
+        entity_id: media_player.gstreamer
         data_template:
-          entity_id: media_player.gstreamer
           cache: true
           message: >
             {% set msg = "" %}

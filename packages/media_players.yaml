@@ -53,9 +53,9 @@ homeassistant:
     script.restart_snapcast_server:
       friendly_name: Restart Snapcast Server
 
-    media_player.denon_avrx2400h:
-      friendly_name: Denon AVRX2400H
-      hidden: false
+    # media_player.denon_avrx2400h:
+    #   friendly_name: Denon AVRX2400H
+    #   hidden: false
     media_player.mpd:
       friendly_name: Mopidy Media Player
       hidden: false
@@ -81,15 +81,15 @@ media_player:
     host: !secret mopidy_server_ip
     port: !secret mopidy_server_port
 
-  - platform: denon
-    host: !secret denon_avr_ip_address
-    name: DENON
+  # - platform: denon
+  #   host: !secret denon_avr_ip_address
+  #   name: DENON
 
-  - platform: denonavr
-    host: !secret denon_avr_ip_address
-    name: MY DENON RECEIVER
-    show_all_sources: true
-    timeout: 5
+  # - platform: denonavr
+  #   host: !secret denon_avr_ip_address
+  #   name: MY DENON RECEIVER
+  #   show_all_sources: true
+  #   timeout: 5
 
 # If you get errors about GI not found, run the command below to link gsp/gi path to HA for Gstreamer to function properly
 
