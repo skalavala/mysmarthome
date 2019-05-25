@@ -68,7 +68,7 @@ automation:
               category: camera
             entity_id: "camera.usps_mail_pictures"
             attachment:
-              url: "{{ states.camera.usps_mail_pictures.attributes.entity_picture }}"
+              url: "{{ state_attr('camera.usps_mail_pictures', 'entity_picture') }}"
               content-type: jpg
 
 # Notify USPS packages via TTS. Usually there are no pictures for packages

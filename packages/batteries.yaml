@@ -361,8 +361,8 @@ automation:
     condition:
       - condition: template
         value_template: >
-          {%- if states.automation.alert_when_moving.attributes.last_triggered -%}
-            {{ (as_timestamp(now()) - as_timestamp(states.automation.alert_when_moving.attributes.last_triggered)) > 300 }}
+          {%- if state_attr('automation.alert_when_moving', 'last_triggered') -%}
+            {{ (as_timestamp(now()) - as_timestamp(state_attr('automation.alert_when_moving', 'last_triggered'))) > 300 }}
           {%- else -%}
             true
           {%- endif -%}

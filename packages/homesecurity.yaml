@@ -86,8 +86,8 @@ automation:
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
       - condition: template
         value_template: >
-          {%- if states.automation.notify_home_security_status_change.attributes.last_triggered -%}
-            {{ (as_timestamp(now()) - as_timestamp(states.automation.notify_home_security_status_change.attributes.last_triggered)) > 90 }}
+          {%- if state_attr('automation.notify_home_security_status_change', 'last_triggered') -%}
+            {{ (as_timestamp(now()) - as_timestamp(state_attr('automation.notify_home_security_status_change', 'last_triggered'))) > 90 }}
           {%- else -%}
             true
           {%- endif -%}
