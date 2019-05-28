@@ -227,6 +227,52 @@ cards:
       - sensor.tv_multi_sensor_luminance
       - sensor.upstairs_multi_sensor_luminance
 
+  - type: conditional
+    conditions:
+      - entity: sensor.season
+        state: 'spring'
+    card:
+      type: vertical-stack
+      cards:
+        - type: horizontal-stack
+          cards:
+            - type: gauge
+              name: Pollen Today
+              unit: '%'
+              entity: sensor.allergy_index_today
+              max: 12.0
+              severity:
+                green: 0
+                yellow: 4
+                red: 7
+            - type: gauge
+              name: Pollen Tomorrow
+              unit: '%'
+              entity: sensor.allergy_index_tomorrow
+              max: 12.0
+              severity:
+                green: 0
+                yellow: 4
+                red: 7
+        - type: horizontal-stack
+          cards:
+            - type: gauge
+              name: Asthma Today
+              unit: '%'
+              entity: sensor.asthma_index_forecasted_average
+              severity:
+                green: 0
+                yellow: 4
+                red: 7
+            - type: gauge
+              name: Asthma Tomorrow
+              unit: '%'
+              entity: sensor.asthma_index_tomorrow
+              severity:
+                green: 0
+                yellow: 4
+                red: 7
+
   - type: entity-filter
     title: Motion Sensors
     show_empty: false

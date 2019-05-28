@@ -134,16 +134,19 @@
 
   {# weather summary #}
   {%- macro weather_update() -%}
-    {% if states('sensor.dark_sky_minutely_summary') |lower != "unknown" %}
-      {% if '.' in states('sensor.dark_sky_minutely_summary') %}
-        It is going to be {{ states('sensor.dark_sky_minutely_summary') |replace("min.", "minutes")}}.
-      {% else %}
-        It is going to be {{ states('sensor.dark_sky_minutely_summary') }}.
-      {% endif %}
-    {% endif %}
-    {% if states('sensor.dark_sky_apparent_temperature') | lower != "unknown" %}
+    {%- if states('sensor.dark_sky_minutely_summary') |lower != "unknown" -%}
+      {%- if '.' in states('sensor.dark_sky_minutely_summary') -%}
+        It is going to be {{ states('sensor.dark_sky_minutely_summary') |replace("min.", "minutes") -}}. 
+      {%- else -%}
+        It is going to be {{ states('sensor.dark_sky_minutely_summary') }}. 
+      {%- endif -%}
+    {%- endif -%}
+    {%- if states('sensor.dark_sky_apparent_temperature') | lower != "unknown" -%}
       Outside temperature is {{ states('sensor.dark_sky_apparent_temperature') | round(0) }} degrees. 
-    {% endif %}
+    {%- endif -%}
+    {%- if states('sensor.cold_flu_forecasted_average') | float > 8.0 %}
+      Cold and Flu index is High. Please take extra caution!.
+    {%- endif -%}
   {%- endmacro -%}
 
   {# Only notify pollen levels in spring #}
