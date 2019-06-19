@@ -75,6 +75,7 @@ recorder:
  db_url: !secret my_sql_url
 logger: !include logging.yaml
 
+zeroconf:
 owntracks:
 system_health:
 
@@ -115,8 +116,6 @@ person:
     device_trackers:
       - device_tracker.hasika
       - device_tracker.hasika_hasika
-
-default_config:
 
 lovelace:
   mode: yaml
