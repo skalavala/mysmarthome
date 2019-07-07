@@ -1,41 +1,4 @@
 homeassistant:
-  customize:
-
-    ################################################
-    ## Node Anchors
-    ################################################
-
-    package.node_anchors:
-      customize: &customize
-        package: 'tts'
-
-      exposed: &exposed
-        <<: *customize
-        emulated_hue_hidden: true
-        homebridge_hidden: false
-
-      not_exposed: &not_exposed
-        <<: *customize
-        emulated_hue_hidden: false
-        homebridge_hidden: true
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-
-      not_hidden: &not_hidden
-        <<: *customize
-        hidden: false
-
-    input_text.tts:
-      <<: *not_hidden
-      icon: mdi:speaker
-    input_boolean.greeting:
-      <<: *not_exposed
-
-    group.text_to_speech:
-      name: TTS
-      <<: *not_hidden
 
 input_text:
   tts:

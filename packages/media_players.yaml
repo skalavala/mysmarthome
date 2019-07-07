@@ -8,24 +8,6 @@
 homeassistant:
   customize:
 
-    package.node_anchors:
-      customize: &customize
-        package: 'media_players'
-
-      exposed: &exposed
-        <<: *customize
-        emulated_hue_hidden: true
-        homebridge_hidden: false
-
-      not_exposed: &not_exposed
-        <<: *customize
-        emulated_hue_hidden: false
-        homebridge_hidden: true
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-
 # Media Players
     media_player.snapcast_client_b827eb8604f5:
       friendly_name: Front Room Music
@@ -53,9 +35,6 @@ homeassistant:
     script.restart_snapcast_server:
       friendly_name: Restart Snapcast Server
 
-    # media_player.denon_avrx2400h:
-    #   friendly_name: Denon AVRX2400H
-    #   hidden: false
     media_player.mpd:
       friendly_name: Mopidy Media Player
       hidden: false
@@ -65,13 +44,6 @@ homeassistant:
     media_player.attic_tv:
       friendly_name: Chromecast Media Player
       hidden: false
-
-    binary_sensor.sharp_tv:
-      <<: *not_exposed
-      hidden: true
-    binary_sensor.sharp_tv_command_state:
-      <<: *not_exposed
-      hidden: true
 
 media_player:
   - platform: snapcast

@@ -7,76 +7,47 @@
 homeassistant:
   customize:
 
-    ################################################
-    ## Node Anchors
-    ################################################
-    package.node_anchors:
-      customize: &customize
-        package: 'lights'
-
-      exposed: &exposed
-        <<: *customize
-        emulated_hue_hidden: true
-        homebridge_hidden: false
-
-      not_exposed: &not_exposed
-        <<: *customize
-        emulated_hue_hidden: false
-        homebridge_hidden: true
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-
     switch.frontyard_light:
-      <<: *exposed
       icon: mdi:lightbulb
       friendly_name: Front Porch Lights
       emulated_hue_name: Front Yard Lights
       homebridge_name: Front Yard Lights
 
     switch.wemoswitch1:
-      <<: *exposed
       icon: mdi:lamp
       friendly_name: TV Switch
       emulated_hue_name: TV Switch
       homebridge_name: TV Switch
 
     switch.wemobackyardlightswitch:
-      <<: *exposed
       icon: mdi:lightbulb
       friendly_name: Backyard Lights
       emulated_hue_name: Backyard Lights
       homebridge_name: Backyard Lights
 
     light.family_room:
-      <<: *exposed
       friendly_name: Family Room Lights
       emulated_hue_name: Family Room Lights
       homebridge_name: Front Room Lights
 
     light.master_bedroom:
-      <<: *exposed
       friendly_name: Master Bedroom Lights
       emulated_hue_name: Master Bedroom Lights
       homebridge_name: Master Bedroom Lights
 
     switch.guest_bedroom:
-      <<: *exposed
       icon: mdi:lightbulb
       friendly_name: Guest Bedroom 1
       emulated_hue_name: Guest Bedroom 1
       homebridge_name: Guest Bedroom 1
 
     switch.prayer_room:
-      <<: *exposed
       icon: mdi:lightbulb
       friendly_name: Guest Bedroom 2
       emulated_hue_name: Guest Bedroom 2
       homebridge_name: Guest Bedroom 2
     
     switch.zwave_smart_switch_switch:
-      <<: *exposed
       friendly_name: Office Room Accent Lights
       emulated_hue_name: Office Room Accent Lights
       homebridge_name: Office Room Accent Lights
@@ -84,71 +55,47 @@ homeassistant:
       icon: mdi:lightbulb
 
     switch.basement_left:
-      <<: *exposed
       friendly_name: Basement Theater Lights
       assumed_state: false
       icon: mdi:lightbulb
     switch.basement_right:
-      <<: *exposed
       friendly_name: Basement Right Side Lights
       assumed_state: false
       icon: mdi:lightbulb
     switch.kitchen:
-      <<: *exposed
       friendly_name: Kitchen Light
       assumed_state: false
       icon: mdi:lightbulb
     switch.office_room:
-      <<: *exposed
       friendly_name: Office Room Lights
       assumed_state: false
       icon: mdi:lightbulb
     switch.kids_bedroom:
-      <<: *exposed
       friendly_name: Kids Bedroom
       icon: mdi:lightbulb
     switch.garage:
-      <<: *exposed
       friendly_name: Garage Lights
       icon: mdi:lightbulb
 
-    # Xiaomi Gateway Light Scripts
-    script.xiaomi_red:
-      <<: *hidden
-    script.xiaomi_blue:
-      <<: *hidden
-    script.xiaomi_green:
-      <<: *hidden
-
-    light.all_hue_lights:
-      <<: *hidden
-
     light.hue_color_lamp_1:
-      <<: *exposed
       friendly_name: Family Room Light 1
       color_set: false
     light.hue_color_lamp_2:
-      <<: *exposed
       friendly_name: Family Room Light 2
       color_set: false
     light.hue_color_lamp_3:
-      <<: *exposed
       friendly_name: Family Room Light 3
       color_set: false
     input_boolean.short_flash:
-      <<: *not_exposed
       icon: mdi:flash
       friendly_name: Short Flash
     input_boolean.long_flash:
-      <<: *not_exposed
       icon: mdi:flash      
       friendly_name: Long Flash
     input_boolean.animate_downstairs_lights:
-      <<: *not_exposed
       icon: mdi:flash-outline
       friendly_name: Animate Family Room Lights    
     input_boolean.animate_upstairs_lights:
-      <<: *not_exposed
       icon: mdi:flash-outline
       friendly_name: Animate Master Bedroom Lights
 
@@ -235,6 +182,7 @@ switch:
   #   retain: true
 
 wemo:
+  discovery: false
   static:
     - !secret wemo_switch_1
     - !secret wemo_switch_2

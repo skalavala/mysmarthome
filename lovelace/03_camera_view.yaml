@@ -148,14 +148,14 @@ cards:
       - binary_sensor.kitchen_camera_motion
       - binary_sensor.back_door_sensor_sensor
 
-  - type: picture-glance
-    id: camera_frontroom_camera
-    title: FrontDoor Camera
-    entity: camera.frontroom_camera
-    camera_image: camera.frontroom_camera
-    show_info: true
-    tap_action: 
-      action: more-info
-    entities:
-      - binary_sensor.frontdoor_camera_motion
-      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+  # - type: picture-glance
+  #   id: camera_frontroom_camera
+  #   title: FrontDoor Camera
+  #   entity: camera.frontroom_camera
+  #   camera_image: camera.frontroom_camera
+  #   show_info: true
+  #   tap_action: 
+  #     action: more-info
+  #   entities:
+  #     - binary_sensor.frontdoor_camera_motion
+  #     - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor

@@ -31,26 +31,6 @@
 #
 ###############################################################################
 homeassistant:
-  customize:
-
-    ################################################
-    ## Node Anchors
-    ################################################
-
-    package.node_anchors:
-      customize: &customize
-        package: 'birthday'
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-  
-    input_label.srinika_birthday:
-      <<: *hidden
-    input_label.hasika_birthday:
-      <<: *hidden
-    input_label.mallika_birthday:
-      <<: *hidden
 
 input_label:
   srinika_birthday:

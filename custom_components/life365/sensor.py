@@ -1,14 +1,14 @@
 """
 @ Author      : Suresh Kalavala
 @ Date        : 05/24/2017
-@ Description : Life360 Sensor - It queries Life360 API and retrieves 
+@ Description : Life365 Sensor - It queries Life360 API and retrieves 
                 data at a specified interval and dumps into MQTT
 
 @ Notes:        Copy this file and place it in your 
                 "Home Assistant Config folder\custom_components\sensor\" folder
-                Copy corresponding Life360 Package frommy repo, 
+                Copy corresponding Life365 Package frommy repo, 
                 and make sure you have MQTT installed and Configured
-                Make sure the life360 password doesn't contain '#' or '$' symbols
+                Make sure the life365 password doesn't contain '#' or '$' symbols
 """
 
 from datetime import timedelta
@@ -34,7 +34,7 @@ _LOGGER = logging.getLogger(__name__)
 
 DEPENDENCIES = ['mqtt']
 
-DEFAULT_NAME = 'Life360 Sensor'
+DEFAULT_NAME = 'Life365 Sensor'
 CONST_MQTT_TOPIC = "mqtt_topic"
 CONST_STATE_ERROR = "error"
 CONST_STATE_RUNNING = "running"
@@ -58,7 +58,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 # pylint: disable=unused-argument
 def setup_platform(hass, config, add_devices, discovery_info=None):
-    """Set up the Life360 Sensor."""
+    """Set up the Life365 Sensor."""
     name = config.get(CONF_NAME)
     username = config.get(CONST_USERNAME)
     password = config.get(CONST_PASSWORD)
@@ -69,12 +69,12 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     if value_template is not None:
         value_template.hass = hass
 
-    data = Life360SensorData(username, password, COMMAND1, COMMAND2, COMMAND3, mqtt_topic, hass)
+    data = Life365SensorData(username, password, COMMAND1, COMMAND2, COMMAND3, mqtt_topic, hass)
 
-    add_devices([Life360Sensor(hass, data, name, unit, value_template)])
+    add_devices([Life365Sensor(hass, data, name, unit, value_template)])
 
 
-class Life360Sensor(Entity):
+class Life365Sensor(Entity):
     """Representation of a sensor."""
 
     def __init__(self, hass, data, name, unit_of_measurement, value_template):
@@ -116,7 +116,7 @@ class Life360Sensor(Entity):
             self._state = value
 
 
-class Life360SensorData(object):
+class Life365SensorData(object):
     """The class for handling the data retrieval."""
 
     def __init__(self, username, password, command1, command2, command3, mqtt_topic, hass):
@@ -237,7 +237,7 @@ class Life360SensorData(object):
             output = None
 
         if output == None:
-            _LOGGER.error( "Life360 has not responsed well. Nothing to worry, will try again!" )
+            _LOGGER.error( "Life365 has not responsed well. Nothing to worry, will try again!" )
             self.value = CONST_STATE_ERROR
             return None
         else:
@@ -252,7 +252,7 @@ class Life360SensorData(object):
             mqtt.publish ( self.hass, topic, payload, self.mqtt_qos, self.mqtt_retain )
 
         except:
-            _LOGGER.error( "Error saving Life360 data to mqtt." )
+            _LOGGER.error( "Error saving Life365 data to mqtt." )
 
 class StringBuilder:
      _file_str = None

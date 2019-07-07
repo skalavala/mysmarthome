@@ -11,443 +11,417 @@
 homeassistant:
   customize:
 
-    ################################################
-    ## Node Anchors
-    ################################################
-
-    package.node_anchors:
-      customize: &customize
-        package: 'zwave_sensors'
-
-      exposed: &exposed
-        <<: *customize
-        emulated_hue_hidden: true
-        homebridge_hidden: false
-
-      not_exposed: &not_exposed
-        <<: *customize
-        emulated_hue_hidden: false
-        homebridge_hidden: true
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-
-      not_hidden: &not_hidden
-        <<: *customize
-        hidden: false
-
 # ZWave Binary Sensors
     binary_sensor.aeotec_water_sensor_sensor:
       friendly_name: Aeotec Water Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.audio_detector_sensor:
       friendly_name: Audio Detector Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.back_door_sensor_sensor:
       friendly_name: Back Door Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.basement_door_sensor_sensor:
       friendly_name: Basement Door Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.downstairs_multi_sensor_sensor:
       friendly_name: Downstairs Multi Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.front_door_sensor_sensor:
       friendly_name: Front Door Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.front_room_multi_sensor_sensor:
       friendly_name: Front Room Multi Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.garage_door_sensor_sensor:
       friendly_name: Garage Door Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.guest_bedroom_multi_sensor_sensor:
       friendly_name: Guest Bedroom Multi Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.kitchen_motion_sensor_sensor:
       friendly_name: Kitchen Motion Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.single_car_garage_door_tilt_sensor_sensor:
       friendly_name: Single Car Garage Door
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.stairs_motion_sensor_sensor:
       friendly_name: Stairs Motion Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.tv_multi_sensor_sensor:
       friendly_name: TV Multi Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.two_car_garage_door_tilt_sensor_sensor:
       friendly_name: Double Car Garage Door
-      <<: *not_exposed
+      ## <<: *not_exposed
     binary_sensor.upstairs_multi_sensor_sensor:
       friendly_name: Upstairs Multi Sensor
-      <<: *not_exposed
+      ## <<: *not_exposed
 
 # ZWave Sensors
     sensor.aeotec_water_sensor_alarm_level:
       friendly_name: Aeotec Water Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_alarm_level_2:
       friendly_name: Aeotec Water Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_alarm_level_3:
       friendly_name: Aeotec Water Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_alarm_type:
       friendly_name: Aeotec Water Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_alarm_type_2:
       friendly_name: Aeotec Water Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_alarm_type_3:
       friendly_name: Aeotec Water Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_burglar:
       friendly_name: Aeotec Water Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_flood:
       friendly_name: Aeotec Water Sensor Flood
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_flood_2:
       friendly_name: Aeotec Water Sensor Flood
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_flood_3:
       friendly_name: Aeotec Water Sensor Flood
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_heat:
       friendly_name: Aeotec Water Sensor Heat
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_sourcenodeid:
       friendly_name: Aeotec Water Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_sourcenodeid_2:
       friendly_name: Aeotec Water Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_sourcenodeid_3:
       friendly_name: Aeotec Water Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.aeotec_water_sensor_temperature:
       friendly_name: Aeotec Water Sensor Temperature
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_alarm_level:
       friendly_name: Audio Detector Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_alarm_type:
       friendly_name: Audio Detector Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_burglar:
       friendly_name: Audio Detector Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_carbon_monoxide:
       friendly_name: Audio Detector Carbon Monoxide
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_power_management:
       friendly_name: Audio Detector Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_smoke:
       friendly_name: Audio Detector Smoke
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_sourcenodeid:
       friendly_name: Audio Detector SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.audio_detector_temperature:
       friendly_name: Audio Detector Temperature
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.back_door_sensor_access_control:
       friendly_name: Back Door Sensor Access Control
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.back_door_sensor_alarm_level:
       friendly_name: Back Door Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.back_door_sensor_alarm_type:
       friendly_name: Back Door Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.back_door_sensor_burglar:
       friendly_name: Back Door Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.back_door_sensor_power_management:
       friendly_name: Back Door Sensor Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.back_door_sensor_sourcenodeid:
       friendly_name: Back Door Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.basement_door_sensor_access_control:
       friendly_name: Basement Door Sensor Access Control
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.basement_door_sensor_alarm_level:
       friendly_name: Basement Door Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.basement_door_sensor_alarm_type:
       friendly_name: Basement Door Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.basement_door_sensor_burglar:
       friendly_name: Basement Door Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.basement_door_sensor_power_management:
       friendly_name: Basement Door Sensor Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.basement_door_sensor_sourcenodeid:
       friendly_name: Basement Door Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_alarm_level:
       friendly_name: Downstairs Multi Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_alarm_type:
       friendly_name: Downstairs Multi Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_burglar:
       friendly_name: Downstairs Multi Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_luminance:
       friendly_name: Downstairs Multi Sensor Luminance
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_power:
       friendly_name: Downstairs Multi Sensor Power
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_relative_humidity:
       friendly_name: Downstairs Multi Sensor Relative Humidity
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_sourcenodeid:
       friendly_name: Downstairs Multi Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.downstairs_multi_sensor_temperature:
       friendly_name: Downstairs Multi Sensor Temperature
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_alarm_level:
       friendly_name: Front Room Multi Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_alarm_type:
       friendly_name: Front Room Multi Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_burglar:
       friendly_name: Front Room Multi Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_luminance:
       friendly_name: Front Room Multi Sensor Luminance
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_relative_humidity:
       friendly_name: Front Room Multi Sensor Relative Humidity
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_sourcenodeid:
       friendly_name: Front Room Multi Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_temperature:
       friendly_name: Front Room Multi Sensor Temperature
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.front_room_multi_sensor_ultraviolet:
       friendly_name: Front Room Multi Sensor Ultraviolet
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.garage_door_sensor_access_control:
       friendly_name: Garage Door Sensor Access Control
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.garage_door_sensor_alarm_level:
       friendly_name: Garage Door Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.garage_door_sensor_alarm_type:
       friendly_name: Garage Door Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.garage_door_sensor_burglar:
       friendly_name: Garage Door Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.garage_door_sensor_power_management:
       friendly_name: Garage Door Sensor Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.garage_door_sensor_sourcenodeid:
       friendly_name: Garage Door Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.single_car_garage_door_sensor_status:
       friendly_name: Single Car Garage Door Sensor Status
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.two_car_garage_door_sensor_status:
       friendly_name: Double Car Garage Door Sensor Status
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_alarm_level:
       friendly_name: Guest Bedroom Multi Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_alarm_type:
       friendly_name: Guest Bedroom Multi Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_burglar:
       friendly_name: Guest Bedroom Multi Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_luminance:
       friendly_name: Guest Bedroom Multi Sensor Luminance
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_relative_humidity:
       friendly_name: Guest Bedroom Multi Sensor Relative Humidity
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_sourcenodeid:
       friendly_name: Guest Bedroom Multi Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_temperature:
       friendly_name: Guest Bedroom Multi Sensor Temperature
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.guest_bedroom_multi_sensor_ultraviolet:
       friendly_name: Guest Bedroom Multi Sensor Ultraviolet
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.kitchen_motion_sensor_alarm_level:
       friendly_name: Kitchen Motion Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.kitchen_motion_sensor_alarm_type:
       friendly_name: Kitchen Motion Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.kitchen_motion_sensor_burglar:
       friendly_name: Kitchen Motion Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.kitchen_motion_sensor_power_management:
       friendly_name: Kitchen Motion Sensor Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.kitchen_motion_sensor_sourcenodeid:
       friendly_name: Kitchen Motion Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.single_car_garage_door_tilt_sensor_access_control:
       friendly_name: Single Car Garage Door Tilt Sensor Access Control
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.single_car_garage_door_tilt_sensor_alarm_level:
       friendly_name: Single Car Garage Door Tilt Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.single_car_garage_door_tilt_sensor_alarm_type:
       friendly_name: Single Car Garage Door Tilt Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.single_car_garage_door_tilt_sensor_burglar:
       friendly_name: Single Car Garage Door Tilt Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.single_car_garage_door_tilt_sensor_power_management:
       friendly_name: Single Car Garage Door Tilt Sensor Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.single_car_garage_door_tilt_sensor_sourcenodeid:
       friendly_name: Single Car Garage Door Tilt Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.stairs_motion_sensor_alarm_level:
       friendly_name: Stairs Motion Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.stairs_motion_sensor_alarm_type:
       friendly_name: Stairs Motion Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.stairs_motion_sensor_burglar:
       friendly_name: Stairs Motion Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.stairs_motion_sensor_power_management:
       friendly_name: Stairs Motion Sensor Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.stairs_motion_sensor_sourcenodeid:
       friendly_name: Stairs Motion Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_alarm_level:
       friendly_name: TV Multi Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_alarm_type:
       friendly_name: TV Multi Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_burglar:
       friendly_name: TV Multi Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_luminance:
       friendly_name: TV Multi Sensor Luminance
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_relative_humidity:
       friendly_name: TV Multi Sensor Relative Humidity
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_sourcenodeid:
       friendly_name: TV Multi Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_temperature:
       friendly_name: TV Multi Sensor Temperature
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.tv_multi_sensor_ultraviolet:
       friendly_name: TV Multi Sensor Ultraviolet
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.two_car_garage_door_tilt_sensor_access_control:
       friendly_name: Two Car Garage Door Tilt Sensor Access Control
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.two_car_garage_door_tilt_sensor_alarm_level:
       friendly_name: Two Car Garage Door Tilt Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.two_car_garage_door_tilt_sensor_alarm_type:
       friendly_name: Two Car Garage Door Tilt Sensor Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.two_car_garage_door_tilt_sensor_burglar:
       friendly_name: Two Car Garage Door Tilt Sensor Burglar
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.two_car_garage_door_tilt_sensor_power_management:
       friendly_name: Two Car Garage Door Tilt Sensor Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.two_car_garage_door_tilt_sensor_sourcenodeid:
       friendly_name: Two Car Garage Door Tilt Sensor SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.upstairs_multi_sensor_alarm_level:
       friendly_name: Upstairs Multi Sensor Alarm Level
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.upstairs_multi_sensor_alarm_type:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Upstairs Multi Sensor Alarm Type
     sensor.upstairs_multi_sensor_burglar:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Upstairs Multi Sensor Burglar
     sensor.upstairs_multi_sensor_luminance:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Upstairs Multi Sensor Luminance
     sensor.upstairs_multi_sensor_relative_humidity:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Upstairs Multi Sensor Relative Humidity
     sensor.upstairs_multi_sensor_sourcenodeid:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Upstairs Multi Sensor SourceNodeId
     sensor.upstairs_multi_sensor_temperature:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Upstairs Multi Sensor Temperature
     sensor.upstairs_multi_sensor_ultraviolet:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Upstairs Multi Sensor Ultraviolet
     sensor.wallmote_alarm_level:
-      <<: *not_exposed
+      # <<: *not_exposed
       friendly_name: Wallmote Alarm Level
     sensor.wallmote_alarm_type:
       friendly_name: Wallmote Alarm Type
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.wallmote_power_management:
       friendly_name: Wallmote Power Management
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.wallmote_sourcenodeid:
       friendly_name: Wallmote SourceNodeId
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.zwave_smart_switch_current:
       friendly_name: ZWave Smart Switch Current
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.zwave_smart_switch_energy:
       friendly_name: ZWave Smart Switch Energy
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.zwave_smart_switch_power:
       friendly_name: ZWave Smart Switch Power
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.zwave_smart_switch_previous_reading:
       friendly_name: ZWave Smart Switch Previous Reading
-      <<: *not_exposed
+      # <<: *not_exposed
     sensor.zwave_smart_switch_voltage:
       friendly_name: ZWave Smart Switch Voltage
-      <<: *not_exposed
+      # <<: *not_exposed
 
 # ZWave Switches
 
     switch.kitchen_siren_switch:
       friendly_name: Kitchen Siren Switch 1
-      <<: *not_exposed
+      # <<: *not_exposed
     switch.kitchen_siren_switch_2:
       friendly_name: Kitchen Siren Switch 2
-      <<: *not_exposed
+      # <<: *not_exposed
     switch.kitchen_siren_switch_3:
       friendly_name: Kitchen Siren Switch 3
-      <<: *not_exposed
+      # <<: *not_exposed
     switch.kitchen_siren_switch_4:
       friendly_name: Kitchen Siren Switch 4
-      <<: *not_exposed
+      # <<: *not_exposed
     switch.kitchen_siren_switch_5:
       friendly_name: Kitchen Siren Switch 5
-      <<: *not_exposed
+      # <<: *not_exposed
     switch.wallmote_switch:
       friendly_name: Wallmote Switch
-      <<: *not_exposed
+      # <<: *not_exposed
 
 zwave:
   usb_path: /dev/ttyACM0

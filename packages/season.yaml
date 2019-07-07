@@ -9,22 +9,6 @@
 #########################################################################################
 
 homeassistant:
-  customize:
-
-    ################################################
-    ## Node Anchors
-    ################################################
-
-    package.node_anchors:
-      customize: &customize
-        package: 'season'
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-
-    sensor.season:
-      <<: *hidden
 
 sensor:
   - platform: season

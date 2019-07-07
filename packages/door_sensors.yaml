@@ -1,24 +1,4 @@
 homeassistant:
-  customize:
-
-    ################################################
-    ## Node Anchors
-    ################################################
-
-    package.node_anchors:
-      customize: &customize
-        package: 'door_sensors'
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-  
-    zwave.two_car_garage_door_tilt_sensor:
-      friendly_name: 2-Car Garage Door Sensor
-      <<: *hidden
-    zwave.single_car_garage_door_tilt_sensor:
-      friendly_name: 1-Car Garage Door Sensor
-      <<: *hidden
    
 sensor:
   - platform: template

@@ -1,28 +1,6 @@
 homeassistant:
   customize:
 
-    ################################################
-    ## Node Anchors
-    ################################################
-
-    package.node_anchors:
-      customize: &customize
-        package: 'xiaomi'
-
-      exposed: &exposed
-        <<: *customize
-        emulated_hue_hidden: true
-        homebridge_hidden: false
-
-      not_exposed: &not_exposed
-        <<: *customize
-        emulated_hue_hidden: false
-        homebridge_hidden: true
-
-      hidden: &hidden
-        <<: *customize
-        hidden: true
-
     binary_sensor.motion_sensor_158d0001a662fe:
       friendly_name: Kitchen Motion Sensor (Xiaomi)
     sensor.Illumination_158d0001a662fe:

@@ -9,15 +9,6 @@
 homeassistant:
   customize:
 
-    ################################################
-    ## Node Anchors
-    ################################################
-
-    package.node_anchors:
-      customize: &customize
-        package: 'cameras'
-
-
 #
 # The camera url format in secrets.yaml would look like this: 
 # frontdoor_camera_url: http://username:password@192.168.xxx.xxx/ISAPI/Streaming/channels/101/picture
@@ -63,9 +54,9 @@ camera:
     mjpeg_url: !secret kitchen_camera_url
     name: Kitchen Camera
 
-  - platform: mjpeg
-    mjpeg_url: !secret frontroom_camera_url
-    name: Frontroom Camera
+  # - platform: mjpeg
+  #   mjpeg_url: !secret frontroom_camera_url
+  #   name: Frontroom Camera
 
   - platform: local_file
     name: Frontdoor Latest Scan
