@@ -46,7 +46,7 @@ cards:
     title: Zone Based Alerts
     show_header_toggle: false
     entities:
-      - automation.alert_life360_error
+      - automation.alert_life365_error
       - automation.alert_private_zone_enter
       - automation.alert_private_zone_leaves
       - automation.alert_when_everyone_is_away

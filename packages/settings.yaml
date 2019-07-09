@@ -145,6 +145,11 @@ input_boolean:
     initial: off
     icon: mdi:movie-roll
 
+  stream_camera2chromecast:
+    name: Stream Cameras to Chromecast
+    icon: mdi:cctv
+    initial: off
+
   home_security:
     name: Home Security System
     initial: off

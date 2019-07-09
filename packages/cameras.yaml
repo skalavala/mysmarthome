@@ -7,7 +7,6 @@
 #                       WORK IN YOUR ENVIRONMENT!
 ###############################################################################
 homeassistant:
-  customize:
 
 #
 # The camera url format in secrets.yaml would look like this: 
@@ -230,6 +229,8 @@ script:
 #
   stream_frontdoor_camera_to_chromecast:
     sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret frontdoor_camera_stream_url
@@ -237,6 +238,8 @@ script:
 
   stream_driveway_camera_to_chromecast:
     sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret driveway_camera_stream_url
@@ -244,6 +247,8 @@ script:
 
   stream_patio_camera_to_chromecast:
     sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret patio_camera_stream_url
@@ -251,6 +256,8 @@ script:
 
   stream_playarea_camera_to_chromecast:
     sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret playarea_camera_stream_url
@@ -301,12 +308,12 @@ automation:
          - binary_sensor.motion_sensor_158d00024ee084
        to: 'on'
     action:
+      - condition: template
+        value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret frontdoor_camera_stream_url
           name: 'frontyard'
-      - condition: template
-        value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
       - condition: template
         value_template: "{{ states('alarm_control_panel.simplisafe') == 'armed_home' or states('alarm_control_panel.simplisafe') == 'armed_away' }}"
       - service: image_processing.scan
@@ -381,12 +388,12 @@ automation:
          - binary_sensor.motion_sensor_158d00024e57fb
        to: 'on'
     action:
+      - condition: template
+        value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret driveway_camera_stream_url
           name: 'driveway'
-      - condition: template
-        value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
       - condition: template
         value_template: "{{ states('alarm_control_panel.simplisafe') == 'armed_home' or states('alarm_control_panel.simplisafe') == 'armed_away' }}"
       - service: image_processing.scan
@@ -535,10 +542,9 @@ automation:
        entity_id:
          - binary_sensor.motion_sensor_158d00024e842c
        to: 'on'
-    condition:
+    action:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
-    action:
       - service: script.stream2chromecast
         data_template:
           url: !secret playarea_camera_stream_url
@@ -627,7 +633,7 @@ automation:
 # |  __| '__/ _ \| '_ \| __/ _` |/ _ \ / _ \| '__|
 # | |  | | | (_) | | | | || (_| | (_) | (_) | |   
 # |_|  |_|  \___/|_| |_|\__\__,_|\___/ \___/|_|                                
-                                                 
+                        
   - alias: Notify Frontdoor Camera Snapshots
     initial_state: true
     trigger:

@@ -170,6 +170,25 @@ cards:
               domain: input_boolean
               action: working_in_garage
 
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            name: Stream Cameras To Chromecast
+            entity: input_boolean.stream_camera2chromecast
+            icon: mdi:cctv
+            color_type: card
+            style:
+              - font-weight: bold
+              - color: rgb(0, 0, 5)
+            state:
+              - value: 'on'
+                color: var(--primary-color)
+            action: toggle
+            toggle:
+              domain: input_boolean
+              action: stream_camera2chromecast
+
+
 
   - type: entities
     title: Control Panel
