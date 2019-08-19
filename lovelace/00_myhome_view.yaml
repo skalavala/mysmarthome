@@ -12,11 +12,11 @@ cards:
           - font-weight: bold
           - color: rgb(255, 255, 255)
         state:
-          - value: 'disarmed'
+          - value: "disarmed"
             color: rgb(255,0,0)
-          - value: 'armed_home'
+          - value: "armed_home"
             color: rgb(0, 128, 0)
-          - value: 'armed_away'
+          - value: "armed_away"
             color: rgb(0, 0, 255)
         action: more_info
 
@@ -29,11 +29,11 @@ cards:
           - font-weight: bold
           - color: rgb(255, 255, 255)
         state:
-          - value: 'heat'
+          - value: "heat"
             color: rgb(255,0,0)
-          - value: 'eco'
+          - value: "eco"
             color: rgb(0, 128, 0)
-          - value: 'cool'
+          - value: "cool"
             color: rgb(0, 0, 255)
         action: service
         service:
@@ -44,36 +44,34 @@ cards:
     title: Device Trackers
     show_header_toggle: false
     entities:
-      - device_tracker.hasika_hasika
-      - device_tracker.mallika_mallika
-      - device_tracker.srinika_srinika
-      - device_tracker.suresh_suresh
+      - entity: device_tracker.life360_suresh
+        name: Suresh
+      - entity: device_tracker.life360_mallika
+        name: Mallika
+      - entity: device_tracker.life360_srinika
+        name: Srinika
+      - entity: device_tracker.life360_hasika
+        name: Hasika
       - entity: device_tracker.tesla_model_3_5yj3e1ea8jf010610_location_tracker
         name: Tesla
     state_filter:
-      - 'home'
+      - "home"
     card:
       type: glance
       title: Kalavala Family
-
-  - type: entities
-    title: Master Bedroom Occupancy Value
-    show_header_toggle: false
-    entities:
-      - sensor.master_bed_sensor
 
   - type: entity-filter
     title: For Your Information
     show_empty: false
     show_header_toggle: false
     entities:
-      - entity: sensor.hasika_iphone_battery_state
+      - entity: sensor.hasika_battery_state
         name: Hasika
-      - entity: sensor.mallika_iphone_battery_state
+      - entity: sensor.mallika_battery_state
         name: Mallika
-      - entity: sensor.srinika_iphone_battery_state
+      - entity: sensor.srinika_battery_state
         name: Srinika
-      - entity: sensor.srinika_iphone_battery_state
+      - entity: sensor.srinika_battery_state
         name: Suresh
       - entity: sensor.hasika_iphone_wifi_state
         name: Hasika
@@ -86,26 +84,17 @@ cards:
       - sensor.recycle_day
       - sensor.trash_day
     state_filter:
-      - 'Charging'
-      - 'yes'
-      - 'Not Connected'
+      - "Charging"
+      - "yes"
+      - "Not Connected"
     card:
       type: glance
       title: FYI
 
-  - type: entities
-    title: Where Is Everyone
-    show_header_toggle: false
-    entities:
-      - sensor.hasika_location
-      - sensor.mallika_location
-      - sensor.srinika_location
-      - sensor.suresh_location
-
   - type: conditional
     conditions:
       - entity: input_boolean.emergency_mode
-        state: 'on'
+        state: "on"
     card:
       type: entities
       title: Emergency Scripts
@@ -146,9 +135,9 @@ cards:
       - entity: binary_sensor.two_car_garage_door_tilt_sensor_sensor
         name: Double Car Garage Door
     state_filter:
-      - 'on'
-      - 'opened'
-      - 'Open'
+      - "on"
+      - "opened"
+      - "Open"
     card:
       type: glance
       title: Doors
@@ -159,7 +148,7 @@ cards:
         cards:
           - type: gauge
             name: Suresh Phone
-            unit: '%'
+            unit: "%"
             entity: input_label.suresh_battery
             severity:
               green: 75
@@ -167,7 +156,7 @@ cards:
               red: 30
           - type: gauge
             name: Mallika Phone
-            unit: '%'
+            unit: "%"
             entity: input_label.mallika_battery
             severity:
               green: 75
@@ -177,7 +166,7 @@ cards:
         cards:
           - type: gauge
             name: Srinika Phone
-            unit: '%'
+            unit: "%"
             entity: input_label.srinika_battery
             severity:
               green: 75
@@ -185,7 +174,7 @@ cards:
               red: 30
           - type: gauge
             name: Hasika Phone
-            unit: '%'
+            unit: "%"
             entity: input_label.hasika_battery
             severity:
               green: 75
@@ -203,7 +192,7 @@ cards:
     show_info: true
     tap_action:
       action: more-info
-  
+
   - type: conditional
     conditions:
       - entity: sensor.usps_mail
@@ -230,7 +219,7 @@ cards:
   - type: conditional
     conditions:
       - entity: sensor.season
-        state: 'spring'
+        state: "spring"
     card:
       type: vertical-stack
       cards:
@@ -238,7 +227,7 @@ cards:
           cards:
             - type: gauge
               name: Pollen Today
-              unit: '%'
+              unit: "%"
               entity: sensor.allergy_index_today
               max: 12.0
               severity:
@@ -247,7 +236,7 @@ cards:
                 red: 7
             - type: gauge
               name: Pollen Tomorrow
-              unit: '%'
+              unit: "%"
               entity: sensor.allergy_index_tomorrow
               max: 12.0
               severity:
@@ -258,7 +247,7 @@ cards:
           cards:
             - type: gauge
               name: Asthma Today
-              unit: '%'
+              unit: "%"
               entity: sensor.asthma_index_forecasted_average
               severity:
                 green: 0
@@ -266,7 +255,7 @@ cards:
                 red: 7
             - type: gauge
               name: Asthma Tomorrow
-              unit: '%'
+              unit: "%"
               entity: sensor.asthma_index_tomorrow
               severity:
                 green: 0
@@ -301,10 +290,10 @@ cards:
       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
       - binary_sensor.upstairs_multi_sensor_sensor
     state_filter:
-      - 'on'
-      - 'detected'
-      - 'opened'
-      - 'Open'
+      - "on"
+      - "detected"
+      - "opened"
+      - "Open"
     card:
       type: entities
       title: Motion Sensors

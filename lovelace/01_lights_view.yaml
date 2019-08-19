@@ -5,7 +5,7 @@ cards:
     title: Upstairs
     show_header_toggle: true
     entities:
-      - light.master_bedroom 
+      - light.master_bedroom
       - entity: light.master_bedroom_1
         name: Suresh's Bedside Light
       - entity: light.master_bedroom_2
@@ -46,9 +46,9 @@ cards:
     show_header_toggle: false
     entities:
       - switch.garage
-      - entity: switch.tesla_model_3_5yj3e1ea8jf010610_charger_switch
+      - entity: switch.tesla_model_3_charger_switch
         name: Tesla Charger Switch
-      - entity: switch.tesla_model_3_5yj3e1ea8jf010610_maxrange_switch
+      - entity: switch.tesla_model_3_maxrange_switch
         name: Tesla Max Range Switch
 
   - type: entities

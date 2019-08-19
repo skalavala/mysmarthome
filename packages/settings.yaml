@@ -2,7 +2,7 @@ homeassistant:
 
 # Input DateTime Options:
 # I set the minutes to something that is divisible by 5, so that the automations
-# can check once every 5 minutes without any performance penalty 
+# can check once every 5 minutes without any performance penalty
 ###############################################################################
 
 input_datetime:
@@ -10,45 +10,45 @@ input_datetime:
     name: Summer Bed Time
     has_date: false
     has_time: true
-    initial: '23:00:00'
+    initial: "23:00:00"
   summer_wakeup_time:
     name: Summer Wakeup Time
     has_date: false
     has_time: true
-    initial: '06:00:00'
+    initial: "06:00:00"
 
   autumn_bed_time:
     name: Autumn Bed Time
     has_date: false
     has_time: true
-    initial: '22:00:00'
+    initial: "22:00:00"
   autumn_wakeup_time:
     name: Autumn Wakeup Time
     has_date: false
     has_time: true
-    initial: '05:30:00'
+    initial: "05:30:00"
 
   winter_bed_time:
     name: Winter Bed Time
     has_date: false
     has_time: true
-    initial: '22:00:00'
+    initial: "22:00:00"
   winter_wakeup_time:
     name: Winter Wakeup Time
     has_date: false
     has_time: true
-    initial: '05:30:00'
+    initial: "05:30:00"
 
   spring_bed_time:
     name: Spring Bed Time
     has_date: false
     has_time: true
-    initial: '22:00:00'
+    initial: "22:00:00"
   spring_wakeup_time:
     name: Spring Wakeup Time
     has_date: false
     has_time: true
-    initial: '05:30:00'
+    initial: "05:30:00"
 
 input_number:
   calendar_remind_before_days:
@@ -141,7 +141,7 @@ input_boolean:
     icon: mdi:do-not-disturb
 
   movie_time:
-    name: 'Movie Time'
+    name: "Movie Time"
     initial: off
     icon: mdi:movie-roll
 
@@ -241,28 +241,27 @@ input_boolean:
     icon: mdi:garage
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-# Do not disturb for 2 hours
-# Simply turns ON the Do Not Disturb Flag ad resets 
-# after 2 hours. The Do Not Disturb flag is used in
-# voice_notify script
-######################################################
+  # Do not disturb for 2 hours
+  # Simply turns ON the Do Not Disturb Flag ad resets
+  # after 2 hours. The Do Not Disturb flag is used in
+  # voice_notify script
+  ######################################################
   - alias: Do Not Disturb For 2 hours
     initial_state: true
     trigger:
       - platform: state
         entity_id: input_boolean.do_not_disturb
-        to: 'on'
+        to: "on"
         for:
           hours: 2
           minutes: 0
@@ -270,22 +269,22 @@ automation:
       - service: input_boolean.turn_off
         entity_id: input_boolean.do_not_disturb
 
-######################################################
-# Reset Movie time after 3 hours
+  ######################################################
+  # Reset Movie time after 3 hours
   - alias: Reset Movie Time After 3 Hours
     initial_state: true
     trigger:
       - platform: state
         entity_id: input_boolean.movie_time
-        to: 'on'
+        to: "on"
         for:
           hours: 3
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.movie_time
 
-# Notify me when DO NOT DISTURB mode is changed
-######################################################
+  # Notify me when DO NOT DISTURB mode is changed
+  ######################################################
   - alias: Do Not Disturb State Change
     initial_state: true
     trigger:
@@ -296,13 +295,13 @@ automation:
         data_template:
           message: "The Do Not Disturb Mode is {{ trigger.to_state.state |upper }}."
 
-# Hourly Reports
-######################################################
+  # Hourly Reports
+  ######################################################
   - alias: Hourly Report During Day Time
     initial_state: true
     trigger:
       platform: time_pattern
-      hours: '/01'
+      hours: "/01"
       minutes: 05
       seconds: 00
     condition:
@@ -310,7 +309,7 @@ automation:
         value_template: '{{ states.input_boolean.hourly_report.state == "on" }}'
       - condition: state
         entity_id: group.all_devices
-        state: 'home'
+        state: "home"
       - condition: template
         value_template: >
           {% set hour = now().hour | int %}

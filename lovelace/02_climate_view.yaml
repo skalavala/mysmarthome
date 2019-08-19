@@ -13,7 +13,7 @@ cards:
         hours_to_show: 12
       - type: gauge
         entity: sensor.dining_room_thermostat_humidity
-        unit: '%'
+        unit: "%"
         name: Home Humidity
         severity:
           green: 40
@@ -25,7 +25,7 @@ cards:
     show_header_toggle: false
     entities:
       - climate.dining_room
-      - climate.tesla_model_3_5yj3e1ea8jf010610_hvac_climate_system
+      - climate.tesla_model_3_hvac_climate_system
       - binary_sensor.dining_room_thermostat_fan
       - binary_sensor.dining_room_thermostat_has_leaf
       - binary_sensor.dining_room_thermostat_is_locked
@@ -38,7 +38,7 @@ cards:
       - sensor.dining_room_thermostat_temperature
 
   - type: history-graph
-    title: 'Temperature'
+    title: "Temperature"
     entities:
       - entity: sensor.dark_sky_apparent_temperature
         name: Outside

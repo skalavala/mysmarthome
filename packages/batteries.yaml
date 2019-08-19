@@ -6,7 +6,6 @@
 ###############################################################################
 homeassistant:
   customize:
-
     group.batteries:
       order: 2
 
@@ -38,25 +37,24 @@ homeassistant:
       friendly_name: Suresh Phone Wi-Fi Status
 
 sensor:
-
   - platform: mqtt
     state_topic: "owntracks/mallika/mallika"
     name: "Mallika iPhone Battery (OT)"
     unit_of_measurement: "%"
     value_template: "{{ value_json.batt }}"
-    
+
   - platform: mqtt
     state_topic: "owntracks/suresh/suresh"
     name: "Suresh iPhone Battery (OT)"
     unit_of_measurement: "%"
     value_template: "{{ value_json.batt }}"
-  
+
   - platform: mqtt
     state_topic: "owntracks/srinika/srinika"
     name: "Srinika iPhone Battery (OT)"
     unit_of_measurement: "%"
     value_template: "{{ value_json.batt }}"
-      
+
   - platform: mqtt
     state_topic: "owntracks/hasika/hasika"
     name: "Hasika iPhone Battery (OT)"
@@ -84,7 +82,7 @@ sensor:
         Not Charging
       {% endif %}
     icon: "mdi:battery-charging"
-  
+
   - platform: mqtt
     state_topic: "owntracks/srinika/srinika"
     name: "Srinika iPhone Battery State"
@@ -154,31 +152,31 @@ sensor:
   - platform: mqtt
     state_topic: "owntracks/mallika/mallika"
     name: "Mallika Driving Speed"
-    value_template: '{{ value_json.vel |int|round}}'
+    value_template: "{{ value_json.vel |int|round}}"
     unit_of_measurement: miles
 
   - platform: mqtt
     state_topic: "owntracks/suresh/suresh"
     name: "Suresh Driving Speed"
-    value_template: '{{ value_json.vel |int|round}}'
+    value_template: "{{ value_json.vel |int|round}}"
     unit_of_measurement: miles
 
   - platform: mqtt
     state_topic: "owntracks/srinika/srinika"
     name: "Srinika Driving Speed"
-    value_template: '{{ value_json.vel |int|round}}'
+    value_template: "{{ value_json.vel |int|round}}"
     unit_of_measurement: miles
 
   - platform: mqtt
     state_topic: "owntracks/hasika/hasika"
     name: "Hasika Driving Speed"
-    value_template: '{{ value_json.vel |int|round}}'
+    value_template: "{{ value_json.vel |int|round}}"
     unit_of_measurement: miles
 
   - platform: template
     sensors:
       suresh_iphone_battery_ot:
-        unit_of_measurement: '%'
+        unit_of_measurement: "%"
         value_template: >
           {% if states('sensor.suresh_iphone_battery_ot') != "unknown" %}
             {{ states('sensor.suresh_iphone_battery_ot')| int }}
@@ -221,7 +219,7 @@ sensor:
   - platform: template
     sensors:
       mallika_iphone_battery_ot:
-        unit_of_measurement: '%'
+        unit_of_measurement: "%"
         value_template: "{{ states('sensor.mallika_iphone_battery_ot')|int(-1) }}"
         icon_template: >-
           {% if states('sensor.mallika_iphone_battery_ot') != "unknown" %}
@@ -255,11 +253,11 @@ sensor:
           {% else %}
             mdi:battery-alert
           {% endif %}
-  
+
   - platform: template
     sensors:
       srinika_iphone_battery_ot:
-        unit_of_measurement: '%'
+        unit_of_measurement: "%"
         value_template: "{{ states('sensor.srinika_iphone_battery_ot')|int(-1) }}"
         icon_template: >-
           {% if states('sensor.srinika_iphone_battery_ot') != "unknown" %}
@@ -293,11 +291,11 @@ sensor:
           {% else %}
             mdi:battery-alert
           {% endif %}
-  
+
   - platform: template
     sensors:
       hasika_iphone_battery_ot:
-        unit_of_measurement: '%'
+        unit_of_measurement: "%"
         value_template: "{{ states('sensor.hasika_iphone_battery_ot')|int(-1) }}"
         icon_template: >-
           {% if states('sensor.hasika_iphone_battery_ot') != "unknown" %}
@@ -333,30 +331,29 @@ sensor:
           {% endif %}
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-#
-# This automation alerts family members when they are "moving" - meaning either in driving from work,
-# kids got on the school bus, and bus is moving...etc
-# This will only announces/ alert when someone is at home.
-#
+  #
+  # This automation alerts family members when they are "moving" - meaning either in driving from work,
+  # kids got on the school bus, and bus is moving...etc
+  # This will only announces/ alert when someone is at home.
+  #
   - alias: Alert When Moving
-    trigger: 
+    trigger:
       platform: numeric_state
       entity_id:
-      - sensor.suresh_driving_speed
-      - sensor.mallika_driving_speed
-      - sensor.srinika_driving_speed
-      - sensor.hasika_driving_speed
+        - sensor.suresh_driving_speed
+        - sensor.mallika_driving_speed
+        - sensor.srinika_driving_speed
+        - sensor.hasika_driving_speed
       above: 8
     condition:
       - condition: template
@@ -382,19 +379,19 @@ automation:
             {% set apostrophe = "\'" %}
             {{ trigger.entity_id.split('.')[1].split('_')[0] |title ~ apostrophe ~ 's' }} vehicle is going at {{ trigger.to_state.state |round *2 }} mph.
 
-###############################################################################
-# Automation: Notify of iPhone Low Battery
-###############################################################################
+  ###############################################################################
+  # Automation: Notify of iPhone Low Battery
+  ###############################################################################
   - alias: Notify Low battery
     initial_state: true
     trigger:
       platform: numeric_state
       entity_id:
-      - device_tracker.suresh_suresh
-      - device_tracker.mallika_mallika
-      - device_tracker.srinika_srinika
-      - device_tracker.hasika_hasika
-      value_template: '{{ state.attributes.battery }}'
+        - device_tracker.life360_suresh
+        - device_tracker.life360_mallika
+        - device_tracker.life360_srinika
+        - device_tracker.life360_hasika
+      value_template: "{{ state.attributes.battery }}"
       below: 25
     condition:
       - condition: template
@@ -402,11 +399,10 @@ automation:
     action:
       - service: script.notify_me
         data_template:
-          message: "{{ trigger.to_state.attributes.friendly_name | title }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
+          message: "{{ trigger.to_state.attributes.friendly_name.split(' ')[1] | title }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
       - service: script.voice_notify
         data_template:
-          message: "{{ trigger.to_state.attributes.friendly_name }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
-
+          message: "{{ trigger.to_state.attributes.friendly_name.split(' ')[1] }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
 
   - alias: Alert Low Battery
     trigger:
@@ -430,9 +426,9 @@ automation:
             {{ ns.lowBattery -}} 
             {{- ' battery is ' if ns.lowBattery.split(',')|count == 1 else ' batteries are ' -}} less than 25 percent.
 
-# ###############################################################################
-# # Automation: Notify of Sensor's Low Battery
-# ###############################################################################
+  # ###############################################################################
+  # # Automation: Notify of Sensor's Low Battery
+  # ###############################################################################
   # - alias: Alert Low Battery Level of Sensors
   #   initial_state: true
   #   trigger:
@@ -451,7 +447,7 @@ automation:
   #       - zwave.back_door_sensor
   #       - zwave.basement_door_sensor
   #       - zwave.downstairs_multi_sensor
-    #       - zwave.front_room_multi_sensor
+  #       - zwave.front_room_multi_sensor
   #       - zwave.front_room_window_sensor
   #       - zwave.garage_door_sensor
   #       - zwave.guest_bedroom_multi_sensor
@@ -477,28 +473,28 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - device_tracker.mallika_mallika
-          - device_tracker.suresh_suresh
-          - device_tracker.srinika_srinika
-          - device_tracker.hasika_hasika
-        from: 'not_home'
-        to: 'home'
-        for: '00:05:00'
+          - device_tracker.life360_mallika
+          - device_tracker.life360_suresh
+          - device_tracker.life360_srinika
+          - device_tracker.life360_hasika
+        from: "not_home"
+        to: "home"
+        for: "00:05:00"
     condition:
       condition: or
       conditions:
         - condition: state
           entity_id: sensor.hasika_iphone_wifi_state
-          state: 'Not Connected'
+          state: "Not Connected"
         - condition: state
           entity_id: sensor.mallika_iphone_wifi_state
-          state: 'Not Connected'
+          state: "Not Connected"
         - condition: state
           entity_id: sensor.srinika_iphone_wifi_state
-          state: 'Not Connected'
+          state: "Not Connected"
         - condition: state
           entity_id: sensor.suresh_iphone_wifi_state
-          state: 'Not Connected'
+          state: "Not Connected"
     action:
       - service: script.notify_me
         data_template:

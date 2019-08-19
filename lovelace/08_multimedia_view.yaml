@@ -61,6 +61,9 @@ cards:
 
       - type: media-control
         entity: media_player.attic_tv
+        
+      - type: media-control
+        entity: media_player.chromecastultra7021
 
       # - type: media-control
       #   entity: media_player.my_denon_receiver

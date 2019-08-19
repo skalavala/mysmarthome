@@ -29,7 +29,7 @@ cards:
   - type: conditional
     conditions:
       - entity: input_boolean.alarm_clock
-        state: 'on'
+        state: "on"
     card:
       type: entities
       title: Alarm Clock
@@ -46,7 +46,6 @@ cards:
     title: Zone Based Alerts
     show_header_toggle: false
     entities:
-      - automation.alert_life365_error
       - automation.alert_private_zone_enter
       - automation.alert_private_zone_leaves
       - automation.alert_when_everyone_is_away
@@ -138,8 +137,6 @@ cards:
     title: Home Security Automations
     show_header_toggle: false
     entities:
-      - automation.disable_emergency_mode_upon_disabling_home_security
-      - automation.home_security_away_motion_deteted_inside
       - automation.home_security_status_leeo_color
       - automation.home_security_system_watchdog_10_minutes
       - automation.home_security_system_watchdog_30_minutes
@@ -150,7 +147,7 @@ cards:
   - type: conditional
     conditions:
       - entity: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     card:
       type: entities
       title: Light Automations
@@ -233,7 +230,6 @@ cards:
       - automation.weather_input_boolean_updates
       - automation.rain_alerts
       - automation.snow_and_sleet_alerts
-      - automation.update_openuv_every_30_minutes_during_the_daytime
       - automation.alert_super_heavy_winds
 
   - type: entities
@@ -252,7 +248,6 @@ cards:
     show_header_toggle: false
     entities:
       - automation.notify_home_status_when_away
-      - automation.emergency_mode_disabled
       - automation.home_mode_away_on
       - automation.hourly_report_during_day_time
       - automation.check_wi_fi_status_of_iphones_at_home
@@ -288,7 +283,6 @@ cards:
       - automation.update_available_notification
       - automation.update_zwave_battery_levels
       - automation.ups_state_change
-      - automation.water_leak_detected
 
   - type: entities
     title: Misc Automations

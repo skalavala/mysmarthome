@@ -3,26 +3,26 @@
 # @Author   :   Mahasri Kalavala
 ###############################################################################
 homeassistant:
-  name: Home 
+  name: Home
   temperature_unit: F
   latitude: !secret home_latitude
   longitude: !secret home_longitude
   elevation: !secret home_elevation
-  
+
   unit_system: imperial
   time_zone: !secret time_zone
   customize_glob: !include customize_glob.yaml
   customize_domain: !include customize_domain.yaml
   packages: !include_dir_named packages
-  
+
   whitelist_external_dirs:
-    - '/home/homeassistant/.homeassistant/www/downloads/camera/patio/'
-    - '/home/homeassistant/.homeassistant/www/downloads/camera/garage/'
-    - '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/'
-    - '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/'
-    - '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/'
-    - '/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/'
-    - '/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/'
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/patio/"
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/garage/"
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/playarea/"
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/"
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/"
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/"
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/"
 
 sun:
 alexa:
@@ -72,12 +72,19 @@ history:
 websocket_api:
 python_script:
 recorder:
- db_url: !secret my_sql_url
+  db_url: !secret my_sql_url
 logger: !include logging.yaml
 
 zeroconf:
 owntracks:
 system_health:
+
+life360:
+  accounts:
+    - username: !secret life360_username
+      password: !secret life360_password
+  circles:
+    include: [Family]
 
 mqtt:
   broker: !secret mqtt_server
@@ -96,26 +103,26 @@ person:
     id: suresh
     device_trackers:
       - device_tracker.suresh
-      - device_tracker.suresh_suresh
+      - device_tracker.suresh_kalavala
       - device_tracker.tesla_model_3_5yj3e1ea8jf010610_location_tracker
 
   - name: Mallika
     id: mallika
     device_trackers:
       - device_tracker.mallika
-      - device_tracker.mallika_mallika
+      - device_tracker.life360_mallika
 
   - name: Srinika
     id: srinika
     device_trackers:
       - device_tracker.srinika
-      - device_tracker.srinika_srinika
+      - device_tracker.life360_srinika
 
   - name: Hasika
     id: hasika
     device_trackers:
       - device_tracker.hasika
-      - device_tracker.hasika_hasika
+      - device_tracker.life360_hasika
 
 lovelace:
   mode: yaml
@@ -147,54 +154,53 @@ ios:
   push:
     categories:
       - name: Single Car Garage Door
-        identifier: '1CAR_GARAGE'
+        identifier: "1CAR_GARAGE"
         actions:
-          - identifier: '1CAR_GARAGE_CLOSE'
-            title: 'Close Garage Door'
-            activationMode: 'background'
+          - identifier: "1CAR_GARAGE_CLOSE"
+            title: "Close Garage Door"
+            activationMode: "background"
             authenticationRequired: yes
             destructive: yes
-            behavior: 'default'
+            behavior: "default"
       - name: Two Car Garage Door
-        identifier: '2CAR_GARAGE'
+        identifier: "2CAR_GARAGE"
         actions:
-          - identifier: '2CAR_GARAGE_CLOSE'
-            title: 'Close Garage Door'
-            activationMode: 'background'
+          - identifier: "2CAR_GARAGE_CLOSE"
+            title: "Close Garage Door"
+            activationMode: "background"
             authenticationRequired: yes
             destructive: yes
-            behavior: 'default'
+            behavior: "default"
       - name: Trash Recycle
-        identifier: 'trash_recycle'
+        identifier: "trash_recycle"
         actions:
-          - identifier: 'TRASH_LEFT'
-            title: 'Done'
-            activationMode: 'background'
+          - identifier: "TRASH_LEFT"
+            title: "Done"
+            activationMode: "background"
             authenticationRequired: yes
             destructive: yes
-            behavior: 'default'
-          - identifier: 'TRASH_REMIND_LATER'
-            title: 'Remind Later'
-            activationMode: 'background'
+            behavior: "default"
+          - identifier: "TRASH_REMIND_LATER"
+            title: "Remind Later"
+            activationMode: "background"
             authenticationRequired: yes
             destructive: yes
-            behavior: 'default'
+            behavior: "default"
       - name: Welcome Home
-        identifier: 'welcome_home'
+        identifier: "welcome_home"
         actions:
-          - identifier: 'DISABLE_SECURITY'
-            title: 'Yes'
-            activationMode: 'background'
+          - identifier: "DISABLE_SECURITY"
+            title: "Yes"
+            activationMode: "background"
             authenticationRequired: yes
             destructive: yes
-            behavior: 'default'
+            behavior: "default"
 
 telegram_bot:
   - platform: broadcast
     api_key: !secret telegram_apikey
     allowed_chat_ids:
       - !secret telegram_chatid
-
 # influxdb:
 #  host: 192.168.1.125
 #  include:

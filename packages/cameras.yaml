@@ -9,7 +9,7 @@
 homeassistant:
 
 #
-# The camera url format in secrets.yaml would look like this: 
+# The camera url format in secrets.yaml would look like this:
 # frontdoor_camera_url: http://username:password@192.168.xxx.xxx/ISAPI/Streaming/channels/101/picture
 #
 camera:
@@ -74,14 +74,13 @@ camera:
     file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_latest.jpg"
 
 binary_sensor:
-
   - platform: hikvision
     name: Frontdoor Camera
     ssl: false
     host: !secret frontdoor_camera_ip
     username: !secret camera_username
     password: !secret camera_password
-    
+
   - platform: hikvision
     name: Driveway Camera
     ssl: false
@@ -134,7 +133,7 @@ rest_command:
     username: !secret camera_username
     password: !secret camera_password
     method: PUT
-    content_type: 'text/xml'
+    content_type: "text/xml"
     payload: >-
       <?xml version="1.0" encoding="UTF-8"?>
       <TextOverlay version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
@@ -148,7 +147,7 @@ rest_command:
     username: !secret camera_username
     password: !secret camera_password
     method: PUT
-    content_type: 'text/xml'
+    content_type: "text/xml"
     payload: >-
       <?xml version="1.0" encoding="UTF-8"?>
       <TextOverlay version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
@@ -162,7 +161,7 @@ rest_command:
     username: !secret camera_username
     password: !secret camera_password
     method: PUT
-    content_type: 'text/xml'
+    content_type: "text/xml"
     payload: >-
       <?xml version="1.0" encoding="UTF-8"?>
       <TextOverlay version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
@@ -176,7 +175,7 @@ rest_command:
     username: !secret camera_username
     password: !secret camera_password
     method: PUT
-    content_type: 'text/xml'
+    content_type: "text/xml"
     payload: >-
       <?xml version="1.0" encoding="UTF-8"?>
       <TextOverlay version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
@@ -186,20 +185,19 @@ rest_command:
       </TextOverlay>
 
 ###############################################################################
-#    _____           _       _       
-#   / ____|         (_)     | |      
-#  | (___   ___ _ __ _ _ __ | |_ ___ 
+#    _____           _       _
+#   / ____|         (_)     | |
+#  | (___   ___ _ __ _ _ __ | |_ ___
 #   \___ \ / __| '__| | '_ \| __/ __|
 #   ____) | (__| |  | | |_) | |_\__ \
 #  |_____/ \___|_|  |_| .__/ \__|___/
-#                     | |            
-#                     |_|            
+#                     | |
+#                     |_|
 #
 script:
-
-###############################################################################
-# Camera Text Overlay Script - sets a given text as an overlay on camera feed
-#
+  ###############################################################################
+  # Camera Text Overlay Script - sets a given text as an overlay on camera feed
+  #
   frontdoor_camera_text_overlay:
     sequence:
       - service: rest_command.set_frontdoor_camera_text_left_bottom
@@ -224,9 +222,9 @@ script:
         data_template:
           message: "{{text}}"
 
-###############################################################################
-# On-Demand camera stream to chromecast scripts
-#
+  ###############################################################################
+  # On-Demand camera stream to chromecast scripts
+  #
   stream_frontdoor_camera_to_chromecast:
     sequence:
       - condition: template
@@ -234,7 +232,7 @@ script:
       - service: script.stream2chromecast
         data_template:
           url: !secret frontdoor_camera_stream_url
-          name: 'frontyard'    
+          name: "frontyard"
 
   stream_driveway_camera_to_chromecast:
     sequence:
@@ -243,7 +241,7 @@ script:
       - service: script.stream2chromecast
         data_template:
           url: !secret driveway_camera_stream_url
-          name: 'driveway'
+          name: "driveway"
 
   stream_patio_camera_to_chromecast:
     sequence:
@@ -252,7 +250,7 @@ script:
       - service: script.stream2chromecast
         data_template:
           url: !secret patio_camera_stream_url
-          name: 'patio'
+          name: "patio"
 
   stream_playarea_camera_to_chromecast:
     sequence:
@@ -261,14 +259,14 @@ script:
       - service: script.stream2chromecast
         data_template:
           url: !secret playarea_camera_stream_url
-          name: 'playarea'
+          name: "playarea"
 
-###############################################################################
-# Stream2Chromecast script streams a given URL to Chromecast
-# But before it streams, it turns ON the media player if it is OFF, and after
-# streaming the URL, it saves the current stream name
-# BY calling media_player.turn_off, it forces Chromecast stream onto be active
-# on TV as soon as it turns ON TV
+  ###############################################################################
+  # Stream2Chromecast script streams a given URL to Chromecast
+  # But before it streams, it turns ON the media player if it is OFF, and after
+  # streaming the URL, it saves the current stream name
+  # BY calling media_player.turn_off, it forces Chromecast stream onto be active
+  # on TV as soon as it turns ON TV
   stream2chromecast:
     sequence:
       - condition: template
@@ -284,36 +282,35 @@ script:
           value: "{{ name }}"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-#
-# Scan front door and driveway cameras when motion detected
-# if the garage doors are open, scan garage cameras as well
-#
+  #
+  # Scan front door and driveway cameras when motion detected
+  # if the garage doors are open, scan garage cameras as well
+  #
   - alias: Scan Frontdoor Camera On Motion
     initial_state: true
     hide_entity: false
     trigger:
-     - platform: state
-       entity_id:
-         - binary_sensor.motion_sensor_158d00024ee084
-       to: 'on'
+      - platform: state
+        entity_id:
+          - binary_sensor.motion_sensor_158d00024ee084
+        to: "on"
     action:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret frontdoor_camera_stream_url
-          name: 'frontyard'
+          name: "frontyard"
       - condition: template
         value_template: "{{ states('alarm_control_panel.simplisafe') == 'armed_home' or states('alarm_control_panel.simplisafe') == 'armed_away' }}"
       - service: image_processing.scan
@@ -345,7 +342,7 @@ automation:
               {%- endfor -%}
             {{ " detected in the front yard."  }}
             {%- endif -%}
-          greeting: 'no'
+          greeting: "no"
       - service: notify.notify_smtp
         data_template:
           title: 'Front door motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
@@ -375,25 +372,25 @@ automation:
       - service: image_processing.scan
         data_template:
           entity_id: image_processing.tensorflow_garage_camera
-#
-# Scan driveway and frontdoor cameras when motion detected
-# if the garage doors are open, scan garage cameras as well
-#
+  #
+  # Scan driveway and frontdoor cameras when motion detected
+  # if the garage doors are open, scan garage cameras as well
+  #
   - alias: Scan Driveway Camera When Motion
     initial_state: true
     hide_entity: false
     trigger:
-     - platform: state
-       entity_id:
-         - binary_sensor.motion_sensor_158d00024e57fb
-       to: 'on'
+      - platform: state
+        entity_id:
+          - binary_sensor.motion_sensor_158d00024e57fb
+        to: "on"
     action:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret driveway_camera_stream_url
-          name: 'driveway'
+          name: "driveway"
       - condition: template
         value_template: "{{ states('alarm_control_panel.simplisafe') == 'armed_home' or states('alarm_control_panel.simplisafe') == 'armed_away' }}"
       - service: image_processing.scan
@@ -455,18 +452,18 @@ automation:
         data_template:
           entity_id: image_processing.tensorflow_garage_camera
 
-#
-# When motion detected in garage, scan garage camera
-# If any of the garage doors are open, scan front door, driveway as well!
-#
+  #
+  # When motion detected in garage, scan garage camera
+  # If any of the garage doors are open, scan front door, driveway as well!
+  #
   - alias: Scan Garage Camera When Motion
     initial_state: true
     hide_entity: false
     trigger:
-     - platform: state
-       entity_id:
-         - binary_sensor.motion_sensor_158d000272bf48
-       to: 'on'
+      - platform: state
+        entity_id:
+          - binary_sensor.motion_sensor_158d000272bf48
+        to: "on"
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
@@ -500,7 +497,7 @@ automation:
             {% endif %}
           {% else %}
             false
-          {% endif %}          
+          {% endif %}
       - service: script.voice_notify
         data_template:
           message: >-
@@ -531,24 +528,24 @@ automation:
           data:
             images:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_latest.jpg"
-#
-# When motion detected in the backyard, scan both cameras
-#
+  #
+  # When motion detected in the backyard, scan both cameras
+  #
   - alias: Scan Backyard Camera When Motion
     initial_state: true
     hide_entity: false
     trigger:
-     - platform: state
-       entity_id:
-         - binary_sensor.motion_sensor_158d00024e842c
-       to: 'on'
+      - platform: state
+        entity_id:
+          - binary_sensor.motion_sensor_158d00024e842c
+        to: "on"
     action:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
       - service: script.stream2chromecast
         data_template:
           url: !secret playarea_camera_stream_url
-          name: 'backyard'
+          name: "backyard"
       - condition: template
         value_template: "{{ states('alarm_control_panel.simplisafe') == 'armed_home' or states('alarm_control_panel.simplisafe') == 'armed_away' }}"
       - service: image_processing.scan
@@ -600,46 +597,46 @@ automation:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_latest.jpg"
               - "/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_latest.jpg"
 
-# Before you think this code is crazy, here is an explanation.
-#
-# I have a xiaomi  aqara  PIR   motion  sensor  near  the  front  door, and 
-# when it triggers, I capture  photo  from  the  camera,  save  it  locally
-# using  last_triggered  date  and   time  as  filename... then  send  that 
-# image to my email as an attacment.
-#
-# In the  action, I have  multiple   services I am calling,  and one service
-# creates  file,  and  I  needed  that   file  name  in  the  second service. 
-# Since passing variables/info  between   the  services  within  an  action,
-# is not  possible,  I generate  the file  name  based  on  the automation's 
-# last_triggered  date. Since that info is same   across  all  the  services
-# within the automation, I now can access/use the  same file name everywhere!
-#
-# I only  send  iOS notifications when I am home, as my HA is not exposed to 
-# Internet, &  I  can't see my camera  unless I login to my vpn on my device. 
-# That's why you  see  the condition  right above iOS  notification  service.
-#
-# Make  sure  you add  the path to white_list  in the configuration.yaml file.
-# If front  door is  open, wait  for a  couple  of seconds, before taking pic!
-#
+  # Before you think this code is crazy, here is an explanation.
+  #
+  # I have a xiaomi  aqara  PIR   motion  sensor  near  the  front  door, and
+  # when it triggers, I capture  photo  from  the  camera,  save  it  locally
+  # using  last_triggered  date  and   time  as  filename... then  send  that
+  # image to my email as an attacment.
+  #
+  # In the  action, I have  multiple   services I am calling,  and one service
+  # creates  file,  and  I  needed  that   file  name  in  the  second service.
+  # Since passing variables/info  between   the  services  within  an  action,
+  # is not  possible,  I generate  the file  name  based  on  the automation's
+  # last_triggered  date. Since that info is same   across  all  the  services
+  # within the automation, I now can access/use the  same file name everywhere!
+  #
+  # I only  send  iOS notifications when I am home, as my HA is not exposed to
+  # Internet, &  I  can't see my camera  unless I login to my vpn on my device.
+  # That's why you  see  the condition  right above iOS  notification  service.
+  #
+  # Make  sure  you add  the path to white_list  in the configuration.yaml file.
+  # If front  door is  open, wait  for a  couple  of seconds, before taking pic!
+  #
 
-# I could have combined all the 3 automations into one, but if all the motion
-# sensors are triggered at the same time, the automation would only fire once, 
-# and the code gets ugly big and unmanageable. 3 simple automations is better!
+  # I could have combined all the 3 automations into one, but if all the motion
+  # sensors are triggered at the same time, the automation would only fire once,
+  # and the code gets ugly big and unmanageable. 3 simple automations is better!
 
-###############################################################################
-#  ______               _      _                  
-# |  ____|             | |    | |                 
-# | |__ _ __ ___  _ __ | |_ __| | ___   ___  _ __ 
-# |  __| '__/ _ \| '_ \| __/ _` |/ _ \ / _ \| '__|
-# | |  | | | (_) | | | | || (_| | (_) | (_) | |   
-# |_|  |_|  \___/|_| |_|\__\__,_|\___/ \___/|_|                                
-                        
+  ###############################################################################
+  #  ______               _      _
+  # |  ____|             | |    | |
+  # | |__ _ __ ___  _ __ | |_ __| | ___   ___  _ __
+  # |  __| '__/ _ \| '_ \| __/ _` |/ _ \ / _ \| '__|
+  # | |  | | | (_) | | | | || (_| | (_) | (_) | |
+  # |_|  |_|  \___/|_| |_|\__\__,_|\___/ \___/|_|
+
   - alias: Notify Frontdoor Camera Snapshots
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.motion_sensor_158d00024ee084
-      to: 'on'
+      to: "on"
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
@@ -650,38 +647,41 @@ automation:
       - service: camera.snapshot
         data_template:
           entity_id: "camera.frontdoor_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  
-                     (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.driveway_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  
-                     (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  
-                      (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                      .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: notify.notify_smtp
         data_template:
           title: 'Front door motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: 'Motion detected at the front door on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") -}}. Please see the images below.'
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  
-                   (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                   .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  
-                   (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                   .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  
-                   (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                   .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - condition: template
-        value_template: "{{ states.device_tracker.suresh_suresh.state == 'home' }}"
+        value_template: "{{ states.device_tracker.life360_suresh.state == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Front Door camera!"
@@ -693,21 +693,21 @@ automation:
               url: "{{ states.camera.frontdoor_camera.attributes.entity_picture }}"
               content-type: jpg
 
-# ###############################################################################
-# #  _____       _                               
-# # |  __ \     (_)                              
-# # | |  | |_ __ ___   _______      ____ _ _   _ 
-# # | |  | | '__| \ \ / / _ \ \ /\ / / _` | | | |
-# # | |__| | |  | |\ V /  __/\ V  V / (_| | |_| |
-# # |_____/|_|  |_| \_/ \___| \_/\_/ \__,_|\__, |
-# #                                         __/ |
-# #                                        |___/                                 
+  # ###############################################################################
+  # #  _____       _
+  # # |  __ \     (_)
+  # # | |  | |_ __ ___   _______      ____ _ _   _
+  # # | |  | | '__| \ \ / / _ \ \ /\ / / _` | | | |
+  # # | |__| | |  | |\ V /  __/\ V  V / (_| | |_| |
+  # # |_____/|_|  |_| \_/ \___| \_/\_/ \__,_|\__, |
+  # #                                         __/ |
+  # #                                        |___/
   - alias: Notify Driveway Camera Snapshots
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.motion_sensor_158d00024e57fb
-      to: 'on'
+      to: "on"
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
@@ -717,38 +717,41 @@ automation:
       - service: camera.snapshot
         data_template:
           entity_id: "camera.frontdoor_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~ 
-                     (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+            (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.driveway_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~ 
-                    (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
-                    .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+            (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~ 
-                     (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+            (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: notify.notify_smtp
         data_template:
           title: 'Driveway motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: 'Motion detected at the Driveway on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~ 
-                     (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  
-                     (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  
-                     (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+                (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+                (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+                (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - condition: template
-        value_template: "{{ states.device_tracker.suresh_suresh.state == 'home' }}"
+        value_template: "{{ states.device_tracker.life360_suresh.state == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Driveway camera!"
@@ -760,21 +763,21 @@ automation:
               url: "{{ states.camera.driveway_camera.attributes.entity_picture }}"
               content-type: jpg
 
-# ###############################################################################
-# #  ____             _                        _ 
-# # |  _ \           | |                      | |
-# # | |_) | __ _  ___| | ___   _  __ _ _ __ __| |
-# # |  _ < / _` |/ __| |/ / | | |/ _` | '__/ _` |
-# # | |_) | (_| | (__|   <| |_| | (_| | | | (_| |
-# # |____/ \__,_|\___|_|\_\\__, |\__,_|_|  \__,_|
-# #                         __/ |                
-# #                        |___/                                                 
+  # ###############################################################################
+  # #  ____             _                        _
+  # # |  _ \           | |                      | |
+  # # | |_) | __ _  ___| | ___   _  __ _ _ __ __| |
+  # # |  _ < / _` |/ __| |/ / | | |/ _` | '__/ _` |
+  # # | |_) | (_| | (__|   <| |_| | (_| | | | (_| |
+  # # |____/ \__,_|\___|_|\_\\__, |\__,_|_|  \__,_|
+  # #                         __/ |
+  # #                        |___/
   - alias: Notify Backyard Camera Snapshots
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.motion_sensor_158d00024e842c
-      to: 'on'
+      to: "on"
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
@@ -795,29 +798,31 @@ automation:
       - service: camera.snapshot
         data_template:
           entity_id: "camera.patio_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_' ~  
-                     (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_' ~
+            (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.playarea_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_' ~  
-                      (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
-                      .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_' ~
+            (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: notify.notify_smtp
         data_template:
           title: 'Backyard motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: 'Motion detected in the Backyard on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_' ~  
-                   (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
-                   .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_' ~  
-                   (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
-                   .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_' ~
+                (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_' ~
+                (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - condition: template
-        value_template: "{{ states.device_tracker.suresh_suresh.state == 'home' }}"
+        value_template: "{{ states.device_tracker.life360_suresh.state == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Patio camera!"
@@ -829,26 +834,25 @@ automation:
               url: "{{ states.camera.patio_camera.attributes.entity_picture }}"
               content-type: jpg
 
-
-###############################################################################
-#   _______        _      ____                 _             
-#  |__   __|      | |    / __ \               | |            
-#     | | _____  _| |_  | |  | |_   _____ _ __| | __ _ _   _ 
-#     | |/ _ \ \/ / __| | |  | \ \ / / _ \ '__| |/ _` | | | |
-#     | |  __/>  <| |_  | |__| |\ V /  __/ |  | | (_| | |_| |
-#     |_|\___/_/\_\\__|  \____/  \_/ \___|_|  |_|\__,_|\__, |
-#                                                       __/ |
-#                                                      |___/ 
-#
-# Show latest weather information on camera (refresh every 2 minutes), but only
-# do it if the last updated is more than 2 minutes; In case some other automation
-# sets a new text overlay, make sure it stays for at least 2 minutes before 
-# replacing with the weather information
-#
+  ###############################################################################
+  #   _______        _      ____                 _
+  #  |__   __|      | |    / __ \               | |
+  #     | | _____  _| |_  | |  | |_   _____ _ __| | __ _ _   _
+  #     | |/ _ \ \/ / __| | |  | \ \ / / _ \ '__| |/ _` | | | |
+  #     | |  __/>  <| |_  | |__| |\ V /  __/ |  | | (_| | |_| |
+  #     |_|\___/_/\_\\__|  \____/  \_/ \___|_|  |_|\__,_|\__, |
+  #                                                       __/ |
+  #                                                      |___/
+  #
+  # Show latest weather information on camera (refresh every 2 minutes), but only
+  # do it if the last updated is more than 2 minutes; In case some other automation
+  # sets a new text overlay, make sure it stays for at least 2 minutes before
+  # replacing with the weather information
+  #
   - alias: Show Outdoor Temperature on Camera
     trigger:
       - platform: time_pattern
-        minutes: '/2'
+        minutes: "/2"
     condition:
       - condition: template
         value_template: >
@@ -859,57 +863,57 @@ automation:
             true
           {% endif %}
     action:
-    - service: script.frontdoor_camera_text_overlay
-      data_template:
-        text: >
-          {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
-                     states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-          {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
-          {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
-    - service: script.driveway_camera_text_overlay
-      data_template:
-        text: >
-          {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
-                     states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-          {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
-          {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
-    - service: script.playarea_camera_text_overlay
-      data_template:
-        text: >
-          {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
-                     states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-          {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
-          {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
-    - service: script.patio_camera_text_overlay
-      data_template:
-        text: >
-          {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
-                     states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-          {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
-          {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
+      - service: script.frontdoor_camera_text_overlay
+        data_template:
+          text: >
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+                       states('alarm_control_panel.simplisafe') == 'armed_away' -}}
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
+      - service: script.driveway_camera_text_overlay
+        data_template:
+          text: >
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+                       states('alarm_control_panel.simplisafe') == 'armed_away' -}}
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
+      - service: script.playarea_camera_text_overlay
+        data_template:
+          text: >
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+                       states('alarm_control_panel.simplisafe') == 'armed_away' -}}
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
+      - service: script.patio_camera_text_overlay
+        data_template:
+          text: >
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+                       states('alarm_control_panel.simplisafe') == 'armed_away' -}}
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
 
-###############################################################################
-#    _____ _                                            _   
-#   / ____| |                                          | |  
-#  | |    | |__  _ __ ___  _ __ ___   ___  ___ __ _ ___| |_ 
-#  | |    | '_ \| '__/ _ \| '_ ` _ \ / _ \/ __/ _` / __| __|
-#  | |____| | | | | | (_) | | | | | |  __/ (_| (_| \__ \ |_ 
-#   \_____|_| |_|_|  \___/|_| |_| |_|\___|\___\__,_|___/\__|
-#
-#
-# Automation to keep Chromecast ON always
-# When chromecase goes into screen saver mode, the status becomes OFF
-# This automation will turn it back on if it is OFF for more than 30 seconds
+  ###############################################################################
+  #    _____ _                                            _
+  #   / ____| |                                          | |
+  #  | |    | |__  _ __ ___  _ __ ___   ___  ___ __ _ ___| |_
+  #  | |    | '_ \| '__/ _ \| '_ ` _ \ / _ \/ __/ _` / __| __|
+  #  | |____| | | | | | (_) | | | | | |  __/ (_| (_| \__ \ |_
+  #   \_____|_| |_|_|  \___/|_| |_| |_|\___|\___\__,_|___/\__|
+  #
+  #
+  # Automation to keep Chromecast ON always
+  # When chromecase goes into screen saver mode, the status becomes OFF
+  # This automation will turn it back on if it is OFF for more than 30 seconds
   - alias: Keep Chromecast On
     trigger:
       - platform: state
         entity_id: media_player.attic_tv
-        to: 'off'
+        to: "off"
         for:
           seconds: 30
       - platform: state
         entity_id: media_player.attic_tv
-        to: 'idle'
+        to: "idle"
         for:
           seconds: 30
     action:
@@ -925,24 +929,24 @@ automation:
           entity_id: input_label.current_stream
           value: "frontyard"
 
-# Motion can be detected anywhere around the house, but the main focus is "Frontyard".
-# By default, the "frontyard" camera stream is played on Chromecast, but when motion 
-# detected anywhere  else,  it  changes  the  stream  to  that  corresponding camera.
-# This automation restores back to "default" (frontyard) after 15 seconds!
-#
+  # Motion can be detected anywhere around the house, but the main focus is "Frontyard".
+  # By default, the "frontyard" camera stream is played on Chromecast, but when motion
+  # detected anywhere  else,  it  changes  the  stream  to  that  corresponding camera.
+  # This automation restores back to "default" (frontyard) after 15 seconds!
+  #
   - alias: Restore Frontyard Stream
     trigger:
       - platform: time_pattern
-        seconds: '/5'
+        seconds: "/5"
     condition:
       - condition: template
         value_template: "{{ states('input_label.current_stream') != 'frontyard' }}"
       - condition: template
-        value_template: "{{ (as_timestamp(now()) - 
-                            as_timestamp(states.input_label.current_stream.last_updated)) 
-                            | int > 15 }}"
+        value_template: "{{ (as_timestamp(now()) -
+          as_timestamp(states.input_label.current_stream.last_updated))
+          | int > 15 }}"
     action:
       - service: script.stream2chromecast
         data_template:
           url: !secret frontdoor_camera_stream_url
-          name: 'frontyard'
+          name: "frontyard"

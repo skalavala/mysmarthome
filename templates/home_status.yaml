@@ -1,4 +1,4 @@
- >
+>
   {%- macro alert_battery_levels() -%}
     {%- for item in states if 'battery_level' in item.attributes and item.attributes.battery_level | int > 0 and item.attributes.battery_level | float <= 10.0 %}
       {{- item.attributes.friendly_name}} battery is less than 10 percent.
@@ -162,7 +162,7 @@
   {# Drone Flying Weather #}
   {%- macro drone_weather() -%}
   {% if states.binary_sensor.good_weather_to_fly_drones.state| lower == "on" and 
-        states.device_tracker.suresh_suresh.state == "home" and 
+        states.device_tracker.life360_suresh.state == "home" and 
         states.sun.sun.state == "above_horizon" %}
     It is now a great weather to fly drone outside.
   {% endif %}
@@ -206,6 +206,6 @@
     {{ birthday_countdown("Srinika", states.input_label.srinika_birthday_days2go.state | int ) }}
     {{ birthday_countdown("Hasika", states.input_label.hasika_birthday_days2go.state | int ) }}
   {%- endmacro -%}
-  
+
   {# Call the macro  #}
   {{- cleanup(mother_of_all_macros()) -}}

@@ -6,10 +6,9 @@
 ###############################################################################
 homeassistant:
   customize:
-  
     sun.sun:
-      friendly_name: Sun 
-     
+      friendly_name: Sun
+
     sensor.cold_flu:
       friendly_name: Cold and Flu
       hidden: true
@@ -25,7 +24,7 @@ homeassistant:
       friendly_name: Pollen Level
       homebridge_hidden: true
     sensor.air_quality:
-      friendly_name: Air Quality    
+      friendly_name: Air Quality
       homebridge_hidden: true
 
     input_boolean.rain_alert:
@@ -92,8 +91,8 @@ input_boolean:
 
 #
 # Good Weather To Fly Drone?
-# Criteria: 
-#   - Wind Speed must be less than 12 mph 
+# Criteria:
+#   - Wind Speed must be less than 12 mph
 #   - No Rain, or Snow
 #   - No Thunderstorms, lightning
 #   - Visiblity must be more than 2 miles
@@ -124,18 +123,18 @@ weather:
 
 openuv:
   api_key: !secret openuv_apikey
-  
-iqvia:
-  zip_code: !secret zip_code
-  monitored_conditions:
-    - allergy_average_forecasted
-    - allergy_index_today
-    - allergy_index_tomorrow
-    - asthma_average_forecasted
-    - asthma_index_today
-    - asthma_index_tomorrow
-    - disease_average_forecasted
-    - disease_index_today
+
+# iqvia:
+#   zip_code: !secret zip_code
+#   monitored_conditions:
+#     - allergy_average_forecasted
+#     - allergy_index_today
+#     - allergy_index_tomorrow
+#     - asthma_average_forecasted
+#     - asthma_index_today
+#     - asthma_index_tomorrow
+#     - disease_average_forecasted
+#     - disease_index_today
 
 sensor:
   - platform: darksky
@@ -177,22 +176,21 @@ sensor:
     value_template: "{{value_json.Location.periods[0].Index}}"
     scan_interval: 21600
     headers:
-      Referer: "https://www.pollen.com"      
+      Referer: "https://www.pollen.com"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
-          
-automation:
 
+automation:
   # Script to alert when enjoyable weather is outside
-  # For me, enjoyable is: 
+  # For me, enjoyable is:
   #      1. Must be above 70 Degrees F
   #      2. Alert me only during day time
   #
@@ -207,11 +205,11 @@ automation:
         value_template: '{{ states.input_boolean.enjoyable_weather_reminders.state == "on" }}'
       - condition: state
         entity_id: sun.sun
-        state: 'above_horizon'
+        state: "above_horizon"
       - condition: template
-        value_template: '{% if states.sensor.dark_sky_apparent_temperature.state | round > 70 %} true {% else %} false {% endif %}'
+        value_template: "{% if states.sensor.dark_sky_apparent_temperature.state | round > 70 %} true {% else %} false {% endif %}"
       - condition: template
-        value_template: '{% if states.sensor.dark_sky_wind_speed.state | round < 8 %} false {% else %} true {% endif %}'
+        value_template: "{% if states.sensor.dark_sky_wind_speed.state | round < 8 %} false {% else %} true {% endif %}"
     action:
       - service: script.notify_me
         data_template:
@@ -250,15 +248,15 @@ automation:
     trigger:
       - platform: state
         entity_id:
-        - input_boolean.nice_breeze_alert
-        - input_boolean.moderate_wind_alert
-        - input_boolean.heavy_wind_alert
-        - input_boolean.super_heavy_wind_alert
-        - input_boolean.hurricane_wind_alert
-        - input_boolean.rain_alert
-        - input_boolean.snow_alert
-        - input_boolean.sleet_alert
-        to: 'on'
+          - input_boolean.nice_breeze_alert
+          - input_boolean.moderate_wind_alert
+          - input_boolean.heavy_wind_alert
+          - input_boolean.super_heavy_wind_alert
+          - input_boolean.hurricane_wind_alert
+          - input_boolean.rain_alert
+          - input_boolean.snow_alert
+          - input_boolean.sleet_alert
+        to: "on"
         for:
           minutes: 15
     action:
@@ -300,14 +298,14 @@ automation:
         value_template: '{{ trigger.to_state.state | lower == "rain" }}'
       - condition: state
         entity_id: group.all_devices
-        state: 'home'
+        state: "home"
       - condition: state
         entity_id: sun.sun
-        state: 'above_horizon'        
+        state: "above_horizon"
       - condition: template
         value_template: '{% if trigger.to_state.state == "unknown" or trigger.to_state.state == "" %} false {% else %} true {% endif %}'
       - condition: template
-        value_template: '{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}'
+        value_template: "{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}"
     action:
       - service: script.notify_me
         data_template:
@@ -333,14 +331,14 @@ automation:
         value_template: '{{ states.sensor.season.state | lower == "winter" }}'
       - condition: state
         entity_id: group.all_devices
-        state: 'home'
+        state: "home"
       - condition: state
         entity_id: sun.sun
-        state: 'above_horizon'        
+        state: "above_horizon"
       - condition: template
         value_template: '{% if trigger.to_state.state == "unknown" or trigger.to_state.state == "" %} false {% else %} true {% endif %}'
       - condition: template
-        value_template: '{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}'
+        value_template: "{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}"
     action:
       - service: script.notify_me
         data_template:
@@ -358,21 +356,12 @@ automation:
                input_boolean.sleet_alert
             {%- endif %}
 
-  - alias: Update OpenUV every 30 minutes during the daytime
+  - alias: Update OpenUV every hour (24 of 50 calls per day)
     trigger:
       platform: time_pattern
-      minutes: "/30"
-      seconds: 00
-    condition:
-      condition: and
-      conditions:
-        - condition: sun
-          after: sunrise
-        - condition: sun
-          before: sunset
+      minutes: "/60"
     action:
       service: openuv.update_data
-
 # Weather sensors - TBD, too lazy to create them
 #
 # {{ states.sun.sun.state }}

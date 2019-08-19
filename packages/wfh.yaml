@@ -2,7 +2,7 @@
 #   @author         :   Mahasri Kalavala
 #   @date           :   11/07/2017
 #   @package        :   Work From Home (wfh)
-#   @description    :   Reminds me to Get Up and Walk around the house once 
+#   @description    :   Reminds me to Get Up and Walk around the house once
 #                       every 30 minutes during Work From Home days
 ###############################################################################
 homeassistant:
@@ -12,50 +12,49 @@ homeassistant:
 
 timer:
   wfh_timer:
-    duration: '00:30:00'
+    duration: "00:30:00"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-# Start WFH timer if Suresh is HOME during weekdays between 10 AM and 5 PM
-###############################################################################
+  # Start WFH timer if Suresh is HOME during weekdays between 10 AM and 5 PM
+  ###############################################################################
   - alias: WFH Timer Start
     initial_state: false
     trigger:
       - platform: time_pattern
-        minutes: '/5'
+        minutes: "/5"
         seconds: 00
     condition:
       - condition: template
         value_template: '{{ states.binary_sensor.workday_sensor.state == "on" }}'
       - condition: template
-        value_template: '{{ now().hour|int >= 10 and now().hour|int < 17 }}'
+        value_template: "{{ now().hour|int >= 10 and now().hour|int < 17 }}"
       - condition: template
         value_template: '{{ states.timer.wfh_timer.state == "idle" }}'
       - condition: template
-        value_template: '{{ states.device_tracker.suresh_suresh.state == "home" }}'
+        value_template: '{{ states.device_tracker.life360_suresh.state == "home" }}'
     action:
       - service: timer.start
         entity_id: timer.wfh_timer
 
-# Timer elapsed... Remind Suresh to take a quick walk
-# Restart the timer ONLY if the time is betwen office hours (10 AM and 5 PM)
-###############################################################################
+  # Timer elapsed... Remind Suresh to take a quick walk
+  # Restart the timer ONLY if the time is betwen office hours (10 AM and 5 PM)
+  ###############################################################################
   - alias: Timer Elapsed - Take a walk
     initial_state: false
     trigger:
       - platform: event
         event_type: timer.finished
-        event_data: 
+        event_data:
           entity_id: timer.wfh_timer
     action:
       - service_template: >
@@ -66,23 +65,23 @@ automation:
           {% endif %}
         entity_id: timer.wfh_timer
       - condition: template
-        value_template: '{{ now().hour|int >= 10 and now().hour|int < 17 }}'
+        value_template: "{{ now().hour|int >= 10 and now().hour|int < 17 }}"
       - service: script.voice_notify
         data_template:
           message: "It is time to stand up and walk around!"
 
-# Cancel timer (if active) When Suresh left home
-###############################################################################
+  # Cancel timer (if active) When Suresh left home
+  ###############################################################################
   - alias: Cancel WFH Timer When Suresh Leaves Home
     initial_state: false
     trigger:
       - platform: zone
-        entity_id: device_tracker.suresh_suresh
+        entity_id: device_tracker.life360_suresh
         zone: zone.home
         event: leave
     condition:
       - condition: template
-        value_template: '{{ states.timer.wfh_timer.state == "active" }}'    
+        value_template: '{{ states.timer.wfh_timer.state == "active" }}'
     action:
       - service: timer.cancel
         entity_id: timer.wfh_timer
