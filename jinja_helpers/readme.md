@@ -25,24 +25,26 @@ $ python3
 'hello world!'
 >>>
 ```
+
 ## Basics of Jinja
 
 ### Basic String Manipulation
+
 `{{ "hello this is a test" | upper }}` returns `HELLO THIS IS A TEST`
 
 `{{ "HELLO THIS IS A TEST" | lower }}` returns `hello this is a test`
 
 `{{ "hello this is a test" | capitalize }}` returns `Hello this is a test`
 
-`{{ "hello this is a test" | title }}`  returns `Hello This Is A Test`
+`{{ "hello this is a test" | title }}` returns `Hello This Is A Test`
 
 `{{ "Hello & World" | safe }}` returns `Hello & World`
 
 `{{ "Hello & World" | escape }}` returns `Hello &amp; World`
 
-`{{ "Hello & World" | length }}`  returns `13`
+`{{ "Hello & World" | length }}` returns `13`
 
-`{{ "Hello & World" | count }}`  returns `13`
+`{{ "Hello & World" | count }}` returns `13`
 
 `{{ " Hello & World " | trim}}` returns `Hello & World` by removing spaces before and after
 
@@ -51,6 +53,7 @@ $ python3
 ## Setting Variables
 
 To have a varibale with a name `val` and with value `hello`, use the following:
+
 ```
 {% set val = "hello" %}
 ```
@@ -58,13 +61,16 @@ To have a varibale with a name `val` and with value `hello`, use the following:
 ### Loops and Loop Indexes
 
 Iterate/Loop thru an array in reverse order
+
 ```
 {% set values = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"] %}
 {% for item in values %}
 {{ values[loop.revindex] }}
 {%- endfor %}
 ```
+
 prints the following:
+
 ```
 k
 j
@@ -77,22 +83,26 @@ d
 c
 b
 ```
+
 Other noteworthy loop properties you may want to know:
+
 ```
 loop.index0 - zero based index of elements in a loop
 loop.revindex - reverse indexing of loop with index starting at one
-loop.revindex0 - reverse indenxing of loop with index starting at zero 
+loop.revindex0 - reverse indenxing of loop with index starting at zero
 loop.first - to check if the current index in the loop is the first one
 loop.last - to check if the current index in the loop is the last item
 loop.length - loop length
 ```
+
 ### Maintaining state in a loop
 
-The loops in Jinja are different from other programming languages, where you can't maintain state. For ex: you can define a variable, and if you try to increment, decrement or change the value in a loop, and after the loop, you will notice the value hasn't changed. Reason being, there is something called `scoping` in Jinja. You can read more about scoping on Jinja's official documentation, and if you are looking for a quick way to do this, you need to use `namespace`. With the namespace, you can create a scope and update the variable from within the loops.  Here is how you define a namespace with a variable in it, called `numberFiveFound` and you can set the default value by assigning directly as follows.
+The loops in Jinja are different from other programming languages, where you can't maintain state. For ex: you can define a variable, and if you try to increment, decrement or change the value in a loop, and after the loop, you will notice the value hasn't changed. Reason being, there is something called `scoping` in Jinja. You can read more about scoping on Jinja's official documentation, and if you are looking for a quick way to do this, you need to use `namespace`. With the namespace, you can create a scope and update the variable from within the loops. Here is how you define a namespace with a variable in it, called `numberFiveFound` and you can set the default value by assigning directly as follows.
 
 ```
 {% set ns = namespace(numberFiveFound=false) %}
 ```
+
 You can then easily change the value from a loop and still able to access the updated value as follows:
 
 ```
@@ -116,6 +126,7 @@ If you do not use namespace and try to do the same thing using simple variables,
 {% endfor %}
 {{ numberFiveFound }}
 ```
+
 It will return `False` even though the number "5" exists in the loop.
 
 ## 1. To see which entities are exposed to your alexa platform, run the following script
@@ -138,7 +149,7 @@ The following entities are exposed to Alexa platform via `emulated_hue_hidden`:
 
 ```
 -------------------------------------------------- ------------------------------
-Entity ID                                          Name                          
+Entity ID                                          Name
 -------------------------------------------------- ------------------------------
 input_boolean.do_not_disturb                       Do Not Disturb
 input_boolean.home_assistant_restart               Home Assistant
@@ -152,7 +163,7 @@ switch.wemoswitch1                                 Front Room Light
 -------------------------------------------------- ------------------------------
 ```
 
-## 2. To generate template sensors based on the device_trackers,  run the following script and copy the output and use it in your code
+## 2. To generate template sensors based on the device_trackers, run the following script and copy the output and use it in your code
 
 Copy the output of the code in your dev-templates, and use it in your code directly
 
@@ -182,12 +193,12 @@ Copy the output of the code in your dev-templates, and use it in your code direc
       friendly_name: "Srinika"
       icon_template: "{% if is_state('device_tracker.srinika_srinika', 'home') %}mdi:check-circle{% else %}mdi:alert-circle{% endif %}"
 
-    ...more entries!    
+    ...more entries!
 ```
 
 ## 3. Group & Entities:
 
-To see the list of `groups`,  and the entities that belong to the group, run this script
+To see the list of `groups`, and the entities that belong to the group, run this script
 
 ```
 {% for group in states.group%}
@@ -236,8 +247,8 @@ binary_sensor.ecolink_door_sensor_sensor_2
   {{ "Last Updated".ljust(50) }}: {{ item.last_updated}}
   {{ "Last Changed".ljust(50) }}: {{ item.last_changed}}
 {%- for attrib in item.attributes|sort() %}
-{%- if attrib is defined %} 
-  {{attrib.ljust(50)}}: {{ item.attributes[attrib] }} 
+{%- if attrib is defined %}
+  {{attrib.ljust(50)}}: {{ item.attributes[attrib] }}
 {%- endif %}
 {%- endfor %}
 {%- endfor %}
@@ -247,25 +258,25 @@ binary_sensor.ecolink_door_sensor_sensor_2
 
 ```
 __________________________________________________________________________________________
-automation.alert_low_battery_level_of_sensors     
+automation.alert_low_battery_level_of_sensors
   State                                             : on
   Domain                                            : automation
   Object ID                                         : alert_low_battery_level_of_sensors
   Last Updated                                      : 2017-09-14 00:19:00.697024+00:00
-  Last Changed                                      : 2017-09-14 00:19:00.697024+00:00 
-  friendly_name                                     : Alert Low Battery Level of Sensors 
-  icon                                              : mdi:arrow-right-drop-circle 
+  Last Changed                                      : 2017-09-14 00:19:00.697024+00:00
+  friendly_name                                     : Alert Low Battery Level of Sensors
+  icon                                              : mdi:arrow-right-drop-circle
   last_triggered                                    : None
 __________________________________________________________________________________________
-automation.alert_super_heavy_winds                
+automation.alert_super_heavy_winds
   State                                             : on
   Domain                                            : automation
   Object ID                                         : alert_super_heavy_winds
   Last Updated                                      : 2017-09-14 00:19:00.739659+00:00
-  Last Changed                                      : 2017-09-14 00:19:00.739659+00:00 
-  friendly_name                                     : Alert Super Heavy Winds 
-  hidden                                            : True 
-  icon                                              : mdi:arrow-right-drop-circle 
+  Last Changed                                      : 2017-09-14 00:19:00.739659+00:00
+  friendly_name                                     : Alert Super Heavy Winds
+  hidden                                            : True
+  icon                                              : mdi:arrow-right-drop-circle
   last_triggered                                    : None
 
   ...more entries!
@@ -298,7 +309,8 @@ Sample code that uses macros to convert temperature from Fahrenheit to Centigrad
 ```
 
 ## 5.a Humidex Calculation
-You can calculate the humidex based on Temperature and Relative Humidity using the following jinja macro
+
+You can calculate the humidex based on Temperature and Humidity using the following jinja macro
 
 ```
 {% macro humidex(T, H) %}
@@ -317,9 +329,24 @@ You can calculate the humidex based on Temperature and Relative Humidity using t
 
 The output of that would be `24.455823489173447`.
 
+## 5.b Heat Index Calculation
+
+You can calculate the heat index based on Temperature and Relative Humidity using the following jinja macro
+
+```
+{% macro heatindex(F, rh) %}
+{% set hIndex = -42.379 + 2.04901523*F + 10.14333127*rh - 0.22475541*F*rh - 6.83783*(10**-3)*F*F - 5.481717*(10**-2)*rh*rh + 1.22874*(10**-3)*F*F*rh + 8.5282*(10**-4)*F*rh*rh - 1.99*10**-6*F*F*rh*rh %}
+{{ hIndex }}
+{% endmacro %}
+
+{{ heatindex(85, 50) }}
+```
+
+The output of that would be `86.4593188`.
+
 ## 6. Trigger Data in Automations
 
-Ever wondered what trigger data is available for you when writing automations? Just copy the mqtt.publish service below 
+Ever wondered what trigger data is available for you when writing automations? Just copy the mqtt.publish service below
 and put it in **any** of your automation action section, and <b>it will dump all the attributes and information related to trigger, and state into your mqtt with a topic name "/dump/platform" </b>.
 
 Pre-requisite is to have MQTT configured in your Home Assistant. Use tools like `mqttfx` to browse mqtt data.
@@ -327,11 +354,11 @@ Pre-requisite is to have MQTT configured in your Home Assistant. Use tools like 
 Hope you find it useful!
 
 ```
-  - alias: Light Bulb State Change 
+  - alias: Light Bulb State Change
     trigger:
       platform: state
       entity_id: light.dinette
-    action:        
+    action:
       - service: mqtt.publish
         data_template:
           topic: '/dump/{{ trigger.platform }}'
@@ -346,44 +373,44 @@ Hope you find it useful!
               {{statePrefix ~ ".last_updated: "}} {{- stateObj.last_updated }}{{- "\n" -}}
               {{statePrefix ~ ".last_changed: "}} {{- stateObj.last_changed }}{{- "\n" -}}
               {%- for attrib in stateObj.attributes | sort() %}
-                {%- if attrib is defined -%} 
+                {%- if attrib is defined -%}
                 {{- statePrefix ~ ".attributes." ~ attrib ~ ": " -}} {{- stateObj.attributes[attrib] -}}
                 {{- "\n" -}}
                 {%- endif -%}
               {%- endfor -%}
             {%- endmacro -%}
-            
+
             {% set p = trigger.platform %}
             {{"trigger.platform: "}} {{ p }}{{- "\n" -}}
-            
+
             {%- if p == "mqtt" -%}
             {{"trigger.topic: "}} {{ trigger.topic }}{{- "\n" -}}
             {{"trigger.payload: "}} {{ trigger.payload }}{{- "\n" -}}
             {{"trigger.payload_json: "}} {{ trigger.payload_json }}{{- "\n" -}}
             {{"trigger.qos: "}} {{ trigger.qos }}{{- "\n" -}}
             {%- endif -%}
-            
+
             {%- if p == "event" or p == "sun" or p == "zone" -%}
             {{"trigger.event: "}} {{ trigger.event }}{{- "\n" -}}
             {%- endif -%}
-            
+
             {%- if p == "numeric_state" -%}
             {{"trigger.above: "}} {{ trigger.above }}{{- "\n" -}}
             {{"trigger.below: "}} {{trigger.below }}{{- "\n" -}}
             {%- endif -%}
-            
+
             {%- if p == "state" -%}
             {{"trigger.for: "}} {{ trigger.for }}{{- "\n" -}}
             {%- endif -%}
-            
+
             {%- if p == "time" -%}
             {{"trigger.now: "}} {{ trigger.now }}{{- "\n" -}}
             {%- endif -%}
-            
+
             {%- if p == "zone" -%}
             {{"trigger.zone: "}} {{ trigger.zone }}{{- "\n" -}}
             {%- endif -%}
-            
+
             {%- if p == "state" or p == "numeric_state" or p == "template" or p == "zone" -%}
             {{"trigger.entity_id: "}} {{ trigger.entity_id }}{{- "\n" -}}{{- "\n" -}}
             {{"trigger.from_state: "}} {{- "\n" -}}
@@ -391,7 +418,7 @@ Hope you find it useful!
             {{ dumpState("trigger.from_state", trigger.from_state) }} {{- "\n" -}}
             trigger.to_state:{{- "\n" -}}
             -----------------{{- "\n" -}}
-            {{ dumpState("trigger.to_state", trigger.to_state) }}            
+            {{ dumpState("trigger.to_state", trigger.to_state) }}
             {%- endif -%}
 ```
 
@@ -437,6 +464,7 @@ You can pick and choose which entity you want to get attributes by changing the 
 ## 8. Find out which zwave device checked in at when
 
 To find out when was the last time a zwave device has communicated with the controller, run the script below
+
 ```
 {%- macro zwave_check() -%}
 {% for item in states.zwave %}
@@ -460,6 +488,7 @@ Here are the devices that have checked in the last 10 minutes:
 {{ output }}
 {% endif %}
 ```
+
 ### Here is the output of the above script:
 
 ```
@@ -490,6 +519,7 @@ ZWave Stick                              - 8.82 minutes ago
 ```
 
 ## 9. Word Wrapping long text into multiple lines:
+
 To wrap text to a certain number of characters, use the following script:
 
 ```
@@ -500,6 +530,7 @@ To wrap text to a certain number of characters, use the following script:
 ```
 
 ### Here is the output of the above script:
+
 ```
 this is a long text. I mean it
 is a really really really long
@@ -533,6 +564,7 @@ Fun stuff...
 ```
 
 ### Here is the sample output of the above script... you may see a different output based on the components that are being used
+
 ```
 ['alarm_control_panel', 'automation', 'binary_sensor', 'calendar', 'camera', 'climate', 'device_tracker', 'group', 'input_boolean', 'input_datetime', 'input_label', 'input_number', 'input_select', 'input_text', 'light', 'media_player', 'proximity', 'script', 'sensor', 'sun', 'switch', 'timer', 'zone', 'zwave']
 ```
@@ -540,7 +572,6 @@ Fun stuff...
 The way the above script works is it iterates through all the entities, and retrieves the `domain` attribute of each of the entity, and makes it a list by removing duplicate items - by doing so, you will get unique list of domains that your Home Assistant uses :smile:
 
 ## 11a. To get the current list of domains and the number of entities in each domain:
-
 
 ```
 {%- set unique_domains = states | map(attribute='domain') |list | unique | list -%}
@@ -554,10 +585,10 @@ The way the above script works is it iterates through all the entities, and retr
 ```
 
 ### Here is the output of the above script... you may see a different output based on the components that are being used
+
 ```
 [alarm_control_panel (1), automation (176), binary_sensor (59), calendar (4), camera (7), climate (2), device_tracker (10), group (106), image_processing (8), input_boolean (42), input_datetime (8), input_label (32), input_number (3), input_select (6), input_text (1), light (8), lock (1), media_player (13), proximity (2), script (26), sensor (330), sun (1), switch (28), timer (9), zone (24), and zwave (24)]
 ```
-
 
 ## 12. Automatic `Group` creator
 
@@ -584,15 +615,16 @@ group:
 
 ## 13. To sum up list of attribute values in a list
 
-```
+````
 something like this will wok: ```
 {% set people = [{'name':'john', 'experience':15}, {'name':'steve', 'experience':10}, {'name':'will', 'experience':12}, {'name':'tinkerer', 'experience':25}] %}
 Combined experience: {{ people | sum(attribute='experience') }} years
-```
+````
 
 ### The above script returns `Combined experience: 62 years`
 
 ## 14. To get list of attribute values as a string
+
 ```
 {%set value_json = {
   "success": true,
@@ -623,11 +655,12 @@ Combined experience: {{ people | sum(attribute='experience') }} years
   {{- item.tag -}}
 {%- endfor %}
 
-Or 
+Or
 
 {{ value_json.tags|map(attribute='tag')|join(', ') }}
 
 ```
+
 ## 15. Convert a given "Number" to "Words"
 
 ```
@@ -678,7 +711,6 @@ Or
 
 The above returns `negative one hundred and twenty-three million four hundred and fifty-six thousand seven hundred and eighty-nine`.
 
-
 ## 16. Positive Subtraction using nines
 
 The following code is written by [@dale3h](https://github.com/dale3h), I thought it would make perfect sense to keep it in here.
@@ -690,6 +722,7 @@ The following code is written by [@dale3h](https://github.com/dale3h), I thought
 ```
 
 The following is an example on how to use the nines macro:
+
 ```
 873 - 218 = 655
 
@@ -697,6 +730,7 @@ The following is an example on how to use the nines macro:
 ```
 
 ## 17. List devices that are home, list lights that are ON, list anything in a group with a specific state
+
 The following code lists all the entity friendly names in a group that has a specific state. Just change the group, and the desired state.
 
 ```
@@ -725,9 +759,11 @@ Or
 {% set open_doors = {{ states | selectattr('entity_id', 'in', state_attr('group.all_doors','entity_id')) | selectattr('state','in',['on','open']) | list | map(attribute='name') |join(', ') }}
 The following doors are open: {{ open_doors }}
 ```
+
 ## 18. Check Battery Levels of ALL devices using one script:
 
 You can also use this in your automations to alert you when a specific device's battery level goes below certain threshold.
+
 ```
 {%- for item in states -%}
 {%- for attrib in item.attributes|sort() if 'battery' in attrib %}
@@ -737,6 +773,7 @@ You can also use this in your automations to alert you when a specific device's 
 ```
 
 The output should be something like:
+
 ```
 Dining Room Motion Sensor Battery: 45.0
 Front Room Motion Sensor Battery: 51.0
@@ -764,7 +801,7 @@ Wallmote Battery: 100
 ## 19. Difference between Two Lists:
 
 Assume you have two lists (before and after), and if you want to find out the difference between the lists, follow the code below:
-In this case, the list one (before_list) has `Whiskey`, and in the list two (after_list), the `Whiskey` is removed and `Beer` is added. 
+In this case, the list one (before_list) has `Whiskey`, and in the list two (after_list), the `Whiskey` is removed and `Beer` is added.
 
 ```
 {% set before_list = ['Cup', 'Drink', 'Coffee cup', 'Coffee', 'Espresso', 'Caffeine', 'Latte', 'Whiskey'] %}
@@ -801,12 +838,14 @@ Removed: {{ removed |title }}
 {{ list_diff(before_list, after_list) }}
 
 ```
+
 The output should be something like:
 
 ```
 Added: Beer
 Removed: Whiskey
 ```
+
 It will show `None.` when there are no changes between the lists. If you are wondering where you would need this script, imagine a scenario where you are feeding your camera image to a machine learning program (like machinebox/tagbox), and you get a list of tags in return. You can then use this script to check the differences between images by comparing tags. Item #14 is a sample output of tagbox for given image. You can use that code to generate list from a given JSON.
 
 ## 20. Concatenating Two Lists
@@ -819,7 +858,8 @@ It will show `None.` when there are no changes between the lists. If you are won
 {%- endfor -%}
 ```
 
-The output would be 
+The output would be
+
 ```
 1
 2
@@ -848,7 +888,6 @@ If you want the date to be more readable for display, you can use the script bel
 ```
 
 Feel free to modify the `strftime` format that fits your need. You can also pass your sensor value - ex: `{{ get_date(states.sensor.mysensor.last_updated) }}`.
-
 
 ## 22. BANNER/ASCII Text Command in Jinja
 
@@ -885,12 +924,12 @@ Ever wondered how you can create ASCII Text using Jinja? I wrote this code while
 The above code outputs:
 
 ```
- #####  #    #     #    #          #    #     #    #    #          #    
-#     # #   #     # #   #         # #   #     #   # #   #         # #   
-#       #  #     #   #  #        #   #  #     #  #   #  #        #   #  
- #####  ###     #     # #       #     # #     # #     # #       #     # 
-      # #  #    ####### #       #######  #   #  ####### #       ####### 
-#     # #   #   #     # #       #     #   # #   #     # #       #     # 
+ #####  #    #     #    #          #    #     #    #    #          #
+#     # #   #     # #   #         # #   #     #   # #   #         # #
+#       #  #     #   #  #        #   #  #     #  #   #  #        #   #
+ #####  ###     #     # #       #     # #     # #     # #       #     #
+      # #  #    ####### #       #######  #   #  ####### #       #######
+#     # #   #   #     # #       #     #   # #   #     # #       #     #
  #####  #    #  #     # ####### #     #    #    #     # ####### #     #
 ```
 
@@ -903,20 +942,20 @@ The `alphabets` variable holds a long string of characters that represent all al
 ### How can I change from `#` with other characters like `*`?
 
 Very simple, just replace the command in the code:  
-from `{{ alphabets[begin:end]|replace('#', '#')|replace(' ',' ') -}}` 
-to   `{{ alphabets[begin:end]|replace('#', '*')|replace(' ',' ') -}}`
+from `{{ alphabets[begin:end]|replace('#', '#')|replace(' ',' ') -}}`
+to `{{ alphabets[begin:end]|replace('#', '*')|replace(' ',' ') -}}`
 
 ### How do I add more characters?
 
 You can add other characters or numbers by simply appending to the existing `alphabets` string. For ex: If you want to add an empty space, just append 49 empty spaces and add a space to the `abcdefghijklmnopqrstuvwxyz` string for index/lookup.
 
 ```
-####### #     #       # ####### #     # 
-#       ##    #       # #     #  #   #  
-#       # #   #       # #     #   # #   
-#####   #  #  #       # #     #    #    
-#       #   # # #     # #     #    #    
-#       #    ## #     # #     #    #    
+####### #     #       # ####### #     #
+#       ##    #       # #     #  #   #
+#       # #   #       # #     #   # #
+#####   #  #  #       # #     #    #
+#       #   # # #     # #     #    #
+#       #    ## #     # #     #    #
 ####### #     #  #####  #######    #
 ```
 
@@ -925,7 +964,7 @@ You can add other characters or numbers by simply appending to the existing `alp
 When you have an image_processing component in your setup, chances are it gives you the following JSON based on the camera feed. Often times people wonder how they can retrive relevant information from the JSON into a variable or a sensor to use in automations. The following JSON is a sample from image_processing component.
 
 ```
-{% set value_json = 
+{% set value_json =
 {
 	'car': [{
 		'score': 99.01034832000732,
@@ -946,12 +985,12 @@ The following code shows all the tags that are found in the JSON that have the b
 
 {%- macro get_list(obj) -%}
 {%- for x in value_json[obj]|list if x.box[0]  > 0.05 -%}
-{%- if loop.first %}{% elif loop.last %},{% else %},{% endif -%}{{ obj }} 
+{%- if loop.first %}{% elif loop.last %},{% else %},{% endif -%}{{ obj }}
 {%- endfor -%}{%- endmacro -%}
 
 {%- macro run() -%}
 {%- for object in tags -%}
-{%- if loop.first %}{% elif loop.last %}, {% else %}, {% endif -%}{{ obj }} 
+{%- if loop.first %}{% elif loop.last %}, {% else %}, {% endif -%}{{ obj }}
 {{- get_list(object).split(',')|list|unique|list|join|title }}
 {%- endfor -%}
 {% endmacro -%}
@@ -960,7 +999,7 @@ The following code shows all the tags that are found in the JSON that have the b
 {{- output ~ ' detected in ' ~ camera if output != '' -}}
 ```
 
-The output is something like the folowing, that can used to announce using TTS or even send a text message to your cell phone. 
+The output is something like the folowing, that can used to announce using TTS or even send a text message to your cell phone.
 
 ```
 Car detected in Backyard
@@ -968,7 +1007,7 @@ Car detected in Backyard
 
 ## 24 English to Morse Code Conversion
 
-For those ham radio buffs out there, here is a way you can convert english to morse code. 
+For those ham radio buffs out there, here is a way you can convert english to morse code.
 
 ```
 {% set input = "hello morse" %}

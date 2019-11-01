@@ -1,5 +1,5 @@
 #########################################################################################################
-# Wrote this code for @norien, where he wanted to set specific color to all the bulbs based on holiday 
+# Wrote this code for @norien, where he wanted to set specific color to all the bulbs based on holiday
 #########################################################################################################
 # homeassistant:
 #   customize:
@@ -37,7 +37,7 @@
 #             {%- macro get_next_entity_id() -%}
 #               {%- for item in states.group.input_labels.attributes.entity_id if is_state(item, "no") -%}
 #                 {{- "," if not loop.first-}}{{- item -}}{{-endif-}}
-#               {%- endfor -%}              
+#               {%- endfor -%}
 #             {%- endmacro -%}
 #             {%- set entity_ids = get_next_entity_id() -%}
 #             {% if entity_ids | trim != "" and entity_ids.split(',') | length | int == 0 %}
@@ -52,7 +52,7 @@
 #             {%- macro get_next_entity_id() -%}
 #               {%- for item in states.group.input_labels.attributes.entity_id if is_state(item, "no") -%}
 #                 {{- "," if not loop.first-}}{{- item -}}{{-endif-}}
-#               {%- endfor -%}              
+#               {%- endfor -%}
 #             {%- endmacro -%}
 #             {%- set entity_ids = get_next_entity_id() -%}
 #             {% if entity_ids | trim != "" %}
@@ -135,11 +135,11 @@
 #     trigger:
 #       platform: state
 #       entity_id: 'group.telefoner'
-#       state: 'home' 
+#       state: 'home'
 #     condition:
 #       - condition: time
 #         after: '12:00:00'
-#         before: '02:00:00'          
+#         before: '02:00:00'
 #     action:
 #       - service_template: scene.turn_on
 #         data_template:
@@ -171,9 +171,8 @@
 #           {% endif %}
 #         entity_id: switch.kitchen
 
-
 #########################################################################################################
-# Wrote this code for someone, where they wanted to drop a message to MQTT with topic name based on sensor 
+# Wrote this code for someone, where they wanted to drop a message to MQTT with topic name based on sensor
 #########################################################################################################
 
 # automation:
@@ -201,7 +200,6 @@
 #           topic: >-
 #             {% set mapping = '{ "hallway": "985335", "livingroom": "854267", "kitchen": "699555" }' %}
 #             {{ 'Hassio/433/Honeywell/Honeywell_Door/Window_Sensor/' ~ mapping[trigger.entity_id.split('.')[1].split('_')[0] ~ ''] }}
-
 
 #########################################################################################################
 # Wrote code for @chags - to pass a list of variables from an automation to a script
@@ -231,7 +229,7 @@
 #             {%- endfor %}
 
 #########################################################################################################
-# Wrote code for @IxsharpxI#4883 - he wanted to call REST api and extract various values for APCUPS! 
+# Wrote code for @IxsharpxI#4883 - he wanted to call REST api and extract various values for APCUPS!
 #########################################################################################################
 
 # https://raw.githubusercontent.com/awesome-automations/home/master/apcups.html
@@ -249,7 +247,6 @@
 #       {%- endif -%}
 #       {%- endmacro %}
 #       {{ GetValue('MODEL    : ') }}
-
 
 #########################################################################################################
 # Wrote this code for someone, where they wanted to have an input_boolean that controls effects
@@ -281,7 +278,7 @@
 #         entity_id: light.xxx
 
 #########################################################################################################
-# @xxKira wanted to call a service in a loop by passing an alphabet each time from a string, 
+# @xxKira wanted to call a service in a loop by passing an alphabet each time from a string,
 # so that the service inserts that alphabet using remote on TV
 #########################################################################################################
 
@@ -351,9 +348,8 @@
 #             {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
 #               {% set ns.lowBattery = ns.lowBattery ~ ',' ~ x.name %}
 #             {%- endfor %}
-#             {{ ns.lowBattery -}} 
+#             {{ ns.lowBattery -}}
 #             {{- ' battery is ' if ns.lowBattery.split(',')|count == 1 else ' batteries are ' -}} less than 25 percent.
-
 
 ##############################################################################################################################
 # Wrote this for @marmar63#0271 - he wanted to run a script `x` number of times
@@ -477,7 +473,6 @@
 #       - sensor.robotic_mower_name
 #       - sensor.robotic_mower_serial
 
-
 #   robotic_mower_scheduling:
 #     view: no
 #     name: 'Robotic mower scheduling'
@@ -497,7 +492,6 @@
 #       - input_datetime.bob_stop_time_6
 #       - input_datetime.bob_start_time_7
 #       - input_datetime.bob_stop_time_7
-
 
 #   robotic_mower_automations:
 #     view: no
@@ -623,7 +617,6 @@
 #     state_topic: "robotic_mower/device/serial"
 #     name: "Robotic mower Serial"
 
-
 # ###########################################################
 # ## binary_sensor
 # ###########################################################
@@ -725,12 +718,12 @@
 #     name: Bob Stop Time 7
 #     has_date: false
 #     has_time: true
-    
+
 # ################################################################
 # # Automation
 # ################################################################
 # automation:
- 
+
 #   - alias: Bob Command Control
 #     initial_state: 'on'
 #     trigger:
@@ -1003,3 +996,15 @@
 #       {% for city in value_json.cities if city.id == '126' %}
 #       {{ city.id }}
 #       {% endfor %}
+
+# homeassistant:
+
+# script:
+#   sync_ecobee_temp:
+#     alias: Push Ecobee target temp to the other thermostats
+#     sequence:
+#       - service: climate.set_temperature
+#         data_template:
+#           entity_id: climate.cooler_fan
+#           temperature: "{{ states.climate.main_floor.temperature |float }}"
+

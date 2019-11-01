@@ -56,6 +56,7 @@ cloud:
         description: Xiaomi Gateway Light
 
 discovery:
+
 homekit:
   autostart: true
   filter:
@@ -64,6 +65,11 @@ homekit:
       - light
       - switch
       - input_boolean
+    include_entities:
+      - binary_sensor.back_door_sensor_sensor
+      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
 
 map:
 updater:
