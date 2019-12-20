@@ -363,8 +363,8 @@ automation:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
       - condition: template
         value_template: >
-          {% if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" or 
-                states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" %}
+          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" or
+                states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
             True
           {% else %}
             False
@@ -442,8 +442,8 @@ automation:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_latest.jpg"
       - condition: template
         value_template: >
-          {% if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" or 
-                states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" %}
+          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" or
+                states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
             True
           {% else %}
             False
@@ -475,8 +475,8 @@ automation:
           entity_id: image_processing.tensorflow_garage_camera
       - condition: template
         value_template: >
-          {% if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" or 
-                states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" %}
+          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" or
+                states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
             True
           {% else %}
             False
@@ -643,7 +643,7 @@ automation:
       - condition: template
         value_template: "{{ states('alarm_control_panel.simplisafe') == 'armed_home' or states('alarm_control_panel.simplisafe') == 'armed_away' }}"
     action:
-      - delay: "{{ '00:00:08' if states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state == 'on' else '0:0:0' }}"
+      - delay: "{{ '00:00:08' if states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor') == 'on' else '0:0:0' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.frontdoor_camera"
@@ -681,7 +681,7 @@ automation:
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - condition: template
-        value_template: "{{ states.device_tracker.life360_suresh.state == 'home' }}"
+        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Front Door camera!"
@@ -751,7 +751,7 @@ automation:
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - condition: template
-        value_template: "{{ states.device_tracker.life360_suresh.state == 'home' }}"
+        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Driveway camera!"
@@ -822,7 +822,7 @@ automation:
                 (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - condition: template
-        value_template: "{{ states.device_tracker.life360_suresh.state == 'home' }}"
+        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Patio camera!"
@@ -866,30 +866,30 @@ automation:
       - service: script.frontdoor_camera_text_overlay
         data_template:
           text: >
-            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or
                        states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like
             {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
       - service: script.driveway_camera_text_overlay
         data_template:
           text: >
-            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or
                        states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like
             {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
       - service: script.playarea_camera_text_overlay
         data_template:
           text: >
-            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or
                        states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like
             {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
       - service: script.patio_camera_text_overlay
         data_template:
           text: >
-            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or 
+            {{ '* ' if states('alarm_control_panel.simplisafe') == 'armed_home' or
                        states('alarm_control_panel.simplisafe') == 'armed_away' -}}
-            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like 
+            {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like
             {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
 
   ###############################################################################

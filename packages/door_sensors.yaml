@@ -1,20 +1,20 @@
 homeassistant:
-   
+
 sensor:
   - platform: template
     sensors:
       single_car_garage_door_sensor_status:
         friendly_name: Single Car Garage Door Sensor Status
         value_template: >-
-          {% if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == 'on' %}
+          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'on' %}
             Open
-          {% elif states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == 'off' %}
+          {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'off' %}
             Closed
           {% else %}
             Unknown
           {% endif %}
         icon_template: >-
-          {% set door_status = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state |d('unknown') %}
+          {% set door_status = states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') %}
           {% if door_status == 'unknown' %}
             mdi:alert-circle
           {% else %}
@@ -24,21 +24,21 @@ sensor:
               mdi:garage
             {% endif %}
           {% endif %}
-  
+
   - platform: template
     sensors:
       two_car_garage_door_sensor_status:
         value_template: >-
-          {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == 'on' %}
+          {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'on' %}
             Open
-          {% elif states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == 'off' %}
+          {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'off' %}
             Closed
           {% else %}
             Unknown
           {% endif %}
         friendly_name: Double Car Garage Door Sensor Status
         icon_template: >-
-          {% set door_status = states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state |d('unknown') %}
+          {% set door_status = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') %}
           {% if door_status == 'unknown' %}
             mdi:alert-circle
           {% else %}
@@ -54,51 +54,50 @@ binary_sensor:
     state_topic: "/garage/motion"
     name: "Garage Motion"
     device_class: motion
-    payload_on: 'on'
-    payload_off: 'off'
+    payload_on: "on"
+    payload_off: "off"
     value_template: "{{ value }}"
 
   - platform: mqtt
     state_topic: "/kitchen/motion"
     name: "Kitchen Camera Motion"
     device_class: motion
-    payload_on: 'on'
-    payload_off: 'off'
+    payload_on: "on"
+    payload_off: "off"
     value_template: "{{ value }}"
 
   - platform: mqtt
     state_topic: "/frontroom/motion"
     name: "Frontroom Camera Motion"
     device_class: motion
-    payload_on: 'on'
-    payload_off: 'off'
+    payload_on: "on"
+    payload_off: "off"
     value_template: "{{ value }}"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
   - alias: Garage Motion Reset
     initial_state: true
     trigger:
       - platform: state
         entity_id: binary_sensor.garage_motion
-        to: 'on'
-        from: 'off'
+        to: "on"
+        from: "off"
     action:
-      - delay: '00:00:30'
+      - delay: "00:00:30"
       - service: mqtt.publish
         data:
           topic: "/garage/motion"
-          payload: 'off'
+          payload: "off"
           retain: false
 
   - alias: Kitchen Camera Motion Reset
@@ -106,14 +105,14 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.kitchen_camera_motion
-        to: 'on'
-        from: 'off'
+        to: "on"
+        from: "off"
     action:
-      - delay: '00:00:30'
+      - delay: "00:00:30"
       - service: mqtt.publish
         data:
           topic: "/kitchen/motion"
-          payload: 'off'
+          payload: "off"
           retain: false
 
   - alias: Frontroom Camera Motion Reset
@@ -121,29 +120,29 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.frontroom_camera_motion
-        to: 'on'
-        from: 'off'
+        to: "on"
+        from: "off"
     action:
-      - delay: '00:00:30'
+      - delay: "00:00:30"
       - service: mqtt.publish
         data:
           topic: "/frontroom/motion"
-          payload: 'off'
+          payload: "off"
           retain: false
 
-################################################################################
-# Notifies when either of the garage door is opened or closed
-# When the garage is opened, it sends an actionable ios notification with an 
-# option to close the garage door. This iso actionable notification only occurs 
-# when garage door is open and not when it is closed.
-###############################################################################
+  ################################################################################
+  # Notifies when either of the garage door is opened or closed
+  # When the garage is opened, it sends an actionable ios notification with an
+  # option to close the garage door. This iso actionable notification only occurs
+  # when garage door is open and not when it is closed.
+  ###############################################################################
   - alias: Notify Garage Door Status
     initial_state: true
     trigger:
       platform: state
-      entity_id: 
-      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
-      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+      entity_id:
+        - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+        - binary_sensor.single_car_garage_door_tilt_sensor_sensor
     condition:
       - condition: template
         value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
@@ -157,20 +156,20 @@ automation:
       - service: script.notify_me
         data_template:
           message: >
-              {% if trigger.to_state.state | lower == "on" %}
-                  {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
-              {% elif trigger.to_state.state | lower == "off" %}
-                  {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
-              {% endif %}
+            {% if trigger.to_state.state | lower == "on" %}
+                {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
+            {% elif trigger.to_state.state | lower == "off" %}
+                {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
+            {% endif %}
       - service: script.voice_notify
         data_template:
           message: >
             {% set doors = "" %}
-              {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on"  and 
-                    states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
+              {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
+                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
                 {% set doors = "Atention! Both Garage Doors are OPEN" %}
-              {% elif states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off"  and 
-                      states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+              {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
+                      states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
                 {% set doors = "Both Garage Doors are now CLOSED" %}
               {% else %}
                 {% if trigger.to_state.state | lower == "on" %}
@@ -184,32 +183,33 @@ automation:
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  
-                     (states.automation.notify_garage_door_status.last_triggered ~ '').replace('-','_')
-                     .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename:
+            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+            (states.automation.notify_garage_door_status.last_triggered ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: notify.notify_smtp
         data_template:
           title: 'Garage Door Status {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >-
             {% set doors = "" %}
-            {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on"  and 
-                  states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
+            {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
+                  states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
               {% set doors = "Both Garage Doors are OPEN" %}
-            {% elif states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off"  and 
-                    states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+            {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
+                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
               {% set doors = "Both Garage Doors are CLOSED" %}
             {% else %}
-              {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name ~ " is " ~ 
-                            ('Closed' if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == 'off' else 'OPEN')
-                             ~ " and " ~ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.name ~ " is " ~ 
-                            ('Closed' if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == 'off' else 'OPEN') %}
+              {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name ~ " is " ~
+                            ('Closed' if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'off' else 'OPEN')
+                             ~ " and " ~ states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name') ~ " is " ~
+                            ('Closed' if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'off' else 'OPEN') %}
             {% endif %}
             Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  
-                   (states.automation.notify_garage_door_status.last_triggered ~ '').replace('-','_')
-                   .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+                (states.automation.notify_garage_door_status.last_triggered ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service_template: >
           {% if trigger.to_state.state | lower == "on" %}
             switch.turn_on
@@ -219,18 +219,18 @@ automation:
         data:
           entity_id: switch.garage
 
-################################################################################
-#  When I open the garage door
-#     if it is dark outside, OR
-#     both the garage doors are closed
-#       ==> turn the Garage lights ON, and start timer!
-################################################################################
+  ################################################################################
+  #  When I open the garage door
+  #     if it is dark outside, OR
+  #     both the garage doors are closed
+  #       ==> turn the Garage lights ON, and start timer!
+  ################################################################################
   - alias: Garage Lights On When Door is Opened
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.garage_door_sensor_sensor
-      to: 'on'
+      to: "on"
     condition:
       condition: or
       conditions:
@@ -239,22 +239,22 @@ automation:
         - condition: and
           conditions:
             - condition: template
-              value_template: "{{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == 'off' }}"
+              value_template: "{{ states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'off' }}"
             - condition: template
-              value_template: "{{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == 'off' }}"      
+              value_template: "{{ states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'off' }}"
     action:
       - service: switch.turn_on
         entity_id: switch.garage
       - service: timer.start
         entity_id: timer.timer_garage
 
-# Notify Entry Door Status
-###############################################################################
+  # Notify Entry Door Status
+  ###############################################################################
   - alias: Notify Entry Door Status
     initial_state: true
     trigger:
       platform: state
-      entity_id: 
+      entity_id:
         - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
         - binary_sensor.back_door_sensor_sensor
     condition:
@@ -266,33 +266,33 @@ automation:
           message: >
             {% if trigger.to_state.state | lower == "on" %}
               Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is OPEN,
-              {% if states.alarm_control_panel.simplisafe.state == 'armed_home' or 
-                    states.alarm_control_panel.simplisafe.state == 'armed_away' %}
+              {% if states('alarm_control_panel.simplisafe') == 'armed_home' or
+                    states('alarm_control_panel.simplisafe') == 'armed_away' %}
               But your home security system is ON.
               {% endif %}
             {% elif trigger.to_state.state | lower == "off" %}
               Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is CLOSED!
             {% endif %}
-          greeting: 'no'
+          greeting: "no"
           only_at_night: >
-            {% if states.alarm_control_panel.simplisafe.state == 'armed_home' %}
+            {% if states('alarm_control_panel.simplisafe') == 'armed_home' %}
               no
             {% else %}
               yes
             {% endif %}
 
-# Turn ON and OFF basement ambient lights
-###############################################################################
+  # Turn ON and OFF basement ambient lights
+  ###############################################################################
   - alias: Basement Accent Lights ON When Basement Door Opened
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.basement_door_sensor_sensor
-      to: 'on'
+      to: "on"
     condition:
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: homeassistant.turn_on
         entity_id: switch.rf_switch_one
@@ -301,15 +301,15 @@ automation:
     initial_state: true
     trigger:
       platform: state
-      entity_id: 
+      entity_id:
         - switch.rf_switch_one
-      to: 'on'
+      to: "on"
       for:
         minutes: 5
     condition:
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: homeassistant.turn_off
         entity_id: switch.rf_switch_one

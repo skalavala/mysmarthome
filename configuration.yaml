@@ -27,33 +27,33 @@ homeassistant:
 sun:
 alexa:
 config:
-cloud:
-  alexa:
-    filter:
-      include_entities:
-        - light.family_room
-        - light.master_bedroom
-        - light.gateway_light_34ce008ad65d
-        - switch.basement_left
-        - switch.basement_right
-        - switch.frontyard_light
-        - switch.garage_lights
-        - switch.guest_bedroom
-        - switch.prayer_room
-        - switch.kids_bed_accent
-        - switch.kids_bedroom
-        - switch.kitchen
-        - switch.office_room
-        - switch.wemobackyardlightswitch
-        - switch.wemoswitch1
-      include_domains:
-        - light
-        - switch
+# cloud:
+#   alexa:
+#     filter:
+#       include_entities:
+#         - light.family_room
+#         - light.master_bedroom
+#         - light.gateway_light_34ce008ad65d
+#         - switch.basement_left
+#         - switch.basement_right
+#         - switch.frontyard_light
+#         - switch.garage_lights
+#         - switch.guest_bedroom
+#         - switch.prayer_room
+#         - switch.kids_bed_accent
+#         - switch.kids_bedroom
+#         - switch.kitchen
+#         - switch.office_room
+#         - switch.wemobackyardlightswitch
+#         - switch.wemoswitch1
+#       include_domains:
+#         - light
+#         - switch
 
-    entity_config:
-      light.gateway_light_34ce008ad65d:
-        name: Gateway Light
-        description: Xiaomi Gateway Light
+#     entity_config:
+#       light.gateway_light_34ce008ad65d:
+#         name: Gateway Light
+#         description: Xiaomi Gateway Light
 
 discovery:
 
@@ -71,14 +71,15 @@ homekit:
       - binary_sensor.single_car_garage_door_tilt_sensor_sensor
       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
 
-map:
-updater:
-logbook:
-history:
+mobile_app:
+# map:
+# updater:
+# logbook:
+# history:
 websocket_api:
 python_script:
-recorder:
-  db_url: !secret my_sql_url
+# recorder:
+#   db_url: !secret my_sql_url
 logger: !include logging.yaml
 
 zeroconf:
@@ -103,32 +104,6 @@ mqtt:
 binary_sensor:
   - platform: workday
     country: US
-
-person:
-  - name: Suresh
-    id: suresh
-    device_trackers:
-      - device_tracker.suresh
-      - device_tracker.suresh_kalavala
-      - device_tracker.tesla_model_3_5yj3e1ea8jf010610_location_tracker
-
-  - name: Mallika
-    id: mallika
-    device_trackers:
-      - device_tracker.mallika
-      - device_tracker.life360_mallika
-
-  - name: Srinika
-    id: srinika
-    device_trackers:
-      - device_tracker.srinika
-      - device_tracker.life360_srinika
-
-  - name: Hasika
-    id: hasika
-    device_trackers:
-      - device_tracker.hasika
-      - device_tracker.life360_hasika
 
 lovelace:
   mode: yaml

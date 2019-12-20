@@ -107,7 +107,7 @@ automation:
           message: >-
             {{ trigger.entity_id.split('.')[1].split('_')[1] | title }} just left {{ trigger.zone.attributes.friendly_name }}.
             {% if trigger.entity_id.split('.')[1].split('_')[1] == "suresh" and trigger.zone.attributes.friendly_name | lower == "office" %}
-              and will be home in {{ (states.sensor.suresh2home.state | int) + 5 }} minutes.
+              and will be home in {{ (states('sensor.suresh2home') | int) + 5 }} minutes.
             {% endif %}
           greeting: "no"
 
@@ -154,13 +154,13 @@ automation:
       seconds: "/30"
     condition:
       - condition: template
-        value_template: '{{ states.input_boolean.home_mode_away.state == "off" }}'
+        value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
       - condition: template
         value_template: >
-          {% set suresh = states.device_tracker.life360_suresh.state %}
-          {% set mallika = states.device_tracker.life360_mallika.state %}
-          {% set srinika = states.device_tracker.life360_srinika.state %}
-          {% set hasika = states.device_tracker.life360_hasika.state %}
+          {% set suresh = states('device_tracker.life360_suresh') %}
+          {% set mallika = states('device_tracker.life360_mallika') %}
+          {% set srinika = states('device_tracker.life360_srinika') %}
+          {% set hasika = states('device_tracker.life360_hasika') %}
           {% if suresh != "home" and mallika != "home" and srinika != "home" and hasika != "home" %}
             True
           {% else %}
@@ -198,10 +198,10 @@ automation:
           message: "Suresh is on his way home, he is within the 5 miles range. Should be home soon!"
       - condition: template
         value_template: >
-          {% set suresh = states.device_tracker.life360_suresh.state %}
-          {% set mallika = states.device_tracker.life360_mallika.state %}
-          {% set srinika = states.device_tracker.life360_srinika.state %}
-          {% set hasika = states.device_tracker.life360_hasika.state %}
+          {% set suresh = states('device_tracker.life360_suresh') %}
+          {% set mallika = states('device_tracker.life360_mallika') %}
+          {% set srinika = states('device_tracker.life360_srinika') %}
+          {% set hasika = states('device_tracker.life360_hasika') %}
           {% if suresh != "home" and mallika != "home" and srinika != "home" and hasika != "home" %}
             True
           {% else %}

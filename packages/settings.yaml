@@ -22,6 +22,7 @@ input_datetime:
     has_date: false
     has_time: true
     initial: "22:00:00"
+
   autumn_wakeup_time:
     name: Autumn Wakeup Time
     has_date: false
@@ -33,6 +34,7 @@ input_datetime:
     has_date: false
     has_time: true
     initial: "22:00:00"
+
   winter_wakeup_time:
     name: Winter Wakeup Time
     has_date: false
@@ -44,6 +46,7 @@ input_datetime:
     has_date: false
     has_time: true
     initial: "22:00:00"
+
   spring_wakeup_time:
     name: Spring Wakeup Time
     has_date: false
@@ -72,56 +75,56 @@ sensor:
       wakeup_hour:
         friendly_name: Wakeup Hour
         value_template: >
-          {% if states.sensor.season.state | lower == "summer" %}
-            {{ states.input_datetime.summer_wakeup_time.state.split(':')[0] }}
-          {% elif states.sensor.season.state | lower == "autumn" %}
-            {{ states.input_datetime.autumn_wakeup_time.state.split(':')[0] }}
-          {% elif states.sensor.season.state | lower == "winter" %}
-            {{ states.input_datetime.winter_wakeup_time.state.split(':')[0] }}
-          {% elif states.sensor.season.state | lower == "spring" %}
-            {{ states.input_datetime.spring_wakeup_time.state.split(':')[0] }}
+          {% if states('sensor.season') | lower == "summer" %}
+            {{ states('input_datetime.summer_wakeup_time').split(':')[0] }}
+          {% elif states('sensor.season') | lower == "autumn" %}
+            {{ states('input_datetime.autumn_wakeup_time').split(':')[0] }}
+          {% elif states('sensor.season') | lower == "winter" %}
+            {{ states('input_datetime.winter_wakeup_time').split(':')[0] }}
+          {% elif states('sensor.season') | lower == "spring" %}
+            {{ states('input_datetime.spring_wakeup_time').split(':')[0] }}
           {% else %}
             6
           {% endif %}
       wakeup_minute:
         friendly_name: Wakeup Minute
         value_template: >
-          {% if states.sensor.season.state | lower == "summer" %}
-            {{ states.input_datetime.summer_wakeup_time.state.split(':')[1] }}
-          {% elif states.sensor.season.state | lower == "autumn" %}
-            {{ states.input_datetime.autumn_wakeup_time.state.split(':')[1] }}
-          {% elif states.sensor.season.state | lower == "winter" %}
-            {{ states.input_datetime.winter_wakeup_time.state.split(':')[1] }}
-          {% elif states.sensor.season.state | lower == "spring" %}
-            {{ states.input_datetime.spring_wakeup_time.state.split(':')[1] }}
+          {% if states('sensor.season') | lower == "summer" %}
+            {{ states('input_datetime.summer_wakeup_time').split(':')[1] }}
+          {% elif states('sensor.season') | lower == "autumn" %}
+            {{ states('input_datetime.autumn_wakeup_time').split(':')[1] }}
+          {% elif states('sensor.season') | lower == "winter" %}
+            {{ states('input_datetime.winter_wakeup_time').split(':')[1] }}
+          {% elif states('sensor.season') | lower == "spring" %}
+            {{ states('input_datetime.spring_wakeup_time').split(':')[1] }}
           {% else %}
             0
           {% endif %}
       bedtime_hour:
         friendly_name: Bedtime Hour
         value_template: >
-          {% if states.sensor.season.state | lower == "summer" %}
-            {{ states.input_datetime.summer_bed_time.state.split(':')[0] }}
-          {% elif states.sensor.season.state | lower == "autumn" %}
-            {{ states.input_datetime.autumn_bed_time.state.split(':')[0] }}
-          {% elif states.sensor.season.state | lower == "winter" %}
-            {{ states.input_datetime.winter_bed_time.state.split(':')[0] }}
-          {% elif states.sensor.season.state | lower == "spring" %}
-            {{ states.input_datetime.spring_bed_time.state.split(':')[0] }}
+          {% if states('sensor.season') | lower == "summer" %}
+            {{ states('input_datetime.summer_bed_time').split(':')[0] }}
+          {% elif states('sensor.season') | lower == "autumn" %}
+            {{ states('input_datetime.autumn_bed_time').split(':')[0] }}
+          {% elif states('sensor.season') | lower == "winter" %}
+            {{ states('input_datetime.winter_bed_time').split(':')[0] }}
+          {% elif states('sensor.season') | lower == "spring" %}
+            {{ states('input_datetime.spring_bed_time').split(':')[0] }}
           {% else %}
             0
           {% endif %}
       bedtime_minute:
         friendly_name: Bedtime Minute
         value_template: >
-          {% if states.sensor.season.state | lower == "summer" %}
-            {{ states.input_datetime.summer_bed_time.state.split(':')[1] }}
-          {% elif states.sensor.season.state | lower == "autumn" %}
-            {{ states.input_datetime.autumn_bed_time.state.split(':')[1] }}
-          {% elif states.sensor.season.state | lower == "winter" %}
-            {{ states.input_datetime.winter_bed_time.state.split(':')[1] }}
-          {% elif states.sensor.season.state | lower == "spring" %}
-            {{ states.input_datetime.spring_bed_time.state.split(':')[1] }}
+          {% if states('sensor.season') | lower == "summer" %}
+            {{ states('input_datetime.summer_bed_time').split(':')[1] }}
+          {% elif states('sensor.season') | lower == "autumn" %}
+            {{ states('input_datetime.autumn_bed_time').split(':')[1] }}
+          {% elif states('sensor.season') | lower == "winter" %}
+            {{ states('input_datetime.winter_bed_time').split(':')[1] }}
+          {% elif states('sensor.season') | lower == "spring" %}
+            {{ states('input_datetime.spring_bed_time').split(':')[1] }}
           {% else %}
             0
           {% endif %}
@@ -148,7 +151,7 @@ input_boolean:
   stream_camera2chromecast:
     name: Stream Cameras to Chromecast
     icon: mdi:cctv
-    initial: off
+    initial: on
 
   home_security:
     name: Home Security System

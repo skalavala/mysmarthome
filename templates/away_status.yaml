@@ -1,10 +1,10 @@
- >
+>
   {% macro weather_update() -%}
-  Outside temperature is {{ states.sensor.dark_sky_apparent_temperature.state | round(0) }} degrees.
+  Outside temperature is {{ states('sensor.dark_sky_apparent_temperature') | round(0) }} degrees.
   {%- endmacro -%}
-  
+
   {%- macro uv_levels() -%}
-  {%- set uv = states.sensor.pws_uv.state | int -%}
+  {%- set uv = states('sensor.pws_uv') | int -%}
   {%- if  uv >= 6 and uv <= 7 -%}
   Current UV index is high. Please be careful outdoors.
   {%- elif  uv >= 8 and uv <= 10 -%}
@@ -15,47 +15,47 @@
   Good UV levels.
   {%- endif -%}
   {%- endmacro -%}
-  
+
   {%- macro USPS() -%}
-  USPS is going to deliver {{ states.sensor.usps_mail.state }} mails today.
+  USPS is going to deliver {{ states('sensor.usps_mail') }} mails today.
   {%- endmacro -%}
-  
+
   {%- macro alert_battery_levels() %}
   {% for item in states if 'battery_level' in item.attributes and item.attributes.battery_level | int > 0 and item.attributes.battery_level | float <= 10.0 -%}{{- item.attributes.friendly_name ~ " battery is less than 10 percent" -}}
   {%- if loop.first %}, {% elif loop.last %}, {% else %}, {% endif -%}
   {%- endfor -%}
   {%- endmacro -%}
-  
+
   {%- macro tesla_status() -%}
   {%- if states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" -%}
-  Your Tesla car battery is at {{ states.sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor.state }} percent ({{ (states.sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor.state | int) | round(0) }} miles).
+  Your Tesla car battery is at {{ states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') }} percent ({{ (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) }} miles).
   {%- endif -%}
   {%- endmacro -%}
-  
+
   {%- macro pollen_levels() -%}
-  Pollen level is {{ states.sensor.pollen_level.state }}.
+  Pollen level is {{ states('sensor.pollen_level') }}.
   {%- endmacro -%}
-  
+
   {%- macro humidity_status() -%}
   Home humidity is {{ states('sensor.dining_room_thermostat_humidity') }} percent.
   {%- endmacro -%}
-  
+
   {%- macro alarm_status() -%}
   Your home is {{ "SECURED!" if states('alarm_control_panel.simplisafe') == "armed_away" or states('alarm_control_panel.simplisafe') == "armed_home" else "UNSECURED!" }}
   {%- endmacro -%}
-  
+
   {%- macro single_car_garage_door_status() -%} 
-  {%- if  states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state|lower == "on" -%}
+  {%- if  states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') |lower == "on" -%}
   {{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
   {%- endif -%}
   {%- endmacro -%}
    
   {%- macro two_car_garage_door_status() -%} 
-  {% if  states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state|lower == "on" %}
+  {% if  states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') |lower == "on" %}
   {{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
   {% endif %}
   {%- endmacro -%}
-  
+
   {%- macro garage_status() -%}
   {%- set single_car_garage = single_car_garage_door_status() -%}
   {%- set two_car_garage = two_car_garage_door_status() -%}
@@ -67,11 +67,11 @@
     Warning! {{ single_car_garage }} {{ two_car_garage }}
   {%- endif -%}
   {%- endmacro -%}
-  
+
   {%- macro plural(name) -%}
   {{- "true" if name.endswith("s") else "false" -}}
   {%- endmacro -%}
-  
+
   {%- macro light_status() -%}
     {%- set lights_switches = ["light.family_room",
                               "light.master_bedroom",
@@ -94,7 +94,7 @@
   {% endif %}
   {%- endfor -%}
   {%- endmacro -%}
-  
+
   {%- macro mother_of_all_macros() -%}
   {{ alarm_status() }}
   {{ garage_status() }}
@@ -107,5 +107,5 @@
   {{ alert_battery_levels() }}
   {{ light_status() }}
   {%- endmacro -%}
-  
+
   {{- mother_of_all_macros() -}}

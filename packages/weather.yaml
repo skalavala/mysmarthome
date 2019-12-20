@@ -58,11 +58,6 @@ homeassistant:
       icon: mdi:weather-windy-variant
       homebridge_hidden: true
 
-camera:
-  - platform: generic
-    name: Ohio Doppler Weather
-    still_image_url: !secret ohio_doppler_weather
-
 input_boolean:
   nice_breeze_alert:
     name: Nice Breeze Alert
@@ -121,8 +116,8 @@ weather:
   - platform: darksky
     api_key: !secret darksky_api_key
 
-openuv:
-  api_key: !secret openuv_apikey
+# openuv:
+#   api_key: !secret openuv_apikey
 
 # iqvia:
 #   zip_code: !secret zip_code
@@ -355,13 +350,13 @@ automation:
             {%- elif curState == "sleet" %}
                input_boolean.sleet_alert
             {%- endif %}
+  # - alias: Update OpenUV every hour (24 of 50 calls per day)
+  #   trigger:
+  #     platform: time_pattern
+  #     minutes: "/60"
+  #   action:
+  #     service: openuv.update_data
 
-  - alias: Update OpenUV every hour (24 of 50 calls per day)
-    trigger:
-      platform: time_pattern
-      minutes: "/60"
-    action:
-      service: openuv.update_data
 # Weather sensors - TBD, too lazy to create them
 #
 # {{ states.sun.sun.state }}

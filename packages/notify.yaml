@@ -6,7 +6,6 @@
 ###############################################################################
 homeassistant:
   customize:
-
     group.tts_announcements:
       order: 52
 
@@ -41,7 +40,7 @@ notify:
       - service: ios_mallika
       - service: ios_srinika
       - service: ios_hasika
-  
+
   # make sure you generate app password for your email if you have 2FA enabled!
   - name: notify_smtp
     platform: smtp
@@ -50,7 +49,7 @@ notify:
     timeout: 15
     username: !secret smtp_username
     password: !secret smtp_password
-    sender: !secret smtp_sender 
+    sender: !secret smtp_sender
     recipient: !secret smtp_recipient
 
   # - name: notify_aws_sns
@@ -67,15 +66,14 @@ tts:
   - platform: amazon_polly
     aws_access_key_id: !secret aws_access_key_id
     aws_secret_access_key: !secret aws_secret_access_key
-    region_name: 'us-east-1'
+    region_name: "us-east-1"
     text_type: ssml
     voice: Joanna
 
 script:
-
-###############################################################################
-# Notify Related Scripts
-###############################################################################
+  ###############################################################################
+  # Notify Related Scripts
+  ###############################################################################
   ifttt_notify:
     sequence:
       - condition: template
@@ -91,15 +89,15 @@ script:
       - condition: template
         value_template: '{{ value1 | trim != "" }}'
       - service: ifttt.trigger
-        data_template: 
+        data_template:
           event: "LEEO_COLOR_CHANGE"
-          value1: '{{ value1 }}'
+          value1: "{{ value1 }}"
 
   notify_me:
     sequence:
       - condition: state
         entity_id: input_boolean.text_alerts
-        state: 'on'
+        state: "on"
       - condition: template
         value_template: '{{ message | trim != "" }}'
       - service: script.ifttt_notify
@@ -112,38 +110,38 @@ script:
         data_template:
           message: !include ../templates/goodnight.yaml
 
-###############################################################################
-# Voice Notify
-# Conditions:
-#   => Only Announce when people are home. Except in emergency mode!
-#   => Only Announce when Music is NOT being played
-###############################################################################
+  ###############################################################################
+  # Voice Notify
+  # Conditions:
+  #   => Only Announce when people are home. Except in emergency mode!
+  #   => Only Announce when Music is NOT being played
+  ###############################################################################
   voice_notify:
     sequence:
       - condition: template
-        value_template: '{{ states.input_boolean.voice_notifications.state == "on" }}'
+        value_template: "{{ states('input_boolean.voice_notifications') == 'on' }}"
       - condition: template
-        value_template: '{{ states.input_boolean.do_not_disturb.state | lower == "off" }}'
+        value_template: "{{ states('input_boolean.do_not_disturb') | lower == 'off' }}"
       - condition: template
-        value_template: '{{ states.media_player.gstreamer.state == "idle" }}'
+        value_template: "{{ states('media_player.gstreamer') == 'idle' }}"
       - condition: template
-        value_template: '{{ states.media_player.mpd.state != "playing" }}'
+        value_template: "{{ states('media_player.mpd') != 'playing' }}"
       - condition: template
-        value_template: '{{ message | trim != "" }}'
+        value_template: "{{ message | trim != '' }}"
       - condition: state
         entity_id: group.all_devices
-        state: 'home'
+        state: "home"
       - condition: template
         value_template: >
-          {% if states.input_boolean.emergency_mode.state == "on" %}
+          {% if states('input_boolean.emergency_mode') == "on" %}
             true
           {% else %}
-            {{ states.group.all_devices.state == "home" }}
+            {{ states('group.all_devices') == "home" }}
           {% endif %}
       - condition: template
         value_template: >
           {% if only_at_night | default('no', true ) == "yes" %}
-            {% if states.sun.sun.state == "above_horizon" %}
+            {% if states('sun.sun') == "above_horizon" %}
               false
             {% else %}
               true
@@ -155,15 +153,15 @@ script:
         entity_id: media_player.gstreamer
         data_template:
           volume_level: >
-            {% if states.input_boolean.emergency_mode.state == "on" %}
-              {{ states.input_number.tts_volume_level_alert.state }}
+            {% if states('input_boolean.emergency_mode') == "on" %}
+              {{ states('input_number.tts_volume_level_alert') }}
             {% else %}
               {% if now().hour | int < 12 and now().hour | int > 6 %}
-                {{ states.input_number.tts_volume_level_morning.state }}
+                {{ states('input_number.tts_volume_level_morning') }}
               {% elif now().hour|int > 12 and now().hour|int < 20 %}
-                {{ states.input_number.tts_volume_level_afternoon.state }}
+                {{ states('input_number.tts_volume_level_afternoon') }}
               {% else %}
-                {{ states.input_number.tts_volume_level_evening.state }}
+                {{ states('input_number.tts_volume_level_evening') }}
               {% endif %}
             {% endif %}
       - service: tts.amazon_polly_say
@@ -196,9 +194,9 @@ script:
             {% set msg = msg + " </speak>" %}
             {{ msg }}
 
-###############################################################################
-# Greeting
-###############################################################################
+  ###############################################################################
+  # Greeting
+  ###############################################################################
   voice_greeting:
     sequence:
       - service: tts.amazon_polly_say
@@ -224,9 +222,9 @@ script:
             {% set msg = msg + " </speak>" %}
             {{ msg }}
 
-###############################################################################
-# Status around the house
-###############################################################################
+  ###############################################################################
+  # Status around the house
+  ###############################################################################
   home_status:
     sequence:
       - service: script.voice_notify

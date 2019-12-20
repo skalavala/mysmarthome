@@ -1,6 +1,5 @@
 homeassistant:
 
-
 sensor:
   - platform: mqtt
     name: "Master Bed Sensor"

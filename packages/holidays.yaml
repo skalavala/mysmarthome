@@ -7,7 +7,6 @@
 
 homeassistant:
   customize:
-
     sensor.holiday:
       hidden: true
       icon: mdi:beach
@@ -15,8 +14,8 @@ homeassistant:
 
 ###############################################################################
 # Sensor updates once every 4 hours (14400 seconds) & runs 6 times in 24 hours
-# 
-# First it checks for holiday in static section, if that doesn't exist, 
+#
+# First it checks for holiday in static section, if that doesn't exist,
 # it checks in the dynamic section. If neither exists, the value will be empty
 ###############################################################################
 sensor:
@@ -34,16 +33,15 @@ sensor:
       {{ holiday }}
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 automation:
-
   - alias: Notify Holiday State Change
     initial_state: true
     trigger:
@@ -53,21 +51,21 @@ automation:
       - condition: template
         value_template: "{{ states('sensor.holiday') != 'unknown' }}"
       - condition: template
-        value_template: "{{ states.sensor.holiday.state | trim != '' }}"
+        value_template: "{{ states('sensor.holiday') | trim != '' }}"
     action:
       - service: persistent_notification.create
         data:
-          message: 'Today is {{ states.sensor.holiday.state }}.'
-          title: '{{ states.sensor.holiday.state }}'
+          message: "Today is {{ states('sensor.holiday') }}."
+          title: "{{ states('sensor.holiday') }}"
       - service: script.notify_me
         data_template:
-          message: 'Today is: {{states.sensor.holiday.state }}'
+          message: "Today is: {{states('sensor.holiday') }}"
 
   - alias: Notify Indian Holidays
     initial_state: true
     trigger:
       platform: time
-      at: '09:00:00'
+      at: "09:00:00"
     condition:
       - condition: template
         value_template: >-
@@ -75,9 +73,9 @@ automation:
           {%- if now().year == strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').year -%}
             {%- set days2NextEvent = strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) -%}
           {%- else -%}
-            {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
-          {%- endif -%}  
-          {%- if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int)  -%}
+            {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%}
+          {%- endif -%}
+          {%- if days2NextEvent <= (states('input_number.calendar_remind_before_days') | int)  -%}
             {%- if days2NextEvent |int == 0 -%}
                true
             {%- elif days2NextEvent | int == 1 -%}
@@ -94,18 +92,18 @@ automation:
       - service: script.notify_me
         data_template:
           message: >-
-           {%- set days2NextEvent = 0 -%}
-           {%- if now().year == strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').year -%}
-             {%- set days2NextEvent = strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) -%}
-           {%- else -%}
-             {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
-           {%- endif -%}  
-           {%- if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int) -%}
-             {%- if days2NextEvent |int == 0 -%}
-                Today is {{ states.calendar.holidays_in_india.attributes.message | replace(".", "") | title }}.
-             {%- elif days2NextEvent |int == 1 -%}
-                Tomorrow is {{ states.calendar.holidays_in_india.attributes.message | replace(".", "") | title }}.
-             {%- elif days2NextEvent |int == 2 -%}
-                {{ states.calendar.holidays_in_india.attributes.message | replace(".", "")  | title }}. is day after tomorrow.
-             {%- endif -%}
-           {%- endif -%}
+            {%- set days2NextEvent = 0 -%}
+            {%- if now().year == strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').year -%}
+              {%- set days2NextEvent = strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) -%}
+            {%- else -%}
+              {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%}
+            {%- endif -%}
+            {%- if days2NextEvent <= (states('input_number.calendar_remind_before_days') | int) -%}
+              {%- if days2NextEvent |int == 0 -%}
+                 Today is {{ states.calendar.holidays_in_india.attributes.message | replace(".", "") | title }}.
+              {%- elif days2NextEvent |int == 1 -%}
+                 Tomorrow is {{ states.calendar.holidays_in_india.attributes.message | replace(".", "") | title }}.
+              {%- elif days2NextEvent |int == 2 -%}
+                 {{ states.calendar.holidays_in_india.attributes.message | replace(".", "")  | title }}. is day after tomorrow.
+              {%- endif -%}
+            {%- endif -%}

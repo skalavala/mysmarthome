@@ -6,13 +6,15 @@
   {%- endmacro %}
 
   {# Birthday notifications #}
-  {%- macro birthday_countdown( name, days2go ) -%}
-    {%- if days2go == 0 -%}
-      Today is {{name}}'s Birthday!. Happy Birthday to you, my dear {{name}}!!!.
-    {%- elif days2go == 1 -%}
-      Tomorrow is {{name}}'s Birthday! HURRAY!!!
-    {%- elif days2go > 1 and days2go <= 10 -%}
-      {{name}}'s Birthday is in {{days2go}} days! HURRAY!!!
+  {%- macro birthday_countdown(name, days2go) -%}
+    {%if days2go != 'unknown' %}
+      {%- if days2go |int == 0 -%}
+        Today is {{name}}'s Birthday!. Happy Birthday to you, my dear {{name}}!!!.
+      {%- elif days2go |int == 1 -%}
+        Tomorrow is {{name}}'s Birthday! HURRAY!!!
+      {%- elif days2go |int > 1 and days2go |int <= 10 -%}
+        {{name}}'s Birthday is in {{days2go}} days! HURRAY!!!
+      {%- endif -%}
     {%- endif -%}
   {%- endmacro -%}
 
@@ -58,7 +60,7 @@
       {% else %}
         {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
       {% endif -%}  
-      {% if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int)  %}
+      {% if days2NextEvent <= states('input_number.calendar_remind_before_days') | int  %}
         Your next event. {{ states.calendar.suresh_kalavala.attributes.message }} . starts 
         {% if days2NextEvent == 0 | int %}
            today at {{ strptime(states.calendar.suresh_kalavala.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%I:%M %p') }}.
@@ -83,7 +85,7 @@
       {% else %}
         {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
       {% endif -%}  
-      {% if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int)  %}
+      {% if days2NextEvent <= (states('input_number.calendar_remind_before_days') | int)  %}
         {% if days2NextEvent == 0 | int %}
            Today is {{ states.calendar.holidays_in_india.attributes.message | replace(".", "")}}.
         {%- elif days2NextEvent == 1 %}
@@ -106,7 +108,7 @@
       {% else %}
         {% set days2NextEvent = strptime((now().year ~ "-12-31 12:02:05"), '%Y-%m-%d %H:%M:%S').strftime('%j') | int - (now().strftime('%j') | int) + (strptime(states.calendar.holidays_in_united_states.attributes.start_time, '%Y-%m-%d %H:%M:%S').strftime('%j') | int) -%} 
       {% endif -%}  
-      {% if days2NextEvent <= (states.input_number.calendar_remind_before_days.state | int)  %}
+      {% if days2NextEvent <= (states('input_number.calendar_remind_before_days') | int)  %}
         {% if days2NextEvent == 0 | int %}
            Today is {{ states.calendar.holidays_in_united_states.attributes.message | replace(".", "")}}.
         {%- elif days2NextEvent == 1 %}
@@ -161,9 +163,9 @@
 
   {# Drone Flying Weather #}
   {%- macro drone_weather() -%}
-  {% if states.binary_sensor.good_weather_to_fly_drones.state| lower == "on" and 
-        states.device_tracker.life360_suresh.state == "home" and 
-        states.sun.sun.state == "above_horizon" %}
+  {% if states('binary_sensor.good_weather_to_fly_drones')| lower == "on" and 
+        states('device_tracker.life360_suresh') == "home" and 
+        states('sun.sun') == "above_horizon" %}
     It is now a great weather to fly drone outside.
   {% endif %}
   {%- endmacro -%}
@@ -202,9 +204,9 @@
     {{ USPS() }}
     {{ tesla_status() }}
     {{ drone_weather() }}
-    {{ birthday_countdown("Mallika", states.input_label.mallika_birthday_days2go.state | int ) }}
-    {{ birthday_countdown("Srinika", states.input_label.srinika_birthday_days2go.state | int ) }}
-    {{ birthday_countdown("Hasika", states.input_label.hasika_birthday_days2go.state | int ) }}
+    {{ birthday_countdown("Mallika", states('input_label.mallika_birthday_days2go')) }}
+    {{ birthday_countdown("Srinika", states('input_label.srinika_birthday_days2go')) }}
+    {{ birthday_countdown("Hasika", states('input_label.hasika_birthday_days2go')) }}
   {%- endmacro -%}
 
   {# Call the macro  #}

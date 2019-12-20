@@ -105,17 +105,17 @@ cards:
         - script.emergency_script
         - script.emergency_script_loop
 
-  - type: horizontal-stack
-    cards:
-      - type: glance
-        entities:
-          - input_label.mallika_birthday_days2go
-      - type: glance
-        entities:
-          - input_label.srinika_birthday_days2go
-      - type: glance
-        entities:
-          - input_label.hasika_birthday_days2go
+  # - type: horizontal-stack
+  #   cards:
+  #     - type: glance
+  #       entities:
+  #         - input_label.mallika_birthday_days2go
+  #     - type: glance
+  #       entities:
+  #         - input_label.srinika_birthday_days2go
+  #     - type: glance
+  #       entities:
+  #         - input_label.hasika_birthday_days2go
 
   - type: entity-filter
     title: Doors
@@ -183,15 +183,6 @@ cards:
 
   - type: weather-forecast
     entity: weather.dark_sky
-
-  - type: picture-entity
-    id: camera_ohio_doppler_weather
-    title: Ohio Doppler Weather
-    entity: camera.ohio_doppler_weather
-    camera_image: camera.ohio_doppler_weather
-    show_info: true
-    tap_action:
-      action: more-info
 
   - type: conditional
     conditions:

@@ -76,12 +76,12 @@ sensor:
   - platform: template
     sensors:
       nas_memory_usage_above_80:
-        value_template: '{{ states.sensor.kalavala_nas_memory_usage.state | int > 80 }}'
+        value_template: "{{ states('sensor.kalavala_nas_memory_usage') | int > 80 }}"
 
   - platform: template
     sensors:
       nas_cpu_usage_above_80:
-        value_template: '{{ states.sensor.kalavala_nas_cpu_usage.state | int > 80 }}'
+        value_template: "{{ states('sensor.kalavala_nas_cpu_usage') | int > 80 }}"
 
 ###############################################################################
 #                _                        _   _                 

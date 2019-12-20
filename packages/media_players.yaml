@@ -158,12 +158,12 @@ automation:
       entity_id: input_select.snapcast_server
     condition:
       - condition: template
-        value_template: '{{ states.input_select.snapcast_server.state | lower != "select one" }}'
+        value_template: "{{ states('input_select.snapcast_server') | lower != 'select one' }}"
     action:
       - service_template: >-
-          {% if states.input_select.snapcast_server.state | lower == "stop" %}
+          {% if states('input_select.snapcast_server') | lower == "stop" %}
             shell_command.stop_snapserver
-          {% elif states.input_select.snapcast_server.state | lower == "start" %}
+          {% elif states('input_select.snapcast_server') | lower == "start" %}
             shell_command.start_snapserver
           {% else %}
             shell_command.restart_snapserver

@@ -45,30 +45,30 @@ automation:
       - condition: template
         value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
       - condition: template
-        value_template: '{{ states.alarm_control_panel.simplisafe.state != "unknown" }}'
+        value_template: "{{ states('alarm_control_panel.simplisafe') != 'unknown' }}"
       - condition: template
-        value_template: '{{ states.alarm_control_panel.simplisafe.state | trim != "" }}'
+        value_template: "{{ states('alarm_control_panel.simplisafe') | trim != '' }}"
     action:
       - service_template: >
-          {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+          {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
             script.xiaomi_blue
-          {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+          {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
             script.xiaomi_green
-          {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+          {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
             script.xiaomi_red
-          {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
+          {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
             script.xiaomi_red
           {% endif %}
       - service: script.ifttt_leeo_color_change
         data_template:
           value1: >
-            {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+            {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
               "#0000FF"
-            {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+            {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
               "#00FF00"
-            {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+            {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
               "#FF0000"
-            {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
+            {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
               "#FF0000"
             {% endif %}
 
@@ -94,29 +94,29 @@ automation:
       - service: script.notify_me
         data_template:
           message: >
-            {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+            {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
               Your home is now secured!
-            {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+            {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
               Your Home Security System is now set to Away mode!
-            {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+            {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
               Attention!: Your Home Security System is triggered! It has been notified to the authorities.
-            {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
+            {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
               Attention!: Your Home Security System is turned OFF.
             {% endif %}
       - service: script.voice_notify
         data_template:
           message: >
-            {% if states.alarm_control_panel.simplisafe.state == "armed_home" %}
+            {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
               Your home is now secured!
-            {% elif states.alarm_control_panel.simplisafe.state == "armed_away" %}
+            {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
               Your Home Security System is now set to Away mode!
-            {% elif states.alarm_control_panel.simplisafe.state == "triggered" %}
+            {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
               Attention!: Your Home Security System is triggered! It has been notified to the authorities.
-            {% elif states.alarm_control_panel.simplisafe.state == "disarmed" %}
-              Attention!: Your Home Security System is turned OFF. 
+            {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
+              Attention!: Your Home Security System is turned OFF.
             {% endif %}
       - condition: template
-        value_template: '{{ states.alarm_control_panel.simplisafe.state != "disarmed" }}'
+        value_template: "{{ states('alarm_control_panel.simplisafe') != 'disarmed' }}"
       - service: input_boolean.turn_on
         entity_id: input_boolean.notify_camera_motion
 
@@ -176,7 +176,7 @@ automation:
     condition:
       - condition: template
         value_template: >
-          {% if trigger.from_state.state == 'armed_away' and  
+          {% if trigger.from_state.state == 'armed_away' and
                 (trigger.to_state.state == 'armed_home' or trigger.to_state.state == 'disarmed') %}
             true
           {% else %}
@@ -199,9 +199,9 @@ automation:
       seconds: 00
     condition:
       - condition: template
-        value_template: "{{ states.sensor.bedtime_hour.state|int == now().hour|int }}"
+        value_template: "{{ states('sensor.bedtime_hour')|int == now().hour|int }}"
       - condition: template
-        value_template: "{{ states.sensor.bedtime_minute.state|int == now().minute|int }}"
+        value_template: "{{ states('sensor.bedtime_minute')|int == now().minute|int }}"
       - condition: template
         value_template: "{{ states('alarm_control_panel.simplisafe') != 'away' }}"
       - condition: state
@@ -231,33 +231,33 @@ automation:
 #     condition: and
 #     conditions:
 #       - condition: template
-#         value_template: '{{ states.alarm_control_panel.simplisafe.state == "armed_home" or states.alarm_control_panel.simplisafe.state == "armed_away" }}'
+#         value_template: '{{ states('alarm_control_panel.simplisafe') == "armed_home" or states('alarm_control_panel.simplisafe') == "armed_away" }}'
 #       - condition: or
 #         conditions:
 #         - condition: template
-#           value_template: '{{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" }}'
+#           value_template: '{{ states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" }}'
 #         - condition: template
-#           value_template: '{{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" }}'
+#           value_template: '{{ states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" }}'
 #   action:
 #     - service: switch.turn_on
 #       entity_id: switch.garage
 #     - service: script.notify_me
 #       data_template:
 #         message: >
-#           Attention! Your home Security system is set to {{ states.alarm_control_panel.simplisafe.state.split('_')[1] | upper }} mode.
-#           BUT THE {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
+#           Attention! Your home Security system is set to {{ states('alarm_control_panel.simplisafe').split('_')[1] | upper }} mode.
+#           BUT THE {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
 #     - service: camera.snapshot
 #       data_template:
 #         entity_id: "camera.garage_camera"
-#         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+#         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 #     - service: camera.snapshot
 #       data_template:
 #         entity_id: "camera.driveway_camera"
-#         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+#         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 #     - service: camera.snapshot
 #       data_template:
 #         entity_id: "camera.frontdoor_camera"
-#         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+#         filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 #     - service: notify.notify_smtp
 #       data_template:
 #         title: 'Garage Picture {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
@@ -272,33 +272,33 @@ automation:
 #             {%- endif %} {{ dt.strftime("%B %Y")}}
 #           {%- endmacro -%}
 #           {% set doors = "" %}
-#           {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on"  and states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
+#           {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
 #             {% set doors = "Both garage doors" %}
-#             {% elif states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"%}
-#               {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
-#             {% elif states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" %}
-#               {% set doors = states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
+#             {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"%}
+#               {% set doors = states('binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
+#             {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
+#               {% set doors = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
 #             {% endif %}
-#           Your {{ doors }} seem to be open while your home security system is set to "{{ states.alarm_control_panel.simplisafe.state.split('_')[1]| title }}" mode. Today is {{ get_date(now()) }}, and time is {{ now().strftime("%I:%M:%S %p") }}. Please see the attached pictures and make sure everything is okay.
+#           Your {{ doors }} seem to be open while your home security system is set to "{{ states('alarm_control_panel.simplisafe').split('_')[1]| title }}" mode. Today is {{ get_date(now()) }}, and time is {{ now().strftime("%I:%M:%S %p") }}. Please see the attached pictures and make sure everything is okay.
 #         data:
 #           images:
-#             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-#             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-#             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  (states.automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+#             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+#             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+#             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 #     - condition: template
-#       value_template: '{{ states.alarm_control_panel.simplisafe.state == "armed_home" }}'
+#       value_template: '{{ states('alarm_control_panel.simplisafe') == "armed_home" }}'
 #     - service: script.voice_notify
 #       data_template:
 #         message: >
 #           {% set doors = "" %}
-#           {% if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on"  and states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
+#           {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
 #             {% set doors = "Both garage doors" %}
-#             {% elif states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"%}
-#               {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
-#             {% elif states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on" %}
-#               {% set doors = states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
+#             {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"%}
+#               {% set doors = states('binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
+#             {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+#               {% set doors = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
 #             {% endif %}
-#           Attention! Your home Security system is set to {{ states.alarm_control_panel.simplisafe.state.split('_')[1] | upper }} mode.
+#           Attention! Your home Security system is set to {{ states('alarm_control_panel.simplisafe').split('_')[1] | upper }} mode.
 #           BUT the {{ doors }} {{ 'are' if doors.endswith('s') else 'is' }} open.
 
 ###############################################################################
@@ -319,10 +319,10 @@ automation:
 #       state: 'disarmed'
 #   action:
 #     - service_template: >-
-#         {% if states.binary_sensor.back_door_sensor_sensor.state == "off" and
-#               states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "off" and
-#               states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off" and
-#               states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+#         {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
+#               states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
+#               states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off" and
+#               states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
 #           alarm_control_panel.alarm_arm_home
 #         {% else %}
 #           alarm_control_panel.disarm
@@ -332,31 +332,31 @@ automation:
 #     - service: script.voice_notify
 #       data_template:
 #         message: >
-#           {% if states.binary_sensor.back_door_sensor_sensor.state == "off" and
-#                 states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "off" and
-#                 states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off" and
-#                 states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+#           {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
+#                 states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
+#                 states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off" and
+#                 states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
 #             It's getting dark outside, and your home security system is now set to HOME mode.
 #           {% else %}
 #              It is getting dark outside.
-#              {%- if states.binary_sensor.back_door_sensor_sensor.state == "on" -%}
+#              {%- if states('binary_sensor.back_door_sensor_sensor') == "on" -%}
 #                {%- set doors = doors ~ " Back Door" -%}
 #              {%- endif -%}
-#              {%- if states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "on" -%}
+#              {%- if states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "on" -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Front Door" -%}
 #                {% else %}
 #                  {%- set doors = doors ~ " Front Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" -%}
+#              {%- if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
 #                {% else %}
 #                  {%- set doors = doors ~ " Two Car Garage Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"  -%}
+#              {%- if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"  -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
 #                {% else %}
@@ -368,31 +368,31 @@ automation:
 #     - service: script.notify_me
 #       data_template:
 #         message: >
-#           {% if states.binary_sensor.back_door_sensor_sensor.state == "off" and
-#                 states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "off" and
-#                 states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "off" and
-#                 states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "off" %}
+#           {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
+#                 states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
+#                 states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off" and
+#                 states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
 #             It's getting dark outside, and your home security system is now set to HOME mode.
 #           {% else %}
 #              It is getting dark outside.
-#              {%- if states.binary_sensor.back_door_sensor_sensor.state == "on" -%}
+#              {%- if states('binary_sensor.back_door_sensor_sensor') == "on" -%}
 #                {%- set doors = doors ~ " Back Door" -%}
 #              {%- endif -%}
-#              {%- if states.binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor.state  == "on" -%}
+#              {%- if states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "on" -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Front Door" -%}
 #                {% else %}
 #                  {%- set doors = doors ~ " Front Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state == "on" -%}
+#              {%- if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
 #                {% else %}
 #                  {%- set doors = doors ~ " Two Car Garage Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state == "on"  -%}
+#              {%- if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"  -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
 #                {% else %}
@@ -417,9 +417,9 @@ automation:
 #     condition: or
 #     conditions:
 #       - condition: template
-#         value_template: '{{ states.alarm_control_panel.simplisafe.state | lower == "armed_away" }}'
+#         value_template: '{{ states('alarm_control_panel.simplisafe') | lower == "armed_away" }}'
 #       - condition: template
-#         value_template: '{{ states.alarm_control_panel.simplisafe.state | lower == "armed_home" }}'
+#         value_template: '{{ states('alarm_control_panel.simplisafe') | lower == "armed_home" }}'
 #   action:
 #     - service: notify.ios_suresh
 #       data_template:
@@ -444,7 +444,7 @@ automation:
 #     to: 'on'
 #   condition:
 #     - condition: template
-#       value_template: '{{ states.alarm_control_panel.simplisafe.state == "armed_home" or states.alarm_control_panel.simplisafe.state == "armed_away" }}'
+#       value_template: '{{ states('alarm_control_panel.simplisafe') == "armed_home" or states('alarm_control_panel.simplisafe') == "armed_away" }}'
 #   action:
 #     - service: notify.ios_suresh
 #       data_template:

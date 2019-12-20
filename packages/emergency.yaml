@@ -154,7 +154,7 @@
 #       to: 'disarmed'
 #     condition:
 #       - condition: template
-#         value_template: '{{ states.input_boolean.emergency_mode.state == "on" }}'
+#         value_template: "{{ states('input_boolean.emergency_mode') == 'on' }}"
 #     action:
 #       - service: input_boolean.turn_off
 #         entity_id: input_boolean.emergency_mode

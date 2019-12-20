@@ -1007,4 +1007,3 @@
 #         data_template:
 #           entity_id: climate.cooler_fan
 #           temperature: "{{ states.climate.main_floor.temperature |float }}"
-

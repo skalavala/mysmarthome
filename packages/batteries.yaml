@@ -187,7 +187,7 @@ sensor:
           {% if states('sensor.suresh_iphone_battery_ot') != "unknown" %}
             {% set battery_level = states('sensor.suresh_iphone_battery_ot')|int (-1)%}
             {% set battery_round = (battery_level|int / 10)|int * 10 %}
-            {% if states.sensor.suresh_iphone_battery_state.state | lower == "charging" %}
+            {% if states('sensor.suresh_iphone_battery_state') | lower == "charging" %}
               {% if battery_level == -1 %}
                 mdi:battery-unknown
               {% else %}
@@ -210,7 +210,7 @@ sensor:
                 {% else %}
                   mdi:battery-alert
                 {% endif %}
-              {% endif %}            
+              {% endif %}
             {% endif %}
           {% else %}
             mdi:battery-alert
@@ -225,7 +225,7 @@ sensor:
           {% if states('sensor.mallika_iphone_battery_ot') != "unknown" %}
             {% set battery_level = states('sensor.mallika_iphone_battery_ot')|int (-1)%}
             {% set battery_round = (battery_level|int / 10)|int * 10 %}
-            {% if states.sensor.mallika_iphone_battery_state.state | lower == "charging" %}
+            {% if states('sensor.mallika_iphone_battery_state') | lower == "charging" %}
               {% if battery_level == -1 %}
                 mdi:battery-unknown
               {% else %}
@@ -248,7 +248,7 @@ sensor:
                 {% else %}
                   mdi:battery-alert
                 {% endif %}
-              {% endif %}            
+              {% endif %}
             {% endif %}
           {% else %}
             mdi:battery-alert
@@ -263,7 +263,7 @@ sensor:
           {% if states('sensor.srinika_iphone_battery_ot') != "unknown" %}
             {% set battery_level = states('sensor.srinika_iphone_battery_ot')|int (-1)%}
             {% set battery_round = (battery_level|int / 10)|int * 10 %}
-            {% if states.sensor.srinika_iphone_battery_state.state | lower == "charging" %}
+            {% if states('sensor.srinika_iphone_battery_state') | lower == "charging" %}
               {% if battery_level == -1 %}
                 mdi:battery-unknown
               {% else %}
@@ -286,7 +286,7 @@ sensor:
                 {% else %}
                   mdi:battery-alert
                 {% endif %}
-              {% endif %}            
+              {% endif %}
             {% endif %}
           {% else %}
             mdi:battery-alert
@@ -301,7 +301,7 @@ sensor:
           {% if states('sensor.hasika_iphone_battery_ot') != "unknown" %}
             {% set battery_level = states('sensor.hasika_iphone_battery_ot')|int (-1)%}
             {% set battery_round = (battery_level|int / 10)|int * 10 %}
-            {% if states.sensor.hasika_iphone_battery_state.state | lower == "charging" %}
+            {% if states('sensor.hasika_iphone_battery_state') | lower == "charging" %}
               {% if battery_level == -1 %}
                 mdi:battery-unknown
               {% else %}
@@ -324,7 +324,7 @@ sensor:
                 {% else %}
                   mdi:battery-alert
                 {% endif %}
-              {% endif %}            
+              {% endif %}
             {% endif %}
           {% else %}
             mdi:battery-alert
@@ -364,9 +364,9 @@ automation:
             true
           {%- endif -%}
       - condition: template
-        value_template: "{{ states.input_boolean.home_mode_away.state == 'off' }}"
+        value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
       - condition: template
-        value_template: "{{ states.alarm_control_panel.simplisafe.state | lower != 'armed_away' }}"
+        value_template: "{{ states('alarm_control_panel.simplisafe') | lower != 'armed_away' }}"
     action:
       - service: script.voice_notify
         data_template:
@@ -395,7 +395,7 @@ automation:
       below: 25
     condition:
       - condition: template
-        value_template: '{{ states.input_boolean.battery_notifications.state == "on" }}'
+        value_template: "{{ states('input_boolean.battery_notifications') == 'on' }}"
     action:
       - service: script.notify_me
         data_template:
@@ -423,7 +423,7 @@ automation:
             {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
               {% set ns.lowBattery = ns.lowBattery ~ ',' ~ x.name %}
             {%- endfor %}
-            {{ ns.lowBattery -}} 
+            {{ ns.lowBattery -}}
             {{- ' battery is ' if ns.lowBattery.split(',')|count == 1 else ' batteries are ' -}} less than 25 percent.
 
   # ###############################################################################

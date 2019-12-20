@@ -3,7 +3,7 @@
 #   @date           :   11/19/2017
 #   @package        :   Timers and Lights/Switches
 #   @description    :   All lights and switches are now timer enabled
-#                       and the timer automatically extends when there is 
+#                       and the timer automatically extends when there is
 #                       motion. When timer elapses, it turns off lights.
 ###############################################################################
 homeassistant:
@@ -25,189 +25,156 @@ homeassistant:
 
 timer:
   timer_kitchen:
-    duration: '00:10:00'
+    duration: "00:10:00"
   timer_familyroom:
-    duration: '00:05:00'
+    duration: "00:05:00"
   timer_frontroom:
-    duration: '00:05:00'
+    duration: "00:05:00"
   timer_garage:
-    duration: '00:05:00'
+    duration: "00:05:00"
   timer_masterbedroom:
-    duration: '00:05:00'
+    duration: "00:05:00"
   timer_officeroom:
-    duration: '00:05:00'
+    duration: "00:05:00"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-# Office Room:
-# Motion Detected - Turn ON the light and extend timer
-###############################################################################
+  # Office Room:
+  # Motion Detected - Turn ON the light and extend timer
+  ###############################################################################
   - alias: Officeroom Motion & Timer
     initial_state: true
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_sensor_158d000272bfd7
-        from: 'off'
-        to: 'on'
+        to: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_officeroom
       - service: switch.turn_on
         entity_id: switch.office_room
       - condition: template
-        value_template: '{{ states.sun.sun.state == "below_horizon" }}'
+        value_template: "{{ states('sun.sun') == 'below_horizon' }}"
       - service: homeassistant.turn_on
         entity_id: switch.zwave_smart_switch_switch
 
   - alias: Officeroom Timer Elapsed
     initial_state: true
     trigger:
-      - platform: state
-        entity_id: timer.timer_officeroom
-        from: 'active'
-        to: 'idle'
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.timer_officeroom
     action:
       - service: switch.turn_off
         entity_id: switch.office_room
       - service: homeassistant.turn_off
         entity_id: switch.zwave_smart_switch_switch
 
-# Srinika's Bedroom:
-# Motion Detected - Turn ON the bedroom light and extend timer
-###############################################################################
-  # - alias: Srinika Bedroom Motion & Timer
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id: binary_sensor.motion_sensor_158d000272bed1
-  #       from: 'off'
-  #       to: 'on'
-  #   action:
-  #     - service: timer.start
-  #       entity_id: timer.timer_srinika_bedroom
-  #     - service: switch.turn_on
-  #       entity_id: switch.switch.guest_bedroom
-  #     - condition: template
-  #       value_template: '{{ states.sun.sun.state == "below_horizon" }}'
-
-  # - alias: Srinika Bedroom Timer Elapsed
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id: timer.timer_srinika_bedroom
-  #       from: 'active'
-  #       to: 'idle'
-  #   action:
-  #     - service: switch.turn_off
-  #       entity_id: switch.guest_bedroom
-
-# Front Room:
-# Motion Detected - Turn ON the light and extend timer
-###############################################################################
+  # # Front Room:
+  # # Motion Detected - Turn ON the light and extend timer
+  # ###############################################################################
   - alias: Frontroom Motion & Timer
     initial_state: true
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_sensor_158d00016db6d2
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_frontroom
       - condition: template
-        value_template: '{{ states.sun.sun.state == "below_horizon" }}'
+        value_template: "{{ states('sun.sun') == 'below_horizon' }}"
       - service: homeassistant.turn_on
         entity_id: switch.zwave_smart_switch_switch
 
-# Front Room:
-# Timer Elapsed - Turn OFF lights
-###############################################################################
+  # Front Room:
+  # Timer Elapsed - Turn OFF lights
+  ###############################################################################
   - alias: Frontroom Timer Elapsed
     initial_state: true
     trigger:
-      - platform: state
-        entity_id: timer.timer_frontroom
-        from: 'active'
-        to: 'idle'
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.timer_frontroom
     condition:
       - condition: template
-        value_template: '{{ states.input_boolean.working_in_office_room.state == "off" }}'
+        value_template: "{{ states('input_boolean.working_in_office_room') == 'off' }}"
     action:
       - service: homeassistant.turn_off
         entity_id: switch.rf_switch_four
-
-# Kitchen:
-# Motion Detected - Turn ON the light and extend timer
-###############################################################################
+  # Kitchen:
+  # Motion Detected - Turn ON the light and extend timer
+  ###############################################################################
   - alias: Kitchen Motion & Timer
     initial_state: true
     trigger:
       - platform: state
-        entity_id: 
+        entity_id:
           - binary_sensor.motion_sensor_158d0001a662fe
           - binary_sensor.kitchen_motion_sensor_sensor
           - binary_sensor.basement_door_sensor_sensor
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     condition:
       - condition: state
         entity_id: sun.sun
-        state: 'below_horizon'
+        state: "below_horizon"
     action:
       - service: switch.turn_on
         entity_id: switch.kitchen
       - service: timer.start
         entity_id: timer.timer_kitchen
-
-# Kitchen:
-# Timer Elapsed - Turn OFF lights
-###############################################################################
+  # Kitchen:
+  # Timer Elapsed - Turn OFF lights
+  ###############################################################################
   - alias: Kitchen Timer Elapsed
     initial_state: true
     trigger:
       - platform: event
         event_type: timer.finished
-        event_data: 
-          entity_id: timer.timer_kitchen    
+        event_data:
+          entity_id: timer.timer_kitchen
     condition:
       - condition: state
         entity_id: sun.sun
-        state: 'below_horizon'
+        state: "below_horizon"
     action:
       - service_template: >
-          {% if now().hour|int >= states.sensor.bedtime_hour.state|int and now().minute|int >= states.sensor.bedtime_minute.state|int %}
+          {% if now().hour|int >= states('sensor.bedtime_hour') |int and
+                now().minute|int >= states('sensor.bedtime_minute') |int %}
             switch.turn_off
           {% else %}
             switch.turn_on
           {% endif %}
         entity_id: switch.kitchen
-
-# Family Room: 
-# Motion Detected - When TV is OFF, turn ON the light 100% and extend timer
-###############################################################################
+  # Family Room:
+  # Motion Detected - When TV is OFF, turn ON the light 100% and extend timer
+  ###############################################################################
   - alias: Family Room Motion & Timer
     initial_state: true
     trigger:
       - platform: state
-        entity_id: 
+        entity_id:
           - binary_sensor.tv_multi_sensor_sensor
           - binary_sensor.motion_sensor_158d0001a25041
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     condition:
       - condition: state
         entity_id: sun.sun
-        state: 'below_horizon'
+        state: "below_horizon"
       - condition: template
         value_template: "{{ states('input_boolean.movie_time') != 'on' }}"
     action:
@@ -215,129 +182,123 @@ automation:
         entity_id: light.family_room
         data_template:
           brightness: >
-            {% if states.binary_sensor.sharp_tv.state == "on" %}
+            {% if states('binary_sensor.sharp_tv') == "on" %}
               25
             {% else %}
               254
             {% endif %}
           color_temp: 154
-          transition: 5          
+          transition: 5
       - service: timer.start
         entity_id: timer.timer_familyroom
-
-# Family Room:
-# Timer Elapsed - Turn OFF lights
-###############################################################################
+  # Family Room:
+  # Timer Elapsed - Turn OFF lights
+  ###############################################################################
   - alias: Family Room Timer Elapsed
     initial_state: true
     trigger:
       - platform: state
         entity_id: timer.timer_familyroom
-        from: 'active'
-        to: 'idle'
+        from: "active"
+        to: "idle"
     action:
       - service: light.turn_off
         entity_id: light.family_room
-      - delay: '00:00:05'
+      - delay: "00:00:05"
       - service: light.turn_off
         entity_id: light.family_room
-
-# Master Bedroom:
-# Motion Detected - Turn ON the lights and extend timer
-###############################################################################
+  # Master Bedroom:
+  # Motion Detected - Turn ON the lights and extend timer
+  ###############################################################################
   - alias: Master Bedroom Motion & Timer
     initial_state: true
     trigger:
       - platform: state
         entity_id: binary_sensor.upstairs_multi_sensor_sensor
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     condition:
       - condition: state
         entity_id: sun.sun
-        state: 'below_horizon'
+        state: "below_horizon"
     action:
       - service: light.turn_on
         data:
           entity_id: light.master_bedroom_1
-          rgb_color: [224,175,102]
+          rgb_color: [224, 175, 102]
           brightness: 10
       - service: light.turn_on
         data:
           entity_id: light.master_bedroom_2
-          rgb_color: [224,175,102]
+          rgb_color: [224, 175, 102]
           brightness: 10
       - service: timer.start
         entity_id: timer.timer_masterbedroom
-
-# Master Bedroom:
-# Timer Elapsed - Turn OFF lights
-###############################################################################
+  # Master Bedroom:
+  # Timer Elapsed - Turn OFF lights
+  ###############################################################################
   - alias: Master Bedroom Timer Elapsed
     initial_state: true
     trigger:
       - platform: state
         entity_id: timer.timer_masterbedroom
-        from: 'active'
-        to: 'idle'
+        from: "active"
+        to: "idle"
     action:
       - service: light.turn_off
         entity_id: light.master_bedroom_1
       - service: light.turn_off
         entity_id: light.master_bedroom_2
-      - delay: '00:00:05'
+      - delay: "00:00:05"
       - service: light.turn_off
         entity_id: light.master_bedroom
-
-# Garage:
-# Motion Detected - Turn ON the light and extend timer
-#
-# Added a condition - if the lights were just turn off in the last 30 seconds,
-# do not turn ON the lights again
-###############################################################################
+  # Garage:
+  # Motion Detected - Turn ON the light and extend timer
+  #
+  # Added a condition - if the lights were just turn off in the last 30 seconds,
+  # do not turn ON the lights again
+  ###############################################################################
   - alias: Garage Motion & Timer
     initial_state: true
     trigger:
       - platform: state
         entity_id: binary_sensor.garage_motion
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     condition:
       - condition: template
-        value_template: '{{ states.input_boolean.working_in_garage.state | lower == "on" }}'
+        value_template: "{{ states('input_boolean.working_in_garage') | lower == 'on' }}"
       - condition: template
-        value_template: '{{ (as_timestamp(now()) - as_timestamp(states.switch.garage.last_updated))  | int > 30 }}'
+        value_template: "{{ (as_timestamp(now()) - as_timestamp(states.switch.garage.last_updated))  | int > 30 }}"
     action:
       - service: switch.turn_on
         entity_id: switch.garage
-
-# Start the timer when the lights are ON
-###############################################################################
+  # Start the timer when the lights are ON
+  ###############################################################################
   - alias: Garage Timer Start When Garage Lights ON
     initial_state: true
     trigger:
       - platform: state
         entity_id: switch.garage
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_garage
-
-# Garage:
-# Timer Elapsed - Turn OFF lights, when "I am not working"
-###############################################################################
+  # Garage:
+  # Timer Elapsed - Turn OFF lights, when "I am not working"
+  ###############################################################################
   - alias: Garage Timer Elapsed
     initial_state: true
     trigger:
       - platform: state
         entity_id: timer.timer_garage
-        from: 'active'
-        to: 'idle'
+        from: "active"
+        to: "idle"
     condition:
       - condition: state
         entity_id: input_boolean.working_in_garage
-        state: 'off'
+        state: "off"
     action:
       - service: switch.turn_off
         entity_id: switch.garage

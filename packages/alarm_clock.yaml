@@ -7,7 +7,6 @@
 ###############################################################################
 homeassistant:
   customize:
-
     automation.alarm_clock:
       icon: mdi:alarm-check
 
@@ -48,13 +47,13 @@ input_label:
     icon: mdi:timer
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
@@ -64,7 +63,7 @@ automation:
       - platform: homeassistant
         event: start
       - platform: state
-        entity_id: 
+        entity_id:
           - input_boolean.am
           - input_boolean.pm
           - input_number.slider_hours
@@ -74,28 +73,28 @@ automation:
         entity_id: input_label.alarm_current_time
         data_template:
           value: >
-            {%- if states.input_number.slider_hours.state | int < 10 -%}
-              {%- if states.input_number.slider_hours.state|int == 0 %}
+            {%- if states('input_number.slider_hours') | int < 10 -%}
+              {%- if states('input_number.slider_hours') |int == 0 %}
                 12
               {%- else -%}
-                {{- 0 ~ states.input_number.slider_hours.state|int -}}
+                {{- 0 ~ states('input_number.slider_hours') |int -}}
               {%- endif -%}
             {%- else -%}
-              {{- states.input_number.slider_hours.state |int -}}
+              {{- states('input_number.slider_hours') |int -}}
             {% endif -%}:
-            {%- if states.input_number.slider_minutes.state | int < 10 -%}
-              {{- 0 ~ states.input_number.slider_minutes.state |int -}}
+            {%- if states('input_number.slider_minutes') | int < 10 -%}
+              {{- 0 ~ states('input_number.slider_minutes') |int -}}
             {%- else -%}
-              {{- states.input_number.slider_minutes.state|int -}}
-            {%- endif -%}{%- if states.input_boolean.am.state == "on" %} AM{%- else %} PM{%- endif -%}          
-  
+              {{- states('input_number.slider_minutes') |int -}}
+            {%- endif -%}{%- if states('input_boolean.am') == "on" %} AM{%- else %} PM{%- endif -%}
+
   - alias: AM Change OFF
     initial_state: true
     trigger:
       platform: state
       entity_id: input_boolean.am
-      from: 'on'
-      to: 'off'
+      from: "on"
+      to: "off"
     action:
       - service: input_boolean.turn_on
         entity_id: input_boolean.pm
@@ -107,8 +106,8 @@ automation:
     trigger:
       platform: state
       entity_id: input_boolean.am
-      from: 'off'
-      to: 'on'
+      from: "off"
+      to: "on"
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.pm
@@ -120,8 +119,8 @@ automation:
     trigger:
       platform: state
       entity_id: input_boolean.pm
-      from: 'on'
-      to: 'off'
+      from: "on"
+      to: "off"
     action:
       - service: input_boolean.turn_on
         entity_id: input_boolean.am
@@ -133,8 +132,8 @@ automation:
     trigger:
       platform: state
       entity_id: input_boolean.pm
-      from: 'off'
-      to: 'on'
+      from: "off"
+      to: "on"
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.am
@@ -145,7 +144,7 @@ automation:
     initial_state: true
     trigger:
       platform: time_pattern
-      minutes: '/1'
+      minutes: "/1"
       seconds: 00
     condition:
       - condition: template

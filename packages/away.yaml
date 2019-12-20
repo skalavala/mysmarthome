@@ -7,7 +7,6 @@ homeassistant:
       friendly_name: All Indoor Lights & Switches OFF
 
 script:
-
   home_mode_away:
     sequence:
       - service: script.all_indoor_lights_off
@@ -16,7 +15,7 @@ script:
       - service: climate.set_away_mode
         data:
           entity_id: climate.dining_room
-          away_mode: 'true'
+          away_mode: "true"
       - service: alarm_control_panel.alarm_arm_away
         data:
           entity_id: alarm_control_panel.simplisafe
@@ -35,7 +34,7 @@ script:
       - service: notify.notify_smtp
         data_template:
           title: 'Indoor Pictures {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
-          message: 'No one seem to be home at the moment... Please see the images and make sure everything is okay.'
+          message: "No one seem to be home at the moment... Please see the images and make sure everything is okay."
           data:
             images:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/kitchen_away.jpg"

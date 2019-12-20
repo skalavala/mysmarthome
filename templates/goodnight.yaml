@@ -46,23 +46,23 @@
 
   {#- Provides Home Security System Status -#}
   {%- macro alarm_status() -%}
-    {%- if states.alarm_control_panel.simplisafe.state | lower == "disarmed" -%}
+    {%- if states('alarm_control_panel.simplisafe') | lower == "disarmed" -%}
       Your home security system is switched OFF. You may want to turn it ON.
-    {%- elif states.alarm_control_panel.simplisafe.state | lower == "armed_away" -%}
+    {%- elif states('alarm_control_panel.simplisafe') | lower == "armed_away" -%}
       Your home security system is set to away mode.
-    {%- elif states.alarm_control_panel.simplisafe.state | lower == "armed_home" -%}
+    {%- elif states('alarm_control_panel.simplisafe') | lower == "armed_home" -%}
       Your home security system is ON, and your home is secured.
     {%- endif %}
   {%- endmacro -%}
-  
+
   {#- Provides Trash and Recycle Reminder -#}
   {%- macro trash_recycle_status() -%}
     {%- set flag = false -%}
-    {%- if states.sensor.trash_day.state | lower == "yes" -%}
+    {%- if states('sensor.trash_day') | lower == "yes" -%}
       Your trash will be picked up tomorrow. Did you leave the trash bin outside?.
       {%- set flag = true -%}
     {%- endif %}
-    {%- if states.sensor.recycle_day.state | lower == "yes" -%}
+    {%- if states('sensor.recycle_day') | lower == "yes" -%}
       {%- if flag -%}
         Also, your recycle stuff will be picked up tomorrow as well! Please leave both recycle bin and trash cans outside if you haven't!.
       {%- else -%}
@@ -70,19 +70,19 @@
       {%- endif -%}
     {%- endif %}
   {%- endmacro -%}
-  
+
   {%- macro outside_weather() -%}
     {%- if states('sensor.dark_sky_minutely_summary') != "unknown" -%}
       Outside, it is going to be {{states('sensor.dark_sky_minutely_summary')}}.
     {%- endif -%}
     {%- if states('sensor.dark_sky_apparent_temperature') != "unknown" %}
-    The temperature outside is around {{ states.sensor.dark_sky_apparent_temperature.state | round(0)}} degrees.
+    The temperature outside is around {{ states('sensor.dark_sky_apparent_temperature') | round(0)}} degrees.
     {%- endif -%}
   {%- endmacro -%}
-  
+
   {%- macro pihole() -%}
-    {%- if states.sensor.ads_blocked_today.state|int > 100 -%}
-      Our internet blocking system has blocked {{states.sensor.ads_blocked_today.state}} ads today.
+    {%- if states('sensor.ads_blocked_today') |int > 100 -%}
+      Our internet blocking system has blocked {{states('sensor.ads_blocked_today') }} ads today.
     {%- endif -%}
   {%- endmacro -%}
 
@@ -103,35 +103,35 @@
 
   {#- Provides Garage Doors Status -#}
   {%- macro single_car_garage_door_status() -%} 
-    {% if  states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.state|lower == "on" %}
+    {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') |lower == "on" %}
       {{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
     {% endif %}
   {%- endmacro -%}
- 
+
   {%- macro two_car_garage_door_status() -%} 
-    {% if  states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.state|lower == "on" %}
+    {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') |lower == "on" %}
       {{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN
     {% endif %}
   {%- endmacro -%}
 
   {%- macro tesla_status() %}
     {%- if states("binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor") != "unknown" -%}
-      Your Tesla Car is {{ 'not' if states.binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor.state == "off" }} plugged in.
+      Your Tesla Car is {{ 'not' if states('binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor') == "off" }} plugged in.
     {% endif %}
 
     {%- if states("sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor") != "unknown" and states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" and states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') | int > 0  -%}
-    Tesla Car battery is at {{ states.sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor.state }}%, and you can drive about {{ (states.sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor.state | int) | round(0) }} miles.
+    Tesla Car battery is at {{ states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') }}%, and you can drive about {{ (states.sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor.state | int) | round(0) }} miles.
     {% endif %}
   {%- endmacro %}
 
   {#- Check for low humidity levels in autumn, winter and high levels during rest of the year -#}
   {%- macro humidity_status() -%}
-    {%- if states.sensor.season.state| lower == "autumn" or states.sensor.season.state| lower == "winter" %}
-      {%- if states.sensor.dining_room_thermostat_humidity.state | int < 30 -%}
+    {%- if states('sensor.season') | lower == "autumn" or states('sensor.season') | lower == "winter" %}
+      {%- if states('sensor.dining_room_thermostat_humidity') | int < 30 -%}
         Home humidity is less than 30%.
       {%- endif -%}
     {% else %}
-      {%- if states.sensor.dining_room_thermostat_humidity.state | default(0) | int > 60 -%}
+      {%- if states('sensor.dining_room_thermostat_humidity') | default(0) | int > 60 -%}
         Home humidity is more than 60%.
       {%- endif -%}
     {%- endif -%}
@@ -187,5 +187,5 @@
    {{- humidity_status() -}}
    {{- outside_weather() }} Everything else looks good. {{ getGreeting() }}
   {%- endmacro -%}
- 
+
   {{- clean_up(run_script()) -}}

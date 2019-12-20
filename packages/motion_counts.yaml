@@ -1,55 +1,55 @@
 homeassistant:
   customize:
-      input_label.aeotec_zw120_door_window_sensor_gen5_sensor:
-        unit_of_measurement: 'count'
-      input_label.back_door_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.basement_door_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.downstairs_multi_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.front_room_multi_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.front_room_window_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.garage_door_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.garage_motion:
-        unit_of_measurement: 'count'
-      input_label.guest_bedroom_multi_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.kitchen_motion_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d00016c2d0e:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d00016db6d2:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d0001a25041:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d0001a662fe:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d00024e57d3:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d00024e57fb:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d00024e842c:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d00024ee084:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d000272bed1:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d000272bf48:
-        unit_of_measurement: 'count'
-      input_label.motion_sensor_158d000272bfd7:
-        unit_of_measurement: 'count'
-      input_label.single_car_garage_door_tilt_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.stairs_motion_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.two_car_garage_door_tilt_sensor_sensor:
-        unit_of_measurement: 'count'
-      input_label.upstairs_multi_sensor_sensor:
-        unit_of_measurement: 'count'
+    input_label.aeotec_zw120_door_window_sensor_gen5_sensor:
+      unit_of_measurement: "count"
+    input_label.back_door_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.basement_door_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.downstairs_multi_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.front_room_multi_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.front_room_window_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.garage_door_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.garage_motion:
+      unit_of_measurement: "count"
+    input_label.guest_bedroom_multi_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.kitchen_motion_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d00016c2d0e:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d00016db6d2:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d0001a25041:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d0001a662fe:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d00024e57d3:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d00024e57fb:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d00024e842c:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d00024ee084:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d000272bed1:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d000272bf48:
+      unit_of_measurement: "count"
+    input_label.motion_sensor_158d000272bfd7:
+      unit_of_measurement: "count"
+    input_label.single_car_garage_door_tilt_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.stairs_motion_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.two_car_garage_door_tilt_sensor_sensor:
+      unit_of_measurement: "count"
+    input_label.upstairs_multi_sensor_sensor:
+      unit_of_measurement: "count"
 
 input_label:
   aeotec_zw120_door_window_sensor_gen5_sensor:
@@ -134,7 +134,7 @@ automation:
   - alias: Count Motions
     trigger:
       - platform: state
-        to: 'on'
+        to: "on"
         entity_id:
           - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
           - binary_sensor.back_door_sensor_sensor
@@ -203,16 +203,15 @@ automation:
             - input_label.stairs_motion_sensor_sensor
             - input_label.two_car_garage_door_tilt_sensor_sensor
             - input_label.upstairs_multi_sensor_sensor
-
-# {% for x in states.binary_sensor if   'camera' not in x.entity_id and 
-#                                       'cube' not in x.entity_id and 
-#                                       'tesla' not in x.entity_id and 
-#                                       'drone' not in x.entity_id and 
-#                                       'audio' not in x.entity_id and 
-#                                       'protection' not in x.entity_id and 
-#                                       'tv' not in x.entity_id and 
-#                                       'workday' not in x.entity_id and 
-#                                       'home_away' not in x.entity_id and 
+# {% for x in states.binary_sensor if   'camera' not in x.entity_id and
+#                                       'cube' not in x.entity_id and
+#                                       'tesla' not in x.entity_id and
+#                                       'drone' not in x.entity_id and
+#                                       'audio' not in x.entity_id and
+#                                       'protection' not in x.entity_id and
+#                                       'tv' not in x.entity_id and
+#                                       'workday' not in x.entity_id and
+#                                       'home_away' not in x.entity_id and
 #                                       'dining_room' not in x.entity_id %}
 # {{ x.entity_id }}
 # {%- endfor %}

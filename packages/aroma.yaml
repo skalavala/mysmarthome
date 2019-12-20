@@ -9,34 +9,33 @@ homeassistant:
 
 timer:
   timer_bathroom_aroma:
-    duration: '00:30:00'
+    duration: "00:30:00"
   timer_downstairs_aroma:
-    duration: '01:00:00'
+    duration: "01:00:00"
   timer_upstairs_aroma:
-    duration: '01:00:00'
+    duration: "01:00:00"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-#
-# Automations to start timer when they are switched ON
-#
+  #
+  # Automations to start timer when they are switched ON
+  #
   - alias: Bathroom Aroma Timer Start
     initial_state: true
     trigger:
       - platform: state
         entity_id: switch.downstairs_fragrance
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_bathroom_aroma
@@ -46,8 +45,8 @@ automation:
     trigger:
       - platform: state
         entity_id: switch.downstairs_fragrance
-        from: 'on'
-        to: 'off'
+        from: "on"
+        to: "off"
     action:
       - service: timer.finish
         entity_id: timer.timer_bathroom_aroma
@@ -57,8 +56,8 @@ automation:
     trigger:
       - platform: state
         entity_id: switch.downstairs_fragrance
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_downstairs_aroma
@@ -68,8 +67,8 @@ automation:
     trigger:
       - platform: state
         entity_id: switch.downstairs_fragrance
-        from: 'on'
-        to: 'off'
+        from: "on"
+        to: "off"
     action:
       - service: timer.finish
         entity_id: timer.timer_downstairs_aroma
@@ -79,8 +78,8 @@ automation:
     trigger:
       - platform: state
         entity_id: switch.upstairs_fragrance
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_upstairs_aroma
@@ -90,22 +89,22 @@ automation:
     trigger:
       - platform: state
         entity_id: switch.upstairs_fragrance
-        from: 'on'
-        to: 'off'
+        from: "on"
+        to: "off"
     action:
       - service: timer.finish
         entity_id: timer.timer_upstairs_aroma
 
-#
-# Timer Elapsed Events
-#
+  #
+  # Timer Elapsed Events
+  #
   - alias: Bathroom Aroma Timer Elapsed
     initial_state: true
     trigger:
       - platform: event
         event_type: timer.finished
-        event_data: 
-          entity_id: timer.timer_bathroom_aroma    
+        event_data:
+          entity_id: timer.timer_bathroom_aroma
     action:
       - service: switch.turn_off
         entity_id: switch.downstairs_fragrance
@@ -115,8 +114,8 @@ automation:
     trigger:
       - platform: event
         event_type: timer.finished
-        event_data: 
-          entity_id: timer.timer_downstairs_aroma    
+        event_data:
+          entity_id: timer.timer_downstairs_aroma
     action:
       - service: switch.turn_off
         entity_id: switch.downstairs_fragrance
@@ -126,21 +125,21 @@ automation:
     trigger:
       - platform: event
         event_type: timer.finished
-        event_data: 
-          entity_id: timer.timer_upstairs_aroma    
+        event_data:
+          entity_id: timer.timer_upstairs_aroma
     action:
       - service: switch.turn_off
         entity_id: switch.upstairs_fragrance
 
-#
-# Turn ON fragrance outlets automatically at specific times of the day
-#
+  #
+  # Turn ON fragrance outlets automatically at specific times of the day
+  #
   - alias: Turn On Upstairs Aroma
     trigger:
       - platform: time
-        at: '08:00:00'
+        at: "08:00:00"
       - platform: time
-        at: '20:00:00'
+        at: "20:00:00"
     action:
       - service: switch.turn_on
         entity_id: switch.upstairs_fragrance
@@ -148,7 +147,7 @@ automation:
   - alias: Turn On Downstairs Aroma
     trigger:
       - platform: time
-        at: '17:00:00'
+        at: "17:00:00"
     action:
       - service: switch.turn_on
         entity_id: switch.downstairs_fragrance

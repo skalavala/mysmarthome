@@ -14,7 +14,7 @@ logs:
   homeassistant.setup: error
   homeassistant.loader: error # hide custom_component warnings
   homeassistant.exceptions: error
-  homeassistant.helpers.script: error  
+  homeassistant.helpers.script: error
   homeassistant.helpers.entity: error
   homeassistant.components.wemo: critical
   homeassistant.components.cloud.iot: error

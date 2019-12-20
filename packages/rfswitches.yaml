@@ -9,7 +9,7 @@
 # ###############################################################################
 # homeassistant:
 #   customize:
-  
+
 #     group.etekcity_rf_switches:
 #       order: 13
 
@@ -38,7 +38,7 @@
 # ###############################################################################
 # #  RF Switches
 # ###############################################################################
-# switch:    
+# switch:
 #   - platform: rpi_rf
 #     gpio: 17
 #     switches:
@@ -71,22 +71,22 @@
 #     state_topic: "/home/rfswitches/switch_one"
 #     name: "RF Switch One"
 #     value_template: "{{ value }}"
-    
+
 #   - platform: mqtt
 #     state_topic: "/home/rfswitches/switch_two"
 #     name: "RF Switch Two"
 #     value_template: "{{ value }}"
-    
+
 #   - platform: mqtt
 #     state_topic: "/home/rfswitches/switch_three"
 #     name: "RF Switch Three"
 #     value_template: "{{ value }}"
-    
+
 #   - platform: mqtt
 #     state_topic: "/home/rfswitches/switch_four"
 #     name: "RF Switch Four"
 #     value_template: "{{ value }}"
-    
+
 #   - platform: mqtt
 #     state_topic: "/home/rfswitches/switch_five"
 #     name: "RF Switch Five"
@@ -103,7 +103,7 @@
 #     hide_entity: true
 #     trigger:
 #       platform: state
-#       entity_id: 
+#       entity_id:
 #         - switch.switch_one
 #         - switch.switch_two
 #         - switch.switch_three
@@ -123,7 +123,7 @@
 #     hide_entity: true
 #     trigger:
 #       platform: state
-#       entity_id: 
+#       entity_id:
 #         - sensor.rf_switch_one
 #         - sensor.rf_switch_two
 #         - sensor.rf_switch_three
@@ -152,35 +152,35 @@
 #       - delay:
 #           minutes: 1
 #       - service_template: >
-#           {%- if states.sensor.rf_switch_one.state | lower == "on" -%}
+#           {%- if states('sensor.rf_switch_one') | lower == "on" -%}
 #               homeassistant.turn_on
 #           {%- else -%}
 #               homeassistant.turn_off
-#           {%- endif -%}    
+#           {%- endif -%}
 #         entity_id: switch.switch_one
 #       - service_template: >
-#           {%- if states.sensor.rf_switch_two.state | lower == "on" -%}
+#           {%- if states('sensor.rf_switch_two') | lower == "on" -%}
 #               homeassistant.turn_on
 #           {%- else  -%}
 #               homeassistant.turn_off
-#           {%- endif -%}    
+#           {%- endif -%}
 #         entity_id: switch.switch_two
 #       - service_template: >
-#           {%- if states.sensor.rf_switch_three.state | lower == "on" -%}
+#           {%- if states('sensor.rf_switch_three') | lower == "on" -%}
 #               homeassistant.turn_on
 #           {%- else  -%}
 #               homeassistant.turn_off
-#           {%- endif -%}    
+#           {%- endif -%}
 #         entity_id: switch.switch_three
 #       - service_template: >
-#           {%- if states.sensor.rf_switch_four.state | lower == "on" -%}
+#           {%- if states('sensor.rf_switch_four') | lower == "on" -%}
 #               homeassistant.turn_on
 #           {%- else  -%}
 #               homeassistant.turn_off
-#           {%- endif -%}    
+#           {%- endif -%}
 #         entity_id: switch.switch_four
 #       - service_template: >
-#           {%- if states.sensor.rf_switch_five.state | lower == "on" -%}
+#           {%- if states('sensor.rf_switch_five') | lower == "on" -%}
 #               homeassistant.turn_on
 #           {%- else  -%}
 #               homeassistant.turn_off

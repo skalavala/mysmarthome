@@ -6,7 +6,6 @@
 ###############################################################################
 homeassistant:
   customize:
-
     switch.frontyard_light:
       icon: mdi:lightbulb
       friendly_name: Front Porch Lights
@@ -46,7 +45,7 @@ homeassistant:
       friendly_name: Guest Bedroom 2
       emulated_hue_name: Guest Bedroom 2
       homebridge_name: Guest Bedroom 2
-    
+
     switch.zwave_smart_switch_switch:
       friendly_name: Office Room Accent Lights
       emulated_hue_name: Office Room Accent Lights
@@ -90,11 +89,11 @@ homeassistant:
       icon: mdi:flash
       friendly_name: Short Flash
     input_boolean.long_flash:
-      icon: mdi:flash      
+      icon: mdi:flash
       friendly_name: Long Flash
     input_boolean.animate_downstairs_lights:
       icon: mdi:flash-outline
-      friendly_name: Animate Family Room Lights    
+      friendly_name: Animate Family Room Lights
     input_boolean.animate_upstairs_lights:
       icon: mdi:flash-outline
       friendly_name: Animate Master Bedroom Lights
@@ -123,63 +122,62 @@ hue:
 tplink:
   discovery: false
   switch:
+    # In-wall switches
+    - host: !secret tplink_kids_bedroom
+    - host: !secret tplink_guest_bedroom_1
+    - host: !secret tplink_guest_bedroom_2
+    - host: !secret tplink_garage
+    - host: !secret tplink_basement_left
+    - host: !secret tplink_basement_right
+    - host: !secret tplink_kitchen
+    - host: !secret tplink_office_room
 
-# In-wall switches
-  - host: !secret tplink_kids_bedroom
-  - host: !secret tplink_guest_bedroom_1
-  - host: !secret tplink_guest_bedroom_2
-  - host: !secret tplink_garage
-  - host: !secret tplink_basement_left
-  - host: !secret tplink_basement_right
-  - host: !secret tplink_kitchen
-  - host: !secret tplink_office_room
-
-# Smart Outlets
-  - host: !secret tplink_smart_outlet1
-    #name: Downstairs Fragrance Outlet
-  - host: !secret tplink_smart_outlet2
-    #name: Downstairs Bathroom Fragrance Outlet
-  - host: !secret tplink_smart_outlet3
-    #name: Upstairs Fragrance Outlet
-  - host: !secret tplink_kids_bed_accent_light
-    #name: Kids Bed Accent Light
+    # Smart Outlets
+    - host: !secret tplink_smart_outlet1
+      #name: Downstairs Fragrance Outlet
+    - host: !secret tplink_smart_outlet2
+      #name: Downstairs Bathroom Fragrance Outlet
+    - host: !secret tplink_smart_outlet3
+      #name: Upstairs Fragrance Outlet
+    - host: !secret tplink_kids_bed_accent_light
+      #name: Kids Bed Accent Light
 
 switch:
 # RF Switches
-  # - platform: mqtt
-  #   name: RF Switch One
-  #   command_topic: '/home/rfswitches/switch_one'
-  #   payload_on: "on"
-  #   payload_off: "off"
-  #   retain: true
+# - platform: mqtt
+#   name: RF Switch One
+#   command_topic: '/home/rfswitches/switch_one'
+#   payload_on: "on"
+#   payload_off: "off"
+#   retain: true
 
-  # - platform: mqtt
-  #   name: RF Switch Two
-  #   command_topic: '/home/rfswitches/switch_two'
-  #   payload_on: "on"
-  #   payload_off: "off"
-  #   retain: true
+# - platform: mqtt
+#   name: RF Switch Two
+#   command_topic: '/home/rfswitches/switch_two'
+#   payload_on: "on"
+#   payload_off: "off"
+#   retain: true
 
-  # - platform: mqtt
-  #   name: RF Switch Three
-  #   command_topic: '/home/rfswitches/switch_three'
-  #   payload_on: "on"
-  #   payload_off: "off"
-  #   retain: true
+# - platform: mqtt
+#   name: RF Switch Three
+#   command_topic: '/home/rfswitches/switch_three'
+#   payload_on: "on"
+#   payload_off: "off"
+#   retain: true
 
-  # - platform: mqtt
-  #   name: RF Switch Four
-  #   command_topic: '/home/rfswitches/switch_four'
-  #   payload_on: "on"
-  #   payload_off: "off"
-  #   retain: true
+# - platform: mqtt
+#   name: RF Switch Four
+#   command_topic: '/home/rfswitches/switch_four'
+#   payload_on: "on"
+#   payload_off: "off"
+#   retain: true
 
-  # - platform: mqtt
-  #   name: RF Switch Five
-  #   command_topic: '/home/rfswitches/switch_five'
-  #   payload_on: "on"
-  #   payload_off: "off"
-  #   retain: true
+# - platform: mqtt
+#   name: RF Switch Five
+#   command_topic: '/home/rfswitches/switch_five'
+#   payload_on: "on"
+#   payload_off: "off"
+#   retain: true
 
 wemo:
   discovery: false
@@ -210,7 +208,7 @@ script:
         data:
           entity_id: light.gateway_light_34ce008ad65d
           brightness: 255
-          rgb_color: [255,0,0]
+          rgb_color: [255, 0, 0]
 
   xiaomi_blue:
     sequence:
@@ -218,7 +216,7 @@ script:
         data:
           entity_id: light.gateway_light_34ce008ad65d
           brightness: 255
-          rgb_color: [0,0,255]
+          rgb_color: [0, 0, 255]
 
   xiaomi_green:
     sequence:
@@ -226,7 +224,7 @@ script:
         data:
           entity_id: light.gateway_light_34ce008ad65d
           brightness: 255
-          rgb_color: [0,255,0]
+          rgb_color: [0, 255, 0]
 
   # start_colorloop:
   #   sequence:
@@ -237,7 +235,6 @@ script:
   #         period: 2
   #         spread: 360
   #         change: 35
-
   # stop_colorloop:
   #   sequence:
   #     - service: light.lifx_effect_stop
@@ -245,31 +242,30 @@ script:
   #         entity_id: light.dinette
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-# Animate Master Bedroom Lights
-###############################################################################
+  # Animate Master Bedroom Lights
+  ###############################################################################
   - alias: Animate Master Bedroom Lights
     initial_state: true
     trigger:
       platform: time_pattern
-      seconds: '/5'
+      seconds: "/5"
     condition:
       - condition: state
         entity_id: input_boolean.animate_upstairs_lights
-        state: 'on'
+        state: "on"
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         data:
@@ -278,45 +274,48 @@ automation:
           brightness: 255
           color_temp: 366
         data_template:
-          rgb_color: ['{{ "{0:d}".format(range(0, 255)|random) }}' , 
-                      '{{ "{0:d}".format(range(0, 255)|random) }}', 
-                      '{{ "{0:d}".format(range(0, 255)|random) }}']
+          rgb_color:
+            [
+              '{{ "{0:d}".format(range(0, 255)|random) }}',
+              '{{ "{0:d}".format(range(0, 255)|random) }}',
+              '{{ "{0:d}".format(range(0, 255)|random) }}',
+            ]
 
-# Restore Master Bedroom Lights
-###############################################################################
+  # Restore Master Bedroom Lights
+  ###############################################################################
   - alias: Restore Masterbedroom Lights
     initial_state: true
     trigger:
       platform: state
       entity_id: input_boolean.animate_upstairs_lights
-      to: 'off'
+      to: "off"
     condition:
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         data:
           entity_id: group.master_bedroom_lights
           transition: 5
-          rgb_color: [224,175,102]
+          rgb_color: [224, 175, 102]
           brightness: 10
           color_temp: 366
 
-# Animate Familyroom Lights
-###############################################################################
+  # Animate Familyroom Lights
+  ###############################################################################
   - alias: Animate Familyroom Lights
     initial_state: true
     trigger:
       platform: time_pattern
-      seconds: '/5'
+      seconds: "/5"
     condition:
       - condition: state
         entity_id: input_boolean.animate_downstairs_lights
-        state: 'on'
+        state: "on"
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         data:
@@ -325,22 +324,25 @@ automation:
           brightness: 255
           color_temp: 366
         data_template:
-          rgb_color: ['{{ "{0:d}".format(range(0, 255)|random) }}' , 
-                      '{{ "{0:d}".format(range(0, 255)|random) }}', 
-                      '{{ "{0:d}".format(range(0, 255)|random) }}']
+          rgb_color:
+            [
+              '{{ "{0:d}".format(range(0, 255)|random) }}',
+              '{{ "{0:d}".format(range(0, 255)|random) }}',
+              '{{ "{0:d}".format(range(0, 255)|random) }}',
+            ]
 
-# Restore Familyroom Lights
-###############################################################################
+  # Restore Familyroom Lights
+  ###############################################################################
   - alias: Restore Familyroom Lights
     initial_state: true
     trigger:
       platform: state
       entity_id: input_boolean.animate_downstairs_lights
-      to: 'off'
+      to: "off"
     condition:
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         data:
@@ -350,8 +352,8 @@ automation:
           brightness: 255
           color_temp: 162
 
-# Animate Kitchen Lights ON
-###############################################################################
+  # Animate Kitchen Lights ON
+  ###############################################################################
   # - alias: Animate Kitchen Lights ON
   #   initial_state: true
   #   trigger:
@@ -365,14 +367,14 @@ automation:
   #     - service: light.turn_on
   #       entity_id: light.dinette
   #       data_template:
-  #         rgb_color: ['{{ (range(0, 255)|random) }}', 
-  #                     '{{ (range(0, 255)|random) }}', 
+  #         rgb_color: ['{{ (range(0, 255)|random) }}',
+  #                     '{{ (range(0, 255)|random) }}',
   #                     '{{ (range(0, 255)|random) }}']
   #         brightness: 255
   #         transition: '{{ (range(1, 2)|random) }}'
 
-# Animate Kitchen Lights OFF
-###############################################################################
+  # Animate Kitchen Lights OFF
+  ###############################################################################
   # - alias: Animate Kitchen Lights OFF
   #   initial_state: true
   #   trigger:
@@ -387,19 +389,19 @@ automation:
   #         brightness: 255
   #         color_temp: 155
 
-# Long Flash All Lights
-###############################################################################
+  # Long Flash All Lights
+  ###############################################################################
   - alias: Long Flash All Lights
     initial_state: true
     trigger:
       - platform: state
         entity_id: input_boolean.long_flash
-        to: 'on'
-        from: 'off'
+        to: "on"
+        from: "off"
     condition:
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         entity_id:
@@ -409,19 +411,19 @@ automation:
       - service: input_boolean.turn_off
         entity_id: input_boolean.long_flash
 
-# Short Flash All Lights
-###############################################################################
+  # Short Flash All Lights
+  ###############################################################################
   - alias: Short Flash All Lights
     initial_state: true
     trigger:
       - platform: state
         entity_id: input_boolean.short_flash
-        to: 'on'
-        from: 'off'
+        to: "on"
+        from: "off"
     condition:
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         entity_id:

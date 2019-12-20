@@ -1,6 +1,5 @@
 homeassistant:
   customize_domain:
-
     alarm_control_panel:
       homebridge_hidden: true
 

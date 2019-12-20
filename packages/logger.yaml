@@ -22,28 +22,28 @@
 #     homeassistant.core: error
 #     homeassistant.setup: error
 #     homeassistant.loader: error
-#     homeassistant.components.api: error 
+#     homeassistant.components.api: error
 #     homeassistant.helpers.script: error
-#     homeassistant.components.mqtt: error 
-#     homeassistant.components.http: error 
+#     homeassistant.components.mqtt: error
+#     homeassistant.components.http: error
 #     homeassistant.helpers.entity: error
-#     homeassistant.components.zwave: error 
-#     homeassistant.components.sensor: error 
+#     homeassistant.components.zwave: error
+#     homeassistant.components.sensor: error
 #     homeassistant.helpers.condition: error
-#     homeassistant.components.recorder: error 
+#     homeassistant.components.recorder: error
 #     homeassistant.components.discovery: error
 #     homeassistant.components.automation: error
 #     homeassistant.components.light.lifx: error
 #     homeassistant.components.emulated_hue: error
-#     homeassistant.components.media_player: error 
+#     homeassistant.components.media_player: error
 #     homeassistant.components.device_tracker: error
 #     custom_components.sensor.life360: error
-#     custom_components.sensor.command_line: error 
-#     custom_components.media_player.sharptv: error 
+#     custom_components.sensor.command_line: error
+#     custom_components.media_player.sharptv: error
 
 # ###############################################################################
 # # Logger level
-# input_select:  
+# input_select:
 #   log_level:
 #     name: Log Level
 #     options:
@@ -99,4 +99,4 @@
 #       - service: input_select.select_option
 #         data_template:
 #           entity_id: input_select.log_level
-#           option: '{{ states.sensor.current_log_level.state | default("warning") }}'
+#           option: '{{ states('sensor.current_log_level') | default("warning") }}'

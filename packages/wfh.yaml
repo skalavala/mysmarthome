@@ -35,13 +35,13 @@ automation:
         seconds: 00
     condition:
       - condition: template
-        value_template: '{{ states.binary_sensor.workday_sensor.state == "on" }}'
+        value_template: "{{ states('binary_sensor.workday_sensor') == 'on' }}"
       - condition: template
         value_template: "{{ now().hour|int >= 10 and now().hour|int < 17 }}"
       - condition: template
-        value_template: '{{ states.timer.wfh_timer.state == "idle" }}'
+        value_template: "{{ states('timer.wfh_timer') == 'idle' }}"
       - condition: template
-        value_template: '{{ states.device_tracker.life360_suresh.state == "home" }}'
+        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
     action:
       - service: timer.start
         entity_id: timer.wfh_timer
@@ -81,7 +81,7 @@ automation:
         event: leave
     condition:
       - condition: template
-        value_template: '{{ states.timer.wfh_timer.state == "active" }}'
+        value_template: "{{ states('timer.wfh_timer') == 'active' }}"
     action:
       - service: timer.cancel
         entity_id: timer.wfh_timer

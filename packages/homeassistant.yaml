@@ -36,7 +36,6 @@ speedtestdotnet:
     - upload
 
 sensor:
-
   - platform: uptime
     name: Home Assistant Up Time
     unit_of_measurement: hours
@@ -48,7 +47,7 @@ sensor:
   - platform: rest
     resource: http://icanhazip.com
     name: external_ip
-    value_template: '{{ value }}'
+    value_template: "{{ value }}"
     scan_interval: 86400
 
   - platform: systemmonitor
@@ -64,42 +63,31 @@ sensor:
   - platform: rest
     resource: https://pypi.python.org/pypi/homeassistant/json
     name: HA Current Version
-    value_template: '{{ value_json.info.version }}'
+    value_template: "{{ value_json.info.version }}"
 
   - platform: command_line
     name: HA Installed Version
     command: /srv/homeassistant/bin/hass --version
     scan_interval: 86400
 
-  - platform: pi_hole
-    host: !secret pi_hole_ip
-    ssl: false
-    verify_ssl: false
-    monitored_conditions:
-      - ads_blocked_today
-      - ads_percentage_today
-      - dns_queries_today
-      - domains_being_blocked
-      - queries_cached
-      - queries_forwarded
-      - unique_clients
-      - unique_domains
-      - clients_ever_seen
+pi_hole:
+  host: !secret pi_hole_ip
+  ssl: false
+  verify_ssl: false
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-
-# Notify me when I get a new public IP from my ISP
-######################################################
+  # Notify me when I get a new public IP from my ISP
+  ######################################################
 
   - alias: Notify Of New External IP
     initial_state: true
@@ -127,7 +115,7 @@ automation:
       entity_id: updater.updater
     action:
       - service: script.notify_me
-        data: {"message":"New HASS update is available. Please update!"}
+        data: { "message": "New HASS update is available. Please update!" }
 
   - alias: Remind domain renewal
     initial_state: true
@@ -138,5 +126,5 @@ automation:
     action:
       - service: persistent_notification.create
         data:
-          title: 'Domain Renew'
-          message: 'It is time to renew your domain. The domain will expire in {{ states.sensor.my_domain.state  }} days.'
+          title: "Domain Renew"
+          message: "It is time to renew your domain. The domain will expire in {{ states('sensor.my_domain')  }} days."
