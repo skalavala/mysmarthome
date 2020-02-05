@@ -73,9 +73,6 @@ automation:
         - input_label.hasika_birthday_days2go
         - input_label.mallika_birthday_days2go
     condition:
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
       - condition: template
         value_template: "{{ trigger.to_state.state | int > 0 and trigger.to_state.state | int < 30 }}"
     action:
@@ -95,9 +92,6 @@ automation:
         - input_label.hasika_birthday_days2go
         - input_label.mallika_birthday_days2go
     condition:
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
       - condition: template
         value_template: "{{ trigger.to_state.state | int == 0 }}"
     action:
@@ -118,9 +112,6 @@ automation:
     condition:
       condition: and
       conditions:
-        - condition: state
-          entity_id: group.all_devices
-          state: "home"
         - condition: time
           after: "07:00:00"
           before: "21:00:00"

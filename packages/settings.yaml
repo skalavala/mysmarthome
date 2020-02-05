@@ -310,9 +310,6 @@ automation:
     condition:
       - condition: template
         value_template: '{{ states.input_boolean.hourly_report.state == "on" }}'
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
       - condition: template
         value_template: >
           {% set hour = now().hour | int %}

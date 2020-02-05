@@ -18,7 +18,7 @@ script:
           away_mode: "true"
       - service: alarm_control_panel.alarm_arm_away
         data:
-          entity_id: alarm_control_panel.simplisafe
+          entity_id: alarm_control_panel.home
       - service: script.notify_me
         data:
           message: >

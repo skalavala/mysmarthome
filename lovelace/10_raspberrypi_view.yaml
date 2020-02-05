@@ -90,6 +90,3 @@ cards:
       - script.restart_all_raspberrypis
       - script.restart_all_snapclients
       - script.shutdown_all_raspberrypis
-      - script.restart_snapcast_server
-      - script.start_snapcast_server
-      - script.stop_snapcast_server

@@ -123,21 +123,7 @@ script:
       - condition: template
         value_template: "{{ states('input_boolean.do_not_disturb') | lower == 'off' }}"
       - condition: template
-        value_template: "{{ states('media_player.gstreamer') == 'idle' }}"
-      - condition: template
-        value_template: "{{ states('media_player.mpd') != 'playing' }}"
-      - condition: template
         value_template: "{{ message | trim != '' }}"
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
-      - condition: template
-        value_template: >
-          {% if states('input_boolean.emergency_mode') == "on" %}
-            true
-          {% else %}
-            {{ states('group.all_devices') == "home" }}
-          {% endif %}
       - condition: template
         value_template: >
           {% if only_at_night | default('no', true ) == "yes" %}
@@ -150,7 +136,8 @@ script:
             true
           {% endif %}
       - service: media_player.volume_set
-        entity_id: media_player.gstreamer
+        # entity_id: media_player.gstreamer
+        entity_id: media_player.living_room, media_player.upstairs
         data_template:
           volume_level: >
             {% if states('input_boolean.emergency_mode') == "on" %}
@@ -165,7 +152,8 @@ script:
               {% endif %}
             {% endif %}
       - service: tts.amazon_polly_say
-        entity_id: media_player.gstreamer
+        #entity_id: media_player.gstreamer
+        entity_id: media_player.living_room, media_player.upstairs
         data_template:
           cache: true
           message: >
@@ -200,7 +188,8 @@ script:
   voice_greeting:
     sequence:
       - service: tts.amazon_polly_say
-        entity_id: media_player.gstreamer
+        #entity_id: media_player.gstreamer
+        entity_id: media_player.living_room, media_player.upstairs
         data_template:
           cache: true
           message: >

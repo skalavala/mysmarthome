@@ -290,9 +290,6 @@ automation:
       platform: time
       at: "22:10:00"
     condition:
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
       - condition: template
         value_template: "{{ states('input_boolean.nightly_report') == 'on' }}"
     action:

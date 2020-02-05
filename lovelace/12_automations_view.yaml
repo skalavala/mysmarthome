@@ -63,7 +63,6 @@ cards:
       - automation.notify_charger_switch_state
       - automation.notify_charging_status
       - automation.notify_door_status
-      - automation.notify_entry_door_status
       - automation.notify_holiday_state_change
       - automation.notify_indian_holidays
       - automation.notify_low_battery
@@ -157,8 +156,6 @@ cards:
         - automation.restore_familyroom_lights
         - automation.animate_master_bedroom_lights
         - automation.restore_masterbedroom_lights
-        - automation.basement_accent_lights_off_after_5_minutes
-        - automation.basement_accent_lights_on_when_basement_door_opened
         - automation.evening_indoor_lights_on_before_sunset
         - automation.evening_outdoor_lights_on_at_sunset
         - automation.garage_lights_on_when_door_is_opened
@@ -266,7 +263,6 @@ cards:
     show_header_toggle: false
     entities:
       - automation.keep_chromecast_on
-      - automation.snapcast_action
 
   - type: entities
     title: Home Assistant Automations

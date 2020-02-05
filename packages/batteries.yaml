@@ -366,7 +366,7 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
       - condition: template
-        value_template: "{{ states('alarm_control_panel.simplisafe') | lower != 'armed_away' }}"
+        value_template: "{{ states('alarm_control_panel.home') | lower != 'armed_away' }}"
     action:
       - service: script.voice_notify
         data_template:

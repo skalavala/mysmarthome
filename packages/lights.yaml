@@ -53,6 +53,14 @@ homeassistant:
       assumed_state: false
       icon: mdi:lightbulb
 
+    switch.kids_bed_accent:
+      friendly_name: Hasika's Bed Accent Lights
+      assumed_state: false
+      icon: mdi:lightbulb
+    switch.front_room:
+      friendly_name: Front Room Light
+      assumed_state: false
+      icon: mdi:lightbulb
     switch.basement_left:
       friendly_name: Basement Theater Lights
       assumed_state: false
@@ -131,6 +139,7 @@ tplink:
     - host: !secret tplink_basement_right
     - host: !secret tplink_kitchen
     - host: !secret tplink_office_room
+    - host: !secret tplink_front_room
 
     # Smart Outlets
     - host: !secret tplink_smart_outlet1

@@ -4,34 +4,47 @@
 #   @package        :   TV
 #   @description    :   Tv Automations
 ###############################################################################
+binary_sensor:
+  - platform: mqtt
+    name: Sharp TV
+    state_topic: "/home/sharptv"
+    payload_on: "on"
+    payload_off: "off"
+    value_template: "{{ value }}"
+
+  - platform: mqtt
+    name: Sharp TV Command State
+    state_topic: "/home/sharp_tv_cmd"
+    payload_on: "on"
+    payload_off: "off"
+    value_template: "{{ value }}"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 automation:
-
-# Dim Family Room Lights When TV is Turned ON
-###############################################################################
+  # Dim Family Room Lights When TV is Turned ON
+  ###############################################################################
   - alias: TV Dim Indoor Lights when TV is ON
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.sharp_tv
-      from: 'off'
-      to: 'on'
+      from: "off"
+      to: "on"
     condition:
       - condition: state
         entity_id: sun.sun
-        state: 'below_horizon'
+        state: "below_horizon"
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         data:
@@ -51,25 +64,25 @@ automation:
       - service: mqtt.publish
         data:
           topic: /home/tv/backlight
-          payload: 'on'
+          payload: "on"
           retain: true
-  
-# Restore Family Room Lights to TV mode
-###############################################################################
+
+  # Restore Family Room Lights to TV mode
+  ###############################################################################
   - alias: TV Restore Family Room Lights To TV Mode
     initial_state: true
     trigger:
       - platform: state
         entity_id: group.family_room_lights
-        from: 'off'
-        to: 'on'
+        from: "off"
+        to: "on"
     condition:
       - condition: state
         entity_id: binary_sensor.sharp_tv
-        state: 'on'
+        state: "on"
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         data:
@@ -89,52 +102,52 @@ automation:
           brightness: 5
           color_temp: 154
           transition: 5
-  
-# Turn Backlights Off when TV is turned OFF
-###############################################################################
+
+  # Turn Backlights Off when TV is turned OFF
+  ###############################################################################
   - alias: TV Backlight OFF when TV is OFF
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.sharp_tv
-      to: 'off'
+      to: "off"
     action:
       - service: mqtt.publish
         data:
           topic: /home/tv/backlight
-          payload: 'off'
+          payload: "off"
           retain: true
-  
-# Turn TV backlights when TV is turned ON
-###############################################################################
+
+  # Turn TV backlights when TV is turned ON
+  ###############################################################################
   - alias: TV Backlight is ON when TV is ON
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.sharp_tv
-      to: 'on'
+      to: "on"
     action:
       - service: mqtt.publish
         data:
           topic: /home/tv/backlight
-          payload: 'on'
+          payload: "on"
           retain: true
 
-# Turn back Family room lights when TV is switched OFF
-###############################################################################
+  # Turn back Family room lights when TV is switched OFF
+  ###############################################################################
   - alias: TV Turn Lights ON When TV is turned OFF
     initial_state: true
     trigger:
       platform: state
       entity_id: binary_sensor.sharp_tv
-      to: 'off'
+      to: "off"
     condition:
       - condition: state
         entity_id: sun.sun
-        state: 'below_horizon'
+        state: "below_horizon"
       - condition: state
         entity_id: input_boolean.light_automations
-        state: 'on'
+        state: "on"
     action:
       - service: light.turn_on
         data:
@@ -153,9 +166,9 @@ automation:
           entity_id: light.hue_color_lamp_3
           brightness: 255
           color_temp: 154
-          transition: 5  
+          transition: 5
       - service: mqtt.publish
         data:
           topic: /home/tv/backlight
-          payload: 'off'
+          payload: "off"
           retain: true

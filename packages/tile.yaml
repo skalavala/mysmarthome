@@ -1,0 +1,23 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   02/05/2020
+#   @package        :   Tile
+#   @description    :   Tile Package
+###############################################################################
+homeassistant:
+  customize:
+    device_tracker.tile_08beea8370ec23b7:
+      friendly_name: Back Pack
+    device_tracker.tile_43a0d518532978f8:
+      friendly_name: Passport Bag
+    device_tracker.tile_49318f5ab14343a5:
+      friendly_name: Suresh's Laptop Bag
+    device_tracker.tile_63ca05b6a3619232:
+      friendly_name: Mallika's Purse
+    device_tracker.tile_p_32c03dc7f21001d36d16b47646e4c421:
+      friendly_name: Tile Tracker
+
+device_tracker:
+  - platform: tile
+    username: !secret tile_username
+    password: !secret tile_password

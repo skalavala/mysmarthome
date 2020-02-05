@@ -292,9 +292,6 @@ automation:
       - condition: template
         value_template: '{{ trigger.to_state.state | lower == "rain" }}'
       - condition: state
-        entity_id: group.all_devices
-        state: "home"
-      - condition: state
         entity_id: sun.sun
         state: "above_horizon"
       - condition: template
@@ -324,9 +321,6 @@ automation:
     condition:
       - condition: template
         value_template: '{{ states.sensor.season.state | lower == "winter" }}'
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
       - condition: state
         entity_id: sun.sun
         state: "above_horizon"

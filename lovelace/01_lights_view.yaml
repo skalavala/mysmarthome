@@ -23,6 +23,7 @@ cards:
     title: Downstairs
     show_header_toggle: true
     entities:
+      - switch.front_room
       - switch.basement_left
       - switch.basement_right
       - switch.kitchen

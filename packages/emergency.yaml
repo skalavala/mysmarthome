@@ -150,7 +150,7 @@
 #     initial_state: true
 #     trigger:
 #       platform: state
-#       entity_id: alarm_control_panel.simplisafe
+#       entity_id: alarm_control_panel.home
 #       to: 'disarmed'
 #     condition:
 #       - condition: template
@@ -186,7 +186,7 @@
 #         value_template: "{{ trigger.from_state }}"
 #       - condition: template
 #         value_template: >
-#           {% set state = states.alarm_control_panel.simplisafe.state %}
+#           {% set state = states.alarm_control_panel.home.state %}
 #           {% if state != "" and state != "unknown" and state == "armed_away" %}
 #             true
 #           {% else %}

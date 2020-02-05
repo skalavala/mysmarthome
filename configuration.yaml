@@ -56,6 +56,8 @@ config:
 #         description: Xiaomi Gateway Light
 
 discovery:
+  ignore:
+    - homekit
 
 homekit:
   autostart: true
@@ -70,6 +72,12 @@ homekit:
       - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
       - binary_sensor.single_car_garage_door_tilt_sensor_sensor
       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+
+sonos:
+  media_player:
+    hosts:
+      - 192.168.1.195
+      - 192.168.1.186
 
 mobile_app:
 # map:
@@ -107,6 +115,11 @@ binary_sensor:
 
 lovelace:
   mode: yaml
+
+# Google Calendar
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_client_secret
 
 emulated_hue:
   expose_by_default: false

@@ -19,10 +19,10 @@
   {%- endmacro -%}
 
   {%- macro tesla_status() -%}
-    {% if states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" %}
-    {%- if (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) < 75 and 
-           (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) > 0 -%}
-      Attention!. Your Tesla car battery is at {{ states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') }} percent. and you can only drive about {{ (states('sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor') | int) | round(0) }} miles. Please charge your car if you want to go anywhere.
+    {% if states("sensor.tesla_model_3_range_sensor") != "unknown" %}
+    {%- if (states('sensor.tesla_model_3_range_sensor') | int) | round(0) < 75 and 
+           (states('sensor.tesla_model_3_range_sensor') | int) | round(0) > 0 -%}
+      Attention!. Your Tesla car battery is at {{ states('sensor.tesla_model_3_battery_sensor') }} percent. and you can only drive about {{ (states('sensor.tesla_model_3_range_sensor') | int) | round(0) }} miles. Please charge your car if you want to go anywhere.
     {%- endif -%}
     {% endif %}
   {%- endmacro -%}

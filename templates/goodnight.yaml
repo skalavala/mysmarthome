@@ -10,7 +10,7 @@
    {%- for item in states.device_tracker if '_' in item.entity_id.split('.')[1] and state_attr(item.entity_id, "battery") |lower != "none" -%}
      {%- if item.attributes.battery|int < level -%}
        {%- if states("sensor." ~ item.friendly_name |lower ~"s_iphone_battery_state") | lower != "charging" %}
-         {{- item.attributes.friendly_name}}s iPhone battery is at {{ item.attributes.battery }} percent.
+         {{- item.attributes.friendly_name | replace("life360", "") |title }}'s iPhone battery is at {{ item.attributes.battery }} percent.
        {%- endif %}
      {%- endif %}
    {%- endfor -%}
@@ -46,11 +46,11 @@
 
   {#- Provides Home Security System Status -#}
   {%- macro alarm_status() -%}
-    {%- if states('alarm_control_panel.simplisafe') | lower == "disarmed" -%}
+    {%- if states('alarm_control_panel.home') | lower == "disarmed" -%}
       Your home security system is switched OFF. You may want to turn it ON.
-    {%- elif states('alarm_control_panel.simplisafe') | lower == "armed_away" -%}
+    {%- elif states('alarm_control_panel.home') | lower == "armed_away" -%}
       Your home security system is set to away mode.
-    {%- elif states('alarm_control_panel.simplisafe') | lower == "armed_home" -%}
+    {%- elif states('alarm_control_panel.home') | lower == "armed_home" -%}
       Your home security system is ON, and your home is secured.
     {%- endif %}
   {%- endmacro -%}
@@ -87,7 +87,7 @@
   {%- endmacro -%}
 
   {%- macro charging_status() -%}
-    {%- for item in states if "iphone_battery_state" in item.entity_id and item.state != "Charging" %}
+    {%- for item in states if "_iphone_battery_state" in item.entity_id and item.state != "Charging" %}
       {%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{- item.name.split(' ')[0] -}}
     {%- endfor -%}
   {%- endmacro -%}
@@ -115,12 +115,12 @@
   {%- endmacro -%}
 
   {%- macro tesla_status() %}
-    {%- if states("binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor") != "unknown" -%}
-      Your Tesla Car is {{ 'not' if states('binary_sensor.tesla_model_3_5yj3e1ea8jf010610_charger_sensor') == "off" }} plugged in.
+    {%- if states("binary_sensor.tesla_model_3_charger_sensor") != "unknown" -%}
+      Your Tesla Car is {{ 'not' if states('binary_sensor.tesla_model_3_charger_sensor') == "off" }} plugged in.
     {% endif %}
 
-    {%- if states("sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor") != "unknown" and states("sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor") != "unknown" and states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') | int > 0  -%}
-    Tesla Car battery is at {{ states('sensor.tesla_model_3_5yj3e1ea8jf010610_battery_sensor') }}%, and you can drive about {{ (states.sensor.tesla_model_3_5yj3e1ea8jf010610_range_sensor.state | int) | round(0) }} miles.
+    {%- if states("sensor.tesla_model_3_battery_sensor") != "unknown" and states("sensor.tesla_model_3_range_sensor") != "unknown" and states('sensor.tesla_model_3_battery_sensor') | int > 0  -%}
+      Tesla Car battery is at {{ states('sensor.tesla_model_3_battery_sensor') }}%, and you can drive about {{ (states.sensor.tesla_model_3_range_sensor.state | int) | round(0) }} miles.
     {% endif %}
   {%- endmacro %}
 

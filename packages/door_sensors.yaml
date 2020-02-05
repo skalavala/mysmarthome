@@ -219,6 +219,65 @@ automation:
         data:
           entity_id: switch.garage
 
+  # Notify Entry Door Status
+  ###############################################################################
+  - alias: Voice Notify Entry Door Status
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+        - binary_sensor.back_door_sensor_sensor
+    condition:
+      - condition: template
+        value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
+    action:
+      - service: script.voice_notify
+        data_template:
+          message: >
+            {% if trigger.to_state.state | lower == "on" %}
+              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is OPEN,
+              {% if states('alarm_control_panel.home') == 'armed_home' or
+                    states('alarm_control_panel.home') == 'armed_away' %}
+              But your home security system is ON.
+              {% endif %}
+            {% elif trigger.to_state.state | lower == "off" %}
+              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is CLOSED!
+            {% endif %}
+          greeting: "no"
+          only_at_night: >
+            {% if states('alarm_control_panel.home') == 'armed_home' %}
+              no
+            {% else %}
+              yes
+            {% endif %}
+
+  - alias: When Front Door Opens Turn Front Room Lights ON
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+      to: "on"
+    condition:
+      - condition: template
+        value_template: "{{ states('sun.sun') == 'below_horizon' }}"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.front_room
+
+  - alias: When Back Door Opens Turn Kitchen Lights ON
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.back_door_sensor_sensor
+      to: "on"
+    condition:
+      - condition: template
+        value_template: "{{ states('sun.sun') == 'below_horizon' }}"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.kitchen
+
   ################################################################################
   #  When I open the garage door
   #     if it is dark outside, OR
@@ -247,69 +306,3 @@ automation:
         entity_id: switch.garage
       - service: timer.start
         entity_id: timer.timer_garage
-
-  # Notify Entry Door Status
-  ###############################################################################
-  - alias: Notify Entry Door Status
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id:
-        - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
-        - binary_sensor.back_door_sensor_sensor
-    condition:
-      - condition: template
-        value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
-    action:
-      - service: script.voice_notify
-        data_template:
-          message: >
-            {% if trigger.to_state.state | lower == "on" %}
-              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is OPEN,
-              {% if states('alarm_control_panel.simplisafe') == 'armed_home' or
-                    states('alarm_control_panel.simplisafe') == 'armed_away' %}
-              But your home security system is ON.
-              {% endif %}
-            {% elif trigger.to_state.state | lower == "off" %}
-              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is CLOSED!
-            {% endif %}
-          greeting: "no"
-          only_at_night: >
-            {% if states('alarm_control_panel.simplisafe') == 'armed_home' %}
-              no
-            {% else %}
-              yes
-            {% endif %}
-
-  # Turn ON and OFF basement ambient lights
-  ###############################################################################
-  - alias: Basement Accent Lights ON When Basement Door Opened
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.basement_door_sensor_sensor
-      to: "on"
-    condition:
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
-    action:
-      - service: homeassistant.turn_on
-        entity_id: switch.rf_switch_one
-
-  - alias: Basement Accent Lights OFF After 5 minutes
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id:
-        - switch.rf_switch_one
-      to: "on"
-      for:
-        minutes: 5
-    condition:
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
-    action:
-      - service: homeassistant.turn_off
-        entity_id: switch.rf_switch_one

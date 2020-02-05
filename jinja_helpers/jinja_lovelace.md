@@ -67,7 +67,7 @@ The output of the above script would look like the following:
   title: Alarm Control Panel
   show_header_toggle: true
   entities:
-    - alarm_control_panel.simplisafe
+    - alarm_control_panel.home
       name: Home Security System
 
 - type: entities
@@ -76,7 +76,7 @@ The output of the above script would look like the following:
   entities:
     - sun.sun
       name: Sun
-      
+
 - type: entities
   title: Proximity
   show_header_toggle: true
@@ -105,6 +105,7 @@ The output of the above script would look like the following:
 {%- endfor %}
 {% endfor %}
 ```
+
 The output of above would look something like:
 
 ```

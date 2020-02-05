@@ -9,7 +9,7 @@ homeassistant:
     group.home_security_system:
       order: 7
 
-    alarm_control_panel.simplisafe:
+    alarm_control_panel.home:
       friendly_name: Home Security System
       icon: mdi:security
     sensor.my_alarm_control_panel:
@@ -40,35 +40,35 @@ automation:
     initial_state: true
     trigger:
       platform: state
-      entity_id: alarm_control_panel.simplisafe
+      entity_id: alarm_control_panel.home
     condition:
       - condition: template
         value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
       - condition: template
-        value_template: "{{ states('alarm_control_panel.simplisafe') != 'unknown' }}"
+        value_template: "{{ states('alarm_control_panel.home') != 'unknown' }}"
       - condition: template
-        value_template: "{{ states('alarm_control_panel.simplisafe') | trim != '' }}"
+        value_template: "{{ states('alarm_control_panel.home') | trim != '' }}"
     action:
       - service_template: >
-          {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
+          {% if states('alarm_control_panel.home') == "armed_home" %}
             script.xiaomi_blue
-          {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
+          {% elif states('alarm_control_panel.home') == "armed_away" %}
             script.xiaomi_green
-          {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
+          {% elif states('alarm_control_panel.home') == "triggered" %}
             script.xiaomi_red
-          {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
+          {% elif states('alarm_control_panel.home') == "disarmed" %}
             script.xiaomi_red
           {% endif %}
       - service: script.ifttt_leeo_color_change
         data_template:
           value1: >
-            {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
+            {% if states('alarm_control_panel.home') == "armed_home" %}
               "#0000FF"
-            {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
+            {% elif states('alarm_control_panel.home') == "armed_away" %}
               "#00FF00"
-            {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
+            {% elif states('alarm_control_panel.home') == "triggered" %}
               "#FF0000"
-            {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
+            {% elif states('alarm_control_panel.home') == "disarmed" %}
               "#FF0000"
             {% endif %}
 
@@ -79,7 +79,7 @@ automation:
     initial_state: true
     trigger:
       platform: state
-      entity_id: alarm_control_panel.simplisafe
+      entity_id: alarm_control_panel.home
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
@@ -94,29 +94,29 @@ automation:
       - service: script.notify_me
         data_template:
           message: >
-            {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
+            {% if states('alarm_control_panel.home') == "armed_home" %}
               Your home is now secured!
-            {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
+            {% elif states('alarm_control_panel.home') == "armed_away" %}
               Your Home Security System is now set to Away mode!
-            {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
+            {% elif states('alarm_control_panel.home') == "triggered" %}
               Attention!: Your Home Security System is triggered! It has been notified to the authorities.
-            {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
+            {% elif states('alarm_control_panel.home') == "disarmed" %}
               Attention!: Your Home Security System is turned OFF.
             {% endif %}
       - service: script.voice_notify
         data_template:
           message: >
-            {% if states('alarm_control_panel.simplisafe') == "armed_home" %}
+            {% if states('alarm_control_panel.home') == "armed_home" %}
               Your home is now secured!
-            {% elif states('alarm_control_panel.simplisafe') == "armed_away" %}
+            {% elif states('alarm_control_panel.home') == "armed_away" %}
               Your Home Security System is now set to Away mode!
-            {% elif states('alarm_control_panel.simplisafe') == "triggered" %}
+            {% elif states('alarm_control_panel.home') == "triggered" %}
               Attention!: Your Home Security System is triggered! It has been notified to the authorities.
-            {% elif states('alarm_control_panel.simplisafe') == "disarmed" %}
+            {% elif states('alarm_control_panel.home') == "disarmed" %}
               Attention!: Your Home Security System is turned OFF.
             {% endif %}
       - condition: template
-        value_template: "{{ states('alarm_control_panel.simplisafe') != 'disarmed' }}"
+        value_template: "{{ states('alarm_control_panel.home') != 'disarmed' }}"
       - service: input_boolean.turn_on
         entity_id: input_boolean.notify_camera_motion
 
@@ -128,14 +128,10 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - alarm_control_panel.simplisafe
+          - alarm_control_panel.home
         to: "disarmed"
         for:
           minutes: 10
-    condition:
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
     action:
       - service: script.notify_me
         data:
@@ -149,14 +145,11 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - alarm_control_panel.simplisafe
+          - alarm_control_panel.home
         to: "disarmed"
         for:
           minutes: 30
     condition:
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
       - condition: template
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
     action:
@@ -172,7 +165,7 @@ automation:
     initial_state: true
     trigger:
       platform: state
-      entity_id: alarm_control_panel.simplisafe
+      entity_id: alarm_control_panel.home
     condition:
       - condition: template
         value_template: >
@@ -203,18 +196,15 @@ automation:
       - condition: template
         value_template: "{{ states('sensor.bedtime_minute')|int == now().minute|int }}"
       - condition: template
-        value_template: "{{ states('alarm_control_panel.simplisafe') != 'away' }}"
-      - condition: state
-        entity_id: group.all_devices
-        state: "home"
+        value_template: "{{ states('alarm_control_panel.home') != 'away' }}"
       - condition: template
-        value_template: "{{ states('alarm_control_panel.simplisafe') == 'disarmed' }}"
+        value_template: "{{ states('alarm_control_panel.home') == 'disarmed' }}"
       - condition: template
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
     action:
       - service: alarm_control_panel.alarm_arm_home
         data:
-          entity_id: alarm_control_panel.simplisafe
+          entity_id: alarm_control_panel.home
       - service: script.notify_me
         data:
           message: "It's bedtime, you forgot to turn ON Home Security System. Turned it ON for you."
@@ -231,7 +221,7 @@ automation:
 #     condition: and
 #     conditions:
 #       - condition: template
-#         value_template: '{{ states('alarm_control_panel.simplisafe') == "armed_home" or states('alarm_control_panel.simplisafe') == "armed_away" }}'
+#         value_template: '{{ states('alarm_control_panel.home') == "armed_home" or states('alarm_control_panel.home') == "armed_away" }}'
 #       - condition: or
 #         conditions:
 #         - condition: template
@@ -244,7 +234,7 @@ automation:
 #     - service: script.notify_me
 #       data_template:
 #         message: >
-#           Attention! Your home Security system is set to {{ states('alarm_control_panel.simplisafe').split('_')[1] | upper }} mode.
+#           Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode.
 #           BUT THE {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
 #     - service: camera.snapshot
 #       data_template:
@@ -279,14 +269,14 @@ automation:
 #             {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
 #               {% set doors = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
 #             {% endif %}
-#           Your {{ doors }} seem to be open while your home security system is set to "{{ states('alarm_control_panel.simplisafe').split('_')[1]| title }}" mode. Today is {{ get_date(now()) }}, and time is {{ now().strftime("%I:%M:%S %p") }}. Please see the attached pictures and make sure everything is okay.
+#           Your {{ doors }} seem to be open while your home security system is set to "{{ states('alarm_control_panel.home').split('_')[1]| title }}" mode. Today is {{ get_date(now()) }}, and time is {{ now().strftime("%I:%M:%S %p") }}. Please see the attached pictures and make sure everything is okay.
 #         data:
 #           images:
 #             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 #             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 #             - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~  (states('automation.home_security_system_and_garage_door_check.last_updated ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 #     - condition: template
-#       value_template: '{{ states('alarm_control_panel.simplisafe') == "armed_home" }}'
+#       value_template: '{{ states('alarm_control_panel.home') == "armed_home" }}'
 #     - service: script.voice_notify
 #       data_template:
 #         message: >
@@ -298,7 +288,7 @@ automation:
 #             {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
 #               {% set doors = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
 #             {% endif %}
-#           Attention! Your home Security system is set to {{ states('alarm_control_panel.simplisafe').split('_')[1] | upper }} mode.
+#           Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode.
 #           BUT the {{ doors }} {{ 'are' if doors.endswith('s') else 'is' }} open.
 
 ###############################################################################
@@ -312,10 +302,7 @@ automation:
 #     offset: '+00:00:00'
 #   condition:
 #     - condition: state
-#       entity_id: group.all_devices
-#       state: 'home'
-#     - condition: state
-#       entity_id: alarm_control_panel.simplisafe
+#       entity_id: alarm_control_panel.home
 #       state: 'disarmed'
 #   action:
 #     - service_template: >-
@@ -328,7 +315,7 @@ automation:
 #           alarm_control_panel.disarm
 #         {% endif %}
 #       data:
-#         entity_id: alarm_control_panel.simplisafe
+#         entity_id: alarm_control_panel.home
 #     - service: script.voice_notify
 #       data_template:
 #         message: >
@@ -417,9 +404,9 @@ automation:
 #     condition: or
 #     conditions:
 #       - condition: template
-#         value_template: '{{ states('alarm_control_panel.simplisafe') | lower == "armed_away" }}'
+#         value_template: '{{ states('alarm_control_panel.home') | lower == "armed_away" }}'
 #       - condition: template
-#         value_template: '{{ states('alarm_control_panel.simplisafe') | lower == "armed_home" }}'
+#         value_template: '{{ states('alarm_control_panel.home') | lower == "armed_home" }}'
 #   action:
 #     - service: notify.ios_suresh
 #       data_template:
@@ -444,7 +431,7 @@ automation:
 #     to: 'on'
 #   condition:
 #     - condition: template
-#       value_template: '{{ states('alarm_control_panel.simplisafe') == "armed_home" or states('alarm_control_panel.simplisafe') == "armed_away" }}'
+#       value_template: '{{ states('alarm_control_panel.home') == "armed_home" or states('alarm_control_panel.home') == "armed_away" }}'
 #   action:
 #     - service: notify.ios_suresh
 #       data_template:
@@ -468,7 +455,7 @@ automation:
 #       actionName: 'DISABLE_SECURITY'
 #   action:
 #     - service: alarm_control_panel.alarm_disarm
-#       entity_id: alarm_control_panel.simplisafe
+#       entity_id: alarm_control_panel.home
 #     - service: notify.ios_suresh
 #       data:
 #         message: "Unlocked your home!"
