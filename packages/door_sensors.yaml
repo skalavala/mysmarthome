@@ -132,9 +132,6 @@ automation:
 
   ################################################################################
   # Notifies when either of the garage door is opened or closed
-  # When the garage is opened, it sends an actionable ios notification with an
-  # option to close the garage door. This iso actionable notification only occurs
-  # when garage door is open and not when it is closed.
   ###############################################################################
   - alias: Notify Garage Door Status
     initial_state: true

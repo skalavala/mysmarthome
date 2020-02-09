@@ -157,7 +157,6 @@
 
 # automation:
 #   - alias: Run every 15 seconds
-#     hide_entity: false
 #     initial_state: true
 #     trigger:
 #       - platform: time_pattern

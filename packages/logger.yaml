@@ -69,7 +69,6 @@
 # ###############################################################################
 #   - alias: Log Level
 #     initial_state: true
-#     hide_entity: true
 #     trigger:
 #       - platform: state
 #         entity_id: input_select.log_level
@@ -88,7 +87,6 @@
 # ###############################################################################
 #   - alias: Restore Log Level on Startup
 #     initial_state: true
-#     hide_entity: true
 #     trigger:
 #       platform: homeassistant
 #       event: start

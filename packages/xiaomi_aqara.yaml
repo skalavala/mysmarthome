@@ -1,21 +1,20 @@
 homeassistant:
   customize:
-
     binary_sensor.motion_sensor_158d0001a662fe:
       friendly_name: Kitchen Motion Sensor (Xiaomi)
     sensor.Illumination_158d0001a662fe:
       friendly_name: Kitchen Luminance (Xiaomi)
-     
+
     binary_sensor.motion_sensor_158d0001a25041:
       friendly_name: Family Room Motion Sensor (xiaomi)
     sensor.Illumination_158d0001a25041:
       friendly_name: Family Room Luminance (xiaomi)
- 
+
     binary_sensor.motion_sensor_158d00016db6d2:
       friendly_name: Study Room Motion Sensor (Xiaomi)
     sensor.Illumination_158d00016db6d2:
       friendly_name: Study Room Luminance (Xiaomi)
-    
+
     binary_sensor.motion_sensor_158d00016c2d0e:
       friendly_name: Dining Room Motion Sensor (Xiaomi)
     sensor.Illumination_158d00016c2d0e:
@@ -72,10 +71,14 @@ homeassistant:
       friendly_name: Front Room Cube (Xiaomi)
     binary_sensor.cube_158d00027ce15c:
       friendly_name: Hasika's Bedroom Cube (Xiaomi)
-    binary_sensor.cube_158d00027cf60d:     
+    binary_sensor.cube_158d00027cf60d:
       friendly_name: Srinika's Bedroom Cube (Xiaomi)
 
 xiaomi_aqara:
   discovery_retry: 5
   gateways:
     - key: !secret xiaomi_key
+# - service: xiaomi_aqara.play_ringtone
+#   gw_mac: !secret xiaomi_mac
+#   ringtone_id: 8
+#   ringtone_vol: 20

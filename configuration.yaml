@@ -27,34 +27,6 @@ homeassistant:
 sun:
 alexa:
 config:
-# cloud:
-#   alexa:
-#     filter:
-#       include_entities:
-#         - light.family_room
-#         - light.master_bedroom
-#         - light.gateway_light_34ce008ad65d
-#         - switch.basement_left
-#         - switch.basement_right
-#         - switch.frontyard_light
-#         - switch.garage_lights
-#         - switch.guest_bedroom
-#         - switch.prayer_room
-#         - switch.kids_bed_accent
-#         - switch.kids_bedroom
-#         - switch.kitchen
-#         - switch.office_room
-#         - switch.wemobackyardlightswitch
-#         - switch.wemoswitch1
-#       include_domains:
-#         - light
-#         - switch
-
-#     entity_config:
-#       light.gateway_light_34ce008ad65d:
-#         name: Gateway Light
-#         description: Xiaomi Gateway Light
-
 discovery:
   ignore:
     - homekit
@@ -73,21 +45,26 @@ homekit:
       - binary_sensor.single_car_garage_door_tilt_sensor_sensor
       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
 
-sonos:
-  media_player:
-    hosts:
-      - 192.168.1.195
-      - 192.168.1.186
-
 mobile_app:
+
 # map:
 # updater:
 # logbook:
 # history:
-websocket_api:
-python_script:
 # recorder:
 #   db_url: !secret my_sql_url
+# influxdb:
+#  host: 192.168.1.125
+#  include:
+#    entities:
+#      - sensor.dining_room_thermostat_temperature
+#      - sensor.downstairs_multi_sensor_temperature
+#      - sensor.front_room_multi_sensor_temperature
+#      - sensor.guest_bedroom_multi_sensor_temperature
+#      - sensor.tv_multi_sensor_temperature
+
+websocket_api:
+python_script:
 logger: !include logging.yaml
 
 zeroconf:
@@ -108,6 +85,12 @@ mqtt:
   password: !secret mqtt_password
   keepalive: 60
   client_id: pi_ha
+
+sonos:
+  media_player:
+    hosts:
+      - !secret sonos_living_room_ip
+      - !secret sonos_front_room_ip
 
 binary_sensor:
   - platform: workday
@@ -195,12 +178,3 @@ telegram_bot:
     api_key: !secret telegram_apikey
     allowed_chat_ids:
       - !secret telegram_chatid
-# influxdb:
-#  host: 192.168.1.125
-#  include:
-#    entities:
-#      - sensor.dining_room_thermostat_temperature
-#      - sensor.downstairs_multi_sensor_temperature
-#      - sensor.front_room_multi_sensor_temperature
-#      - sensor.guest_bedroom_multi_sensor_temperature
-#      - sensor.tv_multi_sensor_temperature

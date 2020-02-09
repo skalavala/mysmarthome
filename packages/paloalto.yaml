@@ -8,7 +8,7 @@
 # homeassistant:
 #   customize:
 
-# # Sensors from custom component  
+# # Sensors from custom component
 #     sensor.paloalto_host_name:
 #       friendly_name: Palo Alto Host Name
 #     sensor.paloalto_operation_mode:
@@ -74,7 +74,6 @@
 #       - loggedin_user_count
 #       - loggedin_users
 
-
 # #
 # # All the URLs below use the following format
 # # For ex: paloalto_clear_traffic_logs: "curl -k 'https://192.xxx.xxx.xxx/api/?type=op&cmd=<clear><log><traffic></traffic></log></clear>&key=YOUR_API_KEY'"
@@ -113,7 +112,7 @@
 #   paloalto_shutdown:
 #     sequence:
 #       - service: shell_command.paloalto_shutdown
-#   paloalto_restart: 
+#   paloalto_restart:
 #     sequence:
 #       - service: shell_command.paloalto_restart
 
@@ -125,7 +124,6 @@
 # #
 #   - alias: Alert When Someone Logged into VPN
 #     initial_state: true
-#     hide_entity: true
 #     trigger:
 #       - platform: state
 #         entity_id: sensor.paloalto_global_protect_users
@@ -169,7 +167,6 @@
 # #
 #   - alias: Alert When Someone Logged into Firewall
 #     initial_state: true
-#     hide_entity: true
 #     trigger:
 #       - platform: state
 #         entity_id: sensor.paloalto_loggedin_users
@@ -213,7 +210,6 @@
 # #
 #   - alias: Clear Traffic Logs
 #     initial_state: True
-#     hide_entity: True
 #     trigger:
 #       - platform: time_pattern
 #         hours: '/1'

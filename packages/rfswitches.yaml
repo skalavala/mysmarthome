@@ -100,7 +100,6 @@
 # # When the switch state changes (programatically or by UI), save the state to MQTT
 #   - alias: Save RF Switch State
 #     initial_state: true
-#     hide_entity: true
 #     trigger:
 #       platform: state
 #       entity_id:
@@ -120,7 +119,6 @@
 # # When the switch state is updated in MQTT (for remove integration), reload the Switch to that state
 #   - alias: Sync MQTT and Switch States
 #     initial_state: true
-#     hide_entity: true
 #     trigger:
 #       platform: state
 #       entity_id:
@@ -144,7 +142,6 @@
 # ###############################################################################
 #   - alias: Restore RF Switch Status on Startup
 #     initial_state: true
-#     hide_entity: true
 #     trigger:
 #       platform: homeassistant
 #       event: start

@@ -53,7 +53,7 @@ cards:
       - automation.alert_when_someone_enters_a_zone
       - automation.alert_when_someone_leaves_a_zone
       - automation.send_a_message_as_i_get_closer_to_home
-      - automation.update_phone_battery_levels
+      - automation.update_phone_battery_levels_from_life360
       - automation.welcome_family
 
   - type: entities

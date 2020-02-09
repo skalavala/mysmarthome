@@ -298,7 +298,6 @@ automation:
   #
   - alias: Scan Frontdoor Camera On Motion
     initial_state: true
-    hide_entity: false
     trigger:
       - platform: state
         entity_id:
@@ -378,7 +377,6 @@ automation:
   #
   - alias: Scan Driveway Camera When Motion
     initial_state: true
-    hide_entity: false
     trigger:
       - platform: state
         entity_id:
@@ -458,7 +456,6 @@ automation:
   #
   - alias: Scan Garage Camera When Motion
     initial_state: true
-    hide_entity: false
     trigger:
       - platform: state
         entity_id:
@@ -533,7 +530,6 @@ automation:
   #
   - alias: Scan Backyard Camera When Motion
     initial_state: true
-    hide_entity: false
     trigger:
       - platform: state
         entity_id:

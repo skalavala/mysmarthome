@@ -1,3 +1,2 @@
 automation:
-  initial_state: 'on'
-  hide_entity: true
+  initial_state: "on"

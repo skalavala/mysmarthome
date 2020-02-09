@@ -4,12 +4,12 @@
     {{- "true" if name.endswith("s") else "false" -}}
   {%- endmacro -%}
 
-  {#- Alerts low battery (below 30%), ONLY when the phone is not already pluggedin -#}
+  {#- Alerts low battery (below 50% at night), ONLY when the phone is not pluggedin -#}
   {%- macro low_battery_check() -%}
-   {%- set level = 30 -%}
-   {%- for item in states.device_tracker if '_' in item.entity_id.split('.')[1] and state_attr(item.entity_id, "battery") |lower != "none" -%}
+   {%- set level = 50 -%}
+   {%- for item in states.device_tracker if 'life360_' in item.entity_id and state_attr(item.entity_id, "battery") |lower != "none" -%}
      {%- if item.attributes.battery|int < level -%}
-       {%- if states("sensor." ~ item.friendly_name |lower ~"s_iphone_battery_state") | lower != "charging" %}
+       {%- if state_attr(item.entity_id, "battery_charging" ) != true %}
          {{- item.attributes.friendly_name | replace("life360", "") |title }}'s iPhone battery is at {{ item.attributes.battery }} percent.
        {%- endif %}
      {%- endif %}
@@ -87,8 +87,8 @@
   {%- endmacro -%}
 
   {%- macro charging_status() -%}
-    {%- for item in states if "_iphone_battery_state" in item.entity_id and item.state != "Charging" %}
-      {%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{- item.name.split(' ')[0] -}}
+    {%- for item in states if "life360_" in item.entity_id and item.attributes.battery_charging != True %}
+      {%- if loop.first %}{% elif loop.last %} and {% else %}, {% endif -%}{{- item.name.split(' ')[1] |title -}}
     {%- endfor -%}
   {%- endmacro -%}
 
