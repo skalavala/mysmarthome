@@ -887,6 +887,24 @@ If you want the date to be more readable for display, you can use the script bel
 {{ get_date(now()) }}
 ```
 
+## 21a. Formatting Numbers
+
+If you want to format numbers, currency...etc, you can use something like:
+
+```
+{% set number = 12345 %}
+{{ "${:,.2f}".format(number) }}
+```
+
+returns `$12,345.00`.
+
+```
+{% set number = 12345 %}
+{{ "{:,}".format(number) }}
+```
+
+returns `12,345`
+
 Feel free to modify the `strftime` format that fits your need. You can also pass your sensor value - ex: `{{ get_date(states.sensor.mysensor.last_updated) }}`.
 
 ## 22. BANNER/ASCII Text Command in Jinja

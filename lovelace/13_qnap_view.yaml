@@ -24,9 +24,9 @@ cards:
             style:
               - font-weight: bold
             state:
-              - value: 'OK'
+              - value: "OK"
                 color: rgb(0, 128, 0)
-              - value: 'FAIL'
+              - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
           - type: "custom:button-card"
@@ -38,9 +38,9 @@ cards:
             style:
               - font-weight: bold
             state:
-              - value: 'OK'
+              - value: "OK"
                 color: rgb(0, 128, 0)
-              - value: 'FAIL'
+              - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
           - type: "custom:button-card"
@@ -52,9 +52,9 @@ cards:
             style:
               - font-weight: bold
             state:
-              - value: 'OK'
+              - value: "OK"
                 color: rgb(0, 128, 0)
-              - value: 'FAIL'
+              - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
           - type: "custom:button-card"
@@ -66,9 +66,9 @@ cards:
             style:
               - font-weight: bold
             state:
-              - value: 'OK'
+              - value: "OK"
                 color: rgb(0, 128, 0)
-              - value: 'FAIL'
+              - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
 
@@ -98,8 +98,8 @@ cards:
             name: Disk Used
             severity:
               green: 0
-              yellow: 50
-              red: 75
+              yellow: 70
+              red: 85
       - type: entities
         title: QNAP Drives
         show_header_toggle: false

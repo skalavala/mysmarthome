@@ -14,7 +14,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -30,7 +30,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -46,7 +46,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -62,7 +62,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -71,7 +71,6 @@ cards:
 
       - type: horizontal-stack
         cards:
-
           - type: "custom:button-card"
             name: Movie Time Popcorn
             entity: input_boolean.movie_time
@@ -81,7 +80,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -97,7 +96,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -113,7 +112,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -129,7 +128,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -147,13 +146,13 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
               domain: input_boolean
               action: working_in_office_room
-              
+
           - type: "custom:button-card"
             name: Working in Garage
             entity: input_boolean.working_in_garage
@@ -163,7 +162,7 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
@@ -181,14 +180,12 @@ cards:
               - font-weight: bold
               - color: rgb(0, 0, 5)
             state:
-              - value: 'on'
+              - value: "on"
                 color: var(--primary-color)
             action: toggle
             toggle:
               domain: input_boolean
               action: stream_camera2chromecast
-
-
 
   - type: entities
     title: Control Panel
@@ -208,6 +205,8 @@ cards:
       - input_boolean.notify_camera_alerts
       - input_boolean.alarm_clock
       - input_boolean.trash_reminders
+      - automation.family_room_motion_timer
+      - automation.family_room_timer_elapsed
 
   - type: entities
     title: Bed & Wakeup Times

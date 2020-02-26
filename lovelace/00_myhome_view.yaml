@@ -75,27 +75,30 @@ cards:
     show_empty: false
     show_header_toggle: false
     entities:
-      - entity: sensor.hasika_battery_state
-        name: Hasika
-      - entity: sensor.mallika_battery_state
-        name: Mallika
-      - entity: sensor.srinika_battery_state
-        name: Srinika
-      - entity: sensor.srinika_battery_state
+      - entity: input_label.suresh_charging
         name: Suresh
-      - entity: sensor.hasika_iphone_wifi_state
-        name: Hasika
-      - entity: sensor.mallika_iphone_wifi_state
+      - entity: input_label.mallika_charging
         name: Mallika
-      - entity: sensor.srinika_iphone_wifi_state
+      - entity: input_label.srinika_charging
         name: Srinika
-      - entity: sensor.srinika_iphone_wifi_state
+      - entity: input_label.hasika_charging
+        name: Hasika
+
+      - entity: input_label.hasika_wifi
+        name: Hasika
+      - entity: input_label.mallika_wifi
+        name: Mallika
+      - entity: input_label.srinika_wifi
+        name: Srinika
+      - entity: input_label.suresh_wifi
         name: Suresh
+
       - sensor.recycle_day
       - sensor.trash_day
     state_filter:
       - "Charging"
       - "yes"
+      - "LTE"
       - "Not Connected"
     card:
       type: glance

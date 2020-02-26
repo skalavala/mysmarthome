@@ -27,6 +27,12 @@ input_label:
   mallika_battery:
   srinika_battery:
   hasika_battery:
+
+  suresh_charging:
+  mallika_charging:
+  srinika_charging:
+  hasika_charging:
+
   suresh_wifi:
   mallika_wifi:
   srinika_wifi:
@@ -157,6 +163,37 @@ automation:
       - service: input_label.set_icon
         data_template:
           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_battery"
+          value: >
+            {% set battery_level = trigger.event.data.new_state.attributes.battery | int %}
+            {% set battery_round = (battery_level / 10)|int * 10 %}
+            {% if trigger.event.data.new_state.attributes.battery_charging == "true" %}
+              {% if battery_round >= 100 %}
+                mdi:battery-charging-100
+              {% elif battery_round > 0 %}
+                mdi:battery-charging-{{ battery_round }}
+              {% else %}
+                mdi:battery-alert
+              {% endif %}
+            {% else %}
+              {% if battery_round >= 100 %}
+                mdi:battery
+              {% elif battery_round > 0 %}
+                mdi:battery-{{ battery_round }}
+              {% else %}
+                mdi:battery-alert
+              {% endif %}
+            {% endif %}
+      - service: input_label.set_value
+        data_template:
+          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_wifi"
+          value: "{{ 'WiFi' if trigger.event.data.new_state.attributes.wifi_on |string |lower == 'true' else 'LTE' }}"
+      - service: input_label.set_value
+        data_template:
+          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_charging"
+          value: "{{ 'Charging' if trigger.event.data.new_state.attributes.battery_charging |string |lower == 'true' else 'Not Charging' }}"
+      - service: input_label.set_icon
+        data_template:
+          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_charging"
           value: >
             {% set battery_level = trigger.event.data.new_state.attributes.battery | int %}
             {% set battery_round = (battery_level / 10)|int * 10 %}
