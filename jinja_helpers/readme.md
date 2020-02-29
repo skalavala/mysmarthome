@@ -524,18 +524,15 @@ To convert given seconds to Days, hours, minutes and seconds, use the script bel
 
 ```
 {% set seconds = 641200 %}
-{%- set map = {
-               'Week': (seconds / 604800) % 604800,
+{%- set map = {'Week': (seconds / 604800) % 604800,
                'Day': (seconds / 86400) % 7,
                'Hour': (seconds / 3600) % 24,
                'Minute': (seconds / 60) % 60,
-               'Second': (seconds % 60)
-              }
--%}
+               'Second': (seconds % 60) } -%}
 
-{% for item in map if map[item] | int > 0 -%}
+{%- for item in map if map[item] | int > 0 -%}
   {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
-  {{ map[item]|int|round(0) }} {{ item }} {{- 's' if map[item]|int|round(0) > 1 }}
+  {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
 {%- endfor -%}
 ```
 
