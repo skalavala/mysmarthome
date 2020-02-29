@@ -518,6 +518,29 @@ ZWave Smart Switch                       - 5.93 minutes ago
 ZWave Stick                              - 8.82 minutes ago
 ```
 
+## 8a. Converting Seconds to Days, Hours, Minutes, and Seconds
+
+To convert given seconds to Days, hours, minutes and seconds, use the script below:
+
+```
+{% set seconds = 641200 %}
+{%- set map = {
+               'Week': (seconds / 604800) % 604800,
+               'Day': (seconds / 86400) % 7,
+               'Hour': (seconds / 3600) % 24,
+               'Minute': (seconds / 60) % 60,
+               'Second': (seconds % 60)
+              }
+-%}
+
+{% for item in map if map[item] | int > 0 -%}
+  {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+  {{ map[item]|int|round(0) }} {{ item }} {{- 's' if map[item]|int|round(0) > 1 }}
+{%- endfor -%}
+```
+
+This returns `1 Week, 10 Hours, 6 Minutes, and 40 Seconds`.
+
 ## 9. Word Wrapping long text into multiple lines:
 
 To wrap text to a certain number of characters, use the following script:
