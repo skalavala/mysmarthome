@@ -66,28 +66,6 @@
 #         data_template:
 #           message: "Emergency mode is now deactivated!"
 
-# # Water Leak detected - initiate the emergency process
-# ###############################################################################
-#   - alias: Water Leak Detected
-#     initial_state: true
-#     trigger:
-#       - platform: state
-#         entity_id: sensor.aeotec_water_sensor_flood
-#         from: '0'
-#         to: '2'
-#     action:
-#       - service: input_boolean.turn_on
-#         entity_id: input_boolean.emergency_mode
-#       - service: script.emergency_all_lights_switches_on
-#       - service: script.notify_me
-#         data_template:
-#           message: "EMERGENCY! Water Leak Detected in the Basement!"
-#       - service: script.emergency_script
-#         data:
-#           volume_level: 25
-#           alarm_code: 2
-#           message: "ALERT! Water Leak Detected in the Basement!"
-
 # # # Carbon Monoxide Detected in the house
 # # ###############################################################################
 # #   - alias: CO Detected

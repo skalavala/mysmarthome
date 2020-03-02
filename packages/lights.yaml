@@ -105,24 +105,6 @@ homeassistant:
     input_boolean.animate_upstairs_lights:
       icon: mdi:flash-outline
       friendly_name: Animate Master Bedroom Lights
-
-    # Set assumed_state to false to show up as switch instead of two lightning symbols
-    switch.rf_switch_one:
-      friendly_name: Basement Light
-      assumed_state: false
-    switch.rf_switch_two:
-      friendly_name: Switch Two
-      assumed_state: false
-    switch.rf_switch_three:
-      friendly_name: Switch Three
-      assumed_state: false
-    switch.rf_switch_four:
-      friendly_name: Front Room Light
-      assumed_state: false
-    switch.rf_switch_five:
-      friendly_name: TV Switch
-      assumed_state: false
-
 hue:
   bridges:
     - host: !secret philips_hue_ipaddress
@@ -150,43 +132,6 @@ tplink:
       #name: Upstairs Fragrance Outlet
     - host: !secret tplink_kids_bed_accent_light
       #name: Kids Bed Accent Light
-
-switch:
-# RF Switches
-# - platform: mqtt
-#   name: RF Switch One
-#   command_topic: '/home/rfswitches/switch_one'
-#   payload_on: "on"
-#   payload_off: "off"
-#   retain: true
-
-# - platform: mqtt
-#   name: RF Switch Two
-#   command_topic: '/home/rfswitches/switch_two'
-#   payload_on: "on"
-#   payload_off: "off"
-#   retain: true
-
-# - platform: mqtt
-#   name: RF Switch Three
-#   command_topic: '/home/rfswitches/switch_three'
-#   payload_on: "on"
-#   payload_off: "off"
-#   retain: true
-
-# - platform: mqtt
-#   name: RF Switch Four
-#   command_topic: '/home/rfswitches/switch_four'
-#   payload_on: "on"
-#   payload_off: "off"
-#   retain: true
-
-# - platform: mqtt
-#   name: RF Switch Five
-#   command_topic: '/home/rfswitches/switch_five'
-#   payload_on: "on"
-#   payload_off: "off"
-#   retain: true
 
 wemo:
   discovery: false
@@ -234,21 +179,6 @@ script:
           entity_id: light.gateway_light_34ce008ad65d
           brightness: 255
           rgb_color: [0, 255, 0]
-
-  # start_colorloop:
-  #   sequence:
-  #     - service: light.lifx_effect_colorloop
-  #       data:
-  #         entity_id: light.dinette
-  #         brightness: 255
-  #         period: 2
-  #         spread: 360
-  #         change: 35
-  # stop_colorloop:
-  #   sequence:
-  #     - service: light.lifx_effect_stop
-  #       data:
-  #         entity_id: light.dinette
 
 ###############################################################################
 #                _                        _   _

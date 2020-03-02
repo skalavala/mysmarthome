@@ -142,9 +142,9 @@ automation:
         - binary_sensor.single_car_garage_door_tilt_sensor_sensor
     condition:
       - condition: template
-        value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
+        value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
       - condition: template
-        value_template: "{{ trigger.to_state.state != 'unknown' }}"
+        value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
       - condition: template
         value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
     action:
@@ -164,7 +164,7 @@ automation:
             {% set doors = "" %}
               {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
                     states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
-                {% set doors = "Atention! Both Garage Doors are OPEN" %}
+                {% set doors = "Attention! Both Garage Doors are OPEN" %}
               {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
                       states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
                 {% set doors = "Both Garage Doors are now CLOSED" %}

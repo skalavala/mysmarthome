@@ -31,6 +31,8 @@ discovery:
   ignore:
     - homekit
 
+shopping_list:
+
 homekit:
   autostart: true
   filter:

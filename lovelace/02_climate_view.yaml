@@ -49,8 +49,6 @@ cards:
     title: Temperature Levels
     show_header_toggle: false
     entities:
-      - entity: sensor.aeotec_water_sensor_temperature
-        name: Basement Temperature in HVAC Room
       - entity: sensor.audio_detector_temperature
         name: Hallway Temperature
       - sensor.downstairs_multi_sensor_temperature

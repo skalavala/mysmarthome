@@ -97,6 +97,8 @@ automation:
         value_template: "{{ states('sun.sun') == 'below_horizon' }}"
       - service: homeassistant.turn_on
         entity_id: switch.zwave_smart_switch_switch
+      - service: switch.turn_on
+        entity_id: switch.front_room
 
   # Front Room:
   # Timer Elapsed - Turn OFF lights
@@ -112,8 +114,11 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.working_in_office_room') == 'off' }}"
     action:
+      - service: switch.turn_off
+        entity_id: switch.front_room
       - service: homeassistant.turn_off
-        entity_id: switch.rf_switch_four
+        entity_id: switch.zwave_smart_switch_switch
+
   # Kitchen:
   # Motion Detected - Turn ON the light and extend timer
   ###############################################################################

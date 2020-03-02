@@ -442,7 +442,6 @@ automation:
   #       - sensor.illumination_158d00016db6d2
   #       - sensor.illumination_158d0001a25041
   #       - sensor.illumination_158d0001a662fe
-  #       - zwave.aeotec_water_sensor
   #       - zwave.audio_detector
   #       - zwave.back_door_sensor
   #       - zwave.basement_door_sensor

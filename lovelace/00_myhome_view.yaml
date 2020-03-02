@@ -243,7 +243,6 @@ cards:
       - binary_sensor.playarea_camera_motion
       - binary_sensor.frontdoor_camera_motion
       - binary_sensor.driveway_camera_motion
-      - binary_sensor.aeotec_water_sensor_sensor
       - binary_sensor.audio_detector_sensor
       - binary_sensor.basement_door_sensor_sensor
       - binary_sensor.downstairs_multi_sensor_sensor
@@ -317,9 +316,9 @@ cards:
     title: Z-Wave Batteries
     show_header_toggle: false
     entities:
-      - input_label.aeotec_water_sensor
       - input_label.audio_detector
       - input_label.back_door_sensor
+      - input_label.zwave_front_door_sensor
       - input_label.basement_door_sensor
       - input_label.downstairs_multi_sensor
       - input_label.front_room_multi_sensor

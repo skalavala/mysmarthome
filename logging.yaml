@@ -1,40 +1,40 @@
-default: error
+default: warning
 logs:
   gsp: critical
-  root: error
-  pyhap: error
-  openzwave: error
-  py.warnings: error
-  pywemo.ssdp: error
-  libopenzwave: error
-  simplipy.api: error
-  netdisco.ssdp: error
-  aiohttp.server: error
+  root: warning
+  pyhap: warning
+  openzwave: warning
+  py.warnings: warning
+  pywemo.ssdp: warning
+  libopenzwave: warning
+  simplipy.api: warning
+  netdisco.ssdp: warning
+  aiohttp.server: warning
   homeassistant.core: critical
-  homeassistant.setup: error
-  homeassistant.loader: error # hide custom_component warnings
-  homeassistant.exceptions: error
-  homeassistant.helpers.script: error
-  homeassistant.helpers.entity: error
+  homeassistant.setup: warning
+  homeassistant.loader: warning # hide custom_component warnings
+  homeassistant.exceptions: warning
+  homeassistant.helpers.script: warning
+  homeassistant.helpers.entity: warning
   homeassistant.components.wemo: critical
-  homeassistant.components.cloud.iot: error
+  homeassistant.components.cloud.iot: warning
   homeassistant.components.hue: critical
-  homeassistant.components.http: error
-  homeassistant.components.camera: error
-  homeassistant.components.zwave: error
-  homeassistant.components.sensor: error
-  homeassistant.components.image_processing: error
-  homeassistant.components.homekit: error
-  custom_components.sensor.life360: error
-  custom_components.sensor.paloalto: error
-  homeassistant.components.recorder: error
-  homeassistant.components.discovery: error
-  homeassistant.components.automation: error
-  custom_components.sensor.command_line: error
-  homeassistant.components.climate.nest: error
-  homeassistant.components.media_player: error
-  custom_components.media_player.sharptv: error
-  homeassistant.components.switch.tplink: error
-  homeassistant.components.emulated_hue: error
-  homeassistant.components.device_tracker: error
-  homeassistant.components.camera.generic: error
+  homeassistant.components.http: warning
+  homeassistant.components.camera: warning
+  homeassistant.components.zwave: warning
+  homeassistant.components.sensor: warning
+  homeassistant.components.image_processing: warning
+  homeassistant.components.homekit: warning
+  custom_components.sensor.life360: warning
+  custom_components.sensor.paloalto: warning
+  homeassistant.components.recorder: warning
+  homeassistant.components.discovery: warning
+  homeassistant.components.automation: warning
+  custom_components.sensor.command_line: warning
+  homeassistant.components.climate.nest: warning
+  homeassistant.components.media_player: warning
+  custom_components.media_player.sharptv: warning
+  homeassistant.components.switch.tplink: warning
+  homeassistant.components.emulated_hue: warning
+  homeassistant.components.device_tracker: warning
+  homeassistant.components.camera.generic: warning

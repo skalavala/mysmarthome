@@ -6,12 +6,11 @@
 ###############################################################################
 
 input_label:
-  aeotec_water_sensor:
   audio_detector:
   back_door_sensor:
   basement_door_sensor:
   downstairs_multi_sensor:
-  front_door_sensor:
+  zwave_front_door_sensor:
   front_room_multi_sensor:
   garage_door_sensor:
   guest_bedroom_multi_sensor:

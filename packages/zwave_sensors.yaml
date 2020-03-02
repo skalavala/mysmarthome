@@ -11,9 +11,6 @@
 homeassistant:
   customize:
     # ZWave Binary Sensors
-    binary_sensor.aeotec_water_sensor_sensor:
-      friendly_name: Aeotec Water Sensor
-      ## <<: *not_exposed
     binary_sensor.audio_detector_sensor:
       friendly_name: Audio Detector Sensor
       ## <<: *not_exposed
@@ -58,51 +55,6 @@ homeassistant:
       ## <<: *not_exposed
 
     # ZWave Sensors
-    sensor.aeotec_water_sensor_alarm_level:
-      friendly_name: Aeotec Water Sensor Alarm Level
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_alarm_level_2:
-      friendly_name: Aeotec Water Sensor Alarm Level
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_alarm_level_3:
-      friendly_name: Aeotec Water Sensor Alarm Level
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_alarm_type:
-      friendly_name: Aeotec Water Sensor Alarm Type
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_alarm_type_2:
-      friendly_name: Aeotec Water Sensor Alarm Type
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_alarm_type_3:
-      friendly_name: Aeotec Water Sensor Alarm Type
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_burglar:
-      friendly_name: Aeotec Water Sensor Burglar
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_flood:
-      friendly_name: Aeotec Water Sensor Flood
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_flood_2:
-      friendly_name: Aeotec Water Sensor Flood
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_flood_3:
-      friendly_name: Aeotec Water Sensor Flood
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_heat:
-      friendly_name: Aeotec Water Sensor Heat
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_sourcenodeid:
-      friendly_name: Aeotec Water Sensor SourceNodeId
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_sourcenodeid_2:
-      friendly_name: Aeotec Water Sensor SourceNodeId
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_sourcenodeid_3:
-      friendly_name: Aeotec Water Sensor SourceNodeId
-      # <<: *not_exposed
-    sensor.aeotec_water_sensor_temperature:
-      friendly_name: Aeotec Water Sensor Temperature
-      # <<: *not_exposed
     sensor.audio_detector_alarm_level:
       friendly_name: Audio Detector Alarm Level
       # <<: *not_exposed
