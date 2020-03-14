@@ -48,7 +48,6 @@ usps_cookies.pickle
 packages/zones_private.yaml
 packages/device_tracker.yaml
 packages/bitcoins.yaml
-packages/pill_reminder.yaml
 custom_components/*/__pycache__/*
 custom_components/__pycache__/*
 docs/_site

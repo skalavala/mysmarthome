@@ -143,6 +143,11 @@ input_boolean:
     initial: off
     icon: mdi:do-not-disturb
 
+  led_alerts:
+    name: LED Messages
+    initial: on
+    icon: mdi:led-strip
+
   movie_time:
     name: "Movie Time"
     initial: off

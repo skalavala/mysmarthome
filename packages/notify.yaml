@@ -118,6 +118,9 @@ script:
   ###############################################################################
   voice_notify:
     sequence:
+      # - service: script.led_message
+      #   data_template:
+      #     message: "{{ message }}"
       - condition: template
         value_template: "{{ states('input_boolean.voice_notifications') == 'on' }}"
       - condition: template
@@ -218,3 +221,17 @@ script:
       - service: script.voice_notify
         data_template:
           message: !include ../templates/home_status.yaml
+
+  ###############################################################################
+  # Display message on LED Matrix Screen
+  ###############################################################################
+  led_message:
+    sequence:
+      - condition: state
+        entity_id: input_boolean.led_alerts
+        state: "on"
+      - service: mqtt.publish
+        data_template:
+          topic: messageboard/messages
+          payload: >
+            { 'message': '{{ message }}','frameDelay': 50 }

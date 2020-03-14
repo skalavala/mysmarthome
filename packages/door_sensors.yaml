@@ -227,7 +227,7 @@ automation:
         - binary_sensor.back_door_sensor_sensor
     condition:
       - condition: template
-        value_template: "{% if trigger.from_state %} True {% else %} False {% endif %}"
+        value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown']  }}"
     action:
       - service: script.voice_notify
         data_template:

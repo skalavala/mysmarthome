@@ -218,6 +218,8 @@ automation:
         entity_id: switch.zwave_smart_switch_switch
       - service: switch.turn_on
         entity_id: switch.kids_bed_accent
+      - service: switch.turn_on
+        entity_id: switch.front_room
 
   #  ÛÛÛÛÛÛ   ÛÛÛÛÛ  ÛÛÛ           ÛÛÛÛÛ       ÛÛÛÛÛ
   # °°ÛÛÛÛÛÛ °°ÛÛÛ  °°°           °°ÛÛÛ       °°ÛÛÛ

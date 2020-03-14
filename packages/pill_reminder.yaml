@@ -1,0 +1,188 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   03/05/2020
+#   @package        :   Pill Reminder Package
+#   @description    :   A package to help you remind pills you need to take
+###############################################################################
+
+###############################################################################
+#   _____ _ _ _   _____                _           _
+#  |  __ (_) | | |  __ \              (_)         | |
+#  | |__) || | | | |__) |___ _ __ ___  _ _ __   __| | ___ _ __
+#  |  ___/ | | | |  _  // _ \ '_ ` _ \| | '_ \ / _` |/ _ \ '__|
+#  | |   | | | | | | \ \  __/ | | | | | | | | | (_| |  __/ |
+#  |_|   |_|_|_| |_|  \_\___|_| |_| |_|_|_| |_|\__,_|\___|_|
+#
+###############################################################################
+
+homeassistant:
+
+input_label:
+  pill_taken_at:
+    name: Last Pills Taken At
+    icon: mdi:pill
+
+input_boolean:
+  pill_taken:
+    name: Pill Taken
+    icon: mdi:pill
+
+  pill_on_vacation:
+    name: On Vacation
+    initial: off
+    icon: mdi:beach
+
+  pill_voice_notification:
+    name: Pill Voice Notification
+    icon: mdi:speaker
+
+timer:
+  timer_pill_reminder:
+    duration: "00:30:00"
+
+input_datetime:
+  pill_reminder_time:
+    name: Pill Reminder Time
+    has_date: false
+    has_time: true
+    initial: "09:00"
+
+#################################################################################
+#    _____           _       _
+#   / ____|         (_)     | |
+#  | (___   ___ _ __ _ _ __ | |_ ___
+#   \___ \ / __| '__| | '_ \| __/ __|
+#   ____) | (__| |  | | |_) | |_\__ \
+#  |_____/ \___|_|  |_| .__/ \__|___/
+#                     | |
+#                     |_|
+#################################################################################
+
+script:
+  ###############################################################################
+  # Notifies to take pills, starts timer again!
+  # Voice notifications at home - only if the option is selected.
+  ###############################################################################
+  remind_pill:
+    sequence:
+      - service: script.notify_me
+        data:
+          message: "ALERT: PLEASE TAKE YOUR TABLETS!"
+      - service: timer.start
+        entity_id: timer.timer_pill_reminder
+      - condition: template
+        value_template: "{{ states('input_boolean.pill_voice_notification') == 'on' }}"
+      - service: script.voice_notify
+        data_template:
+          message: >
+            Please take the tablets. It looks like you have forgotten to take today's 
+            dose of tablets... Once again, this is a reminder for you to take the tablets.
+
+  ###############################################################################
+  # Stops timer, Records that the pills are taken, and notifies!
+  ###############################################################################
+  pill_taken:
+    sequence:
+      - service: timer.cancel
+        entity_id: timer.timer_pill_reminder
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.pill_taken
+      - service: script.notify_me
+        data:
+          message: "Thank you for taking tablets on time!"
+      - condition: template
+        value_template: "{{ states('input_boolean.pill_voice_notification') == 'on' }}"
+      - service: script.voice_notify
+        data:
+          message: "Thank you for taking tablets on time!"
+
+###############################################################################
+#                 _                        _   _
+#      /\        | |                      | | (_)
+#     /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
+#    / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+#   / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+#  /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#
+
+automation:
+  ###############################################################################
+  # Turn On "Pill Taken" Input Boolean when the Pill Box is Opened
+  # Opening the Pills Box signifies that the pills are taken!
+  # Make sure the pill box is not accessible to children and only you use it daily
+  ###############################################################################
+  - alias: Pill Box is Opened
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.door_window_sensor_158d00040ad8ec
+      to: "on"
+      from: "off"
+    action:
+      - service: input_label.set_value
+        data_template:
+          entity_id: input_label.pill_taken_at
+          value: "{{ as_timestamp(now()) | timestamp_custom('%m/%d/%Y %I:%M %p') }}"
+      - delay:
+          seconds: 15
+      - service: script.pill_taken
+
+  ###############################################################################
+  # Reset at mid night every day.
+  # When you get up in the morning, you will get a fresh reminder
+  ###############################################################################
+  - alias: Reset Pill Taken
+    initial_state: true
+    trigger:
+      platform: time
+      at: "00:00:00"
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.pill_taken
+
+  ###############################################################################
+  # Set the vacation mode automatically based on home security system state
+  # When travelling, make sure you add a reminder on your mobile phone
+  ###############################################################################
+  - alias: Set Vacation Mode For Pills
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.home
+    action:
+      - service_template: "input_boolean.turn_{{- 'on' if
+          states('alarm_control_panel.home') == 'armed_away' else 'off' }}"
+        entity_id: input_boolean.pill_on_vacation
+
+  ###############################################################################
+  # Checks if the pills were taken - trigger on the pill reminder time
+  # Also, only remind if not on vacation or away from home
+  # Right after the notification, start the timer, and keep reminders going
+  # until acknowledged
+  ###############################################################################
+  - alias: Check if pills were taken
+    initial_state: true
+    trigger:
+      platform: template
+      value_template: "{{ states('sensor.time') ==
+        states('input_datetime.pill_reminder_time')[:-3] }}"
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.pill_taken') == 'off' }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.pill_on_vacation') == 'off' }}"
+    action:
+      - service: script.remind_pill
+
+  ###############################################################################
+  # Timer Elapsed - Time for a reminder if the pill is not taken yet
+  ###############################################################################
+  - alias: Pill Reminder Timer Elapsed
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.timer_pill_reminder
+    action:
+      - service_template: script.remind_pill

@@ -201,6 +201,7 @@ cards:
       - input_boolean.garage_door_notifications
       - input_boolean.battery_notifications
       - input_boolean.text_alerts
+      - input_boolean.led_alerts
       - input_boolean.security_system_alerts
       - input_boolean.notify_camera_alerts
       - input_boolean.alarm_clock

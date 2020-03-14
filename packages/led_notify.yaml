@@ -1,0 +1,97 @@
+homeassistant:
+
+automation:
+  ###############################################################################
+  # Display Weather Information on LED Screen
+  ###############################################################################
+  - alias: Display Weather Changes on LED Screen
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.dark_sky_apparent_temperature, sensor.dark_sky_hourly_summary
+    action:
+      - service: script.led_message
+        data_template:
+          message: >
+            {{ states('sensor.dark_sky_apparent_temperature') |int }} degrees, {{ states('sensor.dark_sky_hourly_summary') }}
+
+  ###############################################################################
+  # Display Garage Door Status on LED Screen
+  ###############################################################################
+  - alias: Notify Garage Door Status on LED Screen
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+        - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
+      - condition: template
+        value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
+    action:
+      - service: script.led_message
+        data_template:
+          message: >
+            {% set doors = "" %}
+              {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
+                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+                {% set doors = "Attention! Both Garage Doors are OPEN" %}
+              {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
+                      states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+                {% set doors = "Both Garage Doors are now CLOSED" %}
+              {% else %}
+                {% if trigger.to_state.state | lower == "on" %}
+                  Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
+                {% elif trigger.to_state.state | lower == "off" %}
+                  Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
+                {% endif %}
+              {% endif %}
+            {{ doors }}
+
+  ###############################################################################
+  # Display Zone based Messages on LED Screen
+  ###############################################################################
+  - alias: Welcome Family on LED Screen
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - device_tracker.life360_mallika
+          - device_tracker.life360_suresh
+          - device_tracker.life360_srinika
+          - device_tracker.life360_hasika
+        from: "not_home"
+        to: "home"
+        for: "00:02:00"
+    action:
+      - service: script.led_message
+        data_template:
+          message: "Welcome home, {{ trigger.entity_id.split('.')[1].split('_')[1] | title }}"
+
+  - alias: Alert When Someone Enters a Zone on LED Screen
+    initial_state: true
+    trigger:
+      - platform: zone
+        entity_id:
+          - device_tracker.life360_hasika
+          - device_tracker.life360_mallika
+          - device_tracker.life360_srinika
+          - device_tracker.life360_suresh
+        zone: zone.home
+        event: enter
+      - platform: zone
+        entity_id: device_tracker.life360_suresh
+        zone: zone.work
+        event: enter
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.zone_alerts') == 'on' }}"
+    action:
+      - service: script.led_message
+        data_template:
+          message: >
+            {{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just entered {{ trigger.zone.attributes.friendly_name }}!

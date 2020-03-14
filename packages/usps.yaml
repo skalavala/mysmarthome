@@ -61,6 +61,14 @@ automation:
             {%- else -%}
               Attention: USPS is delivering {{ states('sensor.usps_mail') }} mails today.
             {%- endif -%}
+      - service: script.led_message
+        data_template:
+          message: >
+            {%- if states('sensor.usps_mail') | int == 1 -%}
+              USPS is delivering {{ states('sensor.usps_mail') }} mail today.
+            {%- else -%}
+              USPS is delivering {{ states('sensor.usps_mail') }} mails today.
+            {%- endif -%}
       - service: notify.ios_devices
         data_template:
           message: "USPS will be delivering {{ states('sensor.usps_mail') }} mail(s) today."

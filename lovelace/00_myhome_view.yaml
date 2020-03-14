@@ -69,6 +69,13 @@ cards:
       - input_boolean.pill_taken
       - input_boolean.pill_voice_notification
       - binary_sensor.door_window_sensor_158d00040ad8ec
+      - input_label.pill_taken_at
+      # - entity: timer.timer_pill_reminder
+      #   name: Pill Reminder Timer
+      # - entity: script.remind_pill
+      #   name: Remind Pill Script
+      # - entity: script.pill_taken
+      #   name: Pill Taken Script
 
   - type: entities
     title: Tile Devices
