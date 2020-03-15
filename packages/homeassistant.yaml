@@ -6,17 +6,6 @@
 ###############################################################################
 homeassistant:
 
-script:
-  stop_hass:
-    sequence:
-      - service: shell_command.stop_hass
-  update_hass:
-    sequence:
-      - service: shell_command.update_hass
-  restart_hass:
-    sequence:
-      - service: shell_command.restart_hass
-
 shell_command:
   stop_hass: >-
     hassctl stop

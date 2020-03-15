@@ -10,7 +10,7 @@ homeassistant:
       friendly_name: Thermostart Emergency Heat
     binary_sensor.dining_room_thermostat_online:
       friendly_name: Thermostat Online
-    
+
     sensor.dining_room_thermostat_humidity:
       friendly_name: Thermostat Humidity
     sensor.dining_room_thermostat_hvac_state:
@@ -27,41 +27,41 @@ nest:
   client_secret: !secret nest_client_secret
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 
 automation:
-###############################################################################
-# Turn OFF AC after 3 hours of cooling
-# Where we live, 3 hours is plenty to cool the house down!
-###############################################################################
+  ###############################################################################
+  # Turn OFF AC after 3 hours of cooling
+  # Where we live, 3 hours is plenty to cool the house down!
+  ###############################################################################
   - alias: Turn Off AC After 3 Hours of Cooling
     initial_state: true
     trigger:
       - platform: state
         entity_id: climate.dining_room
-        to: 'cool'
-        for: '03:00:00'
+        to: "cool"
+        for: "03:00:00"
     action:
       - service: climate.set_away_mode
         data:
           entity_id: climate.dining_room
-          away_mode: 'true' 
+          away_mode: "true"
       - service: script.notify_me
         data_template:
-          message: "Air Condition has been ON for 3 hours. 
-                    Turning it Off to save power."
+          message: "Air Condition has been ON for 3 hours.
+            Turning it Off to save power."
 
-###############################################################################
-# Nest Thermostat automatically changes based on activity at home.
-# This automation is to keep an eye on what's going on with Nest
-###############################################################################
+  ###############################################################################
+  # Nest Thermostat automatically changes based on activity at home.
+  # This automation is to keep an eye on what's going on with Nest
+  ###############################################################################
   - alias: Notify Thermostat State Change
     initial_state: true
     trigger:
@@ -88,14 +88,3 @@ automation:
             {% else %}
               Your home's thermostat is set to {{ state }} mode. 
             {% endif %}
-
-###############################################################################
-# A script that toggles Nest Thermostat between eco/away & non-eco/away modes
-###############################################################################
-script:
-  toggle_climate:
-    sequence:
-      - service: climate.set_away_mode
-        data_template:
-          entity_id: climate.dining_room
-          away_mode: "{{ false if state_attr('climate.dining_room', 'away_mode') == 'on' else true }}"

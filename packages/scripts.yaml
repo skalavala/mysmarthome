@@ -1,0 +1,467 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   09/20/2018
+#   @package        :   scripts
+#   @description    :   All my scripts are here in one place!
+################################################################################
+#    _____           _       _
+#   / ____|         (_)     | |
+#  | (___   ___ _ __ _ _ __ | |_ ___
+#   \___ \ / __| '__| | '_ \| __/ __|
+#   ____) | (__| |  | | |_) | |_\__ \
+#  |_____/ \___|_|  |_| .__/ \__|___/
+#                     | |
+#                     |_|
+################################################################################
+
+homeassistant:
+  customize:
+    script.all_indoor_lights_off:
+      friendly_name: All Indoor Lights & Switches OFF
+    script.home_status:
+      friendly_name: Home Status (Hourly Report)
+    script.home_mode_away:
+      friendly_name: Set Home Mode to AWAY
+    script.good_night_tts:
+      friendly_name: Good Night TTS Report
+
+script:
+  toggle_do_not_disturb:
+    sequence:
+      - service: input_boolean.toggle
+        entity_id: input_boolean.do_not_disturb
+
+  play_ringtone:
+    sequence:
+      - service: xiaomi_aqara.play_ringtone
+        data:
+          gw_mac: !secret xiaomi_mac
+          ringtone_id: 10
+          ringtone_vol: 30
+
+  play_dog_sounds:
+    sequence:
+      - service: media_player.volume_set
+        entity_id: media_player.living_room, media_player.upstairs
+        data:
+          volume_level: "1.0"
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.living_room, media_player.upstairs
+          media_content_id: !secret dog_sound_url
+          media_content_type: "music"
+      - delay: "00:00:05"
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.living_room, media_player.upstairs
+          media_content_id: !secret dog_sound_url
+          media_content_type: "music"
+      - delay: "00:00:05"
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.living_room, media_player.upstairs
+          media_content_id: !secret dog_sound_url
+          media_content_type: "music"
+
+  home_mode_away:
+    sequence:
+      - service: script.all_indoor_lights_off
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.notify_camera_motion
+      - service: climate.set_away_mode
+        data:
+          entity_id: climate.dining_room
+          away_mode: "true"
+      - service: script.notify_me
+        data:
+          message: >
+            No one is at home. Cameras rolling, Indoor lights OFF, Thermostat is set to 'away' and your home is secured!
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.kitchen_camera"
+          filename: "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/kitchen_away.jpg"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.frontroom_camera"
+          filename: "/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/frontroom_away.jpg"
+      - service: notify.notify_smtp
+        data_template:
+          title: 'Indoor Pictures {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
+          message: "No one seem to be home at the moment... Please see the images and make sure everything is okay."
+          data:
+            images:
+              - "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/kitchen_away.jpg"
+              - "/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/frontroom_away.jpg"
+
+  ###############################################################################
+  # The following script runs when no one is home. It excludes some lights
+  # and switches like front porch and backyard lights...etc for safety reasons.
+  ###############################################################################
+  all_indoor_lights_off:
+    sequence:
+      - service: light.turn_off
+        data_template:
+          entity_id: >
+            {%- for state in states.light if state.entity_id != 'light.gateway_light_34ce008ad65d' -%}
+            {{- "," if not loop.first-}}{{ state.entity_id }}{{-endif-}}
+            {%- endfor -%}
+      - service: switch.turn_off
+        data_template:
+          entity_id: >
+            {%- for state in states.switch if
+                                state.entity_id != 'switch.wemoswitch1' and
+                                state.entity_id != 'switch.wallmote_switch' and
+                                state.entity_id != 'switch.wemobackyardlightswitch' and
+                                state.entity_id != 'switch.frontyard_light' and
+                                not '_siren_' in state.entity_id -%}
+            {{- "," if not loop.first-}}{{ state.entity_id }}{{-endif-}}
+            {%- endfor -%}
+
+  ###############################################################################
+  #    _____                                  ____                 _
+  #  / ____|                                / __ \               | |
+  # | |     __ _ _ __ ___   ___ _ __ __ _  | |  | |_   _____ _ __| | __ _ _   _
+  # | |    / _` | '_ ` _ \ / _ \ '__/ _` | | |  | \ \ / / _ \ '__| |/ _` | | | |
+  # | |___| (_| | | | | | |  __/ | | (_| | | |__| |\ V /  __/ |  | | (_| | |_| |
+  #  \_____\__,_|_| |_| |_|\___|_|  \__,_|  \____/  \_/ \___|_|  |_|\__,_|\__, |
+  #                                                                        __/ |
+  #                                                                       |___/
+  #
+  # Camera Text Overlay Script - sets a given text as an overlay on camera feed
+  ###############################################################################
+  frontdoor_camera_text_overlay:
+    sequence:
+      - service: rest_command.set_frontdoor_camera_text_left_bottom
+        data_template:
+          message: "{{text}}"
+
+  driveway_camera_text_overlay:
+    sequence:
+      - service: rest_command.set_driveway_camera_text_left_bottom
+        data_template:
+          message: "{{text}}"
+
+  patio_camera_text_overlay:
+    sequence:
+      - service: rest_command.set_patio_camera_text_left_bottom
+        data_template:
+          message: "{{text}}"
+
+  playarea_camera_text_overlay:
+    sequence:
+      - service: rest_command.set_playarea_camera_text_left_bottom
+        data_template:
+          message: "{{text}}"
+
+  ###############################################################################
+  # On-Demand camera stream to chromecast scripts
+  #
+  stream_frontdoor_camera_to_chromecast:
+    sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret frontdoor_camera_stream_url
+          name: "frontyard"
+
+  stream_driveway_camera_to_chromecast:
+    sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret driveway_camera_stream_url
+          name: "driveway"
+
+  stream_patio_camera_to_chromecast:
+    sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret patio_camera_stream_url
+          name: "patio"
+
+  stream_playarea_camera_to_chromecast:
+    sequence:
+      - condition: template
+        value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret playarea_camera_stream_url
+          name: "playarea"
+
+  ###############################################################################
+  # Stream2Chromecast script streams a given URL to Chromecast
+  # But before it streams, it turns ON the media player if it is OFF, and after
+  # streaming the URL, it saves the current stream name
+  # BY calling media_player.turn_off, it forces Chromecast stream onto be active
+  # on TV as soon as it turns ON TV
+  stream2chromecast:
+    sequence:
+      - condition: template
+        value_template: "{{ states('input_label.current_stream') != name  }}"
+      - service: media_player.play_media
+        data_template:
+          entity_id: media_player.attic_tv
+          media_content_id: "{{ url }}"
+          media_content_type: "video"
+      - service: input_label.set_value
+        data_template:
+          entity_id: input_label.current_stream
+          value: "{{ name }}"
+
+  stop_hass:
+    sequence:
+      - service: shell_command.stop_hass
+  update_hass:
+    sequence:
+      - service: shell_command.update_hass
+  restart_hass:
+    sequence:
+      - service: shell_command.restart_hass
+
+  xiaomi_red:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.gateway_light_34ce008ad65d
+          brightness: 255
+          rgb_color: [255, 0, 0]
+
+  xiaomi_blue:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.gateway_light_34ce008ad65d
+          brightness: 255
+          rgb_color: [0, 0, 255]
+
+  xiaomi_green:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.gateway_light_34ce008ad65d
+          brightness: 255
+          rgb_color: [0, 255, 0]
+
+  ###############################################################################
+  # A script that toggles Nest Thermostat between eco/away & non-eco/away modes
+  ###############################################################################
+  toggle_climate:
+    sequence:
+      - service: climate.set_away_mode
+        data_template:
+          entity_id: climate.dining_room
+          away_mode: "{{ false if state_attr('climate.dining_room', 'away_mode') == 'on' else true }}"
+
+  ###############################################################################
+  #   _   _       _   _  __
+  #  | \ | |     | | (_)/ _|
+  #  |  \| | ___ | |_ _| |_ _   _
+  #  | . ` |/ _ \| __| |  _| | | |
+  #  | |\  | (_) | |_| | | | |_| |
+  #  |_| \_|\___/ \__|_|_|  \__, |
+  #                          __/ |
+  #                         |___/
+  # Notify Related Scripts
+  ###############################################################################
+  ifttt_notify:
+    sequence:
+      - condition: template
+        value_template: '{{ message | trim != "" }}'
+      - service: ifttt.trigger
+        data_template:
+          event: "Smart_Home"
+          value1: "{{ message }}"
+          value2: ""
+
+  ifttt_leeo_color_change:
+    sequence:
+      - condition: template
+        value_template: '{{ value1 | trim != "" }}'
+      - service: ifttt.trigger
+        data_template:
+          event: "LEEO_COLOR_CHANGE"
+          value1: "{{ value1 }}"
+
+  notify_me:
+    sequence:
+      - condition: state
+        entity_id: input_boolean.text_alerts
+        state: "on"
+      - condition: template
+        value_template: '{{ message | trim != "" }}'
+      - service: script.ifttt_notify
+        data_template:
+          message: "{{ message }}"
+
+  good_night_tts:
+    sequence:
+      - service: script.voice_notify
+        data_template:
+          message: !include ../templates/goodnight.yaml
+
+  ###############################################################################
+  # Voice Notify
+  # Conditions:
+  #   => Only Announce when people are home. Except in emergency mode!
+  #   => Only Announce when Music is NOT being played
+  ###############################################################################
+  voice_notify:
+    sequence:
+      # - service: script.led_message
+      #   data_template:
+      #     message: "{{ message }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.voice_notifications') == 'on' }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.do_not_disturb') | lower == 'off' }}"
+      - condition: template
+        value_template: "{{ message | trim != '' }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
+      - condition: template
+        value_template: >
+          {% if only_at_night | default('no', true ) == "yes" %}
+            {% if states('sun.sun') == "above_horizon" %}
+              false
+            {% else %}
+              true
+            {% endif %}
+          {% else %}
+            true
+          {% endif %}
+      - service: media_player.volume_set
+        entity_id: media_player.living_room, media_player.upstairs
+        data_template:
+          volume_level: >
+            {% if states('input_boolean.emergency_mode') == "on" %}
+              {{ states('input_number.tts_volume_level_alert') }}
+            {% else %}
+              {% if now().hour | int < 12 and now().hour | int > 6 %}
+                {{ states('input_number.tts_volume_level_morning') }}
+              {% elif now().hour|int > 12 and now().hour|int < 20 %}
+                {{ states('input_number.tts_volume_level_afternoon') }}
+              {% else %}
+                {{ states('input_number.tts_volume_level_evening') }}
+              {% endif %}
+            {% endif %}
+      - service: tts.amazon_polly_say
+        entity_id: media_player.living_room, media_player.upstairs
+        data_template:
+          cache: true
+          message: >
+            {% set msg = "" %}
+            {% macro getGreeting() %}
+              {% if greeting | default('yes', true ) == "yes" %}
+                {% if now().hour|int < 12 %}
+                  Good morning.
+                {% elif now().hour|int < 18 %}
+                  Good afternoon.
+                {% else %}
+                  Good evening.
+                {% endif %}
+              {% endif %}
+            {% endmacro %}
+            {%- macro getEndGreeting() -%}
+              {%- if greeting |default('yes', true ) == "yes" -%}
+                Thank you!
+              {%- endif -%}
+            {%- endmacro -%}
+            {% set msg = msg + "<speak> " %}
+            {% set msg = msg + getGreeting() %}
+            {% set msg = msg + ". " + message %}
+            {% set msg = msg.replace(".", " <break time='0.5s'/> ") %}
+            {% set msg = msg + " " + getEndGreeting() %}
+            {% set msg = msg + " </speak>" %}
+            {{ msg }}
+
+  ###############################################################################
+  # Greeting
+  ###############################################################################
+  voice_greeting:
+    sequence:
+      - service: tts.amazon_polly_say
+        entity_id: media_player.living_room, media_player.upstairs
+        data_template:
+          cache: true
+          message: >
+            {% set msg = "" %}
+            {% macro getGreeting() %}
+              {% if greeting | default('yes', true ) == "yes" %}
+                {% if now().hour|int < 12 %}
+                  Good morning.
+                {% elif now().hour|int < 18 %}
+                  Good afternoon.
+                {% else %}
+                  Good evening.
+                {% endif %}
+              {% endif %}
+            {% endmacro %}
+            {% set msg = msg + "<speak> " %}
+            {% set msg = msg + " " + getGreeting() %}
+            {% set msg = msg.replace(".", " <break time='0.5s'/> ") %}
+            {% set msg = msg + " </speak>" %}
+            {{ msg }}
+
+  ###############################################################################
+  # Status around the house
+  ###############################################################################
+  home_status:
+    sequence:
+      - service: script.voice_notify
+        data_template:
+          message: !include ../templates/home_status.yaml
+
+  ###############################################################################
+  # Display message on LED Matrix Screen
+  ###############################################################################
+  led_message:
+    sequence:
+      - condition: state
+        entity_id: input_boolean.led_alerts
+        state: "on"
+      - service: mqtt.publish
+        data_template:
+          topic: messageboard/messages
+          payload: >
+            { 'message': '{{ message }}','frameDelay': 50 }
+
+  ###############################################################################
+  # Notifies to take pills, starts timer again!
+  # Voice notifications at home - only if the option is selected.
+  ###############################################################################
+  remind_pill:
+    sequence:
+      - service: script.notify_me
+        data:
+          message: "ALERT: PLEASE TAKE YOUR TABLETS!"
+      - service: timer.start
+        entity_id: timer.timer_pill_reminder
+      - condition: template
+        value_template: "{{ states('input_boolean.pill_voice_notification') == 'on' }}"
+      - service: script.voice_notify
+        data_template:
+          message: >
+            Please take the tablets. It looks like you have forgotten to take today's 
+            dose of tablets... Once again, this is a reminder for you to take the tablets.
+
+  ###############################################################################
+  # Stops timer, Records that the pills are taken, and notifies!
+  ###############################################################################
+  pill_taken:
+    sequence:
+      - service: timer.cancel
+        entity_id: timer.timer_pill_reminder
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.pill_taken
+      - service: script.notify_me
+        data:
+          message: "Thank you for taking tablets on time!"
+      - condition: template
+        value_template: "{{ states('input_boolean.pill_voice_notification') == 'on' }}"
+      - service: script.voice_notify
+        data:
+          message: "Thank you for taking tablets on time!"

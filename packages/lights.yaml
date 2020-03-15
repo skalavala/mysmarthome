@@ -155,31 +155,6 @@ input_boolean:
     name: Long Flash Lights
     initial: off
 
-script:
-  xiaomi_red:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.gateway_light_34ce008ad65d
-          brightness: 255
-          rgb_color: [255, 0, 0]
-
-  xiaomi_blue:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.gateway_light_34ce008ad65d
-          brightness: 255
-          rgb_color: [0, 0, 255]
-
-  xiaomi_green:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.gateway_light_34ce008ad65d
-          brightness: 255
-          rgb_color: [0, 255, 0]
-
 ###############################################################################
 #                _                        _   _
 #     /\        | |                      | | (_)

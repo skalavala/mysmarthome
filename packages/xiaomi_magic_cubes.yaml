@@ -5,48 +5,7 @@
 #   @description    :   Xiaomi Aqara Magic Cube Automations
 ###############################################################################
 
-################################################################################
-#                     COMMON SCRIPTS USED IN THIS PACKAGE                     #
-################################################################################
-script:
-  toggle_do_not_disturb:
-    sequence:
-      - service: input_boolean.toggle
-        entity_id: input_boolean.do_not_disturb
-
-  play_ringtone:
-    sequence:
-      - service: xiaomi_aqara.play_ringtone
-        data:
-          gw_mac: !secret xiaomi_mac
-          ringtone_id: 10
-          ringtone_vol: 30
-
-  play_dog_sounds:
-    sequence:
-      - service: media_player.volume_set
-        entity_id: media_player.living_room, media_player.upstairs
-        data:
-          volume_level: "1.0"
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room, media_player.upstairs
-          media_content_id: !secret dog_sound_url
-          media_content_type: "music"
-      - delay: "00:00:05"
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room, media_player.upstairs
-          media_content_id: !secret dog_sound_url
-          media_content_type: "music"
-      - delay: "00:00:05"
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.living_room, media_player.upstairs
-          media_content_id: !secret dog_sound_url
-          media_content_type: "music"
-
-################################################################################
+###############################################################################
 #                      XIAOMI AQARA MAGIC CUBE AUTOMATIONS                     #
 #       http://patorjk.com/software/taag/#p=display&h=2&v=2&f=Big&t=Test       #
 ################################################################################
@@ -61,6 +20,7 @@ automation:
   # |_|  \__,_|_| |_| |_|_|_|\__, | |_|  \_\___/ \___/|_| |_| |_|
   #                           __/ |
   #                          |___/
+  ################################################################################
 
   # Flip 90: Toggle Family Room Lights
   - alias: Family Room Cube Event flip90
@@ -375,6 +335,16 @@ automation:
       - service: script.toggle_do_not_disturb
 
   ################################################################################
+  #   _____                   _          _ _
+  #  |  __ \                 | |        | | |
+  #  | |  | | ___   ___  _ __| |__   ___| | |
+  #  | |  | |/ _ \ / _ \| '__| '_ \ / _ \ | |
+  #  | |__| | (_) | (_) | |  | |_) |  __/ | |
+  #  |_____/ \___/ \___/|_|  |_.__/ \___|_|_|
+  #
+  ################################################################################
+
+  ################################################################################
   # Doorbell Automations -
   #     When we are home, play the door bell
   #     When we are not home, play dog sounds
@@ -386,7 +356,39 @@ automation:
       event_type: xiaomi_aqara.click
       event_data:
         entity_id: binary_sensor.wall_switch_158d00045622d9
-        click_type: single
+        click_type: "single"
+    action:
+      - service_template: >
+          {% if states('input_boolean.home_mode_away') == 'off' %}
+            script.play_ringtone
+          {% else %}
+            script.play_dog_sounds
+          {% endif %}
+
+  - alias: Doorbell Double Press
+    initial_state: true
+    trigger:
+      platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: binary_sensor.wall_switch_158d00045622d9
+        click_type: "double"
+    action:
+      - service_template: >
+          {% if states('input_boolean.home_mode_away') == 'off' %}
+            script.play_ringtone
+          {% else %}
+            script.play_dog_sounds
+          {% endif %}
+
+  - alias: Doorbell Long Press
+    initial_state: true
+    trigger:
+      platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: binary_sensor.wall_switch_158d00045622d9
+        click_type: "long"
     action:
       - service_template: >
           {% if states('input_boolean.home_mode_away') == 'off' %}

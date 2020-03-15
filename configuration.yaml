@@ -174,9 +174,3 @@ ios:
             authenticationRequired: yes
             destructive: yes
             behavior: "default"
-
-telegram_bot:
-  - platform: broadcast
-    api_key: !secret telegram_apikey
-    allowed_chat_ids:
-      - !secret telegram_chatid
