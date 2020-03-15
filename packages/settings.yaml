@@ -145,7 +145,6 @@ input_boolean:
 
   led_alerts:
     name: LED Messages
-    initial: on
     icon: mdi:led-strip
 
   movie_time:

@@ -1,5 +1,8 @@
 homeassistant:
   customize:
+    binary_sensor.wall_switch_158d00045622d9:
+      friendly_name: Door Bell Button
+
     binary_sensor.motion_sensor_158d0001a662fe:
       friendly_name: Kitchen Motion Sensor (Xiaomi)
     sensor.Illumination_158d0001a662fe:

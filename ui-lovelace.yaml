@@ -1,4 +1,3 @@
-
 # This code is auto-generated using my Jinja lovelace migration script
 # visit: https://github.com/skalavala/mysmarthome/blob/master/jinja_helpers/jinja_lovelace.md
 # Or visit https://sharethelove.io/tools/jinja-magic-scripts
@@ -25,3 +24,4 @@ views:
   - !include lovelace/11_scripts_view.yaml
   - !include lovelace/12_automations_view.yaml
   - !include lovelace/13_qnap_view.yaml
+  - !include lovelace/14_rooms.yaml

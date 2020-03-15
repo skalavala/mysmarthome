@@ -1,0 +1,36 @@
+title: Rooms
+icon: mdi:home
+cards:
+  - type: entities
+    title: Home
+    show_header_toggle: false
+    entities:
+      - input_boolean.home_mode_away
+
+  - type: entities
+    title: Kitchen
+    show_header_toggle: false
+    entities:
+      - switch.kitchen
+      - sensor.kitchen_motion_sensor_battery_level
+      - binary_sensor.kitchen_motion_sensor_sensor
+      - binary_sensor.kitchen_camera_motion
+      - binary_sensor.motion_sensor_158d0001a662fe
+      - sensor.illumination_158d0001a662fe
+      - input_label.motion_sensor_158d0001a662fe
+
+  - type: entities
+    title: Family Room
+    show_header_toggle: false
+    entities:
+      - input_boolean.sharp_tv
+      - light.family_room
+      - media_player.living_room
+      - switch.downstairs_fragrance
+      - sensor.downstairs_multi_sensor_temperature
+      - sensor.downstairs_multi_sensor_relative_humidity
+      - sensor.downstairs_multi_sensor_luminance
+      - sensor.downstairs_multi_sensor_battery_level
+      - input_label.downstairs_multi_sensor_sensor
+      - input_label.downstairs_multi_sensor
+      - binary_sensor.downstairs_multi_sensor_sensor

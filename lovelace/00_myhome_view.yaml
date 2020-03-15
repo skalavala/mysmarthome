@@ -106,6 +106,25 @@ cards:
         icon: "mdi:emoticon-dead-outline"
         name: Deaths
 
+  - type: glance
+    show_icon: true
+    show_name: true
+    show_state: true
+    title: Fitness
+    entities:
+      - entity: sensor.suresh_steps
+        icon: "mdi:run"
+        name: Suresh Steps
+      - entity: sensor.suresh_floors_ascended
+        icon: "mdi:run"
+        name: Suresh Floors Ascended
+      - entity: sensor.mallika_steps
+        icon: "mdi:run"
+        name: Mallika Steps
+      - entity: sensor.mallika_floors_ascended
+        icon: "mdi:run"
+        name: Mallika Floors Ascended
+
   - type: entity-filter
     title: For Your Information
     show_empty: false

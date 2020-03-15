@@ -114,8 +114,6 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.working_in_office_room') == 'off' }}"
     action:
-      - service: switch.turn_off
-        entity_id: switch.front_room
       - service: homeassistant.turn_off
         entity_id: switch.zwave_smart_switch_switch
 
