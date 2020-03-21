@@ -10,6 +10,7 @@ logs:
   simplipy.api: warning
   netdisco.ssdp: warning
   aiohttp.server: warning
+  aiohttp.websocket: error
   homeassistant.core: critical
   homeassistant.setup: warning
   homeassistant.loader: warning # hide custom_component warnings

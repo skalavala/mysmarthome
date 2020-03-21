@@ -849,3 +849,16 @@ automation:
         data_template:
           url: !secret frontdoor_camera_stream_url
           name: "frontyard"
+
+  #
+  # Every 15 minutes, change stream to alternate view
+  #
+  - alias: Reset Stream On Chromecast
+    trigger:
+      - platform: time_pattern
+        minutes: "/15"
+    action:
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret driveway_camera_stream_url
+          name: "driveway"

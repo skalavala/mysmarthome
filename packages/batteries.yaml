@@ -403,6 +403,9 @@ automation:
       - service: script.voice_notify
         data_template:
           message: "{{ trigger.to_state.attributes.friendly_name.split(' ')[1] }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
+      - service: script.led_message
+        data_template:
+          message: "{{ trigger.to_state.attributes.friendly_name.split(' ')[1] }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
 
   - alias: Alert Low Battery
     trigger:
@@ -419,12 +422,16 @@ automation:
       - service: script.voice_notify
         data_template:
           message: >
-            {% set ns = namespace(lowBattery) %}
+            {% set ns = namespace(lowBattery="") %}
             {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
+              {%- if loop.first %}The {% elif loop.last %} and the {% else %}, the {% endif -%}
               {% set ns.lowBattery = ns.lowBattery ~ ',' ~ x.name %}
             {%- endfor %}
             {{ ns.lowBattery -}}
-            {{- ' battery is ' if ns.lowBattery.split(',')|count == 1 else ' batteries are ' -}} less than 25 percent.
+            {{- ' battery is ' if ns.lowBattery.split(',')|count == 2 else ' batteries are ' -}} less than 25 percent.
+      - service: script.led_message
+        data_template:
+          message: "{{ trigger.to_state.attributes.friendly_name.split(' ')[1] }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
 
   # ###############################################################################
   # # Automation: Notify of Sensor's Low Battery

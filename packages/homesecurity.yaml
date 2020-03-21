@@ -118,7 +118,7 @@ automation:
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') != 'disarmed' }}"
       - service: input_boolean.turn_on
-        entity_id: input_boolean.notify_camera_motion
+        entity_id: input_boolean.notify_camera_alerts
 
   ###############################################################################
   # A gentle 10 minute reminder that the Home Security system is OFF

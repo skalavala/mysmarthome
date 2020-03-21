@@ -1,4 +1,23 @@
 homeassistant:
+  customize:
+    package.door_sensors:
+      door_notification_script: &door_notification_script
+        message: >
+          {% set doors = "" %}
+            {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
+                  states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+              {% set doors = "Attention! Both Garage Doors are OPEN" %}
+            {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
+                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+              {% set doors = "Both Garage Doors are now CLOSED" %}
+            {% else %}
+              {% if trigger.to_state.state | lower == "on" %}
+                Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
+              {% elif trigger.to_state.state | lower == "off" %}
+                Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
+              {% endif %}
+            {% endif %}
+          {{ doors }}
 
 sensor:
   - platform: template
@@ -158,24 +177,12 @@ automation:
             {% elif trigger.to_state.state | lower == "off" %}
                 {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
             {% endif %}
+      - service: script.led_message
+        data_template:
+          <<: *door_notification_script
       - service: script.voice_notify
         data_template:
-          message: >
-            {% set doors = "" %}
-              {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
-                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
-                {% set doors = "Attention! Both Garage Doors are OPEN" %}
-              {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
-                      states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
-                {% set doors = "Both Garage Doors are now CLOSED" %}
-              {% else %}
-                {% if trigger.to_state.state | lower == "on" %}
-                  Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
-                {% elif trigger.to_state.state | lower == "off" %}
-                  Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
-                {% endif %}
-              {% endif %}
-            {{ doors }}
+          <<: *door_notification_script
       - delay: "00:00:05"
       - service: camera.snapshot
         data_template:
@@ -247,6 +254,14 @@ automation:
               no
             {% else %}
               yes
+            {% endif %}
+      - service: script.led_message
+        data_template:
+          message: >
+            {% if trigger.to_state.state | lower == "on" %}
+              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') -}} is OPEN.
+            {% else %}
+              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') -}} is CLOSED.
             {% endif %}
 
   - alias: When Front Door Opens Turn Front Room Lights ON

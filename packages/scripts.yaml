@@ -67,7 +67,7 @@ script:
     sequence:
       - service: script.all_indoor_lights_off
       - service: input_boolean.turn_on
-        entity_id: input_boolean.notify_camera_motion
+        entity_id: input_boolean.notify_camera_alerts
       - service: climate.set_away_mode
         data:
           entity_id: climate.dining_room
@@ -426,8 +426,7 @@ script:
       - service: mqtt.publish
         data_template:
           topic: messageboard/messages
-          payload: >
-            { 'message': '{{ message }}','frameDelay': 50 }
+          payload: "{{ message }}"
 
   ###############################################################################
   # Notifies to take pills, starts timer again!

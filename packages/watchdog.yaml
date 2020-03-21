@@ -35,13 +35,14 @@ automation:
         entity_id: input_boolean.working_in_garage
 
   # Garage:
-  # Keeps and eye on the garage door... reminds me to close after 5 min
+  # Keeps and eye on the garage doors... reminds me to close after 5 min
   ###############################################################################
-  - alias: Single Car garage Door WatchDog
+  - alias: Two Car garage Door WatchDog
     initial_state: true
     trigger:
       - platform: state
         entity_id:
+          - binary_sensor.two_car_garage_door_tilt_sensor_sensor
           - binary_sensor.single_car_garage_door_tilt_sensor_sensor
         to: "on"
         for:
@@ -54,46 +55,27 @@ automation:
         value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
     action:
       - service: script.notify_me
-        data:
-          message: "Single Car Garage Door is OPEN for more than 5 minutes!"
+        data_template:
+          message: >
+            Your {{ trigger.to_state.attributes.friendly_name }} is OPEN for more than 5 minutes!
       - service: script.voice_notify
         data_template:
-          message: "Attention! Your single car garage door is open for more than 5 minutes."
+          message: >
+            Attention! Your {{ trigger.to_state.attributes.friendly_name }} is open for more than 5 minutes.
+      - service: scipt.led_notify
+        data_template:
+          message: >
+            Your {{ trigger.to_state.attributes.friendly_name }} is OPEN for more than 5 minutes!
 
-  # Garage:
-  # Keeps and eye on the garage door... reminds me to close after 5 min
+  # Outdoor Lights:
+  # Keeps and eye on the patio and backyard lights...
   ###############################################################################
-  - alias: Two Car garage Door WatchDog
+  - alias: Outdoor Light WatchDog
     initial_state: true
     trigger:
       - platform: state
         entity_id:
-          - binary_sensor.two_car_garage_door_tilt_sensor_sensor
-        to: "on"
-        for:
-          minutes: 5
-    condition:
-      - condition: state
-        entity_id: input_boolean.working_in_garage
-        state: "off"
-      - condition: template
-        value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
-    action:
-      - service: script.notify_me
-        data:
-          message: "Your Two Car Garage Door is OPEN for more than 5 minutes!"
-      - service: script.voice_notify
-        data_template:
-          message: "Attention! Your two car garage door is open for more than 5 minutes."
-
-  # Front Yard:
-  # Keeps and eye on the front porch lights...
-  ###############################################################################
-  - alias: Frontyard Light WatchDog
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id:
+          - switch.wemobackyardlightswitch
           - switch.frontyard_light
         to: "on"
         for:
@@ -111,78 +93,46 @@ automation:
           message: >
             {{ trigger.to_state.attributes.friendly_name }} is ON during the day time. Saving power by turning it off!
 
-  # Back Yard:
-  # Keeps and eye on the patio lights...
+  # General Watch Dog automation:
+  # Keeps and eye on the lights & switches, turns off after 10 PM if they are on.
   ###############################################################################
-  - alias: Backyard Light WatchDog
+  - alias: Lights And Switches WatchDog
     initial_state: true
     trigger:
       - platform: state
         entity_id:
-          - switch.wemobackyardlightswitch
-        to: "on"
-        for:
-          minutes: 5
-    condition:
-      - condition: state
-        entity_id: sun.sun
-        state: "above_horizon"
-    action:
-      - service: switch.turn_off
-        data_template:
-          entity_id: "{{ trigger.entity_id }}"
-      - service: script.notify_me
-        data_template:
-          message: >
-            {{ trigger.to_state.attributes.friendly_name }} is ON during the day time. Saving power by turning it off!
-
-  # Guest Bedroom:
-  # Keeps and eye on the Guest Bedroom 1 lights...
-  ###############################################################################
-  - alias: Guest Bedroom 1 Light WatchDog
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id:
+          - switch.basement_left
+          - switch.basement_right
+          - switch.bathroom_fragrance
+          - switch.downstairs_fragrance
+          - switch.front_room
+          - switch.garage
           - switch.guest_bedroom
-        to: "on"
-        for:
-          minutes: 15
-    action:
-      - service: switch.turn_off
-        data_template:
-          entity_id: "{{ trigger.entity_id }}"
-
-  # Guest Bedroom 2:
-  # Keeps and eye on the Guest Bedroom 2 lights...
-  ###############################################################################
-  - alias: Guest Bedroom 2 Light WatchDog
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id:
-          - switch.prayer_room
-        to: "on"
-        for:
-          minutes: 10
-    action:
-      - service: switch.turn_off
-        data_template:
-          entity_id: "{{ trigger.entity_id }}"
-
-  # Kids Bedroom:
-  # Keeps and eye on the Kids Bedroom lights...
-  ###############################################################################
-  - alias: Kids Bedroom Light WatchDog
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id:
+          - switch.kids_bed_accent
           - switch.kids_bedroom
+          - switch.kitchen
+          - switch.office_room
+          - switch.prayer_room
+          - switch.upstairs_fragrance
+          - switch.wemoswitch1
+          - switch.zwave_smart_switch_switch
+          - light.family_room
+          - light.family_room_2
+          - light.gateway_light_34ce008ad65d
+          - light.hue_color_lamp_1
+          - light.hue_color_lamp_2
+          - light.hue_color_lamp_3
+          - light.master_bedroom
+          - light.master_bedroom_1
+          - light.master_bedroom_2
+          - light.master_bedroom_3
         to: "on"
         for:
           minutes: 10
+    condition:
+      - condition: template
+        value_template: "{{ now().hour |int > 22 }}"
     action:
-      - service: switch.turn_off
+      - service: homeassistant.turn_off
         data_template:
           entity_id: "{{ trigger.entity_id }}"
