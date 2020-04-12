@@ -851,14 +851,31 @@ automation:
           name: "frontyard"
 
   #
-  # Every 15 minutes, change stream to alternate view
+  # Every 15 minutes, change stream to alternate view with random cameras
   #
   - alias: Reset Stream On Chromecast
     trigger:
       - platform: time_pattern
         minutes: "/15"
     action:
+      - service_template: "script.{{- ['driveway', 'patio', 'playarea'] | random -}}_cam"
+
+script:
+  driveway_cam:
+    sequence:
       - service: script.stream2chromecast
         data_template:
           url: !secret driveway_camera_stream_url
           name: "driveway"
+  patio_cam:
+    sequence:
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret patio_camera_stream_url
+          name: "patio"
+  playarea_cam:
+    sequence:
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret playarea_camera_stream_url
+          name: "playarea"

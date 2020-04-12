@@ -39,6 +39,18 @@ script:
           ringtone_id: 10
           ringtone_vol: 30
 
+  play_fav_song:
+    sequence:
+      - service: media_player.volume_set
+        entity_id: media_player.living_room, media_player.upstairs
+        data:
+          volume_level: "0.15"
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.living_room, media_player.upstairs
+          media_content_id: !secret fav_song_url
+          media_content_type: "music"
+
   play_dog_sounds:
     sequence:
       - service: media_player.volume_set

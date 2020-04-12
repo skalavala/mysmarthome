@@ -259,9 +259,9 @@ automation:
         data_template:
           message: >
             {% if trigger.to_state.state | lower == "on" %}
-              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') -}} is OPEN.
+              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') |lower -}} is open.
             {% else %}
-              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') -}} is CLOSED.
+              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') |lower -}} is closed.
             {% endif %}
 
   - alias: When Front Door Opens Turn Front Room Lights ON

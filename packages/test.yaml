@@ -1006,3 +1006,86 @@
 #         data_template:
 #           entity_id: climate.cooler_fan
 #           temperature: "{{ states.climate.main_floor.temperature |float }}"
+
+# automation:
+#   - id: sensor
+#     alias: sensor
+#     trigger:
+#       - platform: state
+#         entity_id: binary_sensor.door
+#         from: "off"
+#         to: "on"
+#         for: "00:00:10"
+#     action:
+#       - service_template: "homeassistant.turn_{{- 'off' if trigger.to_state.state == 'on' else 'on' }}"
+#         entity_id: switch.luce_corridoio
+
+# homeassistant:
+# group:
+#   kitchen:
+#     name: Kitchen
+#     entities:
+#       - light.family_room
+#       - light.gateway_light_34ce008ad65d
+#       - light.hue_color_lamp_1
+#       - light.hue_color_lamp_2
+#       - light.hue_color_lamp_3
+#       - light.master_bedroom
+#       - light.master_bedroom_1
+#       - light.master_bedroom_2
+
+# - alias: "doods fremme video"
+#   trigger:
+#     platform: state
+#     entity_id: image_processing.doods_fremme
+#   #  condition:
+#   #    condition: template
+#   #    value_template: "{{ 'person' in state_attr('image_processing.doods_fremme', 'summary') }}"
+#   action:
+#     - service: input_boolean.toggle
+#       entity_id: input_boolean.dummy
+#     - service: camera.record
+#       data_template:
+#         entity_id: camera.fremme
+#         filename: "/tmp/{{- trigger.entity_id.split('.')[1].split('_')[1] -}}_{{- states.input_boolean.dummy_fremme.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"
+#         duration: 20
+#         lookback: 10
+#     - delay: "00:00:20"
+#     - service: notify.eirikz_telegram
+#       data_template:
+#         title: "Doods"
+#         message: "fremme"
+#         data:
+#           video:
+#             file: "/tmp/{{- trigger.entity_id.split('.')[1].split('_')[1] -}}_{{- states.input_boolean.dummy_fremme.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"
+
+# homeassistant:
+
+# input_boolean:
+#   dummy_fremme:
+#     name: "Dummy Fremme Input Boolean!"
+#     icon: mdi:sticker-emoji
+#     initial: on
+
+# input_label:
+#   file_1:
+#   file_2:
+
+# automation:
+#   - alias: "my test"
+#     initial_state: "on"
+#     trigger:
+#       platform: state
+#       entity_id: switch.kitchen
+#     action:
+#       - service: input_boolean.toggle
+#         entity_id: input_boolean.dummy
+#       - service: input_label.set_value
+#         data_template:
+#           entity_id: "input_label.file_1"
+#           value: "/tmp/{{- trigger.entity_id.split('.')[1] -}}_{{- states.input_boolean.dummy.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"
+#       - delay: "00:00:05"
+#       - service: input_label.set_value
+#         data_template:
+#           entity_id: "input_label.file_2"
+#           value: "/tmp/{{- trigger.entity_id.split('.')[1] -}}_{{- states.input_boolean.dummy.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"

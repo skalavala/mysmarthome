@@ -392,7 +392,7 @@ automation:
     action:
       - service_template: >
           {% if states('input_boolean.home_mode_away') == 'off' %}
-            script.play_ringtone
+            script.play_fav_song
           {% else %}
             script.play_dog_sounds
           {% endif %}
