@@ -5,9 +5,9 @@
 # I use custom:button card, for two button, credits to https://github.com/kuuji/button-card
 #
 title: Kalavala's Home
-resources:
-  - url: /local/button-card.js
-    type: module
+# resources:
+#   - url: /local/button-card.js
+#     type: module
 
 views:
   - !include lovelace/00_myhome_view.yaml

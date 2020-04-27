@@ -1,7 +1,6 @@
 title: Date & Time
 icon: mdi:desktop-tower
 cards:
-
   - type: entities
     title: Date & Time
     show_header_toggle: false
@@ -79,19 +78,6 @@ cards:
           green: 70
           yellow: 50
           red: 35
-
-  - type: entities
-    title: Battery/UPS
-    show_header_toggle: false
-    entities:
-      - sensor.ups_battery
-      - sensor.ups_input_voltage
-      - sensor.ups_load
-      - sensor.ups_nominal_input_voltage
-      - sensor.ups_status
-      - sensor.ups_time_left
-      - sensor.ups_time_on_battery
-      - sensor.ups_transfer_count
 
   - type: entities
     title: ESXi Vmware Server

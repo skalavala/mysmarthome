@@ -72,16 +72,6 @@ cards:
       - automation.notify_usps_packages
 
   - type: entities
-    title: Watch Dog Automations
-    show_header_toggle: false
-    entities:
-      - automation.backyard_light_watchdog
-      - automation.frontyard_light_watchdog
-      - automation.guest_bedroom_1_light_watchdog
-      - automation.guest_bedroom_2_light_watchdog
-      - automation.kids_bedroom_light_watchdog
-
-  - type: entities
     title: Timer Automations
     show_header_toggle: false
     entities:
@@ -119,7 +109,6 @@ cards:
       - automation.garage_timer_start_when_garage_lights_on
       - automation.notify_garage_door_status
       - automation.scan_garage_camera_when_motion
-      - automation.single_car_garage_door_watchdog
       - automation.two_car_garage_door_watchdog
       - automation.working_in_garage_watchdog
 
@@ -268,8 +257,6 @@ cards:
     title: Home Assistant Automations
     show_header_toggle: false
     entities:
-      - automation.power_failure
-      - automation.power_restored
       - automation.random_darker_theme_at_sunset
       - automation.random_lighter_theme_at_sunrise
       - automation.random_theme_at_startup
@@ -278,7 +265,6 @@ cards:
       - automation.turn_off_ac_after_3_hours_of_cooling
       - automation.update_available_notification
       - automation.update_zwave_battery_levels
-      - automation.ups_state_change
 
   - type: entities
     title: Misc Automations
