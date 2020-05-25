@@ -59,6 +59,31 @@ sensor:
     command: /srv/homeassistant/bin/hass --version
     scan_interval: 86400
 
+  - platform: mqtt
+    state_topic: "iotlink/domain/winsvr2016/lwt"
+    name: "Windows Server"
+    value_template: "{{ value }}"
+
+  - platform: mqtt
+    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/cpu/usage"
+    name: "Windows Server CPU Usage"
+    value_template: "{{ value }}"
+
+  - platform: mqtt
+    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/memory/used"
+    name: "Windows Server Memory Used"
+    value_template: "{{ value }}"
+
+  - platform: mqtt
+    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/memory/available"
+    name: "Windows Server Memory Available"
+    value_template: "{{ value }}"
+
+  - platform: mqtt
+    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/system/idle-time"
+    name: "Windows Server Idle Time"
+    value_template: "{{ value }}"
+
 pi_hole:
   host: !secret pi_hole_ip
   ssl: false

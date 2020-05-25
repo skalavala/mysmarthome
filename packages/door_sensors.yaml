@@ -205,7 +205,7 @@ automation:
             {% else %}
               {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name ~ " is " ~
                             ('Closed' if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'off' else 'OPEN')
-                             ~ " and " ~ states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name') ~ " is " ~
+                             ~ " and " ~ state_attr('binary_sensor.two_car_garage_door_tilt_sensor_sensor', 'friendly_name') ~ " is " ~
                             ('Closed' if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'off' else 'OPEN') %}
             {% endif %}
             Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.

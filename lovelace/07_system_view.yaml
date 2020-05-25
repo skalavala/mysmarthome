@@ -90,3 +90,13 @@ cards:
       - sensor.esxi_system_uptime
       - sensor.esxi_total_ram
       - sensor.esxi_used_ram
+
+  - type: entities
+    title: Windows Server
+    show_header_toggle: false
+    entities:
+      - sensor.windows_server
+      - sensor.windows_server_cpu_usage
+      - sensor.windows_server_idle_time
+      - sensor.windows_server_memory_available
+      - sensor.windows_server_memory_used

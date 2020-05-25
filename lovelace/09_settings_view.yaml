@@ -6,7 +6,7 @@ cards:
       - type: horizontal-stack
         cards:
           - type: "custom:button-card"
-            name: Light Automations
+            name: Automatic Lights
             entity: input_boolean.light_automations
             icon: mdi:lightbulb-on
             color_type: card
@@ -38,7 +38,7 @@ cards:
               action: do_not_disturb
 
           - type: "custom:button-card"
-            name: Home TTS/Sounds
+            name: Home Sounds
             entity: input_boolean.voice_notifications
             icon: mdi:volume-high
             color_type: card
@@ -72,7 +72,7 @@ cards:
       - type: horizontal-stack
         cards:
           - type: "custom:button-card"
-            name: Movie Time Popcorn
+            name: Family Movie
             entity: input_boolean.movie_time
             icon: mdi:filmstrip
             color_type: card

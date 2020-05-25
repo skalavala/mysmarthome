@@ -135,7 +135,6 @@ sensor:
 input_boolean:
   voice_notifications:
     name: Home Assistant Announcements
-    initial: on
     icon: mdi:volume-off
 
   do_not_disturb:
@@ -189,7 +188,6 @@ input_boolean:
 
   notify_camera_alerts:
     name: Notify Camera Alerts
-    initial: on
     icon: mdi:camera
 
   trash_reminders:
