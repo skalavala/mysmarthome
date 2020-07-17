@@ -41,6 +41,7 @@ homekit:
       - light
       - switch
       - input_boolean
+      - camera
     include_entities:
       - binary_sensor.back_door_sensor_sensor
       - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
@@ -70,7 +71,7 @@ python_script:
 logger: !include logging.yaml
 
 zeroconf:
-owntracks:
+#owntracks:
 system_health:
 
 life360:

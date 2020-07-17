@@ -209,10 +209,7 @@ automation:
     action:
       - condition: template
         value_template: "{{ states('input_boolean.notify_camera_alerts') == 'on' }}"
-      - service: script.stream2chromecast
-        data_template:
-          url: !secret frontdoor_camera_stream_url
-          name: "frontyard"
+      - service: script.frontdoor_cam
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
       - service: image_processing.scan
@@ -845,10 +842,7 @@ automation:
           as_timestamp(states.input_label.current_stream.last_updated))
           | int > 15 }}"
     action:
-      - service: script.stream2chromecast
-        data_template:
-          url: !secret frontdoor_camera_stream_url
-          name: "frontyard"
+      - service: script.frontdoor_cam
 
   #
   # Every 15 minutes, change stream to alternate view with random cameras
@@ -861,6 +855,12 @@ automation:
       - service_template: "script.{{- ['driveway', 'patio', 'playarea'] | random -}}_cam"
 
 script:
+  frontdoor_cam:
+    sequence:
+      - service: script.stream2chromecast
+        data_template:
+          url: !secret frontdoor_camera_stream_url
+          name: "frontyard"
   driveway_cam:
     sequence:
       - service: script.stream2chromecast

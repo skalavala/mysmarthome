@@ -119,6 +119,16 @@ automation:
           payload: "off"
           retain: false
 
+  - alias: Turn Garage Lights On When Motion Detected
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_sensor_158d000272bf48
+        to: "on"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.garage
+
   - alias: Kitchen Camera Motion Reset
     initial_state: true
     trigger:
@@ -276,19 +286,21 @@ automation:
     action:
       - service: switch.turn_on
         entity_id: switch.front_room
+      - service: script.frontdoor_cam
 
   - alias: When Back Door Opens Turn Kitchen Lights ON
     initial_state: true
     trigger:
-      platform: state
-      entity_id: binary_sensor.back_door_sensor_sensor
-      to: "on"
+      - platform: state
+        entity_id: binary_sensor.back_door_sensor_sensor
+        to: "on"
     condition:
       - condition: template
         value_template: "{{ states('sun.sun') == 'below_horizon' }}"
     action:
       - service: switch.turn_on
         entity_id: switch.kitchen
+      - service_template: "script.{{ ['patio_cam', 'playarea_cam'] | random }}"
 
   ################################################################################
   #  When I open the garage door

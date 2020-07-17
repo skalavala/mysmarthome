@@ -1,6 +1,8 @@
 ## skalavala's Home Automation/Smart Home
 
-Here you will find a bunch of scripts that I use to automate my home.
+skalavala's Home Automation
+
+<!-- Here you will find a bunch of scripts that I use to automate my home.
 
 I have a bunch of Raspberry Pi's, and Pi Zeros at home along with a bunch of "smart" devices of various brands. All these smart devices work great independently but not together. My goal is to bring all of them together and have them talk to each other with a little bit of programming and make them really smarter as a whole! I also want to be able to run all the software on Raspberry Pi's only.
 
@@ -294,6 +296,6 @@ I wrote a Palo Alto component to keep an eye on who is logging into my firewall 
 
 <img src="https://raw.githubusercontent.com/skalavala/mysmarthome/master/images/paloalto.png"/>
 
-### Tesla 
+### Tesla
 
-<img src="https://raw.githubusercontent.com/skalavala/mysmarthome/master/images/Tesla.png" />
+<img src="https://raw.githubusercontent.com/skalavala/mysmarthome/master/images/Tesla.png" /> -->

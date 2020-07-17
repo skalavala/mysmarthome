@@ -237,6 +237,7 @@ automation:
           brightness: 10
       - service: timer.start
         entity_id: timer.timer_masterbedroom
+
   # Master Bedroom:
   # Timer Elapsed - Turn OFF lights
   ###############################################################################
@@ -255,27 +256,29 @@ automation:
       - delay: "00:00:05"
       - service: light.turn_off
         entity_id: light.master_bedroom
-  # Garage:
-  # Motion Detected - Turn ON the light and extend timer
-  #
-  # Added a condition - if the lights were just turn off in the last 30 seconds,
-  # do not turn ON the lights again
-  ###############################################################################
-  - alias: Garage Motion & Timer
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.garage_motion
-        from: "off"
-        to: "on"
-    condition:
-      - condition: template
-        value_template: "{{ states('input_boolean.working_in_garage') | lower == 'on' }}"
-      - condition: template
-        value_template: "{{ (as_timestamp(now()) - as_timestamp(states.switch.garage.last_updated))  | int > 30 }}"
-    action:
-      - service: switch.turn_on
-        entity_id: switch.garage
+
+  # # Garage:
+  # # Motion Detected - Turn ON the light and extend timer
+  # #
+  # # Added a condition - if the lights were just turn off in the last 30 seconds,
+  # # do not turn ON the lights again
+  # ###############################################################################
+  # - alias: Garage Motion & Timer
+  #   initial_state: true
+  #   trigger:
+  #     - platform: state
+  #       entity_id: binary_sensor.garage_motion
+  #       from: "off"
+  #       to: "on"
+  #   condition:
+  #     - condition: template
+  #       value_template: "{{ states('input_boolean.working_in_garage') | lower == 'on' }}"
+  #     - condition: template
+  #       value_template: "{{ (as_timestamp(now()) - as_timestamp(states.switch.garage.last_updated))  | int > 30 }}"
+  #   action:
+  #     - service: switch.turn_on
+  #       entity_id: switch.garage
+
   # Start the timer when the lights are ON
   ###############################################################################
   - alias: Garage Timer Start When Garage Lights ON
@@ -288,6 +291,7 @@ automation:
     action:
       - service: timer.start
         entity_id: timer.timer_garage
+
   # Garage:
   # Timer Elapsed - Turn OFF lights, when "I am not working"
   ###############################################################################
