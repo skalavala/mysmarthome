@@ -128,11 +128,11 @@ automation:
       platform: state
       entity_id: sensor.octoprint_job_percentage
     action:
-      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int > 25 else 'off' }}"
+      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 25 else 'off' }}"
         entity_id: input_boolean.twenty_five_percent
-      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int > 50 else 'off' }}"
+      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 50 else 'off' }}"
         entity_id: input_boolean.fifty_percent
-      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int > 75 else 'off' }}"
+      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 75 else 'off' }}"
         entity_id: input_boolean.seventy_five_percent
       - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int == 100 else 'off' }}"
         entity_id: input_boolean.hundred_percent
@@ -150,19 +150,16 @@ automation:
         data_template:
           message: >-
             {%- macro secondsToReadableString(seconds) %}
-            {%- set map = {'Week': (seconds / 604800) % 604800,
-               'Day': (seconds / 86400) % 7, 'Hour': (seconds / 3600) % 24,
-               'Minute': (seconds / 60) % 60, 'Second': (seconds % 60) } -%}
+            {%- set map = {'week': (seconds / 604800) % 604800,
+               'day': (seconds / 86400) % 7, 'hour': (seconds / 3600) % 24,
+               'minute': (seconds / 60) % 60 } -%}
             {%- for item in map if map[item] | int > 0 -%}
               {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
               {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
             {%- endfor -%}
             {% endmacro %}
-            3D Printer job is now {{ trigger.to_state.attributes.friendly_name }} complete.
-            {% if trigger.entity_id != 'input_boolean.hundred_percent' %}
-              Time Spent: {{ secondsToReadableString(states('sensor.octoprint_time_elapsed') |int) }}.
-              Time Left: {{ secondsToReadableString(states('sensor.octoprint_time_remaining') |int) }}.
-            {% endif %}
+            3D Printer job is now {{ trigger.to_state.attributes.friendly_name }} complete. {% if trigger.entity_id != 'input_boolean.hundred_percent' %} Will be done in {{ secondsToReadableString(states('sensor.octoprint_time_remaining') |int) }}.
+            {%- endif -%}
 
   #
   # When the printing is complete (100%), it waits for 2 minutes and turns off the printer.
