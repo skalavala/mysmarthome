@@ -5,12 +5,12 @@ cards:
     entity: climate.dining_room
   - type: horizontal-stack
     cards:
-      - type: sensor
-        entity: sensor.dining_room_thermostat_temperature
-        name: Home Temperature
-        graph: line
-        detail: 1
-        hours_to_show: 12
+      # - type: sensor
+      #   entity: sensor.dining_room_thermostat_temperature
+      #   name: Home Temperature
+      #   graph: line
+      #   detail: 1
+      #   hours_to_show: 12
       - type: gauge
         entity: sensor.dining_room_thermostat_humidity
         unit: "%"
@@ -37,13 +37,13 @@ cards:
       - sensor.dining_room_thermostat_target
       - sensor.dining_room_thermostat_temperature
 
-  - type: history-graph
-    title: "Temperature"
-    entities:
-      - entity: sensor.dark_sky_apparent_temperature
-        name: Outside
-      - entity: sensor.dining_room_thermostat_temperature
-        name: Inside
+  # - type: history-graph
+  #   title: "Temperature"
+  #   entities:
+  #     - entity: sensor.dark_sky_apparent_temperature
+  #       name: Outside
+  #     - entity: sensor.dining_room_thermostat_temperature
+  #       name: Inside
 
   - type: entities
     title: Temperature Levels

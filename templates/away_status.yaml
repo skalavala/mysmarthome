@@ -84,9 +84,7 @@
   {%- endmacro -%}
 
   {%- macro light_status() -%}
-    {%- set lights_switches = ["light.family_room",
-                              "light.master_bedroom",
-                              "switch.basement_left",
+    {%- set lights_switches = ["switch.basement_left",
                               "switch.basement_right",
                               "switch.frontyard_light",
                               "switch.garage",

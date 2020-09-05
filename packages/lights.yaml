@@ -24,16 +24,6 @@ homeassistant:
       emulated_hue_name: Backyard Lights
       homebridge_name: Backyard Lights
 
-    light.family_room:
-      friendly_name: Family Room Lights
-      emulated_hue_name: Family Room Lights
-      homebridge_name: Front Room Lights
-
-    light.master_bedroom:
-      friendly_name: Master Bedroom Lights
-      emulated_hue_name: Master Bedroom Lights
-      homebridge_name: Master Bedroom Lights
-
     switch.guest_bedroom:
       icon: mdi:lightbulb
       friendly_name: Guest Bedroom 1
@@ -127,7 +117,7 @@ tplink:
     - host: !secret tplink_smart_outlet1
       #name: Downstairs Fragrance Outlet
     - host: !secret tplink_smart_outlet2
-      #name: Downstairs Bathroom Fragrance Outlet
+      #name: Downstairs 3d printer Outlet
     - host: !secret tplink_smart_outlet3
       #name: Upstairs Fragrance Outlet
     - host: !secret tplink_kids_bed_accent_light

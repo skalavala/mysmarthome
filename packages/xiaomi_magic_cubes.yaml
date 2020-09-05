@@ -33,7 +33,7 @@ automation:
         action_type: flip90
     action:
       - service_template: light.toggle
-        entity_id: light.family_room
+        entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
 
   # Flip 180: Lights ON Family Room Lights FULL brightness
   - alias: Family Room Cube Event flip180
@@ -46,7 +46,7 @@ automation:
         action_type: flip180
     action:
       - service: light.turn_on
-        entity_id: light.family_room
+        entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
         data:
           rgb_color: [255, 251, 245]
           brightness: 254
@@ -77,7 +77,7 @@ automation:
     action:
       - service: light.turn_on
         data_template:
-          entity_id: light.family_room
+          entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
           rgb_color:
             - "{{ range(0,255) |random }}"
             - "{{ range(0,255) |random }}"
@@ -94,6 +94,11 @@ automation:
         action_type: shake_air
     action:
       - service: script.toggle_do_not_disturb
+      - service: switch.turn_off
+        entity_id: switch.wemoswitch1
+      - delay: "00:00:02"
+      - service: switch.turn_on
+        entity_id: switch.wemoswitch1
 
   ################################################################################
   #   ______               _     _____
@@ -117,7 +122,7 @@ automation:
         entity_id: switch.front_room
 
   # Flip 180: Toggle Office Room Accent Lights
-  - alias: Family Room Cube Event flip180
+  - alias: Front Room Cube Event flip180
     initial_state: true
     trigger:
       platform: event
@@ -130,7 +135,7 @@ automation:
         entity_id: switch.zwave_smart_switch_switch
 
   # Move: Toggle Office Room Light
-  - alias: Family Room Cube Event Move
+  - alias: Front Room Cube Event Move
     initial_state: true
     trigger:
       platform: event
@@ -143,7 +148,7 @@ automation:
         entity_id: switch.office_room
 
   # Shake: Toggle Do Not Disturb Mode
-  - alias: Family Room Cube Event Shake
+  - alias: Front Room Cube Event Shake
     initial_state: true
     trigger:
       platform: event
@@ -289,7 +294,9 @@ automation:
         action_type: flip180
     action:
       - service: light.toggle
-        entity_id: light.master_bedroom
+        entity_id: light.master_bedroom_1
+      - service: light.toggle
+        entity_id: light.master_bedroom_2
 
   # Move: Turn ON Master Bedroom Lights
   - alias: Master Bedroom Cube Event Move
@@ -302,7 +309,9 @@ automation:
         action_type: move
     action:
       - service: light.turn_on
-        entity_id: light.master_bedroom
+        entity_id: light.master_bedroom_1
+      - service: light.turn_on
+        entity_id: light.master_bedroom_2
 
   # Double Tap:  Turn OFF Downstairs Lights
   - alias: Master Bedroom Cube Event Tap Twice
@@ -316,7 +325,14 @@ automation:
     action:
       - service: light.turn_on
         data_template:
-          entity_id: light.master_bedroom
+          entity_id: light.master_bedroom_1
+          rgb_color:
+            - "{{ range(0,255) |random }}"
+            - "{{ range(0,255) |random }}"
+            - "{{ range(0,255) |random }}"
+      - service: light.turn_on
+        data_template:
+          entity_id: light.master_bedroom_2
           rgb_color:
             - "{{ range(0,255) |random }}"
             - "{{ range(0,255) |random }}"

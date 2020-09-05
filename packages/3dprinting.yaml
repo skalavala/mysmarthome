@@ -1,0 +1,80 @@
+###############################################################################
+#   @author         :   Mahasri Kalavala
+#   @date           :   09/04/2020
+#   @package        :   3D Printer
+#   @description    :   3D Printer Automations
+###############################################################################
+homeassistant:
+  customize:
+    automation.3d_print:
+      icon: mdi:printer
+
+#
+# Turn Off When the printer status changed from "Prnting" to anything.
+#
+automation:
+  - alias: "Octoprint 3D Print"
+    trigger:
+      platform: state
+      entity_id: "sensor.octoprint_current_state"
+      from: "Printing"
+    action:
+      - delay: "00:00:59"
+      - service: switch.turn_off
+        entity_id: switch.3d_printer
+      - service: script.notify_me
+        data_template:
+          message: "3D Printer Status Changed from 'Printing' to {{ trigger.to_state.state }}. Turned Off the Printer!"
+
+  #
+  # Updates on the Printer Status
+  #
+  - alias: "Octoprint Notify Printer State"
+    trigger:
+      platform: state
+      entity_id: "binary_sensor.octoprint_printing"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "3D Printer Status is now {{ trigger.to_state.state }}"
+
+  #
+  # Notifies when the printer errors out
+  #
+  - alias: "Octoprint Noify Printer Error"
+    trigger:
+      platform: state
+      entity_id: binary_sensor.octoprint_printing_error
+      to: "on"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: "3D Printer Status changed to 'ERROR'. Please check the printer!"
+
+  #
+  # Provides update at frequent intervals - 25%, 50%, 75%, and 100%!
+  #
+  - alias: "Octoprint 3D Printer Progress Update"
+    trigger:
+      platform: template
+      value_template:
+        "{{ states('sensor.octoprint_job_percentage') |int == 25  or
+        states('sensor.octoprint_job_percentage') |int == 50  or
+        states('sensor.octoprint_job_percentage') |int == 75  or
+        states('sensor.octoprint_job_percentage') |int == 100 }}"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: >-
+            {%- macro secondsToReadableString(seconds) %}
+            {%- set map = {'Week': (seconds / 604800) % 604800,
+               'Day': (seconds / 86400) % 7, 'Hour': (seconds / 3600) % 24,
+               'Minute': (seconds / 60) % 60, 'Second': (seconds % 60) } -%}
+            {%- for item in map if map[item] | int > 0 -%}
+              {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+              {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
+            {%- endfor -%}
+            {% endmacro %}
+            3D Printer - Print job is now {{ states('sensor.octoprint_job_percentage') |int }}% complete.
+            Print Time: {{ secondsToReadableString(states('sensor.octoprint_time_elapsed') |int) }}
+            Print Time Left: {{ secondsToReadableString(states('sensor.octoprint_time_remaining') |int) }}

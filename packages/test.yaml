@@ -117,7 +117,7 @@
 #         entity_id:
 #           - binary_sensor.masterbed_motion
 #           - binary_sensor.masterbath_motion
-#           - binary_sensor.bathroom_motion
+#           - binary_sensor.bathm_motion
 #           - binary_sensor.kitchen_motion
 #           - binary_sensor.den_motion
 #     action:

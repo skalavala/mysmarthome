@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Driver xmlns="http://code.google.com/p/open-zwave/" version="3" home_id="0xd89c4f0c" node_id="1" api_capabilities="0" controller_capabilities="8" poll_interval="60000" poll_interval_between="true">
-	<Node id="1" name="ZWave Stick" location="" basic="2" generic="2" specific="1" type="Static PC Controller" listening="true" frequentListening="false" beaming="true" routing="false" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="86" name="Aeotec">
-			<Product type="101" id="5a" name="ZW090 Z-Stick Gen5" />
+	<Node id="1" name="" location="" basic="2" generic="2" specific="1" type="Static PC Controller" listening="true" frequentListening="false" beaming="true" routing="false" max_baud_rate="40000" version="4" query_stage="Complete">
+		<Manufacturer id="86" name="AEON Labs">
+			<Product type="101" id="5a" name="ZW090 Z-Stick Gen5 US" />
 		</Manufacturer>
 		<CommandClasses>
 			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" after_mark="true">
@@ -11,486 +11,37 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="2" name="Downstairs Multi Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3079" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
-		<Manufacturer id="86" name="Aeotec">
-			<Product type="102" id="4a" name="ZW074 MultiSensor Gen5" />
+	<Node id="2" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Probe">
+		<Manufacturer id="0" name="">
+			<Product type="0" id="0" name="" />
 		</Manufacturer>
 		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4">
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1">
 				<Instance index="1" />
-				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="255" />
+				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 			</CommandClass>
-			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
+			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="1" request_flags="2">
 				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="47" />
-				<SensorMap index="0" type="55" />
-				<SensorMap index="0" type="63" />
-				<SensorMap index="0" type="127" />
-				<SensorMap index="0" type="192" />
-				<SensorMap index="0" type="196" />
-				<SensorMap index="0" type="208" />
-				<SensorMap index="0" type="255" />
-			</CommandClass>
-			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="5" innif="true">
-				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="71.9" />
-				<Value type="decimal" genre="user" instance="1" index="3" label="Luminance" units="lux" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="6" />
-				<Value type="decimal" genre="user" instance="1" index="4" label="Power" units="W" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="46" />
-				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="42" />
-			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" after_mark="true" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3079" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3079" />
-			</CommandClass>
-			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="config" instance="1" index="2" label="Wake up 10 minutes on Power On" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Stay awake for 10 minutes after batteries are inserted</Help>
-					<Item label="No" value="0" />
-					<Item label="Yes" value="1" />
-				</Value>
-				<Value type="short" genre="config" instance="1" index="3" label="On time" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="15300" value="240">
-					<Help>How long should the device associated to multi sensor keep state On before sending it Off command (if the value is bigger than 255, the value would be rounded to next integer in minutes)</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="4" label="Enable Motion Sensor" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="1" size="1">
-					<Help>Enable Motion Sensor</Help>
-					<Item label="Disabled" value="0" />
-					<Item label="Enabled" value="1" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="5" label="Command Options" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2" vindex="0" size="1">
-					<Help>Which commands to send when PIR motion sensor triggered OZW Ideal Value is Binary Sensor Report</Help>
-					<Item label="Basic Set (default) " value="1" />
-					<Item label="Binary Sensor Report" value="2" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="40" label="Reporting Threshold" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Enable/disable the selective reporting only when measurements reach a certain threshold or percentage set in the threshold settings. This is used to reduce network traffic.</Help>
-					<Item label="Disabled" value="0" />
-					<Item label="Enabled" value="1" />
-				</Value>
-				<Value type="short" genre="config" instance="1" index="41" label="Temperature Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="256">
-					<Help>Threshold change in temperature to induce an automatic report. Note: 1. When the unit is Celsius, threshold=Value. 2. When the unit is Fahrenheit, threshold=Value*1.8. The accuracy is 0.1. 3. The high byte is the part of integer, the low byte is the fractional part.</Help>
-				</Value>
-				<Value type="short" genre="config" instance="1" index="42" label="Humidity Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="1280">
-					<Help>Threshold change in humidity to induce an automatic report. Note: The accuracy is 0.1. The high byte is the part of integer, the low byte is the fractional part.</Help>
-				</Value>
-				<Value type="short" genre="config" instance="1" index="43" label="Luminance Reporting Threshold" units="LUX" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="65535" value="25600">
-					<Help>Threshold change in luminance to induce an automatic report.</Help>
-				</Value>
-				<Value type="short" genre="config" instance="1" index="44" label="Battery Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="1280">
-					<Help>Threshold change in battery level to induce an automatic report. Note: The accuracy is 0.1. The high byte is the part of integer, the low byte is the fractional part.</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="46" label="Low Temp Alarm" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Enable/disable to send the alarm report of low temperature(Less than 15 Degress C)</Help>
-					<Item label="Disabled" value="0" />
-					<Item label="Enabled" value="1" />
-				</Value>
-				<Value type="int" genre="config" instance="1" index="101" label="Group 1 Reports" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="255">
-					<Help>Which reports need to send automatically in timing intervals for group 1. Bitsets: 0 -&gt; Battery report, 5 -&gt; Temperature, 6 -&gt; Humidity, 7 -&gt; Luminosity</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="102" label="Group 2 Reports" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0">
-					<Help>Which reports need to send automatically in timing intervals for group 2. Bitsets: 0 -&gt; Battery report, 5 -&gt; Temperature, 6 -&gt; Humidity, 7 -&gt; Luminosity</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="103" label="Group 3 Reports" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0">
-					<Help>Which reports need to send automatically in timing intervals for group 3. Bitsets: 0 -&gt; Battery report, 5 -&gt; Temperature, 6 -&gt; Humidity, 7 -&gt; Luminosity</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="111" label="Group 1 Interval" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2678400" value="1800">
-					<Help>The interval of sending report group 1. 1 to 2678400 seconds</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="112" label="Group 2 Interval" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2678400" value="1800">
-					<Help>The interval of sending report group 2. 1 to 2678400 seconds</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="113" label="Group 3 Interval" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2678400" value="1800">
-					<Help>The interval of sending report group 3. 1 to 2678400 seconds</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="252" label="Enable/disable Lock Configuration" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Enable/disable Lock Configuration</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="1" />
-				</Value>
-				<Value type="button" genre="config" instance="1" index="255" label="Reset to default" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0">
-					<Help>Reset to factory defaults.</Help>
-				</Value>
-			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="3" request_flags="2" getsupported="false" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="7" />
-			</CommandClass>
-			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="115" name="COMMAND_CLASS_POWERLEVEL" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="system" instance="1" index="0" label="Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="byte" genre="system" instance="1" index="1" label="Timeout" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="system" instance="1" index="2" label="Set Powerlevel" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="byte" genre="system" instance="1" index="3" label="Test Node" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="list" genre="system" instance="1" index="4" label="Test Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="5" label="Frame Count" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="button" genre="system" instance="1" index="6" label="Test" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="system" instance="1" index="7" label="Report" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="list" genre="system" instance="1" index="8" label="Test Status" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Failed" value="0" />
-					<Item label="Success" value="1" />
-					<Item label="In Progress" value="2" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="9" label="Acked Frames" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="130" name="COMMAND_CLASS_HAIL" version="1" request_flags="4" after_mark="true" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="1" label="Minimum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="240" />
-				<Value type="int" genre="system" instance="1" index="2" label="Maximum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="2678400" />
-				<Value type="int" genre="system" instance="1" index="3" label="Default Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="4" label="Wake-up Interval Step" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="240" />
-			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Associations num_groups="1">
-					<Group index="1" max_associations="5" label="LifeLine" auto="true">
-						<Node id="1" />
-					</Group>
-				</Associations>
-			</CommandClass>
-			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="string" genre="system" instance="1" index="0" label="Library Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="3" />
-				<Value type="string" genre="system" instance="1" index="1" label="Protocol Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="3.92" />
-				<Value type="string" genre="system" instance="1" index="2" label="Application Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="1.02" />
+				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="3" name="Upstairs Multi Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3079" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
-		<Manufacturer id="86" name="Aeotec">
-			<Product type="102" id="4a" name="ZW074 MultiSensor Gen5" />
+	<Node id="3" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Probe">
+		<Manufacturer id="0" name="">
+			<Product type="0" id="0" name="" />
 		</Manufacturer>
 		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4">
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1">
 				<Instance index="1" />
-				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="255" />
+				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 			</CommandClass>
-			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
+			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="1" request_flags="2">
 				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="46" />
-				<SensorMap index="0" type="62" />
-				<SensorMap index="0" type="193" />
-				<SensorMap index="0" type="209" />
-			</CommandClass>
-			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="5" innif="true">
-				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="72.1" />
-				<Value type="decimal" genre="user" instance="1" index="3" label="Luminance" units="lux" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="75" />
-				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="39" />
-				<Value type="decimal" genre="user" instance="1" index="27" label="Ultraviolet" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
-			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" after_mark="true" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3079" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3079" />
-			</CommandClass>
-			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="config" instance="1" index="2" label="Wake up 10 minutes on Power On" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Stay awake for 10 minutes after batteries are inserted</Help>
-					<Item label="No" value="0" />
-					<Item label="Yes" value="1" />
-				</Value>
-				<Value type="short" genre="config" instance="1" index="3" label="On time" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="15300" value="240">
-					<Help>How long should the device associated to multi sensor keep state On before sending it Off command (if the value is bigger than 255, the value would be rounded to next integer in minutes)</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="4" label="Enable Motion Sensor" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="1" size="1">
-					<Help>Enable Motion Sensor</Help>
-					<Item label="Disabled" value="0" />
-					<Item label="Enabled" value="1" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="5" label="Command Options" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2" vindex="0" size="1">
-					<Help>Which commands to send when PIR motion sensor triggered OZW Ideal Value is Binary Sensor Report</Help>
-					<Item label="Basic Set (default) " value="1" />
-					<Item label="Binary Sensor Report" value="2" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="40" label="Reporting Threshold" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Enable/disable the selective reporting only when measurements reach a certain threshold or percentage set in the threshold settings. This is used to reduce network traffic.</Help>
-					<Item label="Disabled" value="0" />
-					<Item label="Enabled" value="1" />
-				</Value>
-				<Value type="short" genre="config" instance="1" index="41" label="Temperature Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="256">
-					<Help>Threshold change in temperature to induce an automatic report. Note: 1. When the unit is Celsius, threshold=Value. 2. When the unit is Fahrenheit, threshold=Value*1.8. The accuracy is 0.1. 3. The high byte is the part of integer, the low byte is the fractional part.</Help>
-				</Value>
-				<Value type="short" genre="config" instance="1" index="42" label="Humidity Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="1280">
-					<Help>Threshold change in humidity to induce an automatic report. Note: The accuracy is 0.1. The high byte is the part of integer, the low byte is the fractional part.</Help>
-				</Value>
-				<Value type="short" genre="config" instance="1" index="43" label="Luminance Reporting Threshold" units="LUX" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="65535" value="25600">
-					<Help>Threshold change in luminance to induce an automatic report.</Help>
-				</Value>
-				<Value type="short" genre="config" instance="1" index="44" label="Battery Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="1280">
-					<Help>Threshold change in battery level to induce an automatic report. Note: The accuracy is 0.1. The high byte is the part of integer, the low byte is the fractional part.</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="46" label="Low Temp Alarm" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Enable/disable to send the alarm report of low temperature(Less than 15 Degress C)</Help>
-					<Item label="Disabled" value="0" />
-					<Item label="Enabled" value="1" />
-				</Value>
-				<Value type="int" genre="config" instance="1" index="101" label="Group 1 Reports" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="255">
-					<Help>Which reports need to send automatically in timing intervals for group 1. Bitsets: 0 -&gt; Battery report, 5 -&gt; Temperature, 6 -&gt; Humidity, 7 -&gt; Luminosity</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="102" label="Group 2 Reports" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0">
-					<Help>Which reports need to send automatically in timing intervals for group 2. Bitsets: 0 -&gt; Battery report, 5 -&gt; Temperature, 6 -&gt; Humidity, 7 -&gt; Luminosity</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="103" label="Group 3 Reports" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0">
-					<Help>Which reports need to send automatically in timing intervals for group 3. Bitsets: 0 -&gt; Battery report, 5 -&gt; Temperature, 6 -&gt; Humidity, 7 -&gt; Luminosity</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="111" label="Group 1 Interval" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2678400" value="1800">
-					<Help>The interval of sending report group 1. 1 to 2678400 seconds</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="112" label="Group 2 Interval" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2678400" value="1800">
-					<Help>The interval of sending report group 2. 1 to 2678400 seconds</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="113" label="Group 3 Interval" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2678400" value="1800">
-					<Help>The interval of sending report group 3. 1 to 2678400 seconds</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="252" label="Enable/disable Lock Configuration" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Enable/disable Lock Configuration</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="1" />
-				</Value>
-				<Value type="button" genre="config" instance="1" index="255" label="Reset to default" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0">
-					<Help>Reset to factory defaults.</Help>
-				</Value>
-			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="3" request_flags="2" getsupported="false" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="7" />
-			</CommandClass>
-			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="115" name="COMMAND_CLASS_POWERLEVEL" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="system" instance="1" index="0" label="Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="byte" genre="system" instance="1" index="1" label="Timeout" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="system" instance="1" index="2" label="Set Powerlevel" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="byte" genre="system" instance="1" index="3" label="Test Node" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="list" genre="system" instance="1" index="4" label="Test Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="5" label="Frame Count" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="button" genre="system" instance="1" index="6" label="Test" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="system" instance="1" index="7" label="Report" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="list" genre="system" instance="1" index="8" label="Test Status" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Failed" value="0" />
-					<Item label="Success" value="1" />
-					<Item label="In Progress" value="2" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="9" label="Acked Frames" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="41" />
-			</CommandClass>
-			<CommandClass id="130" name="COMMAND_CLASS_HAIL" version="1" request_flags="4" after_mark="true" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="1" label="Minimum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="240" />
-				<Value type="int" genre="system" instance="1" index="2" label="Maximum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="2678400" />
-				<Value type="int" genre="system" instance="1" index="3" label="Default Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="4" label="Wake-up Interval Step" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="240" />
-			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Associations num_groups="1">
-					<Group index="1" max_associations="5" label="LifeLine" auto="true">
-						<Node id="1" />
-					</Group>
-				</Associations>
-			</CommandClass>
-			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="string" genre="system" instance="1" index="0" label="Library Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="3" />
-				<Value type="string" genre="system" instance="1" index="1" label="Protocol Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="3.92" />
-				<Value type="string" genre="system" instance="1" index="2" label="Application Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="1.02" />
+				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="4" name="Two Car Garage Door Tilt Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="14a" name="Ecolink">
-			<Product type="4" id="3" name="Garage Door Tilt Sensor" />
-		</Manufacturer>
-		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" innif="true" setasreport="true">
-				<Instance index="1" />
-				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="255" />
-			</CommandClass>
-			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="255" />
-			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3079" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3072" />
-			</CommandClass>
-			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="config" instance="1" index="223" label="Fault restore" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Enable/Disable Basic Sets of 0x00 on a fault restore to nodes in Group 2</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="255" />
-				</Value>
-			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="5" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="9" label="Access Control" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="23" />
-				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="11" label="Power Management" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="115" name="COMMAND_CLASS_POWERLEVEL" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="system" instance="1" index="0" label="Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="byte" genre="system" instance="1" index="1" label="Timeout" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="system" instance="1" index="2" label="Set Powerlevel" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="byte" genre="system" instance="1" index="3" label="Test Node" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="list" genre="system" instance="1" index="4" label="Test Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="5" label="Frame Count" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="button" genre="system" instance="1" index="6" label="Test" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="system" instance="1" index="7" label="Report" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="list" genre="system" instance="1" index="8" label="Test Status" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Failed" value="0" />
-					<Item label="Success" value="1" />
-					<Item label="In Progress" value="2" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="9" label="Acked Frames" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="100" />
-			</CommandClass>
-			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="14400" />
-				<Value type="int" genre="system" instance="1" index="1" label="Minimum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
-				<Value type="int" genre="system" instance="1" index="2" label="Maximum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="604800" />
-				<Value type="int" genre="system" instance="1" index="3" label="Default Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="14400" />
-				<Value type="int" genre="system" instance="1" index="4" label="Wake-up Interval Step" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="200" />
-			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Associations num_groups="2">
-					<Group index="1" max_associations="5" label="Lifeline" auto="true">
-						<Node id="1" />
-					</Group>
-					<Group index="2" max_associations="5" label="Basic Report" auto="false" />
-				</Associations>
-			</CommandClass>
-			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="string" genre="system" instance="1" index="0" label="Library Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="6" />
-				<Value type="string" genre="system" instance="1" index="1" label="Protocol Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="4.05" />
-				<Value type="string" genre="system" instance="1" index="2" label="Application Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="10.01" />
-			</CommandClass>
-		</CommandClasses>
-	</Node>
-	<Node id="5" name="Single Car Garage Door Tilt Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
+	<Node id="4" name="" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
 		<Manufacturer id="14a" name="Ecolink">
 			<Product type="4" id="3" name="Garage Door Tilt Sensor" />
 		</Manufacturer>
@@ -601,24 +152,36 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="6" name="Back Door Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="14a" name="Ecolink">
-			<Product type="4" id="2" name="Door Sensor" />
+	<Node id="5" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Session">
+		<Manufacturer id="0" name="">
+			<Product type="0" id="0" name="" />
 		</Manufacturer>
 		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" innif="true">
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1">
+				<Instance index="1" />
+				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
+			</CommandClass>
+			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="1" request_flags="2">
+				<Instance index="1" />
+				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
+			</CommandClass>
+		</CommandClasses>
+	</Node>
+	<Node id="6" name="" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
+		<Manufacturer id="14a" name="Ecolink">
+			<Product type="4" id="2" name="Door/Window Sensor" />
+		</Manufacturer>
+		<CommandClasses>
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" innif="true" setasreport="true">
 				<Instance index="1" />
 				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 			</CommandClass>
 			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
 				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="127" />
-				<SensorMap index="0" type="191" />
-				<SensorMap index="0" type="223" />
 				<SensorMap index="0" type="255" />
 			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4">
+			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1">
 				<Instance index="1" />
 			</CommandClass>
 			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
@@ -696,10 +259,10 @@
 			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
 				<Associations num_groups="2">
-					<Group index="1" max_associations="1" label="Group 1" auto="true">
+					<Group index="1" max_associations="5" label="Lifeline" auto="true">
 						<Node id="1" />
 					</Group>
-					<Group index="2" max_associations="3" label="Group 2" auto="false" />
+					<Group index="2" max_associations="5" label="Basic Report" auto="false" />
 				</Associations>
 			</CommandClass>
 			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
@@ -710,8 +273,8 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="11" name="Front Room Multi Sensor" location="" basic="4" generic="33" specific="1" roletype="6" devicetype="3079" nodetype="0" type="Routing Multilevel Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="86" name="Aeotec">
+	<Node id="11" name="" location="" basic="4" generic="33" specific="1" roletype="6" devicetype="3079" nodetype="0" type="Routing Multilevel Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
+		<Manufacturer id="86" name="AEON Labs">
 			<Product type="102" id="64" name="ZW100 MultiSensor 6" />
 		</Manufacturer>
 		<CommandClasses>
@@ -721,16 +284,14 @@
 			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
 				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="38" />
 				<SensorMap index="0" type="54" />
 				<SensorMap index="0" type="201" />
-				<SensorMap index="0" type="217" />
 			</CommandClass>
 			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="5" innif="true">
 				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="75.0" />
-				<Value type="decimal" genre="user" instance="1" index="3" label="Luminance" units="lux" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="2" />
-				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="46" />
+				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="83.3" />
+				<Value type="decimal" genre="user" instance="1" index="3" label="Luminance" units="lux" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
+				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="53" />
 				<Value type="decimal" genre="user" instance="1" index="27" label="Ultraviolet" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
 			</CommandClass>
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" innif="true">
@@ -745,32 +306,36 @@
 			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
 				<Value type="list" genre="config" instance="1" index="2" label="Wake up 10 minutes on Power On" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Stay awake for 10 minutes after batteries are inserted</Help>
-					<Item label="No" value="0" />
-					<Item label="Yes" value="1" />
+					<Help>Enable/Disable waking up for 10 minutes when re-power on (battery mode) the MultiSensor</Help>
+					<Item label="Disable" value="0" />
+					<Item label="Enable" value="1" />
 				</Value>
-				<Value type="short" genre="config" instance="1" index="3" label="On time" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="15300" value="120">
+				<Value type="short" genre="config" instance="1" index="3" label="On time" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="10" max="3600" value="240">
 					<Help>Duration that the motion sensor must observe no motion before it will return to the no-motion state. If value greater than 255, effective value is rounded up to the nearest minute (255 -&gt; 255 seconds, 256 -&gt; 300 seconds)</Help>
 				</Value>
 				<Value type="list" genre="config" instance="1" index="4" label="Enable Motion Sensor" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="5" size="1">
-					<Help>Enable Motion Sensor</Help>
+					<Help>Enable Motion Sensor, (1 minimum, 5 maximum sensitivity level)</Help>
 					<Item label="Disabled" value="0" />
-					<Item label="Enabled level 1 (minimum sensitivity)" value="1" />
+					<Item label="Enabled level 1" value="1" />
 					<Item label="Enabled level 2" value="2" />
 					<Item label="Enabled level 3" value="3" />
 					<Item label="Enabled level 4" value="4" />
-					<Item label="Enabled level 5 (maximum sensitivity)" value="5" />
+					<Item label="Enabled level 5" value="5" />
 				</Value>
-				<Value type="list" genre="config" instance="1" index="5" label="Command Options" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2" vindex="1" size="1">
+				<Value type="list" genre="config" instance="1" index="5" label="Command Options" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2" vindex="0" size="1">
 					<Help>Which commands to send when PIR motion sensor triggered OZW Ideal Value is Binary Sensor Report</Help>
-					<Item label="Basic Set (default) " value="0" />
-					<Item label="Binary Sensor Report" value="1" />
+					<Item label="Basic Set" value="1" />
+					<Item label="Binary Sensor Report" value="2" />
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="8" label="Awake timeout" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="8" max="255" value="30">
 					<Help>Set the timeout of awake after the Wake Up CC is sent out. Available rang: 8 to 255 seconds.</Help>
 				</Value>
-				<Value type="short" genre="config" instance="1" index="9" label="Current power mode" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0">
-					<Help>Report the current power mode and the product state for battery power mode. Value1 (MSB): 0x00=USB power mode, 0x01=Battery power mode. Value2 (LSB): 0x00= keep sleep state for Battery power mode, 0x01=keep awake for 10 minutes for battery power mode. Note: this parameter cannot be used as Set usage.</Help>
+				<Value type="list" genre="config" instance="1" index="9" label="Current power mode" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="257" vindex="0" size="2">
+					<Help>Report the current power mode and the product state for battery power mode</Help>
+					<Item label="USB power, sleeping mode after re-power on" value="0" />
+					<Item label="USB power, keep awake for 10 minutes after re-power on" value="1" />
+					<Item label="Battery power, sleeping mode after re-power on" value="256" />
+					<Item label="Battery power, keep awake for 10 minutes after re-power on" value="257" />
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="39" label="Low Battery" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="10" max="50" value="20">
 					<Help>Configure low battery value Value=10 to 50.</Help>
@@ -780,7 +345,7 @@
 					<Item label="Disabled" value="0" />
 					<Item label="Enabled" value="1" />
 				</Value>
-				<Value type="short" genre="config" instance="1" index="41" label="Temperature Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="20">
+				<Value type="int" genre="config" instance="1" index="41" label="Temperature Reporting Threshold" units="C/F" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="20">
 					<Help>Threshold change in temperature to induce an automatic report. Note: 1. The unit is Fahrenheit for US version, Celsius for EU/AU version. 2. The value contains one decimal point. E.g. if the value is set to 20, the threshold value = 2.0 C (EU/AU) or 2.0 F (US). When the temperature has changed by 2.0 (of the appropriate unit), a temperature report will be sent.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="42" label="Humidity Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="10">
@@ -815,10 +380,10 @@
 				<Value type="byte" genre="config" instance="1" index="52" label="Set the lower limit value of humidity sensor" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="50">
 					<Help>When the measurement is less than this lower limit, which will trigger to sent out a sensor report. Lower limit range: 0 to 100%. E.g. The default lower limit is 50%, when the measurement is less than 50%, it will be triggered to send out a humidity sensor report.</Help>
 				</Value>
-				<Value type="short" genre="config" instance="1" index="53" label="Set the upper limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="1000">
+				<Value type="short" genre="config" instance="1" index="53" label="Set the upper limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="30000" value="1000">
 					<Help>When the measurement is more than this upper limit, which will trigger to sent out a sensor report. Upper limit range: 0 to 30000 Lux. E.g. The default upper limit is 1000Lux, when the measurement is more than 1000Lux, it will be triggered to send out a Lighting sensor report.</Help>
 				</Value>
-				<Value type="short" genre="config" instance="1" index="54" label="Set the lower limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="50">
+				<Value type="short" genre="config" instance="1" index="54" label="Set the lower limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="30000" value="100">
 					<Help>When the measurement is less than this lower limit, which will trigger to sent out a sensor report. Lower limit range: 0 to 30000 Lux. E.g. The default lower limit is 100Lux, when the measurement is less than 100Lux, it will be triggered to send out a Lighting sensor report.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="55" label="Set the upper limit value of ultraviolet sensor" units="UV" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="11" value="8">
@@ -828,16 +393,16 @@
 					<Help>When the measurement is less than this upper limit, which will trigger to sent out a sensor report. Lower limit range: 1 to 11. E.g. The default lower limit is 4, when the measurement is less than 8, it will be triggered to send out a ultraviolet sensor report.</Help>
 				</Value>
 				<Value type="short" genre="config" instance="1" index="57" label="Set the recover limit value of temperature sensor" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="5121">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that, the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that, the lower limit report would be disabled again until the measurement greater or egal (Lower limit + Recover limit). 3. High byte is the recover limit value. Low byte is the unit (0x01=Celsius, 0x02=Fahrenheit). 4. Recover limit range: 1.0 to 25.5 C/ F (0x0101 to 0xFF01 or 0x0102 to 0xFF02). E.g. The default recover limit value is 2.0 C/F (0x1401/0x1402), when the measurement is less than (Upper limit - 2), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 2), the lower limit report would be enabled one time.</Help>
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that, the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that, the lower limit report would be disabled again until the measurement greater or equal (Lower limit + Recover limit). 3. High byte is the recover limit value. Low byte is the unit (0x01=Celsius, 0x02=Fahrenheit). 4. Recover limit range: 1.0 to 25.5 C/ F (0x0101 to 0xFF01 or 0x0102 to 0xFF02). E.g. The default recover limit value is 2.0 C/F (0x1401/0x1402), when the measurement is less than (Upper limit - 2), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 2), the lower limit report would be enabled one time.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="58" label="Set the recover limit value of humidity sensor" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="255" value="5">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or egal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or equal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
 				</Value>
-				<Value type="byte" genre="config" instance="1" index="59" label="Set the recover limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="50" value="100">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or egal (Lower limit + Recover limit). 3. Unit = 10*Recover limit (Lux) 4. Recover limit range: 10 to 2550Lux (0x01 to 0xFF). E.g. The default recover limit value is 100 Lux, when the measurement is less than (Upper limit - 100), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 100), the lower limit report would be enabled one time.</Help>
+				<Value type="byte" genre="config" instance="1" index="59" label="Set the recover limit value of Lighting sensor" units="10xlux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="255" value="10">
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or equal (Lower limit + Recover limit). 3. Unit = 10*Recover limit (Lux) 4. Recover limit range: 10 to 2550Lux (0x01 to 0xFF). E.g. The default recover limit value is 100 Lux, when the measurement is less than (Upper limit - 100), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 100), the lower limit report would be enabled one time.</Help>
 				</Value>
-				<Value type="byte" genre="config" instance="1" index="60" label="Set the recover limit value of Ultraviolet sensor" units="UV" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="50" value="5">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or egal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
+				<Value type="byte" genre="config" instance="1" index="60" label="Set the recover limit value of Ultraviolet sensor" units="UV" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="5" value="2">
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or equal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="61" label="Get the out-of-limit state of the Sensors" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0">
 					<Help>Get the out-of-limit state of the Sensors. Bit mask = 0, within the limit. Bit mask = 1, out of the limit. Bit 0 = temperature. Bit 1 = humidity. Bit 2 = luminance. Bit 3 = ultraviolet. The above bit masks are used to indicate whether the current measurements of the Sensors are out of the lower limit. The below bit masks are used to indicate whether the current measurements of the Sensors are out of the upper limit. Bit 4 = temperature. Bit 5 = humidity. Bit 6 = luminance. Bit 7 = ultraviolet.</Help>
@@ -847,10 +412,11 @@
 					<Item label="Celsius" value="1" />
 					<Item label="Fahrenheit" value="2" />
 				</Value>
-				<Value type="list" genre="config" instance="1" index="81" label="LED report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>LED when motion/vibration triggered</Help>
-					<Item label="Enable" value="0" />
-					<Item label="Disable" value="1" />
+				<Value type="list" genre="config" instance="1" index="81" label="LED blinking report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="2" vindex="0" size="1">
+					<Help>Enable/disable the LED blinking for motion, wakeup, and sensor report.</Help>
+					<Item label="Enable LED blinking" value="0" />
+					<Item label="Disable LED blinking only when the PIR is triggered" value="1" />
+					<Item label="Completely disable LED for motion, wakeup, and sensor report" value="2" />
 				</Value>
 				<Value type="button" genre="config" instance="1" index="100" label="Reset Params 101-103 to Default" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" affects="101,102,103">
 					<Help>Reset The Reporting Group Configuration (101 to 103) to default</Help>
@@ -877,7 +443,7 @@
 					<Help>The interval for sending reports for group 3. The effective behavior of this setting depends on the device&apos;s power source: - If the device is on USB power, it will send the reports at the configured interval; set it to something low (~15-60 seconds) to get frequent updates from a powered device. - If the device is on battery, the sensor will never report in more often than its configured wake interval, regardless of what this setting is configured to; setting this to 3601 when the wake interval is 3600 would make this group report in every 7200 seconds. 240 seconds is the minimum wake interval, but will quickly use battery.</Help>
 				</Value>
 				<Value type="short" genre="config" instance="1" index="201" label="Temperature Calibration" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="1">
-					<Help>The calibration value = standard value - measure value. (the available value range is [-100, 100] or [-10C, 10C]). Note: 1. The value contains one decimal point. E.g. if the value is set to 20, the calibration value is 2.0 (EU/AU version) or 2.0 (US version) 2. The calibration value = standard value - measure value. If measure value =25.3 and the standard value = 23.2, so the calibration value= 23.2-25.3 = -2.1 (0xEB). If the measure value =30.1 and the standard value = 33.2, so the calibration value= 33.2-30.1= 3.1 (0x1F). Default value: 1 for EU/AU version, 2 for US version.</Help>
+					<Help>Temperature calibration (the available value range is [-128,127] or [-12.8C,12.7C]). Note: 1. High byte is the calibration value. Low byte is the unit (0x01=Celsius,0x02=Fahrenheit) 2. The calibration value (high byte) contains one decimal point. E.g. if the value is set to 20 (0x1401), the calibration value is 2.0C (EU/AU version) or if the value is set to 20 (0x1402), the calibration value is 2.0F (US version) 3. The calibration value (high byte) = standard value - measure value. E.g. If measure value =25.3C and the standard value = 23.2C, so the calibration value= 23.2C - 25.3C= -2.1C (0xEB). If the measure value =30.1C and the standard value = 33.2C, so the calibration value= 33.2C - 30.1C=3.1C (0x1F). Default value: 1 for EU/AU version, 2 for US version.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="202" label="Humidity Calibration" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0">
 					<Help>The calibration value = standard value - measure value. (the available value range is [-50, 50]). If measure value =80RH and the standard value = 75RH, so the calibration value= 75RH-80RH = -5RH (0xFB). If the measure value =85RH and the standard value = 90RH, so the calibration value= 90RH-85RH = 5RH (0x05).</Help>
@@ -893,8 +459,11 @@
 					<Item label="Disable" value="0" />
 					<Item label="Enable" value="1" />
 				</Value>
-				<Value type="button" genre="config" instance="1" index="255" label="Reset to default" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0">
-					<Help>Reset to factory defaults.</Help>
+				<Value type="list" genre="config" instance="1" index="255" label="Reset To Factory Defaults" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="1" size="4">
+					<Help>Reset to factory defaults</Help>
+					<Item label="Reset to factory default setting" value="0" />
+					<Item label="Normal" value="1" />
+					<Item label="Reset to factory default setting and removed from the z-wave network" value="1431655765" />
 				</Value>
 			</CommandClass>
 			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="3" request_flags="2" getsupported="false" innif="true">
@@ -974,8 +543,8 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="15" name="ZWave Smart Switch" location="" basic="4" generic="16" specific="1" roletype="5" devicetype="1792" nodetype="0" type="Binary Power Switch" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" refreshonnodeinfoframe="false" query_stage="Complete">
-		<Manufacturer id="86" name="Aeotec">
+	<Node id="15" name="" location="" basic="4" generic="16" specific="1" type="Binary Power Switch" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" refreshonnodeinfoframe="false" query_stage="Complete">
+		<Manufacturer id="86" name="AEON Labs">
 			<Product type="103" id="60" name="ZW096 Smart Switch 6" />
 		</Manufacturer>
 		<CommandClasses>
@@ -1006,11 +575,11 @@
 			</CommandClass>
 			<CommandClass id="50" name="COMMAND_CLASS_METER" version="3" request_flags="2" innif="true">
 				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="0" label="Energy" units="kWh" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="60.790" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Previous Reading" units="kWh" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="60.743" />
+				<Value type="decimal" genre="user" instance="1" index="0" label="Energy" units="kWh" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="61.603" />
+				<Value type="decimal" genre="user" instance="1" index="1" label="Previous Reading" units="kWh" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="61.402" />
 				<Value type="int" genre="user" instance="1" index="2" label="Interval" units="seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="65535" />
 				<Value type="decimal" genre="user" instance="1" index="8" label="Power" units="W" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0.000" />
-				<Value type="decimal" genre="user" instance="1" index="16" label="Voltage" units="V" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="122.264" />
+				<Value type="decimal" genre="user" instance="1" index="16" label="Voltage" units="V" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="122.532" />
 				<Value type="decimal" genre="user" instance="1" index="20" label="Current" units="A" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0.000" />
 				<Value type="bool" genre="user" instance="1" index="32" label="Exporting" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
 				<Value type="button" genre="system" instance="1" index="33" label="Reset" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
@@ -1043,11 +612,11 @@
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" after_mark="true" innif="true">
 				<Instance index="1" />
 			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
+			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="6" innif="true">
 				<Instance index="1" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="1792" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="1792" />
+				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
+				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
+				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
 			</CommandClass>
 			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
@@ -1086,7 +655,6 @@
 				<Value type="int" genre="config" instance="1" index="84" label="RGB Brightness in Energy Mode" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="16777215" value="5263440">
 					<Help>Configure the brightness level of RGB LED (0%-100%) when it is in Energy Mode/momentary indicate mode. Byte 1: Red Color Byte 2: Green Color Byte 3: Blue Color</Help>
 				</Value>
-				<Value type="byte" genre="config" instance="1" index="85" label="Parameter #85" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="5" />
 				<Value type="bool" genre="config" instance="1" index="90" label="Enables/disables parameter 91/92" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False">
 					<Help>Enable/disable Wattage threshold and percent.</Help>
 				</Value>
@@ -1181,7 +749,7 @@
 			</CommandClass>
 			<CommandClass id="129" name="COMMAND_CLASS_CLOCK" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
-				<Value type="list" genre="user" instance="1" index="0" label="Day" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="6" size="1">
+				<Value type="list" genre="user" instance="1" index="0" label="Day" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
 					<Item label="Monday" value="1" />
 					<Item label="Tuesday" value="2" />
 					<Item label="Wednesday" value="3" />
@@ -1190,18 +758,16 @@
 					<Item label="Saturday" value="6" />
 					<Item label="Sunday" value="7" />
 				</Value>
-				<Value type="byte" genre="user" instance="1" index="1" label="Hour" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="6" />
-				<Value type="byte" genre="user" instance="1" index="2" label="Minute" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="46" />
+				<Value type="byte" genre="user" instance="1" index="1" label="Hour" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="11" />
+				<Value type="byte" genre="user" instance="1" index="2" label="Minute" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="8" />
 			</CommandClass>
 			<CommandClass id="130" name="COMMAND_CLASS_HAIL" version="1" request_flags="4" after_mark="true" innif="true">
 				<Instance index="1" />
 			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
+			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="6" innif="true">
 				<Instance index="1" />
 				<Associations num_groups="2">
-					<Group index="1" max_associations="5" label="LifeLine" auto="true">
-						<Node id="1" />
-					</Group>
+					<Group index="1" max_associations="5" label="LifeLine" auto="true" />
 					<Group index="2" max_associations="5" label="Retransmit Switch CC" auto="false" />
 				</Associations>
 			</CommandClass>
@@ -1213,7 +779,22 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="16" name="Kitchen Motion Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
+	<Node id="16" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Probe">
+		<Manufacturer id="0" name="">
+			<Product type="0" id="0" name="" />
+		</Manufacturer>
+		<CommandClasses>
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1">
+				<Instance index="1" />
+				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
+			</CommandClass>
+			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="1" request_flags="2">
+				<Instance index="1" />
+				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
+			</CommandClass>
+		</CommandClasses>
+	</Node>
+	<Node id="17" name="" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
 		<Manufacturer id="14a" name="Ecolink">
 			<Product type="4" id="1" name="Motion Detector" />
 		</Manufacturer>
@@ -1224,7 +805,7 @@
 			</CommandClass>
 			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="2" min="0" max="0" value="False" />
+				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
 				<SensorMap index="0" type="255" />
 			</CommandClass>
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1">
@@ -1301,121 +882,6 @@
 			</CommandClass>
 			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="42" />
-			</CommandClass>
-			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="14400" />
-				<Value type="int" genre="system" instance="1" index="1" label="Minimum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
-				<Value type="int" genre="system" instance="1" index="2" label="Maximum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="604800" />
-				<Value type="int" genre="system" instance="1" index="3" label="Default Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="14400" />
-				<Value type="int" genre="system" instance="1" index="4" label="Wake-up Interval Step" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="200" />
-			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Associations num_groups="2">
-					<Group index="1" max_associations="5" label="Lifeline" auto="true">
-						<Node id="1" />
-					</Group>
-					<Group index="2" max_associations="5" label="Basic Report" auto="false" />
-				</Associations>
-			</CommandClass>
-			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="string" genre="system" instance="1" index="0" label="Library Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="6" />
-				<Value type="string" genre="system" instance="1" index="1" label="Protocol Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="4.05" />
-				<Value type="string" genre="system" instance="1" index="2" label="Application Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="10.01" />
-			</CommandClass>
-		</CommandClasses>
-	</Node>
-	<Node id="17" name="Stairs Motion Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="14a" name="Ecolink">
-			<Product type="4" id="1" name="Motion Detector" />
-		</Manufacturer>
-		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" innif="true" setasreport="true">
-				<Instance index="1" />
-				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="True" />
-				<SensorMap index="0" type="255" />
-			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3079" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3072" />
-			</CommandClass>
-			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="config" instance="1" index="1" label="Basic Set Report when sensor is restored" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Configures the sensor to send or not send Basic Set commands of 0x00 to nodes in Association group 2 turning the devices off when the sensor is in a restored state (i.e. motion not detected). By default the sensor does NOT send Basic Set commands of 0x00.</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="255" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="2" label="Basic Set Report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Configures the sensor to either to send or not to send Sensor Binary Report commands to Association Group 1 when the sensor is faulted and restored.</Help>
-					<Item label="Enable Binary Reports" value="0" />
-					<Item label="Disable Binary Reports" value="255" />
-				</Value>
-			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="5" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="8" />
-				<Value type="byte" genre="user" instance="1" index="11" label="Power Management" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="115" name="COMMAND_CLASS_POWERLEVEL" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="system" instance="1" index="0" label="Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="byte" genre="system" instance="1" index="1" label="Timeout" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="system" instance="1" index="2" label="Set Powerlevel" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="byte" genre="system" instance="1" index="3" label="Test Node" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="list" genre="system" instance="1" index="4" label="Test Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="5" label="Frame Count" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="button" genre="system" instance="1" index="6" label="Test" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="system" instance="1" index="7" label="Report" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="list" genre="system" instance="1" index="8" label="Test Status" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Failed" value="0" />
-					<Item label="Success" value="1" />
-					<Item label="In Progress" value="2" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="9" label="Acked Frames" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
 				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="100" />
 			</CommandClass>
 			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="2" innif="true">
@@ -1443,8 +909,8 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="18" name="ZWave Repeater" location="" basic="4" generic="15" specific="1" roletype="5" devicetype="6912" nodetype="0" type="Basic Repeater Slave" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="86" name="Aeotec">
+	<Node id="18" name="" location="" basic="4" generic="15" specific="1" roletype="5" devicetype="6912" nodetype="0" type="Basic Repeater Slave" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
+		<Manufacturer id="86" name="AEON Labs">
 			<Product type="104" id="75" name="ZW117 Range Extender 6" />
 		</Manufacturer>
 		<CommandClasses>
@@ -1581,7 +1047,7 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="23" name="Kitchen Siren" location="" basic="4" generic="16" specific="5" roletype="5" devicetype="3840" nodetype="0" type="Siren" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
+	<Node id="23" name="" location="" basic="4" generic="16" specific="5" roletype="5" devicetype="3840" nodetype="0" type="Siren" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
 		<Manufacturer id="14a" name="Ecolink">
 			<Product type="5" id="a" name="Unknown: type=0005, id=000a" />
 		</Manufacturer>
@@ -1703,327 +1169,28 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="25" name="Basement Door Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="14a" name="Ecolink">
-			<Product type="4" id="2" name="Unknown: type=0004, id=0002" />
+	<Node id="25" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
+		<Manufacturer id="0" name="">
+			<Product type="0" id="0" name="" />
 		</Manufacturer>
 		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" innif="true">
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1">
 				<Instance index="1" />
 				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 			</CommandClass>
-			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
+			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="1" request_flags="2">
 				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="255" />
-			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3079" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3072" />
-			</CommandClass>
-			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="5" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="9" label="Access Control" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="23" />
-				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="11" label="Power Management" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="115" name="COMMAND_CLASS_POWERLEVEL" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="system" instance="1" index="0" label="Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="byte" genre="system" instance="1" index="1" label="Timeout" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="system" instance="1" index="2" label="Set Powerlevel" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="byte" genre="system" instance="1" index="3" label="Test Node" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="list" genre="system" instance="1" index="4" label="Test Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="5" label="Frame Count" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="button" genre="system" instance="1" index="6" label="Test" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="system" instance="1" index="7" label="Report" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="list" genre="system" instance="1" index="8" label="Test Status" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Failed" value="0" />
-					<Item label="Success" value="1" />
-					<Item label="In Progress" value="2" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="9" label="Acked Frames" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="100" />
-			</CommandClass>
-			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="14400" />
-				<Value type="int" genre="system" instance="1" index="1" label="Minimum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
-				<Value type="int" genre="system" instance="1" index="2" label="Maximum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="604800" />
-				<Value type="int" genre="system" instance="1" index="3" label="Default Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="14400" />
-				<Value type="int" genre="system" instance="1" index="4" label="Wake-up Interval Step" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="200" />
-			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Associations num_groups="2">
-					<Group index="1" max_associations="1" label="Group 1" auto="true">
-						<Node id="1" />
-					</Group>
-					<Group index="2" max_associations="3" label="Group 2" auto="false" />
-				</Associations>
-			</CommandClass>
-			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="string" genre="system" instance="1" index="0" label="Library Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="6" />
-				<Value type="string" genre="system" instance="1" index="1" label="Protocol Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="4.05" />
-				<Value type="string" genre="system" instance="1" index="2" label="Application Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="10.01" />
+				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="27" name="Wallmote" location="" basic="4" generic="24" specific="1" roletype="4" devicetype="7172" nodetype="0" type="Basic Wall Controller" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
-		<Manufacturer id="86" name="Aeotec">
-			<Product type="102" id="82" name="ZW130 WallMote Quad" />
+	<Node id="27" name="" location="" basic="0" generic="0" specific="0" type="" listening="true" frequentListening="false" beaming="false" routing="false" max_baud_rate="0" version="0" query_stage="Complete">
+		<Manufacturer id="0" name="">
+			<Product type="0" id="0" name="" />
 		</Manufacturer>
-		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="5" getsupported="false">
-				<Instance index="1" />
-				<Instance index="2" endpoint="1" />
-				<Instance index="3" endpoint="2" />
-				<Instance index="4" endpoint="3" />
-				<Instance index="5" endpoint="4" />
-				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="37" name="COMMAND_CLASS_SWITCH_BINARY" version="1" request_flags="5" after_mark="true" getsupported="false" innif="true">
-				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Switch" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-			</CommandClass>
-			<CommandClass id="38" name="COMMAND_CLASS_SWITCH_MULTILEVEL" version="4" request_flags="1" after_mark="true" getsupported="false" innif="true">
-				<Instance index="1" />
-				<Instance index="2" endpoint="1" />
-				<Instance index="3" endpoint="2" />
-				<Instance index="4" endpoint="3" />
-				<Instance index="5" endpoint="4" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Level" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="user" instance="1" index="1" label="Bright" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="user" instance="1" index="2" label="Dim" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="bool" genre="system" instance="1" index="3" label="Ignore Start Level" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="True" />
-				<Value type="byte" genre="system" instance="1" index="4" label="Start Level" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="91" name="COMMAND_CLASS_CENTRAL_SCENE" version="1" request_flags="5" innif="true" scenecount="0">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Scene Count" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="1" label="Button One" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="2" label="Button Two" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="3" label="Button Three" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="4" label="Button Four" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="5" label="Other" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-				<Instance index="2" endpoint="1" />
-				<Instance index="3" endpoint="2" />
-				<Instance index="4" endpoint="3" />
-				<Instance index="5" endpoint="4" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="7172" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="7172" />
-				<Value type="byte" genre="system" instance="2" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="short" genre="system" instance="2" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="short" genre="system" instance="2" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="byte" genre="system" instance="3" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="short" genre="system" instance="3" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="short" genre="system" instance="3" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="byte" genre="system" instance="4" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="short" genre="system" instance="4" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="short" genre="system" instance="4" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="byte" genre="system" instance="5" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="short" genre="system" instance="5" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="short" genre="system" instance="5" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="96" name="COMMAND_CLASS_MULTI_INSTANCE/CHANNEL" version="4" request_flags="1" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="config" instance="1" index="1" label="Touch sound" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="1" size="1">
-					<Help>This will enable or disable the sound effects when you press or touch the sensing area</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="1" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="2" label="Touch vibration" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="1" size="1">
-					<Help>This will enable or disable the vibration effects when you press or touch the sensing area</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="1" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="3" label="Button slide function" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="1" size="1">
-					<Help>This will enable or disable control by sliding the button area</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="1" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="4" label="Report type" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="1" size="1">
-					<Help>To configure which report will be sent when pressing the buttons</Help>
-					<Item label="Send nothing" value="0" />
-					<Item label="Send Central Scene Command Notification" value="1" />
-					<Item label="Send Central Scene Command Notification and Configuration report" value="3" />
-				</Value>
-				<Value type="int" genre="config" instance="1" index="5" label="Color when button is pressed" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="65280">
-					<Help>To configure which color will be displayed when the button is pressed. Value 1: (msb) Red. Value 2: Green. Value 3: Blue. Value 4: Reserved</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="33" label="Test the LED, buzzer and vibrator" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0">
-					<Help>Get the LED Strip color value Value 1: (msb) Red. Value 2: Green. Value 3: Blue. Value 4: buzzer and vibrator. (1=ON, 0=OFF)</Help>
-				</Value>
-				<Value type="byte" genre="config" instance="1" index="39" label="Set the low battery value" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="10" max="50" value="20">
-					<Help>Set the low battery value. Range: 10% - 50%.</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="255" label="Reset To Factory Defaults" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="1" size="4">
-					<Help>Reset to factory defaults</Help>
-					<Item label="Reset to factory default setting" value="0" />
-					<Item label="Normal" value="1" />
-					<Item label="Reset to factory default setting and removed from the z-wave network" value="1431655765" />
-				</Value>
-			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="4" request_flags="1" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="11" label="Power Management" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-			</CommandClass>
-			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="115" name="COMMAND_CLASS_POWERLEVEL" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="system" instance="1" index="0" label="Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="byte" genre="system" instance="1" index="1" label="Timeout" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="system" instance="1" index="2" label="Set Powerlevel" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="byte" genre="system" instance="1" index="3" label="Test Node" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="list" genre="system" instance="1" index="4" label="Test Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="5" label="Frame Count" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="button" genre="system" instance="1" index="6" label="Test" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="system" instance="1" index="7" label="Report" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="list" genre="system" instance="1" index="8" label="Test Status" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Failed" value="0" />
-					<Item label="Success" value="1" />
-					<Item label="In Progress" value="2" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="9" label="Acked Frames" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="100" />
-			</CommandClass>
-			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="1" innif="true">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="1" label="Minimum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="2" label="Maximum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="864000" />
-				<Value type="int" genre="system" instance="1" index="3" label="Default Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="4" label="Wake-up Interval Step" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="240" />
-			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-				<Instance index="2" endpoint="1" />
-				<Instance index="3" endpoint="2" />
-				<Instance index="4" endpoint="3" />
-				<Instance index="5" endpoint="4" />
-				<Associations num_groups="9">
-					<Group index="1" max_associations="1" label="Lifeline" auto="true" multiInstance="true">
-						<Node id="1" />
-					</Group>
-					<Group index="2" max_associations="5" label="On/Off control via Button 1" auto="false" multiInstance="true" />
-					<Group index="3" max_associations="5" label="Dimmer control via Button 1" auto="false" multiInstance="true" />
-					<Group index="4" max_associations="5" label="On/Off control via Button 2" auto="false" multiInstance="true" />
-					<Group index="5" max_associations="5" label="Dimmer control via Button 2" auto="false" multiInstance="true" />
-					<Group index="6" max_associations="5" label="On/Off control via Button 3" auto="false" multiInstance="true" />
-					<Group index="7" max_associations="5" label="Dimmer control via Button 3" auto="false" multiInstance="true" />
-					<Group index="8" max_associations="5" label="On/Off control via Button 4" auto="false" multiInstance="true" />
-					<Group index="9" max_associations="5" label="Dimmer control via Button 4" auto="false" multiInstance="true" />
-				</Associations>
-			</CommandClass>
-			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-				<Value type="string" genre="system" instance="1" index="0" label="Library Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="3" />
-				<Value type="string" genre="system" instance="1" index="1" label="Protocol Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="4.33" />
-				<Value type="string" genre="system" instance="1" index="2" label="Application Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="1.08" />
-			</CommandClass>
-			<CommandClass id="142" name="COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION" version="1" request_flags="5" innif="true">
-				<Instance index="1" />
-				<Instance index="2" endpoint="1" />
-				<Instance index="3" endpoint="2" />
-				<Instance index="4" endpoint="3" />
-				<Instance index="5" endpoint="4" />
-				<Associations num_groups="9">
-					<Group index="1" max_associations="1" label="Lifeline" auto="true" multiInstance="true">
-						<Node id="1" />
-					</Group>
-					<Group index="2" max_associations="5" label="On/Off control via Button 1" auto="false" multiInstance="true" />
-					<Group index="3" max_associations="5" label="Dimmer control via Button 1" auto="false" multiInstance="true" />
-					<Group index="4" max_associations="5" label="On/Off control via Button 2" auto="false" multiInstance="true" />
-					<Group index="5" max_associations="5" label="Dimmer control via Button 2" auto="false" multiInstance="true" />
-					<Group index="6" max_associations="5" label="On/Off control via Button 3" auto="false" multiInstance="true" />
-					<Group index="7" max_associations="5" label="Dimmer control via Button 3" auto="false" multiInstance="true" />
-					<Group index="8" max_associations="5" label="On/Off control via Button 4" auto="false" multiInstance="true" />
-					<Group index="9" max_associations="5" label="Dimmer control via Button 4" auto="false" multiInstance="true" />
-				</Associations>
-			</CommandClass>
-		</CommandClasses>
+		<CommandClasses />
 	</Node>
-	<Node id="28" name="Audio Detector" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3073" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
+	<Node id="28" name="" location="" basic="4" generic="24" specific="1" roletype="6" devicetype="3073" nodetype="0" type="Basic Wall Controller" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
 		<Manufacturer id="14a" name="Ecolink">
 			<Product type="5" id="f" name="FireFighter" />
 		</Manufacturer>
@@ -2038,7 +1205,7 @@
 			</CommandClass>
 			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="7" innif="true">
 				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="78.26" />
+				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="74.66" />
 			</CommandClass>
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
@@ -2132,12 +1299,12 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="29" name="Garage Door Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
+	<Node id="29" name="" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3072" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
 		<Manufacturer id="14a" name="Ecolink">
-			<Product type="4" id="2" name="Unknown: type=0004, id=0002" />
+			<Product type="4" id="2" name="Door/Window Sensor" />
 		</Manufacturer>
 		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" innif="true">
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" innif="true" setasreport="true">
 				<Instance index="1" />
 				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 			</CommandClass>
@@ -2224,10 +1391,10 @@
 			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
 				<Associations num_groups="2">
-					<Group index="1" max_associations="1" label="Group 1" auto="true">
+					<Group index="1" max_associations="5" label="Lifeline" auto="true">
 						<Node id="1" />
 					</Group>
-					<Group index="2" max_associations="3" label="Group 2" auto="false" />
+					<Group index="2" max_associations="5" label="Basic Report" auto="false" />
 				</Associations>
 			</CommandClass>
 			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
@@ -2238,8 +1405,8 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="34" name="TV Multi Sensor" location="" basic="4" generic="33" specific="1" roletype="6" devicetype="3079" nodetype="0" type="Routing Multilevel Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
-		<Manufacturer id="86" name="Aeotec">
+	<Node id="34" name="" location="" basic="4" generic="33" specific="1" roletype="6" devicetype="3079" nodetype="0" type="Routing Multilevel Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Complete">
+		<Manufacturer id="86" name="AEON Labs">
 			<Product type="102" id="64" name="ZW100 MultiSensor 6" />
 		</Manufacturer>
 		<CommandClasses>
@@ -2249,24 +1416,17 @@
 			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
 				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="15" />
 				<SensorMap index="0" type="27" />
 				<SensorMap index="0" type="31" />
-				<SensorMap index="0" type="38" />
-				<SensorMap index="0" type="54" />
-				<SensorMap index="0" type="201" />
-				<SensorMap index="0" type="217" />
 				<SensorMap index="0" type="224" />
 				<SensorMap index="0" type="228" />
-				<SensorMap index="0" type="240" />
 			</CommandClass>
 			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="5" innif="true">
 				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="76.7" />
+				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="84.8" />
 				<Value type="decimal" genre="user" instance="1" index="3" label="Luminance" units="lux" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
-				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="41" />
+				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="48" />
 				<Value type="decimal" genre="user" instance="1" index="27" label="Ultraviolet" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
-				<Value type="decimal" genre="user" instance="1" index="37" label="Radon Concentration" units="bq/m3" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="60" />
 			</CommandClass>
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
@@ -2280,32 +1440,36 @@
 			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
 				<Value type="list" genre="config" instance="1" index="2" label="Wake up 10 minutes on Power On" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Stay awake for 10 minutes after batteries are inserted</Help>
-					<Item label="No" value="0" />
-					<Item label="Yes" value="1" />
+					<Help>Enable/Disable waking up for 10 minutes when re-power on (battery mode) the MultiSensor</Help>
+					<Item label="Disable" value="0" />
+					<Item label="Enable" value="1" />
 				</Value>
-				<Value type="short" genre="config" instance="1" index="3" label="On time" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="15300" value="120">
+				<Value type="short" genre="config" instance="1" index="3" label="On time" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="10" max="3600" value="240">
 					<Help>Duration that the motion sensor must observe no motion before it will return to the no-motion state. If value greater than 255, effective value is rounded up to the nearest minute (255 -&gt; 255 seconds, 256 -&gt; 300 seconds)</Help>
 				</Value>
 				<Value type="list" genre="config" instance="1" index="4" label="Enable Motion Sensor" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="5" size="1">
-					<Help>Enable Motion Sensor</Help>
+					<Help>Enable Motion Sensor, (1 minimum, 5 maximum sensitivity level)</Help>
 					<Item label="Disabled" value="0" />
-					<Item label="Enabled level 1 (minimum sensitivity)" value="1" />
+					<Item label="Enabled level 1" value="1" />
 					<Item label="Enabled level 2" value="2" />
 					<Item label="Enabled level 3" value="3" />
 					<Item label="Enabled level 4" value="4" />
-					<Item label="Enabled level 5 (maximum sensitivity)" value="5" />
+					<Item label="Enabled level 5" value="5" />
 				</Value>
-				<Value type="list" genre="config" instance="1" index="5" label="Command Options" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2" vindex="1" size="1">
+				<Value type="list" genre="config" instance="1" index="5" label="Command Options" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="2" vindex="0" size="1">
 					<Help>Which commands to send when PIR motion sensor triggered OZW Ideal Value is Binary Sensor Report</Help>
-					<Item label="Basic Set (default) " value="0" />
-					<Item label="Binary Sensor Report" value="1" />
+					<Item label="Basic Set" value="1" />
+					<Item label="Binary Sensor Report" value="2" />
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="8" label="Awake timeout" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="8" max="255" value="30">
 					<Help>Set the timeout of awake after the Wake Up CC is sent out. Available rang: 8 to 255 seconds.</Help>
 				</Value>
-				<Value type="short" genre="config" instance="1" index="9" label="Current power mode" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0">
-					<Help>Report the current power mode and the product state for battery power mode. Value1 (MSB): 0x00=USB power mode, 0x01=Battery power mode. Value2 (LSB): 0x00= keep sleep state for Battery power mode, 0x01=keep awake for 10 minutes for battery power mode. Note: this parameter cannot be used as Set usage.</Help>
+				<Value type="list" genre="config" instance="1" index="9" label="Current power mode" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="257" vindex="0" size="2">
+					<Help>Report the current power mode and the product state for battery power mode</Help>
+					<Item label="USB power, sleeping mode after re-power on" value="0" />
+					<Item label="USB power, keep awake for 10 minutes after re-power on" value="1" />
+					<Item label="Battery power, sleeping mode after re-power on" value="256" />
+					<Item label="Battery power, keep awake for 10 minutes after re-power on" value="257" />
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="39" label="Low Battery" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="10" max="50" value="20">
 					<Help>Configure low battery value Value=10 to 50.</Help>
@@ -2315,7 +1479,7 @@
 					<Item label="Disabled" value="0" />
 					<Item label="Enabled" value="1" />
 				</Value>
-				<Value type="short" genre="config" instance="1" index="41" label="Temperature Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="20">
+				<Value type="int" genre="config" instance="1" index="41" label="Temperature Reporting Threshold" units="C/F" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="39321" value="20">
 					<Help>Threshold change in temperature to induce an automatic report. Note: 1. The unit is Fahrenheit for US version, Celsius for EU/AU version. 2. The value contains one decimal point. E.g. if the value is set to 20, the threshold value = 2.0 C (EU/AU) or 2.0 F (US). When the temperature has changed by 2.0 (of the appropriate unit), a temperature report will be sent.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="42" label="Humidity Reporting Threshold" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="10">
@@ -2350,10 +1514,10 @@
 				<Value type="byte" genre="config" instance="1" index="52" label="Set the lower limit value of humidity sensor" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="50">
 					<Help>When the measurement is less than this lower limit, which will trigger to sent out a sensor report. Lower limit range: 0 to 100%. E.g. The default lower limit is 50%, when the measurement is less than 50%, it will be triggered to send out a humidity sensor report.</Help>
 				</Value>
-				<Value type="short" genre="config" instance="1" index="53" label="Set the upper limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="1000">
+				<Value type="short" genre="config" instance="1" index="53" label="Set the upper limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="30000" value="1000">
 					<Help>When the measurement is more than this upper limit, which will trigger to sent out a sensor report. Upper limit range: 0 to 30000 Lux. E.g. The default upper limit is 1000Lux, when the measurement is more than 1000Lux, it will be triggered to send out a Lighting sensor report.</Help>
 				</Value>
-				<Value type="short" genre="config" instance="1" index="54" label="Set the lower limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="100" value="50">
+				<Value type="short" genre="config" instance="1" index="54" label="Set the lower limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="30000" value="100">
 					<Help>When the measurement is less than this lower limit, which will trigger to sent out a sensor report. Lower limit range: 0 to 30000 Lux. E.g. The default lower limit is 100Lux, when the measurement is less than 100Lux, it will be triggered to send out a Lighting sensor report.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="55" label="Set the upper limit value of ultraviolet sensor" units="UV" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="11" value="8">
@@ -2363,16 +1527,16 @@
 					<Help>When the measurement is less than this upper limit, which will trigger to sent out a sensor report. Lower limit range: 1 to 11. E.g. The default lower limit is 4, when the measurement is less than 8, it will be triggered to send out a ultraviolet sensor report.</Help>
 				</Value>
 				<Value type="short" genre="config" instance="1" index="57" label="Set the recover limit value of temperature sensor" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="5121">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that, the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that, the lower limit report would be disabled again until the measurement greater or egal (Lower limit + Recover limit). 3. High byte is the recover limit value. Low byte is the unit (0x01=Celsius, 0x02=Fahrenheit). 4. Recover limit range: 1.0 to 25.5 C/ F (0x0101 to 0xFF01 or 0x0102 to 0xFF02). E.g. The default recover limit value is 2.0 C/F (0x1401/0x1402), when the measurement is less than (Upper limit - 2), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 2), the lower limit report would be enabled one time.</Help>
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that, the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that, the lower limit report would be disabled again until the measurement greater or equal (Lower limit + Recover limit). 3. High byte is the recover limit value. Low byte is the unit (0x01=Celsius, 0x02=Fahrenheit). 4. Recover limit range: 1.0 to 25.5 C/ F (0x0101 to 0xFF01 or 0x0102 to 0xFF02). E.g. The default recover limit value is 2.0 C/F (0x1401/0x1402), when the measurement is less than (Upper limit - 2), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 2), the lower limit report would be enabled one time.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="58" label="Set the recover limit value of humidity sensor" units="%" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="255" value="5">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or egal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or equal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
 				</Value>
-				<Value type="byte" genre="config" instance="1" index="59" label="Set the recover limit value of Lighting sensor" units="lux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="50" value="100">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or egal (Lower limit + Recover limit). 3. Unit = 10*Recover limit (Lux) 4. Recover limit range: 10 to 2550Lux (0x01 to 0xFF). E.g. The default recover limit value is 100 Lux, when the measurement is less than (Upper limit - 100), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 100), the lower limit report would be enabled one time.</Help>
+				<Value type="byte" genre="config" instance="1" index="59" label="Set the recover limit value of Lighting sensor" units="10xlux" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="255" value="10">
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or equal (Lower limit + Recover limit). 3. Unit = 10*Recover limit (Lux) 4. Recover limit range: 10 to 2550Lux (0x01 to 0xFF). E.g. The default recover limit value is 100 Lux, when the measurement is less than (Upper limit - 100), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 100), the lower limit report would be enabled one time.</Help>
 				</Value>
-				<Value type="byte" genre="config" instance="1" index="60" label="Set the recover limit value of Ultraviolet sensor" units="UV" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="50" value="5">
-					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or egal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or egal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
+				<Value type="byte" genre="config" instance="1" index="60" label="Set the recover limit value of Ultraviolet sensor" units="UV" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="1" max="5" value="2">
+					<Help>Note: 1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. After that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit). 2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. After that the lower limit report would be disabled again until the measurement greater or equal(Lower limit + Recover limit). 3. Recover limit range: 1 to 50% (0x01 to 0x32). E.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="61" label="Get the out-of-limit state of the Sensors" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0">
 					<Help>Get the out-of-limit state of the Sensors. Bit mask = 0, within the limit. Bit mask = 1, out of the limit. Bit 0 = temperature. Bit 1 = humidity. Bit 2 = luminance. Bit 3 = ultraviolet. The above bit masks are used to indicate whether the current measurements of the Sensors are out of the lower limit. The below bit masks are used to indicate whether the current measurements of the Sensors are out of the upper limit. Bit 4 = temperature. Bit 5 = humidity. Bit 6 = luminance. Bit 7 = ultraviolet.</Help>
@@ -2382,10 +1546,11 @@
 					<Item label="Celsius" value="1" />
 					<Item label="Fahrenheit" value="2" />
 				</Value>
-				<Value type="list" genre="config" instance="1" index="81" label="LED report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>LED when motion/vibration triggered</Help>
-					<Item label="Enable" value="0" />
-					<Item label="Disable" value="1" />
+				<Value type="list" genre="config" instance="1" index="81" label="LED blinking report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="2" vindex="0" size="1">
+					<Help>Enable/disable the LED blinking for motion, wakeup, and sensor report.</Help>
+					<Item label="Enable LED blinking" value="0" />
+					<Item label="Disable LED blinking only when the PIR is triggered" value="1" />
+					<Item label="Completely disable LED for motion, wakeup, and sensor report" value="2" />
 				</Value>
 				<Value type="button" genre="config" instance="1" index="100" label="Reset Params 101-103 to Default" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" affects="101,102,103">
 					<Help>Reset The Reporting Group Configuration (101 to 103) to default</Help>
@@ -2412,7 +1577,7 @@
 					<Help>The interval for sending reports for group 3. The effective behavior of this setting depends on the device&apos;s power source: - If the device is on USB power, it will send the reports at the configured interval; set it to something low (~15-60 seconds) to get frequent updates from a powered device. - If the device is on battery, the sensor will never report in more often than its configured wake interval, regardless of what this setting is configured to; setting this to 3601 when the wake interval is 3600 would make this group report in every 7200 seconds. 240 seconds is the minimum wake interval, but will quickly use battery.</Help>
 				</Value>
 				<Value type="short" genre="config" instance="1" index="201" label="Temperature Calibration" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="1">
-					<Help>The calibration value = standard value - measure value. (the available value range is [-100, 100] or [-10C, 10C]). Note: 1. The value contains one decimal point. E.g. if the value is set to 20, the calibration value is 2.0 (EU/AU version) or 2.0 (US version) 2. The calibration value = standard value - measure value. If measure value =25.3 and the standard value = 23.2, so the calibration value= 23.2-25.3 = -2.1 (0xEB). If the measure value =30.1 and the standard value = 33.2, so the calibration value= 33.2-30.1= 3.1 (0x1F). Default value: 1 for EU/AU version, 2 for US version.</Help>
+					<Help>Temperature calibration (the available value range is [-128,127] or [-12.8C,12.7C]). Note: 1. High byte is the calibration value. Low byte is the unit (0x01=Celsius,0x02=Fahrenheit) 2. The calibration value (high byte) contains one decimal point. E.g. if the value is set to 20 (0x1401), the calibration value is 2.0C (EU/AU version) or if the value is set to 20 (0x1402), the calibration value is 2.0F (US version) 3. The calibration value (high byte) = standard value - measure value. E.g. If measure value =25.3C and the standard value = 23.2C, so the calibration value= 23.2C - 25.3C= -2.1C (0xEB). If the measure value =30.1C and the standard value = 33.2C, so the calibration value= 33.2C - 30.1C=3.1C (0x1F). Default value: 1 for EU/AU version, 2 for US version.</Help>
 				</Value>
 				<Value type="byte" genre="config" instance="1" index="202" label="Humidity Calibration" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0">
 					<Help>The calibration value = standard value - measure value. (the available value range is [-50, 50]). If measure value =80RH and the standard value = 75RH, so the calibration value= 75RH-80RH = -5RH (0xFB). If the measure value =85RH and the standard value = 90RH, so the calibration value= 90RH-85RH = 5RH (0x05).</Help>
@@ -2428,11 +1593,14 @@
 					<Item label="Disable" value="0" />
 					<Item label="Enable" value="1" />
 				</Value>
-				<Value type="button" genre="config" instance="1" index="255" label="Reset to default" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0">
-					<Help>Reset to factory defaults.</Help>
+				<Value type="list" genre="config" instance="1" index="255" label="Reset To Factory Defaults" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="1" size="4">
+					<Help>Reset to factory defaults</Help>
+					<Item label="Reset to factory default setting" value="0" />
+					<Item label="Normal" value="1" />
+					<Item label="Reset to factory default setting and removed from the z-wave network" value="1431655765" />
 				</Value>
 			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="3" request_flags="2" innif="true">
+			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="3" request_flags="2" getsupported="false" innif="true">
 				<Instance index="1" />
 				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
@@ -2510,7 +1678,7 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="38" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
+	<Node id="38" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Session">
 		<Manufacturer id="0" name="">
 			<Product type="0" id="0" name="" />
 		</Manufacturer>
@@ -2525,7 +1693,7 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="39" name="" location="" basic="4" generic="49" specific="1" type="Simple Meter" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Configuration">
+	<Node id="39" name="" location="" basic="4" generic="49" specific="1" type="Simple Meter" listening="true" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
 		<Manufacturer id="0" name="">
 			<Product type="0" id="0" name="" />
 		</Manufacturer>
@@ -2548,7 +1716,7 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="41" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
+	<Node id="41" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Probe">
 		<Manufacturer id="0" name="">
 			<Product type="0" id="0" name="" />
 		</Manufacturer>
@@ -2563,139 +1731,18 @@
 			</CommandClass>
 		</CommandClasses>
 	</Node>
-	<Node id="42" name="Front Door Sensor" location="" basic="4" generic="7" specific="1" roletype="6" devicetype="3078" nodetype="0" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="CacheLoad">
-		<Manufacturer id="86" name="Aeotec">
-			<Product type="102" id="78" name="ZW120 Door Window Sensor Gen5" />
+	<Node id="42" name="" location="" basic="4" generic="7" specific="1" type="Notification Sensor" listening="false" frequentListening="false" beaming="true" routing="true" max_baud_rate="40000" version="4" query_stage="Probe">
+		<Manufacturer id="0" name="">
+			<Product type="0" id="0" name="" />
 		</Manufacturer>
 		<CommandClasses>
-			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1" request_flags="4" setasreport="true">
+			<CommandClass id="32" name="COMMAND_CLASS_BASIC" version="1">
 				<Instance index="1" />
 				<Value type="byte" genre="basic" instance="1" index="0" label="Basic" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 			</CommandClass>
-			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
+			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="1" request_flags="2">
 				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
-				<SensorMap index="0" type="23" />
-				<SensorMap index="0" type="232" />
-				<SensorMap index="0" type="248" />
-			</CommandClass>
-			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" after_mark="true" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="94" name="COMMAND_CLASS_ZWAVEPLUS_INFO" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="system" instance="1" index="0" label="ZWave+ Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="1" />
-				<Value type="short" genre="system" instance="1" index="1" label="InstallerIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3078" />
-				<Value type="short" genre="system" instance="1" index="2" label="UserIcon" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="3078" />
-			</CommandClass>
-			<CommandClass id="112" name="COMMAND_CLASS_CONFIGURATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="config" instance="1" index="1" label="Sensor Binary Report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Which value of the Sensor Binary Report will be sent when the door is Opened/Closed</Help>
-					<Item label="Open: 0xFF, Close: 0x00" value="0" />
-					<Item label="Open: 0x00, Close: 0xFF" value="1" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="2" label="Enable wake up 10 minutes when re-power on the sensor" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="1" size="1">
-					<Help>Default setting: Disable</Help>
-					<Item label="Disable" value="0" />
-					<Item label="Enable" value="1" />
-				</Value>
-				<Value type="list" genre="config" instance="1" index="3" label="Basic Set Report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="1" vindex="0" size="1">
-					<Help>Which value of the Basic Set will be sent when the door is Opened/Closed</Help>
-					<Item label="Open: 0xFF, Close: 0x00" value="0" />
-					<Item label="Open: 0x00, Close: 0xFF" value="1" />
-				</Value>
-				<Value type="byte" genre="config" instance="1" index="39" label="Set the low battery value" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="10" max="50" value="10">
-					<Help>10% to 50%</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="111" label="Interval time of battery report" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="2147483647" value="0">
-					<Help>Set the interval time of battery report. Value=0, disable the battery report for a interval time. Value=1 to 0x7FFFFFFF, the interval time of battery report is set. Note: 1, if the value is less than 10, the time unit is second. If the value is more than 10, the time unit is 4 minutes, which means if the value is more than 10 and less than 240, the interval time is 4 minutes. If the value is more than 240 and less than 480, the interval is 8 minutes. 2, if the current battery report falls below the low battery value (configurable parameter 39), it will send battery report=0xFF.</Help>
-				</Value>
-				<Value type="int" genre="config" instance="1" index="121" label="Report type" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="65535" value="17">
-					<Help>To configure which sensor report will be sent when the Sensor is triggered Opened/Closed. Bitsets: 0-&gt;Battery report, 4-&gt;Sensor Binary, 8-&gt;Basic Set, Default setting: 0x00000100 (Basic Set). Ideal Setting for OZW is 17 (Sensor Binary and Battery Report).</Help>
-				</Value>
-				<Value type="list" genre="config" instance="1" index="255" label="Reset To Factory Defaults" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="1" size="4">
-					<Help>Reset to factory defaults</Help>
-					<Item label="Reset to factory default setting" value="0" />
-					<Item label="Normal" value="1" />
-					<Item label="Reset to factory default setting and removed from the z-wave network" value="1431655765" />
-				</Value>
-			</CommandClass>
-			<CommandClass id="113" name="COMMAND_CLASS_ALARM" version="4" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="9" label="Access Control" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="23" />
-				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="254" />
-			</CommandClass>
-			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-			</CommandClass>
-			<CommandClass id="115" name="COMMAND_CLASS_POWERLEVEL" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="list" genre="system" instance="1" index="0" label="Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="byte" genre="system" instance="1" index="1" label="Timeout" units="seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="button" genre="system" instance="1" index="2" label="Set Powerlevel" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="byte" genre="system" instance="1" index="3" label="Test Node" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="list" genre="system" instance="1" index="4" label="Test Powerlevel" units="dB" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Normal" value="0" />
-					<Item label="-1dB" value="1" />
-					<Item label="-2dB" value="2" />
-					<Item label="-3dB" value="3" />
-					<Item label="-4dB" value="4" />
-					<Item label="-5dB" value="5" />
-					<Item label="-6dB" value="6" />
-					<Item label="-7dB" value="7" />
-					<Item label="-8dB" value="8" />
-					<Item label="-9dB" value="9" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="5" label="Frame Count" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-				<Value type="button" genre="system" instance="1" index="6" label="Test" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="button" genre="system" instance="1" index="7" label="Report" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
-				<Value type="list" genre="system" instance="1" index="8" label="Test Status" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="0" size="1">
-					<Item label="Failed" value="0" />
-					<Item label="Success" value="1" />
-					<Item label="In Progress" value="2" />
-				</Value>
-				<Value type="short" genre="system" instance="1" index="9" label="Acked Frames" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-32768" max="32767" value="0" />
-			</CommandClass>
-			<CommandClass id="128" name="COMMAND_CLASS_BATTERY" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="byte" genre="user" instance="1" index="0" label="Battery Level" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="100" />
-			</CommandClass>
-			<CommandClass id="132" name="COMMAND_CLASS_WAKE_UP" version="2" request_flags="2" innif="true">
-				<Instance index="1" />
-				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="1" label="Minimum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="2" label="Maximum Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="16777200" />
-				<Value type="int" genre="system" instance="1" index="3" label="Default Wake-up Interval" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="0" />
-				<Value type="int" genre="system" instance="1" index="4" label="Wake-up Interval Step" units="Seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="240" />
-			</CommandClass>
-			<CommandClass id="133" name="COMMAND_CLASS_ASSOCIATION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Associations num_groups="1">
-					<Group index="1" max_associations="5" label="Lifeline" auto="true">
-						<Node id="1" />
-					</Group>
-				</Associations>
-			</CommandClass>
-			<CommandClass id="134" name="COMMAND_CLASS_VERSION" version="1" request_flags="4" innif="true">
-				<Instance index="1" />
-				<Value type="string" genre="system" instance="1" index="0" label="Library Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="3" />
-				<Value type="string" genre="system" instance="1" index="1" label="Protocol Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="4.05" />
-				<Value type="string" genre="system" instance="1" index="2" label="Application Version" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="1.05" />
+				<Value type="int" genre="system" instance="1" index="0" label="Wake-up Interval" units="Seconds" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="3600" />
 			</CommandClass>
 		</CommandClasses>
 	</Node>

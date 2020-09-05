@@ -78,6 +78,21 @@ cards:
       #   name: Pill Taken Script
 
   - type: entities
+    title: 3D Printer
+    show_header_toggle: false
+    entities:
+      - binary_sensor.octoprint_printing
+      - binary_sensor.octoprint_printing_error
+      - sensor.octoprint_actual_bed_temp
+      - sensor.octoprint_actual_tool0_temp
+      - sensor.octoprint_current_state
+      - sensor.octoprint_job_percentage
+      - sensor.octoprint_target_bed_temp
+      - sensor.octoprint_target_tool0_temp
+      - sensor.octoprint_time_elapsed
+      - sensor.octoprint_time_remaining
+
+  - type: entities
     title: Tile Devices
     show_header_toggle: false
     entities:
@@ -87,24 +102,24 @@ cards:
       - device_tracker.tile_63ca05b6a3619232
       - device_tracker.tile_p_32c03dc7f21001d36d16b47646e4c421
 
-  - type: glance
-    show_icon: true
-    show_name: true
-    show_state: true
-    title: Coronavirus USA
-    entities:
-      - entity: sensor.us_coronavirus_confirmed
-        icon: "mdi:emoticon-neutral-outline"
-        name: Confirmed
-      - entity: sensor.us_coronavirus_current
-        icon: "mdi:emoticon-frown-outline"
-        name: Current
-      - entity: sensor.us_coronavirus_recovered
-        icon: "mdi:emoticon-happy-outline"
-        name: Recovered
-      - entity: sensor.us_coronavirus_deaths
-        icon: "mdi:emoticon-dead-outline"
-        name: Deaths
+  # - type: glance
+  #   show_icon: true
+  #   show_name: true
+  #   show_state: true
+  #   title: Coronavirus USA
+  #   entities:
+  #     - entity: sensor.us_coronavirus_confirmed
+  #       icon: "mdi:emoticon-neutral-outline"
+  #       name: Confirmed
+  #     - entity: sensor.us_coronavirus_current
+  #       icon: "mdi:emoticon-frown-outline"
+  #       name: Current
+  #     - entity: sensor.us_coronavirus_recovered
+  #       icon: "mdi:emoticon-happy-outline"
+  #       name: Recovered
+  #     - entity: sensor.us_coronavirus_deaths
+  #       icon: "mdi:emoticon-dead-outline"
+  #       name: Deaths
 
   - type: glance
     show_icon: true
@@ -279,11 +294,18 @@ cards:
     title: Xiaomi Motion Sensors
     show_header_toggle: false
     entities:
-      - binary_sensor.garage_motion
-      - binary_sensor.patio_camera_motion
-      - binary_sensor.playarea_camera_motion
-      - binary_sensor.frontdoor_camera_motion
-      - binary_sensor.driveway_camera_motion
+      - binary_sensor.motion_sensor_158d00016c2d0e
+      - binary_sensor.motion_sensor_158d00016db6d2
+      - binary_sensor.motion_sensor_158d0001a25041
+      - binary_sensor.motion_sensor_158d0001a662fe
+      - binary_sensor.motion_sensor_158d00024e57d3
+      - binary_sensor.motion_sensor_158d00024e57fb
+      - binary_sensor.motion_sensor_158d00024e842c
+      - binary_sensor.motion_sensor_158d00024ee084
+      - binary_sensor.motion_sensor_158d000272bed1
+      - binary_sensor.motion_sensor_158d000272bf48
+      - binary_sensor.motion_sensor_158d000272bfd7
+      - binary_sensor.motion_sensor_158d00047b6f69
 
   - type: entity-filter
     title: Motion Sensors

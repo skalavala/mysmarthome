@@ -24,7 +24,6 @@ cards:
     show_header_toggle: false
     entities:
       - input_boolean.sharp_tv
-      - light.family_room
       - media_player.living_room
       - switch.downstairs_fragrance
       - sensor.downstairs_multi_sensor_temperature

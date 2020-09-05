@@ -397,7 +397,9 @@ automation:
           scene_id: 1
     action:
       - service: light.toggle
-        entity_id: light.master_bedroom
+        entity_id: light.master_bedroom_1
+      - service: light.toggle
+        entity_id: light.master_bedroom_2
 
   - alias: WallMote Button 2 Pressed
     trigger:

@@ -5,7 +5,6 @@ cards:
     title: Upstairs
     show_header_toggle: true
     entities:
-      - light.master_bedroom
       - entity: light.master_bedroom_1
         name: Suresh's Bedside Light
       - entity: light.master_bedroom_2
@@ -29,7 +28,6 @@ cards:
       - switch.kitchen
       - switch.office_room
       - switch.zwave_smart_switch_switch
-      - light.family_room
       - light.hue_color_lamp_1
       - light.hue_color_lamp_2
       - light.hue_color_lamp_3
@@ -38,7 +36,7 @@ cards:
     title: Fragrance Outlets
     show_header_toggle: true
     entities:
-      - switch.bathroom_fragrance
+      - switch.3d_printer
       - switch.downstairs_fragrance
       - switch.upstairs_fragrance
 

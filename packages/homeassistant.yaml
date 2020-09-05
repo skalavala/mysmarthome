@@ -84,11 +84,6 @@ sensor:
     name: "Windows Server Idle Time"
     value_template: "{{ value }}"
 
-pi_hole:
-  host: !secret pi_hole_ip
-  ssl: false
-  verify_ssl: false
-
 ###############################################################################
 #                _                        _   _
 #     /\        | |                      | | (_)

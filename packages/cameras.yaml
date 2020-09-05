@@ -105,7 +105,7 @@ binary_sensor:
 image_processing:
   - platform: tensorflow
     scan_interval: 10000
-    confidence: 75
+    # confidence: 75
     source:
       - entity_id: camera.frontdoor_camera
       - entity_id: camera.driveway_camera
@@ -116,7 +116,8 @@ image_processing:
       - "/home/homeassistant/.homeassistant/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_latest.jpg"
       - "/home/homeassistant/.homeassistant/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
     model:
-      graph: /home/homeassistant/.homeassistant/tensorflow/frozen_inference_graph.pb
+      graph: /home/homeassistant/.homeassistant/tensorflow/
+      # graph: /home/homeassistant/.homeassistant/tensorflow/frozen_inference_graph.pb
     # categories:
     #   - person
     #   - car

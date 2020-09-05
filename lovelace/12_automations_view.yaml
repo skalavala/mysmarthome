@@ -75,9 +75,6 @@ cards:
     title: Timer Automations
     show_header_toggle: false
     entities:
-      - automation.bathroom_aroma_timer_elapsed
-      - automation.bathroom_aroma_timer_finish
-      - automation.bathroom_aroma_timer_start
       - automation.cancel_wfh_timer_when_suresh_leaves_home
       - automation.downstairs_aroma_timer_elapsed
       - automation.downstairs_aroma_timer_finish

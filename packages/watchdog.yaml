@@ -103,7 +103,6 @@ automation:
         entity_id:
           - switch.basement_left
           - switch.basement_right
-          - switch.bathroom_fragrance
           - switch.downstairs_fragrance
           - switch.front_room
           - switch.guest_bedroom
@@ -113,12 +112,9 @@ automation:
           - switch.prayer_room
           - switch.upstairs_fragrance
           - switch.zwave_smart_switch_switch
-          - light.family_room
-          - light.family_room_2
           - light.hue_color_lamp_1
           - light.hue_color_lamp_2
           - light.hue_color_lamp_3
-          - light.master_bedroom
           - light.master_bedroom_1
           - light.master_bedroom_2
           - light.master_bedroom_3

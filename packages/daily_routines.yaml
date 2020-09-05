@@ -246,16 +246,16 @@ automation:
         value_template: "{{ states('sensor.bedtime_hour') |int == now().hour|int }}"
       - condition: template
         value_template: "{{ (states('sensor.bedtime_minute') |int - 15 ) == now().minute|int }}"
-      - condition: state
-        entity_id: light.family_room
-        state: "on"
+      # - condition: state
+      #   entity_id: light.family_room
+      #   state: "on"
       - condition: state
         entity_id: input_boolean.light_automations
         state: "on"
     action:
       - service: light.turn_on
         data:
-          entity_id: light.family_room
+          entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
           brightness: 30
           color_temp: 154
           transition: 15

@@ -31,7 +31,11 @@ discovery:
   ignore:
     - homekit
 
-shopping_list:
+# shopping_list:
+
+octoprint:
+  host: !secret octoprint_ip
+  api_key: !secret octoprint_key
 
 homekit:
   autostart: true

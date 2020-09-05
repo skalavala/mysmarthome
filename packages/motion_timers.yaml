@@ -182,7 +182,7 @@ automation:
         value_template: "{{ states('input_boolean.movie_time') != 'on' }}"
     action:
       - service: light.turn_on
-        entity_id: light.family_room
+        entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
         data_template:
           brightness: >
             {% if states('binary_sensor.sharp_tv') == "on" %}
@@ -206,10 +206,10 @@ automation:
         to: "idle"
     action:
       - service: light.turn_off
-        entity_id: light.family_room
+        entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
       - delay: "00:00:05"
       - service: light.turn_off
-        entity_id: light.family_room
+        entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
   # Master Bedroom:
   # Motion Detected - Turn ON the lights and extend timer
   ###############################################################################
@@ -253,9 +253,6 @@ automation:
         entity_id: light.master_bedroom_1
       - service: light.turn_off
         entity_id: light.master_bedroom_2
-      - delay: "00:00:05"
-      - service: light.turn_off
-        entity_id: light.master_bedroom
 
   # # Garage:
   # # Motion Detected - Turn ON the light and extend timer

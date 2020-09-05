@@ -1,15 +1,11 @@
 homeassistant:
   customize:
-    timer.timer_bathroom_aroma:
-      hidden: true
     timer.timer_downstairs_aroma:
       hidden: true
     timer.timer_upstairs_aroma:
       hidden: true
 
 timer:
-  timer_bathroom_aroma:
-    duration: "00:30:00"
   timer_downstairs_aroma:
     duration: "01:00:00"
   timer_upstairs_aroma:
@@ -26,31 +22,6 @@ timer:
 ###############################################################################
 
 automation:
-  #
-  # Automations to start timer when they are switched ON
-  #
-  - alias: Bathroom Aroma Timer Start
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: switch.downstairs_fragrance
-        from: "off"
-        to: "on"
-    action:
-      - service: timer.start
-        entity_id: timer.timer_bathroom_aroma
-
-  - alias: Bathroom Aroma Timer Finish
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: switch.downstairs_fragrance
-        from: "on"
-        to: "off"
-    action:
-      - service: timer.finish
-        entity_id: timer.timer_bathroom_aroma
-
   - alias: Downstairs Aroma Timer Start
     initial_state: true
     trigger:
@@ -98,17 +69,6 @@ automation:
   #
   # Timer Elapsed Events
   #
-  - alias: Bathroom Aroma Timer Elapsed
-    initial_state: true
-    trigger:
-      - platform: event
-        event_type: timer.finished
-        event_data:
-          entity_id: timer.timer_bathroom_aroma
-    action:
-      - service: switch.turn_off
-        entity_id: switch.downstairs_fragrance
-
   - alias: Downstairs Aroma Timer Elapsed
     initial_state: true
     trigger:
