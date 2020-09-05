@@ -36,7 +36,6 @@ cards:
     title: Fragrance Outlets
     show_header_toggle: true
     entities:
-      - switch.3d_printer
       - switch.downstairs_fragrance
       - switch.upstairs_fragrance
 

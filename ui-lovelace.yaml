@@ -11,6 +11,7 @@ title: Kalavala's Home
 
 views:
   - !include lovelace/00_myhome_view.yaml
+  - !include lovelace/15_3d_printer.yaml
   - !include lovelace/01_lights_view.yaml
   - !include lovelace/02_climate_view.yaml
   - !include lovelace/03_camera_view.yaml

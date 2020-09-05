@@ -1,0 +1,62 @@
+title: 3D Printer
+icon: mdi:printer-3d
+cards:
+  - type: picture-glance
+    id: 3d_printer_camera
+    title: 3D Printer Camera
+    entity: camera.3d_printer_camera
+    camera_image: camera.3d_printer_camera
+    show_info: false
+    tap_action:
+      action: more-info
+    entities:
+      - binary_sensor.motion_sensor_158d00016c2d0e
+
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: Percent 3D Print Complete
+            unit: "%"
+            entity: sensor.octoprint_job_percentage
+
+  - type: entities
+    title: Octoprint
+    show_header_toggle: false
+    entities:
+      - binary_sensor.octoprint_printing
+      - binary_sensor.octoprint_printing_error
+      - sensor.octoprint_actual_bed_temp
+      - sensor.octoprint_actual_tool0_temp
+      - sensor.octoprint_current_state
+      - sensor.octoprint_job_percentage
+      - sensor.octoprint_target_bed_temp
+      - sensor.octoprint_target_tool0_temp
+      - sensor.octoprint_time_elapsed
+      - sensor.octoprint_time_remaining
+
+  - type: entities
+    title: Percentage Complete
+    show_header_toggle: false
+    entities:
+      - input_boolean.twenty_five_percent
+      - input_boolean.fifty_percent
+      - input_boolean.seventy_five_percent
+      - input_boolean.hundred_percent
+
+  - type: entities
+    title: Print Times
+    show_header_toggle: false
+    entities:
+      - entity: sensor.time_elapsed
+        name: Elapsed
+      - entity: sensor.time_estimated
+        name: Estimated
+
+  - type: entities
+    title: 3D Printer
+    show_header_toggle: false
+    entities:
+      - switch.3d_printer
+      - input_boolean.power_off_when_complete
