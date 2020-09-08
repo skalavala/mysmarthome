@@ -38,6 +38,8 @@ homeassistant:
       unit_of_measurement: "count"
     input_label.motion_sensor_158d000272bed1:
       unit_of_measurement: "count"
+    input_label.motion_sensor_158d00047b6f69:
+      unit_of_measurement: "count"
     input_label.motion_sensor_158d000272bf48:
       unit_of_measurement: "count"
     input_label.motion_sensor_158d000272bfd7:
@@ -84,37 +86,41 @@ input_label:
     name: Kitchen Motion
     icon: mdi:run-fast
   motion_sensor_158d00016c2d0e:
-    name: Dining Room Motion (X)
+    name: Dining Room Motion (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d00016db6d2:
-    name: Study Room Motion (X)
+    name: Front Room Motion (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d0001a25041:
-    name: Family Room (X)
+    name: Family Room (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d0001a662fe:
-    name: Kitchen (X)
+    name: Kitchen (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d00024e57d3:
-    name: Master Bedroom (X)
+    name: Master Bedroom (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d00024e57fb:
-    name: Driveway Motion (X)
+    name: Driveway Motion (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d00024e842c:
-    name: Backyard Motion (X)
+    name: Backyard Motion (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d00024ee084:
-    name: Front Door Motion (X)
+    name: Front Door Motion (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d000272bed1:
-    name: Srinika Bedroom (X)
+    name: Srinika Bedroom (Xiaomi)
     icon: mdi:run-fast
+  motion_sensor_158d00047b6f69:
+    name: Hasika Bedroom (Xiaomi)
+    icon: mdi:run-fast
+
   motion_sensor_158d000272bf48:
-    name: Garage Motion (X)
+    name: Garage Motion (Xiaomi)
     icon: mdi:run-fast
   motion_sensor_158d000272bfd7:
-    name: Office Room Motion (X)
+    name: Office Room Motion (Xiaomi)
     icon: mdi:run-fast
 
   single_car_garage_door_tilt_sensor_sensor:
@@ -155,6 +161,7 @@ automation:
           - binary_sensor.motion_sensor_158d00024e842c
           - binary_sensor.motion_sensor_158d00024ee084
           - binary_sensor.motion_sensor_158d000272bed1
+          - binary_sensor.motion_sensor_158d00047b6f69
           - binary_sensor.motion_sensor_158d000272bf48
           - binary_sensor.motion_sensor_158d000272bfd7
           - binary_sensor.single_car_garage_door_tilt_sensor_sensor
@@ -197,6 +204,7 @@ automation:
             - input_label.motion_sensor_158d00024e842c
             - input_label.motion_sensor_158d00024ee084
             - input_label.motion_sensor_158d000272bed1
+            - input_label.motion_sensor_158d00047b6f69
             - input_label.motion_sensor_158d000272bf48
             - input_label.motion_sensor_158d000272bfd7
             - input_label.single_car_garage_door_tilt_sensor_sensor

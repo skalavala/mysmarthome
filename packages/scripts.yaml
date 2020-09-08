@@ -121,6 +121,7 @@ script:
         data_template:
           entity_id: >
             {%- for state in states.switch if
+                                state.entity_id != 'switch.3d_printer' and
                                 state.entity_id != 'switch.wemoswitch1' and
                                 state.entity_id != 'switch.wallmote_switch' and
                                 state.entity_id != 'switch.wemobackyardlightswitch' and
@@ -306,6 +307,9 @@ script:
       - condition: template
         value_template: '{{ message | trim != "" }}'
       - service: script.ifttt_notify
+        data_template:
+          message: "{{ message }}"
+      - service: notify.telegram
         data_template:
           message: "{{ message }}"
 

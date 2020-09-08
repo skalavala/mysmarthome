@@ -40,6 +40,10 @@ notify:
     platform: file
     filename: debug.log
 
+  - name: telegram
+    platform: telegram
+    chat_id: !secret telegram_chatid
+
 tts:
   - platform: amazon_polly
     aws_access_key_id: !secret aws_access_key_id
@@ -48,8 +52,18 @@ tts:
     text_type: ssml
     voice: Joanna
 
+#
+# Telegram Configuration
+#
 telegram_bot:
+  # Setup Broadcast for sending messages
   - platform: broadcast
+    api_key: !secret telegram_apikey
+    allowed_chat_ids:
+      - !secret telegram_chatid
+
+  # Add Polling
+  - platform: polling
     api_key: !secret telegram_apikey
     allowed_chat_ids:
       - !secret telegram_chatid

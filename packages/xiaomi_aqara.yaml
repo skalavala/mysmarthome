@@ -14,9 +14,9 @@ homeassistant:
       friendly_name: Family Room Luminance (xiaomi)
 
     binary_sensor.motion_sensor_158d00016db6d2:
-      friendly_name: Study Room Motion Sensor (Xiaomi)
+      friendly_name: Front Room Motion Sensor (Xiaomi)
     sensor.Illumination_158d00016db6d2:
-      friendly_name: Study Room Luminance (Xiaomi)
+      friendly_name: Front Room Luminance (Xiaomi)
 
     binary_sensor.motion_sensor_158d00016c2d0e:
       friendly_name: Dining Room Motion Sensor (Xiaomi)
@@ -57,6 +57,11 @@ homeassistant:
       friendly_name: Srinika's Bedroom Motion Sensor (Xiaomi)
     sensor.illumination_158d000272bed1:
       friendly_name: Srinika's Bedroom Liminance (Xiaomi)
+
+    binary_sensor.motion_sensor_158d00047b6f69:
+      friendly_name: Hasika's Bedroom Motion Sensor (Xiaomi)
+    sensor.illumination_158d00047b6f69:
+      friendly_name: Hasika's Bedroom Liminance (Xiaomi)
 
     sensor.Illumination_34ce008ad65d:
       friendly_name: Hallway Luminance (Xiaomi Aqara)
