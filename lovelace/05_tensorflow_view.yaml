@@ -7,7 +7,7 @@ cards:
     entity: camera.frontdoor_latest_scan
     camera_image: camera.frontdoor_latest_scan
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
 
   - type: picture-entity
@@ -16,7 +16,7 @@ cards:
     entity: camera.patio_latest_scan
     camera_image: camera.patio_latest_scan
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
 
   - type: picture-entity
@@ -25,7 +25,7 @@ cards:
     entity: camera.driveway_latest_scan
     camera_image: camera.driveway_latest_scan
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
 
   - type: picture-entity
@@ -34,7 +34,7 @@ cards:
     entity: camera.playarea_latest_scan
     camera_image: camera.playarea_latest_scan
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
 
   - type: picture-entity
@@ -43,7 +43,16 @@ cards:
     entity: camera.garage_latest_scan
     camera_image: camera.garage_latest_scan
     show_info: true
-    tap_action: 
+    tap_action:
+      action: more-info
+
+  - type: picture-entity
+    id: camera_3dprinter_latest_scan
+    title: 3D Printer Latest Scan
+    entity: camera.3dprinter_latest_scan
+    camera_image: camera.3d_printer_camera
+    show_info: true
+    tap_action:
       action: more-info
 
   - type: entities
@@ -60,3 +69,5 @@ cards:
         name: Patio Camera
       - entity: image_processing.tensorflow_playarea_camera
         name: Playarea Camera
+      - entity: image_processing.tensorflow_3d_printer_camera
+        name: 3D Printer Camera

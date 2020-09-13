@@ -6,12 +6,9 @@ cards:
     show_header_toggle: false
     entities:
       - automation.family_room_cube_event_flip180
-      - automation.family_room_cube_event_flip180_2
       - automation.family_room_cube_event_flip90
       - automation.family_room_cube_event_move
-      - automation.family_room_cube_event_move_2
       - automation.family_room_cube_event_shake
-      - automation.family_room_cube_event_shake_2
       - automation.family_room_cube_event_tap_twice
       - automation.front_room_cube_event_flip90
       - automation.hasika_room_cube_event_flip90
@@ -96,12 +93,22 @@ cards:
       - automation.wfh_timer_start
 
   - type: entities
+    title: 3D Printer Automations
+    show_header_toggle: false
+    entities:
+      - automation.3d_print_send_telegram_pictures
+      - automation.3d_print_job_finished
+      - automation.3d_print_progress_update
+      - automation.3d_print_state_changed
+      - automation.3d_print_notify_printer_state
+      - automation.3d_print_notify_printer_error
+
+  - type: entities
     title: Garage Automations
     show_header_toggle: false
     entities:
       - automation.garage_lights_on_when_door_is_opened
       - automation.garage_motion_reset
-      - automation.garage_motion_timer
       - automation.garage_timer_elapsed
       - automation.garage_timer_start_when_garage_lights_on
       - automation.notify_garage_door_status

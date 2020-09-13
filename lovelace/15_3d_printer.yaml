@@ -60,4 +60,16 @@ cards:
     title: 3D Printer Control
     show_header_toggle: false
     entities:
-      - switch.3d_printer
+      - entity: switch.3d_printer
+        name: Ender 3 Pro 3D Printer
+
+  - type: entities
+    title: 3D Printer Automations
+    show_header_toggle: false
+    entities:
+      - automation.3d_print_send_telegram_pictures
+      - automation.3d_print_job_finished
+      - automation.3d_print_progress_update
+      - automation.3d_print_state_changed
+      - automation.3d_print_notify_printer_state
+      - automation.3d_print_notify_printer_error

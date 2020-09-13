@@ -72,6 +72,9 @@ camera:
   - platform: local_file
     name: Garage Latest Scan
     file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_latest.jpg"
+  - platform: local_file
+    name: 3dPrinter Latest Scan
+    file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
 
 binary_sensor:
   - platform: hikvision
@@ -112,11 +115,12 @@ image_processing:
       - entity_id: camera.patio_camera
       - entity_id: camera.playarea_camera
       - entity_id: camera.garage_camera
+      - entity_id: camera.3d_printer_camera
     file_out:
       - "/home/homeassistant/.homeassistant/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_latest.jpg"
       - "/home/homeassistant/.homeassistant/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
     model:
-      graph: /home/homeassistant/.homeassistant/tensorflow/
+      graph: /home/homeassistant/.homeassistant/tensorflow/models/efficientdet_d0_coco17_tpu-32/
       # graph: /home/homeassistant/.homeassistant/tensorflow/frozen_inference_graph.pb
     # categories:
     #   - person

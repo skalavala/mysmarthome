@@ -15,7 +15,7 @@ homeassistant:
   customize_domain: !include customize_domain.yaml
   packages: !include_dir_named packages
 
-  whitelist_external_dirs:
+  allowlist_external_dirs:
     - "/home/homeassistant/.homeassistant/www/downloads/camera/patio/"
     - "/home/homeassistant/.homeassistant/www/downloads/camera/garage/"
     - "/home/homeassistant/.homeassistant/www/downloads/camera/playarea/"
@@ -23,6 +23,7 @@ homeassistant:
     - "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/"
     - "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/"
     - "/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/"
+    - "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/"
 
 sun:
 alexa:

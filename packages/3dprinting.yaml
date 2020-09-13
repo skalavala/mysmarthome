@@ -139,7 +139,7 @@ automation:
   # Notify when the printer status changed from "Prnting" to anything.
   # Use this later to determine if you want to turn off printer or not
   #
-  - alias: "Octoprint 3D Print"
+  - alias: "3D Print State Changed"
     trigger:
       platform: state
       entity_id: "sensor.octoprint_current_state"
@@ -152,7 +152,7 @@ automation:
   #
   # Updates on the Printer Status
   #
-  - alias: "Octoprint Notify Printer State"
+  - alias: "3D Print Notify Printer State"
     trigger:
       platform: state
       entity_id: "binary_sensor.octoprint_printing"
@@ -164,7 +164,7 @@ automation:
   #
   # Notifies when the printer errors out
   #
-  - alias: "Octoprint Noify Printer Error"
+  - alias: "3D Print Notify Printer Error"
     trigger:
       platform: state
       entity_id: binary_sensor.octoprint_printing_error
@@ -177,7 +177,7 @@ automation:
   #
   # Updates appropriate input booleans based on percentage complete
   #
-  - alias: "Update Percentage Booleans"
+  - alias: "3D Print Update Percentage Booleans"
     trigger:
       platform: state
       entity_id: sensor.octoprint_job_percentage
@@ -194,7 +194,7 @@ automation:
   #
   # Provides update at frequent intervals - 25%, 50%, 75%, and 100%!
   #
-  - alias: "Octoprint 3D Printer Progress Update"
+  - alias: "3D Print Progress Update"
     trigger:
       platform: state
       entity_id: input_boolean.twenty_five_percent, input_boolean.fifty_percent, input_boolean.seventy_five_percent, input_boolean.hundred_percent
@@ -221,7 +221,7 @@ automation:
   # Resetting input boleans is not necessary as they get updated automatically when
   # octoprint job percentage value chaanges... but why not?
   #
-  - alias: "Job Finished"
+  - alias: "3d Print Job Finished"
     trigger:
       platform: state
       entity_id: input_boolean.hundred_percent
@@ -247,7 +247,7 @@ automation:
   #
   # If the printer is ON and is "Printing", it will send a snapshot/picture every 30 minutes
   #
-  - alias: "Send 3D Print Pictures"
+  - alias: "3D Print Send Telegram Pictures"
     trigger:
       platform: time_pattern
       minutes: "/30"
@@ -263,10 +263,10 @@ automation:
           entity_id: camera.3d_printer_camera
           filename: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
       - service: notify.telegram
-        data:
+        data_template:
           title: "3D Printer"
           message: "Print Progress"
           data:
             photo:
               - file: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
-                caption: "3D Print Progress"
+                caption: "3D Print Progress at {{ states('sensor.octoprint_job_percentage') }}%"
