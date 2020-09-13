@@ -1,7 +1,6 @@
 title: Camera Live
 icon: mdi:cctv
 cards:
-
   - type: horizontal-stack
     cards:
       - type: "custom:button-card"
@@ -13,7 +12,7 @@ cards:
           - font-weight: bold
           - color: rgb(0, 0, 5)
         state:
-          - value: 'frontyard'
+          - value: "frontyard"
             color: var(--primary-color)
         action: service
         service:
@@ -29,7 +28,7 @@ cards:
           - font-weight: bold
           - color: rgb(0, 0, 5)
         state:
-          - value: 'driveway'
+          - value: "driveway"
             color: var(--primary-color)
         action: service
         service:
@@ -45,7 +44,7 @@ cards:
           - font-weight: bold
           - color: rgb(0, 0, 5)
         state:
-          - value: 'patio'
+          - value: "patio"
             color: var(--primary-color)
         action: service
         service:
@@ -61,7 +60,7 @@ cards:
           - font-weight: bold
           - color: rgb(0, 0, 5)
         state:
-          - value: 'playarea'
+          - value: "playarea"
             color: var(--primary-color)
         action: service
         service:
@@ -75,7 +74,7 @@ cards:
     camera_image: camera.frontdoor_camera
     camera_view: live
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
     entities:
       - switch.frontyard_light
@@ -88,7 +87,7 @@ cards:
     entity: camera.patio_camera
     camera_image: camera.patio_camera
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
     entities:
       - switch.wemobackyardlightswitch
@@ -101,7 +100,7 @@ cards:
     entity: camera.driveway_camera
     camera_image: camera.driveway_camera
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
     entities:
       - switch.frontyard_light
@@ -115,7 +114,7 @@ cards:
     entity: camera.playarea_camera
     camera_image: camera.playarea_camera
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
     entities:
       - switch.wemobackyardlightswitch
@@ -128,7 +127,7 @@ cards:
     entity: camera.garage_camera
     camera_image: camera.garage_camera
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
     entities:
       - switch.garage
@@ -136,17 +135,29 @@ cards:
       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
 
   - type: picture-glance
-    id: camera_kitchen_camera
-    title: Kitchen Camera
-    entity: camera.kitchen_camera
-    camera_image: camera.kitchen_camera
+    id: camera_3dprinter_camera
+    title: 3D Printer Camera
+    entity: camera.3d_printer_camera
+    camera_image: camera.3d_printer_camera
     show_info: true
-    tap_action: 
+    tap_action:
       action: more-info
     entities:
-      - switch.kitchen
-      - binary_sensor.kitchen_camera_motion
-      - binary_sensor.back_door_sensor_sensor
+      - binary_sensor.motion_sensor_158d00016c2d0e
+      - binary_sensor.octoprint_printing
+
+  # - type: picture-glance
+  #   id: camera_kitchen_camera
+  #   title: Kitchen Camera
+  #   entity: camera.kitchen_camera
+  #   camera_image: camera.kitchen_camera
+  #   show_info: true
+  #   tap_action:
+  #     action: more-info
+  #   entities:
+  #     - switch.kitchen
+  #     - binary_sensor.kitchen_camera_motion
+  #     - binary_sensor.back_door_sensor_sensor
 
   # - type: picture-glance
   #   id: camera_frontroom_camera
@@ -154,7 +165,7 @@ cards:
   #   entity: camera.frontroom_camera
   #   camera_image: camera.frontroom_camera
   #   show_info: true
-  #   tap_action: 
+  #   tap_action:
   #     action: more-info
   #   entities:
   #     - binary_sensor.frontdoor_camera_motion

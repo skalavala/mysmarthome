@@ -11,6 +11,7 @@ cards:
       action: more-info
     entities:
       - binary_sensor.motion_sensor_158d00016c2d0e
+      - binary_sensor.octoprint_printing
 
   - type: vertical-stack
     cards:
@@ -26,24 +27,16 @@ cards:
     show_header_toggle: false
     entities:
       - binary_sensor.octoprint_printing
-      - binary_sensor.octoprint_printing_error
-      - sensor.octoprint_actual_bed_temp
-      - sensor.octoprint_actual_tool0_temp
       - sensor.octoprint_current_state
-      - sensor.octoprint_job_percentage
-      - sensor.octoprint_target_bed_temp
-      - sensor.octoprint_target_tool0_temp
-      - sensor.octoprint_time_elapsed
-      - sensor.octoprint_time_remaining
-
-  - type: entities
-    title: Percentage Complete
-    show_header_toggle: false
-    entities:
-      - input_boolean.twenty_five_percent
-      - input_boolean.fifty_percent
-      - input_boolean.seventy_five_percent
-      - input_boolean.hundred_percent
+      - binary_sensor.octoprint_printing_error
+      - entity: sensor.octoprint_actual_bed_temp_c
+        name: Print Bed Temperature
+      - entity: sensor.octoprint_target_bed_temp_c
+        name: Target Bed Temperature
+      - entity: sensor.octoprint_actual_tool0_temp_c
+        name: Extruder Temperature
+      - entity: sensor.octoprint_target_tool0_temp_c
+        name: Extruder Target Temperature
 
   - type: entities
     title: Print Times
@@ -53,10 +46,18 @@ cards:
         name: Elapsed
       - entity: sensor.time_estimated
         name: Estimated
+      - entity: sensor.print_completion
+        name: Print Completion
 
   - type: entities
-    title: 3D Printer
+    title: 3D Printer Settings
+    show_header_toggle: false
+    entities:
+      - input_boolean.power_off_when_complete
+      - input_boolean.send_progress_pictures
+
+  - type: entities
+    title: 3D Printer Control
     show_header_toggle: false
     entities:
       - switch.3d_printer
-      - input_boolean.power_off_when_complete

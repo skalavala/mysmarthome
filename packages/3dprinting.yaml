@@ -32,8 +32,12 @@ input_boolean:
 
   power_off_when_complete:
     name: Auto Shutoff When Done
-    initial: "off"
     icon: mdi:toggle-switch-off
+
+  send_progress_pictures:
+    name: Send Telegram Pictures
+    icon: mdi:toggle-switch-off
+
 #
 # Octoprint Camera URL in the format
 #    still_image_url: "http://192.xxx.xxx.xxx/webcam/?action=snapshot"
@@ -79,6 +83,56 @@ sensor:
           {%- endfor -%}
           {% endmacro %}
           {{ secondsToReadableString(states('sensor.octoprint_time_remaining') |int) }}
+
+  - platform: template
+    sensors:
+      print_completion:
+        value_template: >
+          {{ (now().strftime('%s') |int + states('sensor.octoprint_time_remaining')|int ) | timestamp_custom("%A %D %H:%M %p") }}
+
+  - platform: template
+    sensors:
+      octoprint_actual_bed_temp_c:
+        unit_of_measurement: "C"
+        value_template: >
+          {%- macro F2C(temperature) -%}
+          {% set tmp = (((temperature - 32) *5)/9) %}
+          {{- " %0.2f" % tmp }}
+          {%- endmacro -%}
+          {{ F2C(states('sensor.octoprint_actual_bed_temp') |int ) |int }}
+
+  - platform: template
+    sensors:
+      octoprint_actual_tool0_temp_c:
+        unit_of_measurement: "C"
+        value_template: >
+          {%- macro F2C(temperature) -%}
+          {% set tmp = (((temperature - 32) *5)/9) %}
+          {{- " %0.2f" % tmp }}
+          {%- endmacro -%}
+          {{ F2C(states('sensor.octoprint_actual_tool0_temp') |int ) |int }}
+
+  - platform: template
+    sensors:
+      octoprint_target_bed_temp_c:
+        unit_of_measurement: "C"
+        value_template: >
+          {%- macro F2C(temperature) -%}
+          {% set tmp = (((temperature - 32) *5)/9) %}
+          {{- " %0.2f" % tmp }}
+          {%- endmacro -%}
+          {{ F2C(states('sensor.octoprint_target_bed_temp') |int ) |int }}
+
+  - platform: template
+    sensors:
+      octoprint_target_tool0_temp_c:
+        unit_of_measurement: "C"
+        value_template: >
+          {%- macro F2C(temperature) -%}
+          {% set tmp = (((temperature - 32) *5)/9) %}
+          {{- " %0.2f" % tmp }}
+          {%- endmacro -%}
+          {{ F2C(states('sensor.octoprint_target_tool0_temp') |int ) |int }}
 
 automation:
   #
@@ -189,3 +243,30 @@ automation:
         entity_id: input_boolean.seventy_five_percent
       - service_template: input_boolean.turn_off
         entity_id: input_boolean.hundred_percent
+
+  #
+  # If the printer is ON and is "Printing", it will send a snapshot/picture every 30 minutes
+  #
+  - alias: "Send 3D Print Pictures"
+    trigger:
+      platform: time_pattern
+      minutes: "/30"
+      seconds: 00
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.send_progress_pictures') == 'on' }}"
+      - condition: template
+        value_template: "{{ states('sensor.octoprint_current_state') | lower == 'printing' }}"
+    action:
+      - service: camera.snapshot
+        data:
+          entity_id: camera.3d_printer_camera
+          filename: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
+      - service: notify.telegram
+        data:
+          title: "3D Printer"
+          message: "Print Progress"
+          data:
+            photo:
+              - file: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
+                caption: "3D Print Progress"
