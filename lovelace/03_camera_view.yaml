@@ -79,7 +79,6 @@ cards:
     entities:
       - switch.frontyard_light
       - binary_sensor.frontdoor_camera_motion
-      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
 
   - type: picture-glance
     id: camera_patio_camera
@@ -92,7 +91,6 @@ cards:
     entities:
       - switch.wemobackyardlightswitch
       - binary_sensor.patio_camera_motion
-      - binary_sensor.back_door_sensor_sensor
 
   - type: picture-glance
     id: camera_driveway_camera
@@ -105,8 +103,6 @@ cards:
     entities:
       - switch.frontyard_light
       - binary_sensor.driveway_camera_motion
-      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
-      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
 
   - type: picture-glance
     id: camera_playarea_camera
@@ -119,7 +115,6 @@ cards:
     entities:
       - switch.wemobackyardlightswitch
       - binary_sensor.playarea_camera_motion
-      - binary_sensor.back_door_sensor_sensor
 
   - type: picture-glance
     id: camera_garage_camera
@@ -131,8 +126,6 @@ cards:
       action: more-info
     entities:
       - switch.garage
-      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
-      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
 
   - type: picture-glance
     id: camera_3dprinter_camera
@@ -145,28 +138,3 @@ cards:
     entities:
       - binary_sensor.motion_sensor_158d00016c2d0e
       - binary_sensor.octoprint_printing
-
-  # - type: picture-glance
-  #   id: camera_kitchen_camera
-  #   title: Kitchen Camera
-  #   entity: camera.kitchen_camera
-  #   camera_image: camera.kitchen_camera
-  #   show_info: true
-  #   tap_action:
-  #     action: more-info
-  #   entities:
-  #     - switch.kitchen
-  #     - binary_sensor.kitchen_camera_motion
-  #     - binary_sensor.back_door_sensor_sensor
-
-  # - type: picture-glance
-  #   id: camera_frontroom_camera
-  #   title: FrontDoor Camera
-  #   entity: camera.frontroom_camera
-  #   camera_image: camera.frontroom_camera
-  #   show_info: true
-  #   tap_action:
-  #     action: more-info
-  #   entities:
-  #     - binary_sensor.frontdoor_camera_motion
-  #     - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor

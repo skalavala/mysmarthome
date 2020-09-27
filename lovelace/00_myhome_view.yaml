@@ -81,6 +81,7 @@ cards:
     title: 3D Printer
     show_header_toggle: false
     entities:
+      - sensor.octoprint_file
       - binary_sensor.octoprint_printing
       - binary_sensor.octoprint_printing_error
       - sensor.octoprint_actual_bed_temp
@@ -91,16 +92,6 @@ cards:
       - sensor.octoprint_target_tool0_temp
       - sensor.octoprint_time_elapsed
       - sensor.octoprint_time_remaining
-
-  - type: entities
-    title: Tile Devices
-    show_header_toggle: false
-    entities:
-      - device_tracker.tile_08beea8370ec23b7
-      - device_tracker.tile_43a0d518532978f8
-      - device_tracker.tile_49318f5ab14343a5
-      - device_tracker.tile_63ca05b6a3619232
-      - device_tracker.tile_p_32c03dc7f21001d36d16b47646e4c421
 
   # - type: glance
   #   show_icon: true
@@ -282,15 +273,6 @@ cards:
         action: more-info
 
   - type: entities
-    title: Light Levels
-    show_header_toggle: false
-    entities:
-      - sensor.downstairs_multi_sensor_luminance
-      - sensor.front_room_multi_sensor_luminance
-      - sensor.tv_multi_sensor_luminance
-      - sensor.upstairs_multi_sensor_luminance
-
-  - type: entities
     title: Xiaomi Motion Sensors
     show_header_toggle: false
     entities:
@@ -401,38 +383,9 @@ cards:
                 red: 7
 
   - type: entities
-    title: Z-Wave Batteries
-    show_header_toggle: false
-    entities:
-      - input_label.audio_detector
-      - input_label.back_door_sensor
-      - input_label.zwave_front_door_sensor
-      - input_label.basement_door_sensor
-      - input_label.downstairs_multi_sensor
-      - input_label.front_room_multi_sensor
-      - input_label.garage_door_sensor
-      - input_label.kitchen_motion_sensor
-      - input_label.single_car_garage_door_tilt_sensor
-      - input_label.stairs_motion_sensor
-      - input_label.tv_multi_sensor
-      - input_label.two_car_garage_door_tilt_sensor
-      - input_label.upstairs_multi_sensor
-      - input_label.wallmote
-
-  - type: entities
     title: Motion Counters
     show_header_toggle: false
     entities:
-      - input_label.aeotec_zw120_door_window_sensor_gen5_sensor
-      - input_label.back_door_sensor_sensor
-      - input_label.basement_door_sensor_sensor
-      - input_label.garage_door_sensor_sensor
-      - input_label.single_car_garage_door_tilt_sensor_sensor
-      - input_label.two_car_garage_door_tilt_sensor_sensor
-      - input_label.downstairs_multi_sensor_sensor
-      - input_label.front_room_multi_sensor_sensor
-      - input_label.front_room_window_sensor_sensor
-      - input_label.kitchen_motion_sensor_sensor
       - input_label.motion_sensor_158d00016c2d0e
       - input_label.motion_sensor_158d00016db6d2
       - input_label.motion_sensor_158d0001a25041
@@ -446,5 +399,3 @@ cards:
       - input_label.motion_sensor_158d000272bf48
       - input_label.motion_sensor_158d000272bfd7
       - input_label.garage_motion
-      - input_label.stairs_motion_sensor_sensor
-      - input_label.upstairs_multi_sensor_sensor

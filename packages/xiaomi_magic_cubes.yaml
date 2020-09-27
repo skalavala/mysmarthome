@@ -121,19 +121,6 @@ automation:
       - service_template: switch.toggle
         entity_id: switch.front_room
 
-  # Flip 180: Toggle Office Room Accent Lights
-  - alias: Front Room Cube Event flip180
-    initial_state: true
-    trigger:
-      platform: event
-      event_type: xiaomi_aqara.cube_action
-      event_data:
-        entity_id: binary_sensor.cube_158d00027c0276
-        action_type: flip180
-    action:
-      - service: switch.toggle
-        entity_id: switch.zwave_smart_switch_switch
-
   # Move: Toggle Office Room Light
   - alias: Front Room Cube Event Move
     initial_state: true

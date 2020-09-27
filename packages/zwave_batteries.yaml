@@ -21,6 +21,13 @@ input_label:
   two_car_garage_door_tilt_sensor:
   upstairs_multi_sensor:
   wallmote:
+  ecolink_motion_detector:
+  ecolink_firefighter:
+  ecolink_door_window_sensor_2:
+  aeon_labs_zw100_multisensor_6_2:
+  aeon_labs_zw100_multisensor_6:
+  ecolink_door_window_sensor:
+  ecolink_garage_door_tilt_sensor:
 
   suresh_battery:
   mallika_battery:

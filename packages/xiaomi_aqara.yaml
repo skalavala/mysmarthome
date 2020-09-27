@@ -81,11 +81,10 @@ homeassistant:
       friendly_name: Hasika's Bedroom Cube (Xiaomi)
     binary_sensor.cube_158d00027cf60d:
       friendly_name: Srinika's Bedroom Cube (Xiaomi)
-
-xiaomi_aqara:
-  discovery_retry: 5
-  gateways:
-    - key: !secret xiaomi_key
+# xiaomi_aqara:
+#   discovery_retry: 5
+#   gateways:
+#     - key: !secret xiaomi_key
 # - service: xiaomi_aqara.play_ringtone
 #   gw_mac: !secret xiaomi_mac
 #   ringtone_id: 8

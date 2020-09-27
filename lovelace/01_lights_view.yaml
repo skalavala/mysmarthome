@@ -27,7 +27,6 @@ cards:
       - switch.basement_right
       - switch.kitchen
       - switch.office_room
-      - switch.zwave_smart_switch_switch
       - light.hue_color_lamp_1
       - light.hue_color_lamp_2
       - light.hue_color_lamp_3

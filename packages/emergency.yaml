@@ -271,7 +271,6 @@
 #           - switch.office_room
 #           - switch.smart_outlet_1
 #           - switch.kitchen
-#           - switch.zwave_smart_switch_switch
 #           - switch.rf_switch_five
 #           - switch.rf_switch_four
 #           - switch.rf_switch_one

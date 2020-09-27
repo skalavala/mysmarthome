@@ -12,22 +12,18 @@ homeassistant:
 input_boolean:
   twenty_five_percent:
     name: "25%"
-    initial: "off"
     icon: mdi:radiobox-blank
 
   fifty_percent:
     name: "50%"
-    initial: "off"
     icon: mdi:brightness-3
 
   seventy_five_percent:
     name: "75%"
-    initial: "off"
     icon: mdi:brightness-2
 
   hundred_percent:
     name: "100%"
-    initial: "off"
     icon: mdi:brightness-1
 
   power_off_when_complete:
@@ -88,7 +84,12 @@ sensor:
     sensors:
       print_completion:
         value_template: >
-          {{ (now().strftime('%s') |int + states('sensor.octoprint_time_remaining')|int ) | timestamp_custom("%A %D %H:%M %p") }}
+          {% set seconds = states('sensor.octoprint_time_remaining')|int %}
+          {% if now().strftime('%s')|int | timestamp_custom("%A %D") ==  (now().strftime('%s') |int + seconds) | timestamp_custom("%A %D")  %}
+            Today at {{- now().strftime('%s')|int | timestamp_custom("%l:%M %p") }}
+          {% else %}
+            {{ (now().strftime('%s') |int + seconds) | timestamp_custom("%A %D %l:%M %p") }}
+          {% endif %}
 
   - platform: template
     sensors:
@@ -199,6 +200,7 @@ automation:
       platform: state
       entity_id: input_boolean.twenty_five_percent, input_boolean.fifty_percent, input_boolean.seventy_five_percent, input_boolean.hundred_percent
       to: "on"
+      from: "off"
     action:
       - service: script.notify_me
         data_template:

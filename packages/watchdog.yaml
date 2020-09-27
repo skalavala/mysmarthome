@@ -111,7 +111,6 @@ automation:
           - switch.kitchen
           - switch.prayer_room
           - switch.upstairs_fragrance
-          - switch.zwave_smart_switch_switch
           - light.hue_color_lamp_1
           - light.hue_color_lamp_2
           - light.hue_color_lamp_3

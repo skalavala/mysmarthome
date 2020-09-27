@@ -36,13 +36,6 @@ homeassistant:
       emulated_hue_name: Guest Bedroom 2
       homebridge_name: Guest Bedroom 2
 
-    switch.zwave_smart_switch_switch:
-      friendly_name: Office Room Accent Lights
-      emulated_hue_name: Office Room Accent Lights
-      homebridge_name: Office Room Accent Lights
-      assumed_state: false
-      icon: mdi:lightbulb
-
     switch.kids_bed_accent:
       friendly_name: Hasika's Bed Accent Lights
       assumed_state: false

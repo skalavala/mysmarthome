@@ -29,10 +29,6 @@ sensor:
     name: Home Assistant Up Time
     unit_of_measurement: hours
 
-  - platform: whois
-    domain: !secret namecheap_domain_name
-    name: My Domain
-
   - platform: rest
     resource: http://icanhazip.com
     name: external_ip

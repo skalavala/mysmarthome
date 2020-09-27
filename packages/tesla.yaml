@@ -1,32 +1,5 @@
 homeassistant:
-  customize:
-    binary_sensor.tesla_model_3_charger_sensor:
-      friendly_name: Charger
-    binary_sensor.tesla_model_3_parking_brake_sensor:
-      friendly_name: Parking Break
-    climate.tesla_model_3_hvac_climate_system:
-      friendly_name: Tesla Climate
-    device_tracker.mahasri_tesla_location_tracker:
-      friendly_name: Tesla
-    lock.tesla_model_3_charger_door_lock:
-      friendly_name: Tesla Door Lock
-    sensor.tesla_model_3_battery_sensor:
-      friendly_name: Battery Percentage
-      icon: mdi:battery
-    sensor.tesla_model_3_mileage_sensor:
-      friendly_name: Total Mileage
-    sensor.tesla_model_3_range_sensor:
-      friendly_name: Battery Range
-    sensor.tesla_model_3_temperature_sensor_inside:
-      friendly_name: Temperature Inside
-    sensor.tesla_model_3_temperature_sensor_outside:
-      friendly_name: Temperature Outside
-    switch.tesla_model_3_charger_switch:
-      friendly_name: Charger Switch
-    switch.tesla_model_3_maxrange_switch:
-      friendly_name: Max Range Switch
-    switch.tesla_model_3_update_switch:
-      friendly_name: Update Tesla
+# customize:
 
 # The scan_interval is now set to 6 hours
 # Leaving it to the default (which is 5 minutes, or 300 seconds) will drain battery at a rate of
@@ -36,7 +9,6 @@ tesla:
   username: !secret tesla_username
   password: !secret tesla_password
   scan_interval: 21600
-
 ###############################################################################
 #                _                        _   _
 #     /\        | |                      | | (_)

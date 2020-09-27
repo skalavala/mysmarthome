@@ -18,12 +18,12 @@ logs:
   homeassistant.helpers.script: warning
   homeassistant.helpers.entity: warning
   homeassistant.components.wemo: critical
+  homeassistant.components.sensor: critical
   homeassistant.components.cloud.iot: warning
   homeassistant.components.hue: critical
   homeassistant.components.http: warning
   homeassistant.components.camera: warning
   homeassistant.components.zwave: warning
-  homeassistant.components.sensor: warning
   homeassistant.components.image_processing: warning
   homeassistant.components.homekit: warning
   custom_components.sensor.life360: warning
@@ -39,3 +39,4 @@ logs:
   homeassistant.components.emulated_hue: warning
   homeassistant.components.device_tracker: warning
   homeassistant.components.camera.generic: warning
+  homeassistant.components.automation.update_zwave_battery_levels: critical

@@ -64,8 +64,6 @@ automation:
         entity_id: switch.office_room
       - condition: template
         value_template: "{{ states('sun.sun') == 'below_horizon' }}"
-      - service: homeassistant.turn_on
-        entity_id: switch.zwave_smart_switch_switch
 
   - alias: Officeroom Timer Elapsed
     initial_state: true
@@ -77,8 +75,6 @@ automation:
     action:
       - service: switch.turn_off
         entity_id: switch.office_room
-      - service: homeassistant.turn_off
-        entity_id: switch.zwave_smart_switch_switch
 
   # # Front Room:
   # # Motion Detected - Turn ON the light and extend timer
@@ -95,27 +91,8 @@ automation:
         entity_id: timer.timer_frontroom
       - condition: template
         value_template: "{{ states('sun.sun') == 'below_horizon' }}"
-      - service: homeassistant.turn_on
-        entity_id: switch.zwave_smart_switch_switch
       - service: switch.turn_on
         entity_id: switch.front_room
-
-  # Front Room:
-  # Timer Elapsed - Turn OFF lights
-  ###############################################################################
-  - alias: Frontroom Timer Elapsed
-    initial_state: true
-    trigger:
-      - platform: event
-        event_type: timer.finished
-        event_data:
-          entity_id: timer.timer_frontroom
-    condition:
-      - condition: template
-        value_template: "{{ states('input_boolean.working_in_office_room') == 'off' }}"
-    action:
-      - service: homeassistant.turn_off
-        entity_id: switch.zwave_smart_switch_switch
 
   # Kitchen:
   # Motion Detected - Turn ON the light and extend timer
