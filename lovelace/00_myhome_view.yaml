@@ -70,12 +70,6 @@ cards:
       - input_boolean.pill_voice_notification
       - binary_sensor.door_window_sensor_158d00040ad8ec
       - input_label.pill_taken_at
-      # - entity: timer.timer_pill_reminder
-      #   name: Pill Reminder Timer
-      # - entity: script.remind_pill
-      #   name: Remind Pill Script
-      # - entity: script.pill_taken
-      #   name: Pill Taken Script
 
   - type: entities
     title: 3D Printer
@@ -93,35 +87,16 @@ cards:
       - sensor.octoprint_time_elapsed
       - sensor.octoprint_time_remaining
 
-  # - type: glance
-  #   show_icon: true
-  #   show_name: true
-  #   show_state: true
-  #   title: Coronavirus USA
-  #   entities:
-  #     - entity: sensor.us_coronavirus_confirmed
-  #       icon: "mdi:emoticon-neutral-outline"
-  #       name: Confirmed
-  #     - entity: sensor.us_coronavirus_current
-  #       icon: "mdi:emoticon-frown-outline"
-  #       name: Current
-  #     - entity: sensor.us_coronavirus_recovered
-  #       icon: "mdi:emoticon-happy-outline"
-  #       name: Recovered
-  #     - entity: sensor.us_coronavirus_deaths
-  #       icon: "mdi:emoticon-dead-outline"
-  #       name: Deaths
-
   - type: glance
     show_icon: true
     show_name: true
     show_state: true
     title: Fitness
     entities:
-      - entity: sensor.suresh_steps
+      - entity: sensor.yo_mama_steps
         icon: "mdi:run"
         name: Suresh Steps
-      - entity: sensor.suresh_floors_ascended
+      - entity: sensor.yo_mama_floors_ascended
         icon: "mdi:run"
         name: Suresh Floors Ascended
       - entity: sensor.mallika_steps
