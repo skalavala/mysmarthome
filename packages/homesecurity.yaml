@@ -225,9 +225,9 @@ automation:
 #       - condition: or
 #         conditions:
 #         - condition: template
-#           value_template: '{{ states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" }}'
+#           value_template: '{{ states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" }}'
 #         - condition: template
-#           value_template: '{{ states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" }}'
+#           value_template: '{{ states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" }}'
 #   action:
 #     - service: switch.turn_on
 #       entity_id: switch.garage
@@ -235,7 +235,7 @@ automation:
 #       data_template:
 #         message: >
 #           Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode.
-#           BUT THE {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
+#           BUT THE {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
 #     - service: camera.snapshot
 #       data_template:
 #         entity_id: "camera.garage_camera"
@@ -262,12 +262,12 @@ automation:
 #             {%- endif %} {{ dt.strftime("%B %Y")}}
 #           {%- endmacro -%}
 #           {% set doors = "" %}
-#           {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+#           {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
 #             {% set doors = "Both garage doors" %}
-#             {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"%}
-#               {% set doors = states('binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
-#             {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
-#               {% set doors = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
+#             {% elif states('binary_sensor.door_window_sensor_158d0004248d5b') == "on"%}
+#               {% set doors = states('binary_sensor.door_window_sensor_158d0004248d5b.name %}
+#             {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" %}
+#               {% set doors = states('binary_sensor.door_window_sensor_158d0004231f7b.name %}
 #             {% endif %}
 #           Your {{ doors }} seem to be open while your home security system is set to "{{ states('alarm_control_panel.home').split('_')[1]| title }}" mode. Today is {{ get_date(now()) }}, and time is {{ now().strftime("%I:%M:%S %p") }}. Please see the attached pictures and make sure everything is okay.
 #         data:
@@ -281,12 +281,12 @@ automation:
 #       data_template:
 #         message: >
 #           {% set doors = "" %}
-#           {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+#           {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
 #             {% set doors = "Both garage doors" %}
-#             {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"%}
-#               {% set doors = states('binary_sensor.single_car_garage_door_tilt_sensor_sensor.name %}
-#             {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
-#               {% set doors = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor.name %}
+#             {% elif states('binary_sensor.door_window_sensor_158d0004248d5b') == "on"%}
+#               {% set doors = states('binary_sensor.door_window_sensor_158d0004248d5b.name %}
+#             {% elif states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
+#               {% set doors = states('binary_sensor.door_window_sensor_158d0004231f7b.name %}
 #             {% endif %}
 #           Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode.
 #           BUT the {{ doors }} {{ 'are' if doors.endswith('s') else 'is' }} open.
@@ -308,8 +308,8 @@ automation:
 #     - service_template: >-
 #         {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
 #               states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
-#               states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off" and
-#               states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+#               states('binary_sensor.door_window_sensor_158d0004231f7b') == "off" and
+#               states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
 #           alarm_control_panel.alarm_arm_home
 #         {% else %}
 #           alarm_control_panel.disarm
@@ -321,8 +321,8 @@ automation:
 #         message: >
 #           {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
 #                 states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
-#                 states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off" and
-#                 states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+#                 states('binary_sensor.door_window_sensor_158d0004231f7b') == "off" and
+#                 states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
 #             It's getting dark outside, and your home security system is now set to HOME mode.
 #           {% else %}
 #              It is getting dark outside.
@@ -336,14 +336,14 @@ automation:
 #                  {%- set doors = doors ~ " Front Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" -%}
+#              {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
 #                {% else %}
 #                  {%- set doors = doors ~ " Two Car Garage Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"  -%}
+#              {%- if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on"  -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
 #                {% else %}
@@ -357,8 +357,8 @@ automation:
 #         message: >
 #           {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
 #                 states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
-#                 states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off" and
-#                 states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+#                 states('binary_sensor.door_window_sensor_158d0004231f7b') == "off" and
+#                 states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
 #             It's getting dark outside, and your home security system is now set to HOME mode.
 #           {% else %}
 #              It is getting dark outside.
@@ -372,14 +372,14 @@ automation:
 #                  {%- set doors = doors ~ " Front Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" -%}
+#              {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
 #                {% else %}
 #                  {%- set doors = doors ~ " Two Car Garage Door" -%}
 #                {% endif %}
 #              {%- endif -%}
-#              {%- if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on"  -%}
+#              {%- if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on"  -%}
 #                {% if doors | trim != "" %}
 #                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
 #                {% else %}
@@ -426,8 +426,8 @@ automation:
 #   trigger:
 #     platform: state
 #     entity_id:
-#       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
-#       - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+#       - binary_sensor.door_window_sensor_158d0004231f7b
+#       - binary_sensor.door_window_sensor_158d0004248d5b
 #     to: 'on'
 #   condition:
 #     - condition: template

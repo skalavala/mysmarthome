@@ -25,4 +25,3 @@ views:
   - !include lovelace/11_scripts_view.yaml
   - !include lovelace/12_automations_view.yaml
   - !include lovelace/13_qnap_view.yaml
-  - !include lovelace/14_rooms.yaml

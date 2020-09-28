@@ -48,10 +48,10 @@ homekit:
       - input_boolean
       - camera
     include_entities:
-      - binary_sensor.back_door_sensor_sensor
-      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
-      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
-      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+      - binary_sensor.door_window_sensor_158d00040ad8fc # Back Door
+      - binary_sensor.door_window_sensor_158d000424a6d6 # Front Door
+      - binary_sensor.door_window_sensor_158d0004248d5b
+      - binary_sensor.door_window_sensor_158d0004231f7b
 
 mobile_app:
 

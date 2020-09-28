@@ -5,6 +5,7 @@ cards:
     title: Upstairs
     show_header_toggle: true
     entities:
+      - light.master_bedroom_lights
       - entity: light.master_bedroom_1
         name: Suresh's Bedside Light
       - entity: light.master_bedroom_2
@@ -27,6 +28,7 @@ cards:
       - switch.basement_right
       - switch.kitchen
       - switch.office_room
+      - light.family_room_lights
       - light.hue_color_lamp_1
       - light.hue_color_lamp_2
       - light.hue_color_lamp_3

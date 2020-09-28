@@ -267,8 +267,8 @@ automation:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
       - condition: template
         value_template: >
-          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" or
-                states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
+          {% if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" or
+                states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" %}
             True
           {% else %}
             False
@@ -345,8 +345,8 @@ automation:
               - "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_latest.jpg"
       - condition: template
         value_template: >
-          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" or
-                states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
+          {% if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" or
+                states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" %}
             True
           {% else %}
             False
@@ -377,8 +377,8 @@ automation:
           entity_id: image_processing.tensorflow_garage_camera
       - condition: template
         value_template: >
-          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" or
-                states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on" %}
+          {% if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" or
+                states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" %}
             True
           {% else %}
             False
@@ -544,7 +544,7 @@ automation:
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
     action:
-      - delay: "{{ '00:00:08' if states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor') == 'on' else '0:0:0' }}"
+      - delay: "{{ '00:00:08' if states('binary_sensor.door_window_sensor_158d000424a6d6') == 'on' else '0:0:0' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.frontdoor_camera"

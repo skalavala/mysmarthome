@@ -23,8 +23,8 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.two_car_garage_door_tilt_sensor_sensor
-        - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+        - binary_sensor.door_window_sensor_158d0004231f7b
+        - binary_sensor.door_window_sensor_158d0004248d5b
     condition:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
@@ -37,11 +37,11 @@ automation:
         data_template:
           message: >
             {% set doors = "" %}
-              {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
-                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+              {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
                 {% set doors = "Attention! Both Garage Doors are OPEN" %}
-              {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
-                      states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+              {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+                      states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
                 {% set doors = "Both Garage Doors are now CLOSED" %}
               {% else %}
                 {% if trigger.to_state.state | lower == "on" %}

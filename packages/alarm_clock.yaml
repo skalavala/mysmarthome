@@ -44,7 +44,7 @@ input_boolean:
 input_label:
   alarm_current_time:
     name: Current Alarm Time
-    icon: mdi:timer
+    icon: mdi:timer-outline
 
 ###############################################################################
 #                _                        _   _

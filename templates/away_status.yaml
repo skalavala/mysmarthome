@@ -49,14 +49,14 @@
   {%- endmacro -%}
 
   {%- macro single_car_garage_door_status() -%} 
-    {%- if  states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') |lower == "on" -%}
-      {{ states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN!
+    {%- if  states('binary_sensor.door_window_sensor_158d0004248d5b') |lower == "on" -%}
+      {{ states.binary_sensor.door_window_sensor_158d0004248d5b.attributes.friendly_name }} is OPEN!
     {%- endif -%}
   {%- endmacro -%}
    
   {%- macro two_car_garage_door_status() -%} 
-    {% if  states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') |lower == "on" %}
-      {{ states.binary_sensor.two_car_garage_door_tilt_sensor_sensor.attributes.friendly_name }} is OPEN!
+    {% if  states('binary_sensor.door_window_sensor_158d0004231f7b') |lower == "on" %}
+      {{ states.binary_sensor.door_window_sensor_158d0004231f7b.attributes.friendly_name }} is OPEN!
     {% endif %}
   {%- endmacro -%}
 

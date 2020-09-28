@@ -52,12 +52,20 @@ homeassistant:
       unit_of_measurement: "count"
     input_label.upstairs_multi_sensor_sensor:
       unit_of_measurement: "count"
+    input_label.door_window_sensor_158d0004231f7b:
+      unit_of_measurement: "count"
+    input_label.door_window_sensor_158d0004248d5b:
+      unit_of_measurement: "count"
+    input_label.door_window_sensor_158d00040ad8fc:
+      unit_of_measurement: "count"
+    input_label.door_window_sensor_158d000424a6d6:
+      unit_of_measurement: "count"
 
 input_label:
-  aeotec_zw120_door_window_sensor_gen5_sensor:
+  door_window_sensor_158d000424a6d6:
     name: Front Door
     icon: mdi:run-fast
-  back_door_sensor_sensor:
+  door_window_sensor_158d00040ad8fc:
     name: Back Door
     icon: mdi:run-fast
   basement_door_sensor_sensor:
@@ -123,10 +131,10 @@ input_label:
     name: Office Room Motion (Xiaomi)
     icon: mdi:run-fast
 
-  single_car_garage_door_tilt_sensor_sensor:
+  door_window_sensor_158d0004248d5b:
     name: Single Car Garage Door
     icon: mdi:run-fast
-  two_car_garage_door_tilt_sensor_sensor:
+  door_window_sensor_158d0004231f7b:
     name: Double Car Garage Door
     icon: mdi:run-fast
   stairs_motion_sensor_sensor:
@@ -142,8 +150,8 @@ automation:
       - platform: state
         to: "on"
         entity_id:
-          - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
-          - binary_sensor.back_door_sensor_sensor
+          - binary_sensor.door_window_sensor_158d000424a6d6
+          - binary_sensor.door_window_sensor_158d00040ad8fc
           - binary_sensor.basement_door_sensor_sensor
           - binary_sensor.downstairs_multi_sensor_sensor
           - binary_sensor.front_room_multi_sensor_sensor
@@ -164,9 +172,9 @@ automation:
           - binary_sensor.motion_sensor_158d00047b6f69
           - binary_sensor.motion_sensor_158d000272bf48
           - binary_sensor.motion_sensor_158d000272bfd7
-          - binary_sensor.single_car_garage_door_tilt_sensor_sensor
           - binary_sensor.stairs_motion_sensor_sensor
-          - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+          - binary_sensor.door_window_sensor_158d0004248d5b # Single Car Garage
+          - binary_sensor.door_window_sensor_158d0004231f7b # Double Car Garage
           - binary_sensor.upstairs_multi_sensor_sensor
     action:
       - service: input_label.set_value
@@ -185,8 +193,6 @@ automation:
         data:
           value: 0
           entity_id:
-            - input_label.aeotec_zw120_door_window_sensor_gen5_sensor
-            - input_label.back_door_sensor_sensor
             - input_label.basement_door_sensor_sensor
             - input_label.downstairs_multi_sensor_sensor
             - input_label.front_room_multi_sensor_sensor
@@ -207,19 +213,5 @@ automation:
             - input_label.motion_sensor_158d00047b6f69
             - input_label.motion_sensor_158d000272bf48
             - input_label.motion_sensor_158d000272bfd7
-            - input_label.single_car_garage_door_tilt_sensor_sensor
-            - input_label.stairs_motion_sensor_sensor
-            - input_label.two_car_garage_door_tilt_sensor_sensor
-            - input_label.upstairs_multi_sensor_sensor
-# {% for x in states.binary_sensor if   'camera' not in x.entity_id and
-#                                       'cube' not in x.entity_id and
-#                                       'tesla' not in x.entity_id and
-#                                       'drone' not in x.entity_id and
-#                                       'audio' not in x.entity_id and
-#                                       'protection' not in x.entity_id and
-#                                       'tv' not in x.entity_id and
-#                                       'workday' not in x.entity_id and
-#                                       'home_away' not in x.entity_id and
-#                                       'dining_room' not in x.entity_id %}
-# {{ x.entity_id }}
-# {%- endfor %}
+            - input_label.door_window_sensor_158d000424a6d6
+            - input_label.door_window_sensor_158d00040ad8fc

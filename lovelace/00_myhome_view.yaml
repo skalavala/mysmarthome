@@ -171,9 +171,9 @@ cards:
     show_empty: false
     entities:
       - alarm_control_panel.home
-      - entity: binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+      - entity: binary_sensor.door_window_sensor_158d000424a6d6
         name: Front Door
-      - entity: binary_sensor.back_door_sensor_sensor
+      - entity: binary_sensor.door_window_sensor_158d00040ad8fc
         name: Back Door
       - entity: binary_sensor.basement_door_sensor_sensor
         name: Basement Door
@@ -270,10 +270,16 @@ cards:
     entities:
       - entity: binary_sensor.door_window_sensor_158d000424a6d6
         name: Front Door
+      - entity: binary_sensor.door_window_sensor_158d00040ad8fc
+        name: Back Door
       - entity: binary_sensor.door_window_sensor_158d000424718f
         name: Master Bathroom Door
       - entity: binary_sensor.door_window_sensor_158d00040ad8ec
         name: Pill Box
+      - entity: binary_sensor.door_window_sensor_158d0004231f7b
+        name: Two Car Garage Door
+      - entity: binary_sensor.door_window_sensor_158d0004248d5b
+        name: Single Car Garage Door
 
   - type: entity-filter
     title: Motion Sensors
@@ -292,13 +298,13 @@ cards:
       - binary_sensor.basement_door_sensor_sensor
       - binary_sensor.downstairs_multi_sensor_sensor
       - binary_sensor.front_room_multi_sensor_sensor
-      - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+      - binary_sensor.door_window_sensor_158d000424a6d6
       - binary_sensor.garage_door_sensor_sensor
       - binary_sensor.kitchen_motion_sensor_sensor
-      - binary_sensor.back_door_sensor_sensor
+      - binary_sensor.door_window_sensor_158d00040ad8fc # back door
       - binary_sensor.stairs_motion_sensor_sensor
       - binary_sensor.tv_multi_sensor_sensor
-      - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+      - binary_sensor.door_window_sensor_158d0004248d5b
       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
       - binary_sensor.upstairs_multi_sensor_sensor
     state_filter:
@@ -374,3 +380,7 @@ cards:
       - input_label.motion_sensor_158d000272bf48
       - input_label.motion_sensor_158d000272bfd7
       - input_label.garage_motion
+      - input_label.door_window_sensor_158d0004231f7b
+      - input_label.door_window_sensor_158d0004248d5b
+      - input_label.door_window_sensor_158d00040ad8fc
+      - input_label.door_window_sensor_158d000424a6d6

@@ -79,7 +79,6 @@ cards:
       - automation.family_room_motion_timer
       - automation.family_room_timer_elapsed
       - automation.frontroom_motion_timer
-      - automation.frontroom_timer_elapsed
       - automation.kitchen_motion_timer
       - automation.kitchen_timer_elapsed
       - automation.master_bedroom_motion_timer

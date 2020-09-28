@@ -151,8 +151,8 @@
 #         - binary_sensor.kitchen_motion_sensor_sensor
 #         - binary_sensor.stairs_motion_sensor_sensor
 #         - binary_sensor.upstairs_multi_sensor_sensor
-#         - binary_sensor.two_car_garage_door_tilt_sensor_sensor
-#         - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+#         - binary_sensor.door_window_sensor_158d0004231f7b
+#         - binary_sensor.door_window_sensor_158d0004248d5b
 #         - binary_sensor.motion_sensor_158d0001a662fe
 #         - binary_sensor.motion_sensor_158d0001a25041
 #         - binary_sensor.motion_sensor_158d00016db6d2

@@ -138,6 +138,20 @@ input_boolean:
     name: Long Flash Lights
     initial: off
 
+light:
+  - platform: group
+    name: Family Room Lights
+    entities:
+      - light.hue_color_lamp_1
+      - light.hue_color_lamp_2
+      - light.hue_color_lamp_3
+
+  - platform: group
+    name: Master Bedroom Lights
+    entities:
+      - light.master_bedroom_1
+      - light.master_bedroom_2
+
 ###############################################################################
 #                _                        _   _
 #     /\        | |                      | | (_)

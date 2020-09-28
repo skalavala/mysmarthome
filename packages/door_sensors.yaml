@@ -4,11 +4,11 @@ homeassistant:
       door_notification_script: &door_notification_script
         message: >
           {% set doors = "" %}
-            {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
-                  states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+            {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
               {% set doors = "Attention! Both Garage Doors are OPEN" %}
-            {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
-                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+            {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
               {% set doors = "Both Garage Doors are now CLOSED" %}
             {% else %}
               {% if trigger.to_state.state | lower == "on" %}
@@ -25,15 +25,15 @@ sensor:
       single_car_garage_door_sensor_status:
         friendly_name: Single Car Garage Door Sensor Status
         value_template: >-
-          {% if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'on' %}
+          {% if states('binary_sensor.door_window_sensor_158d0004248d5b') == 'on' %}
             Open
-          {% elif states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'off' %}
+          {% elif states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' %}
             Closed
           {% else %}
             Unknown
           {% endif %}
         icon_template: >-
-          {% set door_status = states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') %}
+          {% set door_status = states('binary_sensor.door_window_sensor_158d0004248d5b') %}
           {% if door_status == 'unknown' %}
             mdi:alert-circle
           {% else %}
@@ -48,16 +48,16 @@ sensor:
     sensors:
       two_car_garage_door_sensor_status:
         value_template: >-
-          {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'on' %}
+          {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'on' %}
             Open
-          {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'off' %}
+          {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' %}
             Closed
           {% else %}
             Unknown
           {% endif %}
         friendly_name: Double Car Garage Door Sensor Status
         icon_template: >-
-          {% set door_status = states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') %}
+          {% set door_status = states('binary_sensor.door_window_sensor_158d0004231f7b') %}
           {% if door_status == 'unknown' %}
             mdi:alert-circle
           {% else %}
@@ -72,14 +72,6 @@ binary_sensor:
   - platform: mqtt
     state_topic: "/garage/motion"
     name: "Garage Motion"
-    device_class: motion
-    payload_on: "on"
-    payload_off: "off"
-    value_template: "{{ value }}"
-
-  - platform: mqtt
-    state_topic: "/kitchen/motion"
-    name: "Kitchen Camera Motion"
     device_class: motion
     payload_on: "on"
     payload_off: "off"
@@ -129,21 +121,6 @@ automation:
       - service: switch.turn_on
         entity_id: switch.garage
 
-  - alias: Kitchen Camera Motion Reset
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.kitchen_camera_motion
-        to: "on"
-        from: "off"
-    action:
-      - delay: "00:00:30"
-      - service: mqtt.publish
-        data:
-          topic: "/kitchen/motion"
-          payload: "off"
-          retain: false
-
   - alias: Frontroom Camera Motion Reset
     initial_state: true
     trigger:
@@ -167,8 +144,8 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.two_car_garage_door_tilt_sensor_sensor
-        - binary_sensor.single_car_garage_door_tilt_sensor_sensor
+        - binary_sensor.door_window_sensor_158d0004231f7b
+        - binary_sensor.door_window_sensor_158d0004248d5b
     condition:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
@@ -206,17 +183,17 @@ automation:
           title: 'Garage Door Status {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >-
             {% set doors = "" %}
-            {% if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "on"  and
-                  states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "on" %}
+            {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
               {% set doors = "Both Garage Doors are OPEN" %}
-            {% elif states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == "off"  and
-                    states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == "off" %}
+            {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
               {% set doors = "Both Garage Doors are CLOSED" %}
             {% else %}
-              {% set doors = states.binary_sensor.single_car_garage_door_tilt_sensor_sensor.name ~ " is " ~
-                            ('Closed' if states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'off' else 'OPEN')
-                             ~ " and " ~ state_attr('binary_sensor.two_car_garage_door_tilt_sensor_sensor', 'friendly_name') ~ " is " ~
-                            ('Closed' if states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'off' else 'OPEN') %}
+              {% set doors = states.binary_sensor.door_window_sensor_158d0004248d5b.name ~ " is " ~
+                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' else 'OPEN')
+                             ~ " and " ~ state_attr('binary_sensor.door_window_sensor_158d0004231f7b', 'friendly_name') ~ " is " ~
+                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' else 'OPEN') %}
             {% endif %}
             Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
           data:
@@ -240,8 +217,8 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
-        - binary_sensor.back_door_sensor_sensor
+        - binary_sensor.door_window_sensor_158d000424a6d6 # Front Door
+        - binary_sensor.door_window_sensor_158d00040ad8fc # Back Door
     condition:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown']  }}"
@@ -278,7 +255,7 @@ automation:
     initial_state: true
     trigger:
       platform: state
-      entity_id: binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor
+      entity_id: binary_sensor.door_window_sensor_158d000424a6d6
       to: "on"
     condition:
       - condition: template
@@ -292,7 +269,7 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: binary_sensor.back_door_sensor_sensor
+        entity_id: binary_sensor.door_window_sensor_158d00040ad8fc
         to: "on"
     condition:
       - condition: template
@@ -322,9 +299,9 @@ automation:
         - condition: and
           conditions:
             - condition: template
-              value_template: "{{ states('binary_sensor.single_car_garage_door_tilt_sensor_sensor') == 'off' }}"
+              value_template: "{{ states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' }}"
             - condition: template
-              value_template: "{{ states('binary_sensor.two_car_garage_door_tilt_sensor_sensor') == 'off' }}"
+              value_template: "{{ states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' }}"
     action:
       - service: switch.turn_on
         entity_id: switch.garage

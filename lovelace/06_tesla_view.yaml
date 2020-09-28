@@ -40,7 +40,7 @@ cards:
     title: Tesla Car
     show_header_toggle: false
     entities:
-      - device_tracker.tesla_model_3_010610_location_tracker
+      - device_tracker.mahasri_tesla_location_tracker
       - binary_sensor.mahasri_tesla_online_sensor
       - binary_sensor.tesla_model_3_parking_brake_sensor
       - lock.tesla_model_3_door_lock
