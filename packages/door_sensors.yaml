@@ -148,6 +148,8 @@ automation:
         - binary_sensor.door_window_sensor_158d0004248d5b
     condition:
       - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+      - condition: template
         value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
       - condition: template
         value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
