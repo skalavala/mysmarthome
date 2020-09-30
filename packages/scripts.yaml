@@ -122,11 +122,15 @@ script:
           entity_id: >
             {%- for state in states.switch if
                                 state.entity_id != 'switch.3d_printer' and
+                                state.entity_id != 'switch.tesla_model_3_charger_switch' and
+                                state.entity_id != 'switch.tesla_model_3_maxrange_switch' and
+                                state.entity_id != 'switch.tesla_model_3_update_switch' and
+                                state.entity_id != 'switch.mahasri_tesla_sentry_mode_switch' and
                                 state.entity_id != 'switch.wemoswitch1' and
                                 state.entity_id != 'switch.wallmote_switch' and
                                 state.entity_id != 'switch.wemobackyardlightswitch' and
                                 state.entity_id != 'switch.frontyard_light' and
-                                not '_siren_' in state.entity_id -%}
+                                not 'ecolink' in state.entity_id -%}
             {{- "," if not loop.first-}}{{ state.entity_id }}{{-endif-}}
             {%- endfor -%}
 
@@ -280,24 +284,21 @@ script:
   #                         |___/
   # Notify Related Scripts
   ###############################################################################
-  ifttt_notify:
+  notify_me_with_picture:
     sequence:
+      - condition: state
+        entity_id: input_boolean.text_alerts
+        state: "on"
       - condition: template
-        value_template: '{{ message | trim != "" }}'
-      - service: ifttt.trigger
+        value_template: '{{- message | trim != "" -}}'
+      - service: notify.telegram
         data_template:
-          event: "Smart_Home"
-          value1: "{{ message }}"
-          value2: ""
-
-  ifttt_leeo_color_change:
-    sequence:
-      - condition: template
-        value_template: '{{ value1 | trim != "" }}'
-      - service: ifttt.trigger
-        data_template:
-          event: "LEEO_COLOR_CHANGE"
-          value1: "{{ value1 }}"
+          title: "{{- title -}}"
+          message: "{{- message -}}"
+          data:
+            photo:
+              - file: "{{- file -}}"
+                caption: "{{- caption -}}"
 
   notify_me:
     sequence:
@@ -306,9 +307,6 @@ script:
         state: "on"
       - condition: template
         value_template: '{{ message | trim != "" }}'
-      - service: script.ifttt_notify
-        data_template:
-          message: "{{ message }}"
       - service: notify.telegram
         data_template:
           message: "{{ message }}"
@@ -327,9 +325,6 @@ script:
   ###############################################################################
   voice_notify:
     sequence:
-      # - service: script.led_message
-      #   data_template:
-      #     message: "{{ message }}"
       - condition: template
         value_template: "{{ states('input_boolean.voice_notifications') == 'on' }}"
       - condition: template

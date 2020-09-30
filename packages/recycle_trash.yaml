@@ -6,7 +6,6 @@
 ###############################################################################
 homeassistant:
   customize:
-  
     sensor.trash_day:
       friendly_name: Is it Trash Day today?
       icon: mdi:delete-variant
@@ -42,33 +41,33 @@ input_select:
   trash_pickup_day:
     name: Current Trash Pickup Day (Evey Week)
     options:
-     - Monday
-     - Tuesday
-     - Wednesday
-     - Thursday
-     - Friday
-     - Saturday
-     - Sunday
-     - unknown
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+      - Sunday
+      - unknown
     icon: mdi:delete-variant
   recycle_pickup_day:
     name: Current Recycle Pickup Day (Every Other Week)
     options:
-     - Monday
-     - Tuesday
-     - Wednesday
-     - Thursday
-     - Friday
-     - Saturday
-     - Sunday
-     - unknown
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+      - Sunday
+      - unknown
     icon: mdi:recycle
   recycle_pickup_week:
     name: Select Recycle Pickup Week based on Current Week above
     options:
-     - Even Weeks
-     - Odd Weeks
-     - unknown
+      - Even Weeks
+      - Odd Weeks
+      - unknown
     icon: mdi:recycle
 
 ###############################################################################
@@ -87,7 +86,7 @@ sensor:
     state_topic: "/home/trashpickupday"
     name: "Trash Pickup Day"
     value_template: "{{ value }}"
-    qos: 1  
+    qos: 1
   - platform: mqtt
     state_topic: "/home/recyclepickupday"
     name: "Recycle Pickup Day"
@@ -99,9 +98,9 @@ sensor:
     value_template: "{{ value }}"
     qos: 1
 
-###############################################################################
-# Sensor to hold info about current week is an odd week or an even week of the year
-###############################################################################
+  ###############################################################################
+  # Sensor to hold info about current week is an odd week or an even week of the year
+  ###############################################################################
   - platform: template
     sensors:
       current_week:
@@ -116,10 +115,10 @@ sensor:
             Odd Week (Week# {{ as_timestamp(today) | timestamp_custom('%U', true) }})
           {%- endif -%}
 
-###############################################################################
-# Trash  - Pickup schedule is EVERY week.
-# Set the day to a day before the actual day leaving time for reminders
-###############################################################################
+  ###############################################################################
+  # Trash  - Pickup schedule is EVERY week.
+  # Set the day to a day before the actual day leaving time for reminders
+  ###############################################################################
   - platform: template
     sensors:
       trash_day:
@@ -135,10 +134,10 @@ sensor:
             no
           {%- endif -%}
 
-###############################################################################
-# Recycle - Pickup schedule is every other week.
-# Set the day to a day before the actual day leaving time for reminders
-###############################################################################
+  ###############################################################################
+  # Recycle - Pickup schedule is every other week.
+  # Set the day to a day before the actual day leaving time for reminders
+  ###############################################################################
   - platform: template
     sensors:
       recycle_day:
@@ -188,22 +187,21 @@ sensor:
           {{- is_it_today() -}}
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
-# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/              
-#                                                                              
+# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+#
 ###############################################################################
 automation:
-
-###############################################################################
-#  The schedule can be changed via UI. The updated schedules are saved in MQTT
-#  The input_selects don't maintain state automatically - hence this code
-#  These automations are hidden - no interaction with user is required.
-#  Save & Restore Functionality
-###############################################################################
+  ###############################################################################
+  #  The schedule can be changed via UI. The updated schedules are saved in MQTT
+  #  The input_selects don't maintain state automatically - hence this code
+  #  These automations are hidden - no interaction with user is required.
+  #  Save & Restore Functionality
+  ###############################################################################
   - alias: Trash Pickup Day Changed
     initial_state: true
     trigger:
@@ -214,7 +212,7 @@ automation:
         data_template:
           topic: "/home/trashpickupday"
           retain: true
-          payload: '{{ states.input_select.trash_pickup_day.state }}'
+          payload: "{{ states.input_select.trash_pickup_day.state }}"
 
   - alias: Recycle Pickup Day Changed
     initial_state: true
@@ -226,7 +224,7 @@ automation:
         data_template:
           topic: "/home/recyclepickupday"
           retain: true
-          payload: '{{ states.input_select.recycle_pickup_day.state }}'
+          payload: "{{ states.input_select.recycle_pickup_day.state }}"
 
   - alias: Recycle Pickup Week Changed
     initial_state: true
@@ -238,7 +236,7 @@ automation:
         data_template:
           topic: "/home/recyclepickupweek"
           retain: true
-          payload: '{{ states.input_select.recycle_pickup_week.state }}'
+          payload: "{{ states.input_select.recycle_pickup_week.state }}"
 
   - alias: Restore Trash Recycle Settings on Startup
     initial_state: true
@@ -247,7 +245,7 @@ automation:
       event: start
     action:
       - delay:
-          minutes: 1      
+          minutes: 1
       - service: input_select.select_option
         data_template:
           entity_id: input_select.trash_pickup_day
@@ -261,62 +259,39 @@ automation:
           entity_id: input_select.recycle_pickup_week
           option: "{{states.sensor.recycle_pickup_week.state}}"
 
-###############################################################################
-#  Reminder code - Reminds 5 times every hour starting 4 PM
-#  Conditions: Only notifies when someone is at home 
-###############################################################################
+  ###############################################################################
+  #  Reminder code - Reminds 5 times every hour starting 4 PM
+  #  Conditions: Only notifies when someone is at home
+  ###############################################################################
   - alias: Trash and Recycle Pickup Reminder
     initial_state: true
     trigger:
       - platform: time
-        at: '16:00:00'
+        at: "16:00:00"
       - platform: time
-        at: '17:00:00'
+        at: "17:00:00"
       - platform: time
-        at: '18:00:00'
+        at: "18:00:00"
       - platform: time
-        at: '19:00:00'
+        at: "19:00:00"
       - platform: time
-        at: '20:00:00'
+        at: "20:00:00"
       - platform: time
-        at: '21:00:00'
+        at: "21:00:00"
     condition:
       condition: and
       conditions:
-      - condition: template
-        value_template: '{{ states.input_boolean.trash_reminders.state == "on" }}'
-      - condition: or
-        conditions:
-          - condition: state
-            entity_id: sensor.trash_day
-            state: 'yes'
-          - condition: state
-            entity_id: sensor.recycle_day
-            state: 'yes'
+        - condition: template
+          value_template: '{{ states.input_boolean.trash_reminders.state == "on" }}'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: sensor.trash_day
+              state: "yes"
+            - condition: state
+              entity_id: sensor.recycle_day
+              state: "yes"
     action:
-      - service: notify.ios_suresh
-        data_template:
-          title: >
-            {% if states.sensor.trash_day.state == "yes" and states.sensor.recycle_day.state == "yes" %}
-              Trash and Recycle Pickup Tomorrow!
-            {% elif states.sensor.trash_day.state == "yes" %}
-              Trash Pickup Tomorrow!
-            {% elif states.sensor.recycle_day.state == "yes" %}
-              Recycle Pickup Tomorrow!
-            {% endif %}
-          message: >
-            {% if states.sensor.trash_day.state == "yes" and states.sensor.recycle_day.state == "yes" %}
-              Please leave Trash AND Recycle bins out tonight!
-            {% elif states.sensor.trash_day.state == "yes" %}
-              Please leave Trash bin outside tonight!
-            {% elif states.sensor.recycle_day.state == "yes" %}
-              Please leave Recycle bin outside tonight!
-            {% endif %}
-          data:
-            push:
-              badge: 0
-              category: "trash_recycle"
-
       - service: script.notify_me
         data_template:
           message: >
@@ -340,39 +315,11 @@ automation:
               Attention!: Tomorrow is the Recycle Pickup day. Please don't forget to put the recycle bin outside tonight!
             {% endif %}
 
-  - alias: Trash and Recycle Bin Left Outside Already
-    initial_state: true
-    trigger:
-      platform: event
-      event_type: ios.notification_action_fired
-      event_data:
-        actionName: TRASH_LEFT
-    action:
-      - service: notify.ios_suresh
-        data:
-          message: "Great job, Thank you!"
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.trash_reminders
-
-  - alias: Remind later
-    initial_state: true
-    trigger:
-      platform: event
-      event_type: ios.notification_action_fired
-      event_data:
-        actionName: TRASH_REMIND_LATER
-    action:
-      - service: notify.ios_suresh
-        data:
-          message: "Will remind you again in an hour!"
-      - service: input_boolean.turn_on
-        entity_id: input_boolean.trash_reminders
-
   - alias: Reset Trash Reminders
     initial_state: true
     trigger:
       - platform: time
-        at: '09:00:00'
+        at: "09:00:00"
     action:
       - service: input_boolean.turn_on
         entity_id: input_boolean.trash_reminders

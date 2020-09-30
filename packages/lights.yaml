@@ -88,9 +88,9 @@ homeassistant:
     input_boolean.animate_upstairs_lights:
       icon: mdi:flash-outline
       friendly_name: Animate Master Bedroom Lights
-hue:
-  bridges:
-    - host: !secret philips_hue_ipaddress
+# hue:
+#   bridges:
+#     - host: !secret philips_hue_ipaddress
 
 tplink:
   discovery: false

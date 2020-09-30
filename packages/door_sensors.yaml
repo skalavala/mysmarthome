@@ -144,8 +144,8 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.door_window_sensor_158d0004231f7b
-        - binary_sensor.door_window_sensor_158d0004248d5b
+        - binary_sensor.door_window_sensor_158d0004231f7b # 2 Car Garage
+        - binary_sensor.door_window_sensor_158d0004248d5b # Single car garage
     condition:
       - condition: template
         value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
@@ -178,39 +178,59 @@ automation:
           entity_id: "camera.garage_camera"
           filename:
             "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
-            (states.automation.notify_garage_door_status.last_triggered ~ '').replace('-','_')
-            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+            ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
+
+      - service: script.notify_me_with_picture
+        data_template:
+          title: 'Garage Door Status {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
+          message: >-
+            {%- set doors = "" -%}
+            {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" -%}
+              {% set doors = "Both Garage Doors are OPEN" -%}
+            {%- elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" -%}
+              {% set doors = "Both Garage Doors are CLOSED" -%}
+            {%- else -%}
+            {% set doors = states.binary_sensor.door_window_sensor_158d0004248d5b.name ~ " is " ~
+                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' else 'OPEN')
+                             ~ " and " ~ state_attr('binary_sensor.door_window_sensor_158d0004231f7b', 'friendly_name') ~ " is " ~
+                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' else 'OPEN') %}
+            {%- endif %}
+            Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
+          file: >
+            {{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+                ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}
+          caption: "{{ trigger.to_state.attributes.friendly_name }}: {{ 'OPEN' if trigger.to_state.state == 'on' else 'CLOSED' }}"
+
       - service: notify.notify_smtp
         data_template:
           title: 'Garage Door Status {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >-
-            {% set doors = "" %}
-            {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
-                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
-              {% set doors = "Both Garage Doors are OPEN" %}
-            {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
-                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
-              {% set doors = "Both Garage Doors are CLOSED" %}
-            {% else %}
-              {% set doors = states.binary_sensor.door_window_sensor_158d0004248d5b.name ~ " is " ~
+            {%- set doors = "" -%}
+            {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" -%}
+              {%- set doors = "Both Garage Doors are OPEN" -%}
+            {%- elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" -%}
+              {%- set doors = "Both Garage Doors are CLOSED" -%}
+            {%- else -%}
+              {%- set doors = states.binary_sensor.door_window_sensor_158d0004248d5b.name ~ " is " ~
                             ('Closed' if states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' else 'OPEN')
                              ~ " and " ~ state_attr('binary_sensor.door_window_sensor_158d0004231f7b', 'friendly_name') ~ " is " ~
-                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' else 'OPEN') %}
-            {% endif %}
+                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' else 'OPEN') -%}
+            {%- endif -%}
             Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
           data:
             images:
               - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
-                (states.automation.notify_garage_door_status.last_triggered ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-      - service_template: >
-          {% if trigger.to_state.state | lower == "on" %}
-            switch.turn_on
-          {% else %}
-            switch.turn_off
-          {% endif%}
-        data:
-          entity_id: switch.garage
+                ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
+
+      - service_template: "switch.turn_{{- trigger.to_state.state }}"
+        entity_id: switch.garage
 
   # Notify Entry Door Status
   ###############################################################################

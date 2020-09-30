@@ -132,7 +132,6 @@ cards:
       - automation.home_security_system_watchdog_10_minutes
       - automation.home_security_system_watchdog_30_minutes
       - automation.notify_home_security_status_change
-      - automation.night_homesecurity_on
       - automation.turn_on_thermostat_upon_reaching_home
 
   - type: conditional
@@ -178,12 +177,10 @@ cards:
     entities:
       - automation.reset_trash_reminders
       - automation.restore_trash_recycle_settings_on_startup
-      - automation.trash_and_recycle_bin_left_outside_already
       - automation.trash_and_recycle_pickup_reminder
       - automation.trash_pickup_day_changed
       - automation.recycle_pickup_day_changed
       - automation.recycle_pickup_week_changed
-      - automation.remind_later
 
   - type: entities
     title: Camera Automations

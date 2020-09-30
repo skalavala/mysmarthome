@@ -20,7 +20,6 @@ logs:
   homeassistant.components.wemo: critical
   homeassistant.components.sensor: critical
   homeassistant.components.cloud.iot: warning
-  homeassistant.components.hue: critical
   homeassistant.components.http: warning
   homeassistant.components.camera: warning
   homeassistant.components.zwave: warning

@@ -16,14 +16,14 @@ homeassistant:
   packages: !include_dir_named packages
 
   allowlist_external_dirs:
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/patio/"
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/garage/"
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/playarea/"
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/"
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/"
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/"
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/"
-    - "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/"
+    - /home/homeassistant/.homeassistant/www/downloads/camera/patio/
+    - /home/homeassistant/.homeassistant/www/downloads/camera/garage/
+    - /home/homeassistant/.homeassistant/www/downloads/camera/playarea/
+    - /home/homeassistant/.homeassistant/www/downloads/camera/driveway/
+    - /home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/
+    - /home/homeassistant/.homeassistant/www/downloads/camera/kitchen/
+    - /home/homeassistant/.homeassistant/www/downloads/camera/frontroom/
+    - /home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/
 
 sun:
 alexa:
@@ -31,8 +31,6 @@ config:
 discovery:
   ignore:
     - homekit
-
-# shopping_list:
 
 octoprint:
   host: !secret octoprint_ip
@@ -50,33 +48,15 @@ homekit:
     include_entities:
       - binary_sensor.door_window_sensor_158d00040ad8fc # Back Door
       - binary_sensor.door_window_sensor_158d000424a6d6 # Front Door
-      - binary_sensor.door_window_sensor_158d0004248d5b
-      - binary_sensor.door_window_sensor_158d0004231f7b
+      - binary_sensor.door_window_sensor_158d0004248d5b # Single Car Garage
+      - binary_sensor.door_window_sensor_158d0004231f7b # Double Car Garage
 
 mobile_app:
-
-# map:
-# updater:
-# logbook:
-# history:
-# recorder:
-#   db_url: !secret my_sql_url
-# influxdb:
-#  host: 192.168.1.125
-#  include:
-#    entities:
-#      - sensor.dining_room_thermostat_temperature
-#      - sensor.downstairs_multi_sensor_temperature
-#      - sensor.front_room_multi_sensor_temperature
-#      - sensor.guest_bedroom_multi_sensor_temperature
-#      - sensor.tv_multi_sensor_temperature
 
 websocket_api:
 python_script:
 logger: !include logging.yaml
-
 zeroconf:
-#owntracks:
 system_health:
 
 life360:
@@ -123,63 +103,4 @@ emulated_hue:
     - light
     - switch
     - input_boolean
-
-panel_iframe:
-  front_room_ha:
-    title: Front Room HA
-    icon: mdi:home-assistant
-    url: !secret front_room_ha_url
-  tv_room_ha:
-    title: TV Room HA
-    icon: mdi:home-assistant
-    url: !secret tv_room_ha_url
-  snapcast_server:
-    title: Snapcast Server
-    icon: mdi:music
-    url: !secret snapcast_server_url
-
-ios:
-  push:
-    categories:
-      - name: Single Car Garage Door
-        identifier: "1CAR_GARAGE"
-        actions:
-          - identifier: "1CAR_GARAGE_CLOSE"
-            title: "Close Garage Door"
-            activationMode: "background"
-            authenticationRequired: yes
-            destructive: yes
-            behavior: "default"
-      - name: Two Car Garage Door
-        identifier: "2CAR_GARAGE"
-        actions:
-          - identifier: "2CAR_GARAGE_CLOSE"
-            title: "Close Garage Door"
-            activationMode: "background"
-            authenticationRequired: yes
-            destructive: yes
-            behavior: "default"
-      - name: Trash Recycle
-        identifier: "trash_recycle"
-        actions:
-          - identifier: "TRASH_LEFT"
-            title: "Done"
-            activationMode: "background"
-            authenticationRequired: yes
-            destructive: yes
-            behavior: "default"
-          - identifier: "TRASH_REMIND_LATER"
-            title: "Remind Later"
-            activationMode: "background"
-            authenticationRequired: yes
-            destructive: yes
-            behavior: "default"
-      - name: Welcome Home
-        identifier: "welcome_home"
-        actions:
-          - identifier: "DISABLE_SECURITY"
-            title: "Yes"
-            activationMode: "background"
-            authenticationRequired: yes
-            destructive: yes
-            behavior: "default"
+    - group
