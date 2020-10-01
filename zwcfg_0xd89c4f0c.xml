@@ -259,9 +259,9 @@
 			</CommandClass>
 			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="5" innif="true">
 				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="75.3" />
+				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="62.3" />
 				<Value type="decimal" genre="user" instance="1" index="3" label="Luminance" units="lux" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
-				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="55" />
+				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="63" />
 				<Value type="decimal" genre="user" instance="1" index="27" label="Ultraviolet" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
 			</CommandClass>
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" innif="true">
@@ -547,9 +547,9 @@
 				<Instance index="1" />
 				<Value type="decimal" genre="user" instance="1" index="0" label="Energy" units="kWh" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="61.693" />
 				<Value type="decimal" genre="user" instance="1" index="1" label="Previous Reading" units="kWh" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="61.693" />
-				<Value type="int" genre="user" instance="1" index="2" label="Interval" units="seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="232" />
+				<Value type="int" genre="user" instance="1" index="2" label="Interval" units="seconds" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="-2147483648" max="2147483647" value="65535" />
 				<Value type="decimal" genre="user" instance="1" index="8" label="Power" units="W" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0.000" />
-				<Value type="decimal" genre="user" instance="1" index="16" label="Voltage" units="V" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="122.888" />
+				<Value type="decimal" genre="user" instance="1" index="16" label="Voltage" units="V" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="122.578" />
 				<Value type="decimal" genre="user" instance="1" index="20" label="Current" units="A" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0.000" />
 				<Value type="bool" genre="user" instance="1" index="32" label="Exporting" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
 				<Value type="button" genre="system" instance="1" index="33" label="Reset" units="" read_only="false" write_only="true" verify_changes="false" poll_intensity="0" min="0" max="0" />
@@ -719,7 +719,7 @@
 			</CommandClass>
 			<CommandClass id="129" name="COMMAND_CLASS_CLOCK" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
-				<Value type="list" genre="user" instance="1" index="0" label="Day" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="4" size="1">
+				<Value type="list" genre="user" instance="1" index="0" label="Day" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" vindex="5" size="1">
 					<Item label="Monday" value="1" />
 					<Item label="Tuesday" value="2" />
 					<Item label="Wednesday" value="3" />
@@ -728,8 +728,8 @@
 					<Item label="Saturday" value="6" />
 					<Item label="Sunday" value="7" />
 				</Value>
-				<Value type="byte" genre="user" instance="1" index="1" label="Hour" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="12" />
-				<Value type="byte" genre="user" instance="1" index="2" label="Minute" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="16" />
+				<Value type="byte" genre="user" instance="1" index="1" label="Hour" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="22" />
+				<Value type="byte" genre="user" instance="1" index="2" label="Minute" units="" read_only="false" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="19" />
 			</CommandClass>
 			<CommandClass id="130" name="COMMAND_CLASS_HAIL" version="1" request_flags="4" after_mark="true" innif="true">
 				<Instance index="1" />
@@ -1139,7 +1139,7 @@
 			</CommandClass>
 			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="7" innif="true">
 				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="C" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="24.90" />
+				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="F" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="72.50" />
 			</CommandClass>
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
@@ -1349,7 +1349,7 @@
 			</CommandClass>
 			<CommandClass id="48" name="COMMAND_CLASS_SENSOR_BINARY" version="1" request_flags="4" innif="true">
 				<Instance index="1" />
-				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="False" />
+				<Value type="bool" genre="user" instance="1" index="0" label="Sensor" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="True" />
 				<SensorMap index="0" type="27" />
 				<SensorMap index="0" type="31" />
 				<SensorMap index="0" type="224" />
@@ -1357,9 +1357,9 @@
 			</CommandClass>
 			<CommandClass id="49" name="COMMAND_CLASS_SENSOR_MULTILEVEL" version="5" innif="true">
 				<Instance index="1" />
-				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="C" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="25.7" />
+				<Value type="decimal" genre="user" instance="1" index="1" label="Temperature" units="C" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="21.9" />
 				<Value type="decimal" genre="user" instance="1" index="3" label="Luminance" units="lux" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
-				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="48" />
+				<Value type="decimal" genre="user" instance="1" index="5" label="Relative Humidity" units="%" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="44" />
 				<Value type="decimal" genre="user" instance="1" index="27" label="Ultraviolet" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="0" value="0" />
 			</CommandClass>
 			<CommandClass id="90" name="COMMAND_CLASS_DEVICE_RESET_LOCALLY" version="1" request_flags="4" innif="true">
@@ -1539,7 +1539,7 @@
 				<Value type="byte" genre="user" instance="1" index="0" label="Alarm Type" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 				<Value type="byte" genre="user" instance="1" index="1" label="Alarm Level" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
 				<Value type="byte" genre="user" instance="1" index="2" label="SourceNodeId" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
-				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="0" />
+				<Value type="byte" genre="user" instance="1" index="10" label="Burglar" units="" read_only="true" write_only="false" verify_changes="false" poll_intensity="0" min="0" max="255" value="8" />
 			</CommandClass>
 			<CommandClass id="114" name="COMMAND_CLASS_MANUFACTURER_SPECIFIC" version="1" request_flags="4" innif="true">
 				<Instance index="1" />

@@ -86,7 +86,7 @@ sensor:
         value_template: >
           {% set seconds = states('sensor.octoprint_time_remaining')|int %}
           {% if now().strftime('%s')|int | timestamp_custom("%A %D") ==  (now().strftime('%s') |int + seconds) | timestamp_custom("%A %D")  %}
-            Today at {{- now().strftime('%s')|int | timestamp_custom("%l:%M %p") }}
+            Today at {{- (now().strftime('%s')|int + seconds) | timestamp_custom("%l:%M %p") }}
           {% else %}
             {{ (now().strftime('%s') |int + seconds) | timestamp_custom("%A %D %l:%M %p") }}
           {% endif %}
