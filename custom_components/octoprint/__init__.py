@@ -1,3 +1,7 @@
+#
+# API URLS: http://192.168.xxx.xxx/api/printer and http://192.168.xxx.xxx/api/job
+#
+
 """Support for monitoring OctoPrint 3D printers."""
 import logging
 import time

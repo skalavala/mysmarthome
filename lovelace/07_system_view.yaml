@@ -22,21 +22,7 @@ cards:
       - sensor.processor_use
       - sensor.memory_free
       - binary_sensor.workday_sensor
-      - sensor.ha_installed_version
-      - sensor.ha_current_version
       - sensor.home_assistant_up_time
-
-  - type: entities
-    title: Alarm Clock
-    show_header_toggle: false
-    entities:
-      - automation.alarm_clock
-      - input_boolean.am
-      - input_boolean.pm
-      - input_boolean.week_day_only
-      - input_label.alarm_current_time
-      - input_number.slider_hours
-      - input_number.slider_minutes
 
   - type: horizontal-stack
     cards:

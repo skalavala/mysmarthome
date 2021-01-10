@@ -108,9 +108,9 @@ automation:
         state: "on"
     action:
       - service: switch.turn_off
-        entity_id: switch.frontyard_light
+        entity_id: switch.frontyard
       - service: switch.turn_off
-        entity_id: switch.wemobackyardlightswitch
+        entity_id: switch.backyard
 
   ###############################################################################
   # Turn OF Kitchen Lights after 3 hours of wake up time during school/work days
@@ -162,9 +162,9 @@ automation:
         state: "on"
     action:
       - service: switch.turn_on
-        entity_id: switch.frontyard_light
+        entity_id: switch.frontyard
       - service: switch.turn_on
-        entity_id: switch.wemobackyardlightswitch
+        entity_id: switch.backyard
 
   ###############################################################################
   # Turn indoor lights on 30 minutes before sunset
@@ -218,6 +218,8 @@ automation:
         entity_id: switch.kids_bed_accent
       - service: switch.turn_on
         entity_id: switch.front_room
+      - service: switch.turn_on
+        entity_id: switch.officeroom_accent_lights
 
   #  ÛÛÛÛÛÛ   ÛÛÛÛÛ  ÛÛÛ           ÛÛÛÛÛ       ÛÛÛÛÛ
   # °°ÛÛÛÛÛÛ °°ÛÛÛ  °°°           °°ÛÛÛ       °°ÛÛÛ

@@ -148,42 +148,34 @@ input_boolean:
 
   movie_time:
     name: "Movie Time"
-    initial: off
     icon: mdi:movie-roll
 
   stream_camera2chromecast:
     name: Stream Cameras to Chromecast
     icon: mdi:cctv
-    initial: on
 
   home_security:
     name: Home Security System
-    initial: off
     icon: mdi:verified
 
   home_assistant_status:
     name: Home Status
-    initial: off
     icon: mdi:home-assistant
 
   working_in_garage:
     name: Working in Garage
-    initial: off
     icon: mdi:worker
 
   working_in_office_room:
     name: Working in Office Room
-    initial: off
     icon: mdi:worker
 
   hourly_report:
     name: Hourly Report
-    initial: on
     icon: mdi:file-chart
 
   nightly_report:
     name: Nightly Report
-    initial: on
     icon: mdi:file-chart
 
   notify_camera_alerts:
@@ -192,32 +184,22 @@ input_boolean:
 
   trash_reminders:
     name: Remind Trash Notifications
-    initial: on
     icon: mdi:recycle
 
   enjoyable_weather_reminders:
     name: Remind me to enjoy Good Weather
-    initial: on
     icon: mdi:weather-sunny
 
   security_system_alerts:
     name: Notify Security System Status Change
-    initial: on
     icon: mdi:verified
 
   zone_alerts:
     name: Zone Alerts
-    initial: on
     icon: mdi:map-marker
-
-  alarm_clock:
-    name: Alarm Clock
-    initial: on
-    icon: mdi:calendar-check
 
   battery_notifications:
     name: Battery Notifications
-    initial: on
     icon: mdi:battery
 
   sharp_tv:
@@ -233,16 +215,13 @@ input_boolean:
   light_automations:
     name: Light Automations
     icon: mdi:lightbulb-on
-    initial: on
 
   text_alerts:
     name: Text Alerts
-    initial: on
     icon: mdi:map-marker
 
   garage_door_notifications:
     name: Garage Door Notifications
-    initial: on
     icon: mdi:garage
 
 ###############################################################################

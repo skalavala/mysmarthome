@@ -67,12 +67,28 @@ cards:
           domain: script
           action: stream_playarea_camera_to_chromecast
 
+  - type: "custom:button-card"
+    name: RESET CAMERA
+    entity: input_label.current_stream
+    icon: mdi:cctv
+    color_type: card
+    style:
+      - font-weight: bold
+      - color: rgb(0, 0, 5)
+    state:
+      - value: "frontyard"
+        color: var(--primary-color)
+    action: service
+    service:
+      domain: script
+      action: reset_camera_stream
+
   - type: picture-glance
     id: camera_frontdoor_camera
     title: Frontdoor Camera
     entity: camera.frontdoor_camera
     camera_image: camera.frontdoor_camera
-    camera_view: live
+    # camera_view: live
     show_info: true
     tap_action:
       action: more-info
@@ -138,3 +154,15 @@ cards:
     entities:
       - binary_sensor.motion_sensor_158d00016c2d0e
       - binary_sensor.octoprint_printing
+
+  - type: picture-glance
+    id: porch_camera
+    title: Porch Camera
+    entity: camera.porch_camera
+    camera_image: camera.porch_camera
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - binary_sensor.porch_motion
+      - switch.frontyard_light

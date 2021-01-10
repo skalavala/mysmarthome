@@ -11,9 +11,9 @@ homeassistant:
                     states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
               {% set doors = "Both Garage Doors are now CLOSED" %}
             {% else %}
-              {% if trigger.to_state.state | lower == "on" %}
+              {% if trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "on" %}
                 Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
-              {% elif trigger.to_state.state | lower == "off" %}
+              {% elif trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "off" %}
                 Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
               {% endif %}
             {% endif %}
@@ -77,13 +77,6 @@ binary_sensor:
     payload_off: "off"
     value_template: "{{ value }}"
 
-  - platform: mqtt
-    state_topic: "/frontroom/motion"
-    name: "Frontroom Camera Motion"
-    device_class: motion
-    payload_on: "on"
-    payload_off: "off"
-    value_template: "{{ value }}"
 
 ###############################################################################
 #                _                        _   _
@@ -111,30 +104,19 @@ automation:
           payload: "off"
           retain: false
 
-  - alias: Turn Garage Lights On When Motion Detected
+  - alias: Turn Garage Lights On When Motion Detected or Door Opened
     initial_state: true
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_sensor_158d000272bf48
         to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: switch.turn_on
         entity_id: switch.garage
-
-  - alias: Frontroom Camera Motion Reset
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.frontroom_camera_motion
-        to: "on"
-        from: "off"
-    action:
-      - delay: "00:00:30"
-      - service: mqtt.publish
-        data:
-          topic: "/frontroom/motion"
-          payload: "off"
-          retain: false
 
   ################################################################################
   # Notifies when either of the garage door is opened or closed
@@ -177,7 +159,7 @@ automation:
         data_template:
           entity_id: "camera.garage_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+            "{{ '/config/www/downloads/camera/garage/garage_' ~
             ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
 
@@ -200,7 +182,7 @@ automation:
             {%- endif %}
             Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
           file: >
-            {{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+            {{ '/config/www/downloads/camera/garage/garage_' ~
                 ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}
           caption: "{{ trigger.to_state.attributes.friendly_name }}: {{ 'OPEN' if trigger.to_state.state == 'on' else 'CLOSED' }}"
@@ -225,7 +207,7 @@ automation:
             Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+              - "{{ '/config/www/downloads/camera/garage/garage_' ~
                 ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
 
@@ -241,9 +223,12 @@ automation:
       entity_id:
         - binary_sensor.door_window_sensor_158d000424a6d6 # Front Door
         - binary_sensor.door_window_sensor_158d00040ad8fc # Back Door
+        - binary_sensor.door_window_sensor_158d0004880f30 # Garage Entry Door
     condition:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown']  }}"
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
       - service: script.voice_notify
         data_template:
@@ -280,12 +265,15 @@ automation:
       entity_id: binary_sensor.door_window_sensor_158d000424a6d6
       to: "on"
     condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: script.frontdoor_cam
       - condition: template
         value_template: "{{ states('sun.sun') == 'below_horizon' }}"
-    action:
       - service: switch.turn_on
         entity_id: switch.front_room
-      - service: script.frontdoor_cam
 
   - alias: When Back Door Opens Turn Kitchen Lights ON
     initial_state: true
@@ -294,12 +282,15 @@ automation:
         entity_id: binary_sensor.door_window_sensor_158d00040ad8fc
         to: "on"
     condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service_template: "script.{{ ['patio_cam', 'playarea_cam'] | random }}"
       - condition: template
         value_template: "{{ states('sun.sun') == 'below_horizon' }}"
-    action:
       - service: switch.turn_on
         entity_id: switch.kitchen
-      - service_template: "script.{{ ['patio_cam', 'playarea_cam'] | random }}"
 
   ################################################################################
   #  When I open the garage door
@@ -311,7 +302,7 @@ automation:
     initial_state: true
     trigger:
       platform: state
-      entity_id: binary_sensor.garage_door_sensor_sensor
+      entity_id: binary_sensor.door_window_sensor_158d0004880f30
       to: "on"
     condition:
       condition: or
@@ -324,8 +315,52 @@ automation:
               value_template: "{{ states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' }}"
             - condition: template
               value_template: "{{ states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' }}"
+        - condition: state
+          entity_id: input_boolean.light_automations
+          state: "on"
     action:
       - service: switch.turn_on
         entity_id: switch.garage
       - service: timer.start
         entity_id: timer.timer_garage
+
+#
+# Only turn ON lights at 25% at night
+#
+  - alias: Master Bathroom Door Opened After Dark
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.door_window_sensor_158d000424718f
+      to: "on"
+    condition:
+      - condition: template
+        value_template: '{{states.sun.sun.state == "below_horizon"}}'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: light.turn_on
+        entity_id: light.master_bathroom_lights
+        data:
+          brightness: 64 # 25% of brightness
+          transition: 5
+
+  - alias: Master Bathroom Door Opened During The Day
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.door_window_sensor_158d000424718f
+      to: "on"
+    condition:
+      - condition: template
+        value_template: '{{states.sun.sun.state == "above_horizon"}}'
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: light.turn_on
+        entity_id: light.master_bathroom_lights
+        data:
+          brightness: 255 # 100% of brightness
+          transition: 10

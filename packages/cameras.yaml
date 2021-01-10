@@ -45,37 +45,56 @@ camera:
     username: !secret camera_username
     password: !secret camera_password
 
+  - platform: generic
+    name: Porch Camera
+    still_image_url: !secret porch_camera_url
+    stream_source: porch_camera_rtsp_url
+    verify_ssl: false
+    authentication: basic
+    username: !secret porch_camera_username
+    password: !secret porch_camera_password
+
+  # - platform: ffmpeg
+  #   input: porch_camera_rtsp_url
+  #   name: Porch Camera
+
   - platform: mjpeg
     mjpeg_url: !secret garage_camera_url
     name: Garage Camera
 
-  - platform: mjpeg
-    mjpeg_url: !secret kitchen_camera_url
-    name: Kitchen Camera
-
-  # - platform: mjpeg
-  #   mjpeg_url: !secret frontroom_camera_url
-  #   name: Frontroom Camera
-
   - platform: local_file
     name: Frontdoor Latest Scan
-    file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
+    file_path: "/config/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
   - platform: local_file
     name: Driveway Latest Scan
-    file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_latest.jpg"
+    file_path: "/config/www/downloads/camera/driveway/driveway_latest.jpg"
   - platform: local_file
     name: Patio Latest Scan
-    file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_latest.jpg"
+    file_path: "/config/www/downloads/camera/patio/patio_latest.jpg"
   - platform: local_file
     name: Playarea Latest Scan
-    file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_latest.jpg"
+    file_path: "/config/www/downloads/camera/playarea/playarea_latest.jpg"
   - platform: local_file
     name: Garage Latest Scan
-    file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_latest.jpg"
+    file_path: "/config/www/downloads/camera/garage/garage_latest.jpg"
   - platform: local_file
     name: 3dPrinter Latest Scan
-    file_path: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
+    file_path: "/config/www/downloads/camera/3d/3d_latest.jpg"
+  - platform: local_file
+    name: Porch Latest Scan
+    file_path: "/config/www/downloads/camera/porch/porch_latest.jpg"
 
+shell_command:
+  reset_camera_stream: !secret camera_stream_restart_docker_url
+
+switch:
+  - platform: rest
+    resource: !secret camera_stream_docker_url
+    name: Camera Stream
+    body_on: '{"state": "start"}'
+    body_off: '{"state": "stop"}'
+    is_on_template: '{{ value_json is not none and value_json.state == "running" }}'
+ 
 binary_sensor:
   - platform: hikvision
     name: Frontdoor Camera
@@ -105,6 +124,14 @@ binary_sensor:
     username: !secret camera_username
     password: !secret camera_password
 
+  - platform: mqtt
+    state_topic: "myhome/dafang_1/motion"
+    name: "Porch Motion"
+    device_class: motion
+    payload_on: "ON"
+    payload_off: "OFF"
+    value_template: "{{ value }}"
+
 image_processing:
   - platform: tensorflow
     scan_interval: 10000
@@ -115,11 +142,12 @@ image_processing:
       - entity_id: camera.playarea_camera
       - entity_id: camera.garage_camera
       - entity_id: camera.3d_printer_camera
+      - entity_id: camera.porch_camera
     file_out:
-      - "/home/homeassistant/.homeassistant/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_latest.jpg"
-      - "/home/homeassistant/.homeassistant/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
+      - "/config/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_latest.jpg"
+      - "/config/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
     model:
-      graph: /home/homeassistant/.homeassistant/tensorflow/models/efficientdet_d0_coco17_tpu-32/
+      graph: /config/tensorflow/models/efficientdet_d0_coco17_tpu-32/
 
 input_label:
   current_stream:
@@ -194,6 +222,26 @@ rest_command:
 ###############################################################################
 
 automation:
+
+  - alias: Scan Porch Camera On Motion
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.porch_motion
+        from: "off"
+        to: "on"
+    action:
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.porch_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/porch/porch_' ~
+            (states.binary_sensor.porch_motion.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+      - service: image_processing.scan
+        data_template:
+          entity_id: image_processing.tensorflow_porch_camera
+
   #
   # Scan front door and driveway cameras when motion detected
   # if the garage doors are open, scan garage cameras as well
@@ -260,7 +308,7 @@ automation:
             {%- endif -%}
           data:
             images:
-              - "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
+              - "/config/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
 
       - service: script.notify_me_with_picture
         data_template:
@@ -277,7 +325,7 @@ automation:
             {% else %}
               Motion detected at the front door on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif %}
-          file: "/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
+          file: "/config/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
           caption: "Front Door Motion"
 
       - condition: template
@@ -357,7 +405,7 @@ automation:
             {% else %}
               Motion detected at the driveway on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif -%}
-          file: "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_latest.jpg"
+          file: "/config/www/downloads/camera/driveway/driveway_latest.jpg"
           caption: "Driveway Motion"
 
       - service: notify.notify_smtp
@@ -377,7 +425,7 @@ automation:
             {%- endif -%}
           data:
             images:
-              - "/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_latest.jpg"
+              - "/config/www/downloads/camera/driveway/driveway_latest.jpg"
 
       - condition: template
         value_template: >
@@ -466,7 +514,7 @@ automation:
             {% else %}
               Motion detected in the garage on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif -%}
-          file: "/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_latest.jpg"
+          file: "/config/www/downloads/camera/garage/garage_latest.jpg"
           caption: "Garage Motion"
 
       - service: notify.notify_smtp
@@ -486,7 +534,7 @@ automation:
             {%- endif -%}
           data:
             images:
-              - "/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_latest.jpg"
+              - "/config/www/downloads/camera/garage/garage_latest.jpg"
   #
   # When motion detected in the backyard, scan both cameras
   #
@@ -552,7 +600,7 @@ automation:
             {% else %}
               Motion detected in the backyard on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif -%}
-          file: "/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_latest.jpg"
+          file: "/config/www/downloads/camera/patio/patio_latest.jpg"
           caption: "Backyard Motion"
 
       - service: notify.notify_smtp
@@ -572,8 +620,8 @@ automation:
             {%- endif -%}
           data:
             images:
-              - "/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_latest.jpg"
-              - "/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_latest.jpg"
+              - "/config/www/downloads/camera/patio/patio_latest.jpg"
+              - "/config/www/downloads/camera/playarea/playarea_latest.jpg"
 
   # Before you think this code is crazy, here is an explanation.
   #
@@ -626,21 +674,28 @@ automation:
         data_template:
           entity_id: "camera.frontdoor_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+            "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.porch_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/porch/porch_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.driveway_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+            "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+            "{{ '/config/www/downloads/camera/garage/garage_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -650,15 +705,15 @@ automation:
           message: "Motion Detected At Front Door, Check images:"
           data:
             photo:
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+              - file: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Front Door"
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+              - file: "{{ '/config/www/downloads/camera/driveway/driveway_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Driveway"
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+              - file: "{{ '/config/www/downloads/camera/garage/garage_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Garage"
@@ -669,13 +724,13 @@ automation:
           message: 'Motion detected at the front door on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") -}}. Please see the images below.'
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+              - "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+              - "{{ '/config/www/downloads/camera/driveway/driveway_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+              - "{{ '/config/www/downloads/camera/garage/garage_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -718,21 +773,21 @@ automation:
         data_template:
           entity_id: "camera.frontdoor_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+            "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
             (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.driveway_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+            "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+            "{{ '/config/www/downloads/camera/garage/garage_' ~
             (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -742,15 +797,15 @@ automation:
           message: "Motion Detected At Driveway, Check images:"
           data:
             photo:
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+              - file: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Front Door"
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+              - file: "{{ '/config/www/downloads/camera/driveway/driveway_' ~
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Driveway"
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+              - file: "{{ '/config/www/downloads/camera/garage/garage_' ~
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Garage"
@@ -761,13 +816,13 @@ automation:
           message: 'Motion detected at the Driveway on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/driveway/driveway_' ~
+              - "{{ '/config/www/downloads/camera/driveway/driveway_' ~
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/frontdoor_' ~
+              - "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+              - "{{ '/config/www/downloads/camera/garage/garage_' ~
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -821,7 +876,7 @@ automation:
         data_template:
           entity_id: "camera.patio_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_' ~
+            "{{ '/config/www/downloads/camera/patio/patio_' ~
             (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -829,7 +884,7 @@ automation:
         data_template:
           entity_id: "camera.playarea_camera"
           filename:
-            "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_' ~
+            "{{ '/config/www/downloads/camera/playarea/playarea_' ~
             (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -839,11 +894,11 @@ automation:
           message: "Motion Detected in the Backyard, Check images:"
           data:
             photo:
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_' ~
+              - file: "{{ '/config/www/downloads/camera/patio/patio_' ~
                 (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Patio"
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_' ~
+              - file: "{{ '/config/www/downloads/camera/playarea/playarea_' ~
                 (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Playarea"
@@ -854,10 +909,10 @@ automation:
           message: 'Motion detected in the Backyard on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
           data:
             images:
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/patio/patio_' ~
+              - "{{ '/config/www/downloads/camera/patio/patio_' ~
                 (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-              - "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/playarea/playarea_' ~
+              - "{{ '/config/www/downloads/camera/playarea/playarea_' ~
                 (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -1023,3 +1078,8 @@ script:
         data_template:
           url: !secret playarea_camera_stream_url
           name: "playarea"
+  reset_camera_stream:
+    alias: Reset Camera Stream
+    sequence:
+      - service: shell_command.reset_camera_stream
+      - service_template: "script.{{- ['frontdoor', 'driveway', 'patio', 'playarea'] | random -}}_cam"

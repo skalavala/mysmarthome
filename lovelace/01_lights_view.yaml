@@ -18,6 +18,8 @@ cards:
         name: Srinika's Bedroom
       - entity: switch.prayer_room
         name: Study Room
+      - entity: light.master_bathroom_lights
+        name: Master Bathroom Lights
 
   - type: entities
     title: Downstairs
@@ -32,6 +34,28 @@ cards:
       - light.hue_color_lamp_1
       - light.hue_color_lamp_2
       - light.hue_color_lamp_3
+      - entity: switch.wemoswitch1
+        name: Office Room Accent Lights
+
+  - type: entities
+    title: TV Power Strip
+    show_header_toggle: true
+    entities:
+      - entity: switch.plug_1
+        name: Monitor
+      - entity: switch.plug_2
+        name: Sharp TV
+      - entity: switch.plug_3
+        name: Bose Audio
+
+  - type: entities
+    title: Tasmota Outlet
+    show_header_toggle: true
+    entities:
+      - entity: switch.tasmota_outlet_1
+        name: Tasmota Outlet 1
+      - entity: switch.tasmota_outlet_2
+        name: Tasmota Outlet 2
 
   - type: entities
     title: Fragrance Outlets
@@ -45,17 +69,13 @@ cards:
     show_header_toggle: false
     entities:
       - switch.garage
-      - entity: switch.tesla_model_3_charger_switch
-        name: Tesla Charger Switch
-      - entity: switch.tesla_model_3_maxrange_switch
-        name: Tesla Max Range Switch
+      - switch.garage_shop_lights
 
   - type: entities
     title: Always On
     show_header_toggle: false
     entities:
       - light.gateway_light_34ce008ad65d
-      - switch.wemoswitch1
 
   - type: entities
     title: Outdoor Lights

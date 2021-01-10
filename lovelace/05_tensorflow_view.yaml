@@ -55,6 +55,15 @@ cards:
     tap_action:
       action: more-info
 
+  - type: picture-entity
+    id: camera_porch_latest_scan
+    title: Porch Latest Scan
+    entity: camera.porch_latest_scan
+    camera_image: camera.porch_camera
+    show_info: true
+    tap_action:
+      action: more-info
+
   - type: entities
     title: Image Processing
     show_header_toggle: false
@@ -71,3 +80,5 @@ cards:
         name: Playarea Camera
       - entity: image_processing.tensorflow_3d_printer_camera
         name: 3D Printer Camera
+      - entity: image_processing.tensorflow_porch_camera
+        name: Porch Camera

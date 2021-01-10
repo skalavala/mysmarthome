@@ -27,6 +27,10 @@ automation:
         to: "on"
         for:
           hours: 2
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.notify_me
         data:
@@ -53,6 +57,9 @@ automation:
         state: "off"
       - condition: template
         value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.notify_me
         data_template:
@@ -75,8 +82,8 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - switch.wemobackyardlightswitch
-          - switch.frontyard_light
+          - switch.backyard
+          - switch.frontyard
         to: "on"
         for:
           minutes: 5
@@ -84,6 +91,9 @@ automation:
       - condition: state
         entity_id: sun.sun
         state: "above_horizon"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: switch.turn_off
         data_template:
@@ -103,7 +113,6 @@ automation:
         entity_id:
           - switch.basement_left
           - switch.basement_right
-          - switch.downstairs_fragrance
           - switch.front_room
           - switch.guest_bedroom
           - switch.kids_bed_accent
@@ -123,6 +132,9 @@ automation:
     condition:
       - condition: template
         value_template: "{{ now().hour |int > 22 }}"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: homeassistant.turn_off
         data_template:

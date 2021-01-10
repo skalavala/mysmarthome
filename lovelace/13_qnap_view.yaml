@@ -1,17 +1,8 @@
 title: QNAP NAS
 icon: mdi:harddisk
 cards:
-  - type: entities
-    title: QNAP Server
-    show_header_toggle: false
-    entities:
-      - sensor.kalavala_nas_status
-      - sensor.kalavala_nas_network_up_eth0
-      - sensor.kalavala_nas_network_up_eth1
-      - sensor.kalavala_nas_system_temperature
-      - sensor.kalavala_nas_cpu_temperature
-
   - type: vertical-stack
+    title: KALAVALA-NAS
     cards:
       - type: horizontal-stack
         cards:
@@ -101,10 +92,156 @@ cards:
               yellow: 70
               red: 85
       - type: entities
-        title: QNAP Drives
+        title: KALAVALA-NAS Drives
         show_header_toggle: false
         entities:
           - sensor.kalavala_nas_temperature_drive_0_1
           - sensor.kalavala_nas_temperature_drive_0_2
           - sensor.kalavala_nas_temperature_drive_0_3
           - sensor.kalavala_nas_temperature_drive_0_4
+
+      - type: entities
+        title: KALAVALA-NAS
+        show_header_toggle: false
+        entities:
+          - sensor.kalavala_nas_status
+          - sensor.kalavala_nas_network_up_eth0
+          - sensor.kalavala_nas_network_up_eth1
+          - sensor.kalavala_nas_system_temperature
+          - sensor.kalavala_nas_cpu_temperature
+
+  - type: vertical-stack
+    title: MAHASRI-NAS
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            entity: sensor.mahasri_nas_smart_status_drive_0_1
+            name: Drive 1
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: "OK"
+                color: rgb(0, 128, 0)
+              - value: "FAIL"
+                color: rgb(255, 0, 0)
+            action: more_info
+          - type: "custom:button-card"
+            entity: sensor.mahasri_nas_smart_status_drive_0_2
+            name: Drive 2
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: "OK"
+                color: rgb(0, 128, 0)
+              - value: "FAIL"
+                color: rgb(255, 0, 0)
+            action: more_info
+          - type: "custom:button-card"
+            entity: sensor.mahasri_nas_smart_status_drive_0_3
+            name: Drive 3
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: "OK"
+                color: rgb(0, 128, 0)
+              - value: "FAIL"
+                color: rgb(255, 0, 0)
+            action: more_info
+          - type: "custom:button-card"
+            entity: sensor.mahasri_nas_smart_status_drive_0_4
+            name: Drive 4
+            color_type: card
+            show_state: true
+            icon: mdi:harddisk
+            style:
+              - font-weight: bold
+            state:
+              - value: "OK"
+                color: rgb(0, 128, 0)
+              - value: "FAIL"
+                color: rgb(255, 0, 0)
+            action: more_info
+
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            entity: sensor.mahasri_nas_cpu_usage
+            unit: "%"
+            name: CPU
+            severity:
+              green: 0
+              yellow: 50
+              red: 75
+          - type: gauge
+            entity: sensor.mahasri_nas_memory_usage
+            unit: "%"
+            name: Memory
+            severity:
+              green: 0
+              yellow: 50
+              red: 75
+          - type: gauge
+            entity: sensor.mahasri_nas_volume_used_primary
+            unit: "%"
+            name: Primary Disk
+            severity:
+              green: 0
+              yellow: 70
+              red: 85
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            entity: sensor.mahasri_nas_volume_used_mahasri
+            unit: "%"
+            name: Mahasri Disk
+            severity:
+              green: 0
+              yellow: 70
+              red: 85
+          - type: gauge
+            entity: sensor.mahasri_nas_volume_used_entertainment
+            unit: "%"
+            name: Media Disk
+            severity:
+              green: 0
+              yellow: 70
+              red: 85
+          - type: gauge
+            entity: sensor.mahasri_nas_volume_used_software
+            unit: "%"
+            name: Software Disk
+            severity:
+              green: 0
+              yellow: 70
+              red: 85
+
+      - type: entities
+        title: MAHASRI-NAS Drives
+        show_header_toggle: false
+        entities:
+          - sensor.mahasri_nas_temperature_drive_0_1
+          - sensor.mahasri_nas_temperature_drive_0_2
+          - sensor.mahasri_nas_temperature_drive_0_3
+          - sensor.mahasri_nas_temperature_drive_0_4
+
+      - type: entities
+        title: MAHASRI-NAS
+        show_header_toggle: false
+        entities:
+          - sensor.mahasri_nas_status
+          - sensor.mahasri_nas_network_up_eth0
+          - sensor.mahasri_nas_network_up_eth1
+          - sensor.mahasri_nas_system_temperature
+          - sensor.mahasri_nas_cpu_temperature

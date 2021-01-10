@@ -58,6 +58,8 @@ homeassistant:
       unit_of_measurement: "count"
     input_label.door_window_sensor_158d00040ad8fc:
       unit_of_measurement: "count"
+    input_label.door_window_sensor_158d0004880f30:
+      unit_of_measurement: "count"
     input_label.door_window_sensor_158d000424a6d6:
       unit_of_measurement: "count"
 
@@ -67,6 +69,9 @@ input_label:
     icon: mdi:run-fast
   door_window_sensor_158d00040ad8fc:
     name: Back Door
+    icon: mdi:run-fast
+  door_window_sensor_158d0004880f30:
+    name: Garage Entry Door
     icon: mdi:run-fast
   basement_door_sensor_sensor:
     name: Basement Door
@@ -152,6 +157,7 @@ automation:
         entity_id:
           - binary_sensor.door_window_sensor_158d000424a6d6
           - binary_sensor.door_window_sensor_158d00040ad8fc
+          - binary_sensor.door_window_sensor_158d0004880f30 # garage entry door
           - binary_sensor.basement_door_sensor_sensor
           - binary_sensor.downstairs_multi_sensor_sensor
           - binary_sensor.front_room_multi_sensor_sensor
@@ -215,3 +221,4 @@ automation:
             - input_label.motion_sensor_158d000272bfd7
             - input_label.door_window_sensor_158d000424a6d6
             - input_label.door_window_sensor_158d00040ad8fc
+            - input_label.door_window_sensor_158d0004880f30

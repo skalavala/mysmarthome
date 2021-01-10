@@ -78,12 +78,8 @@ cards:
       - sensor.octoprint_file
       - binary_sensor.octoprint_printing
       - binary_sensor.octoprint_printing_error
-      - sensor.octoprint_actual_bed_temp
-      - sensor.octoprint_actual_tool0_temp
       - sensor.octoprint_current_state
       - sensor.octoprint_job_percentage
-      - sensor.octoprint_target_bed_temp
-      - sensor.octoprint_target_tool0_temp
       - sensor.octoprint_time_elapsed
       - sensor.octoprint_time_remaining
 
@@ -179,6 +175,8 @@ cards:
         name: Basement Door
       - entity: binary_sensor.garage_door_sensor_sensor
         name: Garage Door
+      - entity: binary_sensor.door_window_sensor_158d0004880f30
+        name: Garage Entry Door
       - entity: sensor.single_car_garage_door_sensor_status
         name: Single Car Garage Door
       - entity: binary_sensor.two_car_garage_door_tilt_sensor_sensor
@@ -190,45 +188,6 @@ cards:
     card:
       type: glance
       title: Doors
-
-  - type: vertical-stack
-    cards:
-      - type: horizontal-stack
-        cards:
-          - type: gauge
-            name: Suresh Phone
-            unit: "%"
-            entity: input_label.suresh_battery
-            severity:
-              green: 75
-              yellow: 50
-              red: 30
-          - type: gauge
-            name: Mallika Phone
-            unit: "%"
-            entity: input_label.mallika_battery
-            severity:
-              green: 75
-              yellow: 50
-              red: 30
-      - type: horizontal-stack
-        cards:
-          - type: gauge
-            name: Srinika Phone
-            unit: "%"
-            entity: input_label.srinika_battery
-            severity:
-              green: 75
-              yellow: 50
-              red: 30
-          - type: gauge
-            name: Hasika Phone
-            unit: "%"
-            entity: input_label.hasika_battery
-            severity:
-              green: 75
-              yellow: 50
-              red: 30
 
   - type: weather-forecast
     entity: weather.dark_sky
@@ -272,6 +231,8 @@ cards:
         name: Front Door
       - entity: binary_sensor.door_window_sensor_158d00040ad8fc
         name: Back Door
+      - entity: binary_sensor.door_window_sensor_158d0004880f30
+        name: Garage Entry Door
       - entity: binary_sensor.door_window_sensor_158d000424718f
         name: Master Bathroom Door
       - entity: binary_sensor.door_window_sensor_158d00040ad8ec
@@ -280,6 +241,63 @@ cards:
         name: Two Car Garage Door
       - entity: binary_sensor.door_window_sensor_158d0004248d5b
         name: Single Car Garage Door
+
+  - type: entities
+    title: Plex
+    show_header_toggle: false
+    entities:
+      - sensor.plex_mahasri_nas
+      - media_player.plex_plex_web_chrome_windows
+
+  - type: entities
+    title: Luminance
+    show_header_toggle: false
+    entities:
+      - sensor.illumination_158d00016c2d0e
+      - sensor.illumination_158d00016db6d2
+      - sensor.illumination_158d0001a25041
+      - sensor.illumination_158d0001a662fe
+      - sensor.illumination_158d00024e57d3
+      - sensor.illumination_158d00024e57fb
+      - sensor.illumination_158d00024e842c
+      - sensor.illumination_158d00024ee084
+      - sensor.illumination_158d000272bed1
+      - sensor.illumination_158d000272bf48
+      - sensor.illumination_158d000272bfd7
+      - sensor.illumination_158d000464c25a
+      - sensor.illumination_158d00047b6f69
+
+  - type: entities
+    title: Batteries
+    show_header_toggle: false
+    entities:
+      - sensor.battery_158d00016c2d0e
+      - sensor.battery_158d00016db6d2
+      - sensor.battery_158d0001a25041
+      - sensor.battery_158d0001a662fe
+      - sensor.battery_158d00024e57d3
+      - sensor.battery_158d00024e57fb
+      - sensor.battery_158d00024e842c
+      - sensor.battery_158d00024ee084
+      - sensor.battery_158d000272bed1
+      - sensor.battery_158d000272bf48
+      - sensor.battery_158d000272bfd7
+      - sensor.battery_158d000276e3e8
+      - sensor.battery_158d000278eb6a
+      - sensor.battery_158d0002794cd6
+      - sensor.battery_158d00027c0276
+      - sensor.battery_158d00027ce15c
+      - sensor.battery_158d00027cf60d
+      - sensor.battery_158d00040ad8ec
+      - sensor.battery_158d00040ad8fc
+      - sensor.battery_158d0004231f7b
+      - sensor.battery_158d000424718f
+      - sensor.battery_158d0004248d5b
+      - sensor.battery_158d000424a6d6
+      - sensor.battery_158d00045622d9
+      - sensor.battery_158d000464c25a
+      - sensor.battery_158d00047b6f69
+      - sensor.battery_158d0004880f30
 
   - type: entity-filter
     title: Motion Sensors
@@ -302,6 +320,7 @@ cards:
       - binary_sensor.garage_door_sensor_sensor
       - binary_sensor.kitchen_motion_sensor_sensor
       - binary_sensor.door_window_sensor_158d00040ad8fc # back door
+      - binary_sensor.door_window_sensor_158d0004880f30 # Garage Entry Door
       - binary_sensor.stairs_motion_sensor_sensor
       - binary_sensor.tv_multi_sensor_sensor
       - binary_sensor.door_window_sensor_158d0004248d5b
@@ -383,4 +402,5 @@ cards:
       - input_label.door_window_sensor_158d0004231f7b
       - input_label.door_window_sensor_158d0004248d5b
       - input_label.door_window_sensor_158d00040ad8fc
+      - input_label.door_window_sensor_158d0004880f30 # garage entry door
       - input_label.door_window_sensor_158d000424a6d6

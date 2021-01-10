@@ -87,6 +87,8 @@ cards:
     title: RPi Scripts
     show_header_toggle: false
     entities:
+      - script.query_disk_info
+      - script.query_wifi_info
       - script.restart_all_raspberrypis
       - script.restart_all_snapclients
       - script.shutdown_all_raspberrypis

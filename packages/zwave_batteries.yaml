@@ -1,222 +1,222 @@
-###############################################################################
-#   @author         :   Mahasri Kalavala
-#   @date           :   04/20/2018
-#   @package        :   zwave batteries
-#   @description    :   Zwave batteries using input_label & MQTT
-###############################################################################
+# ###############################################################################
+# #   @author         :   Mahasri Kalavala
+# #   @date           :   04/20/2018
+# #   @package        :   zwave batteries
+# #   @description    :   Zwave batteries using input_label & MQTT
+# ###############################################################################
 
-input_label:
-  audio_detector:
-  back_door_sensor:
-  basement_door_sensor:
-  downstairs_multi_sensor:
-  zwave_front_door_sensor:
-  front_room_multi_sensor:
-  garage_door_sensor:
-  guest_bedroom_multi_sensor:
-  kitchen_motion_sensor:
-  single_car_garage_door_tilt_sensor:
-  stairs_motion_sensor:
-  tv_multi_sensor:
-  two_car_garage_door_tilt_sensor:
-  upstairs_multi_sensor:
-  wallmote:
-  ecolink_motion_detector:
-  ecolink_firefighter:
-  ecolink_door_window_sensor_2:
-  aeon_labs_zw100_multisensor_6_2:
-  aeon_labs_zw100_multisensor_6:
-  ecolink_door_window_sensor:
-  ecolink_garage_door_tilt_sensor:
+# input_label:
+#   audio_detector:
+#   back_door_sensor:
+#   basement_door_sensor:
+#   downstairs_multi_sensor:
+#   zwave_front_door_sensor:
+#   front_room_multi_sensor:
+#   garage_door_sensor:
+#   guest_bedroom_multi_sensor:
+#   kitchen_motion_sensor:
+#   single_car_garage_door_tilt_sensor:
+#   stairs_motion_sensor:
+#   tv_multi_sensor:
+#   two_car_garage_door_tilt_sensor:
+#   upstairs_multi_sensor:
+#   wallmote:
+#   ecolink_motion_detector:
+#   ecolink_firefighter:
+#   ecolink_door_window_sensor_2:
+#   aeon_labs_zw100_multisensor_6_2:
+#   aeon_labs_zw100_multisensor_6:
+#   ecolink_door_window_sensor:
+#   ecolink_garage_door_tilt_sensor:
 
-  suresh_battery:
-  mallika_battery:
-  srinika_battery:
-  hasika_battery:
+#   suresh_battery:
+#   mallika_battery:
+#   srinika_battery:
+#   hasika_battery:
 
-  suresh_charging:
-  mallika_charging:
-  srinika_charging:
-  hasika_charging:
+#   suresh_charging:
+#   mallika_charging:
+#   srinika_charging:
+#   hasika_charging:
 
-  suresh_wifi:
-  mallika_wifi:
-  srinika_wifi:
-  hasika_wifi:
+#   suresh_wifi:
+#   mallika_wifi:
+#   srinika_wifi:
+#   hasika_wifi:
 
-###############################################################################
-#                _                        _   _
-#     /\        | |                      | | (_)
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
-#   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
-#  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
-# /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#
-###############################################################################
+# ###############################################################################
+# #                _                        _   _
+# #     /\        | |                      | | (_)
+# #    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
+# #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+# #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
+# # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+# #
+# ###############################################################################
 
-automation:
-  - alias: Update ZWave Battery Levels
-    initial_state: true
-    trigger:
-      - platform: event
-        event_type: state_changed
-    condition:
-      - condition: template
-        value_template: "{{ trigger.event.data.entity_id is not none }}"
-      - condition: template
-        value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'zwave' }}"
-      - condition: template
-        value_template: "{{ trigger.event.data.new_state.attributes is not none }}"
-      - condition: template
-        value_template: "{{ trigger.event.data.new_state.attributes.battery_level | trim != '' }}"
-      - condition: template
-        value_template: "{{ trigger.event.data.new_state.attributes.battery_level | default(999) | int != 999 }}"
-    action:
-      - service: input_label.set_value
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
-          value: "{{ trigger.event.data.new_state.attributes.battery_level }}"
-      - service: input_label.set_name
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
-          value: "{{ trigger.event.data.new_state.attributes.friendly_name }}'s Battery"
-      - service: input_label.set_icon
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
-          value: >
-            {% set battery_level = trigger.event.data.new_state.attributes.battery_level | int %}
-            {% set battery_round = (battery_level / 10)|int * 10 %}
-            {% if battery_round >= 100 %}
-              mdi:battery
-            {% elif battery_round > 0 %}
-              mdi:battery-{{ battery_round }}
-            {% else %}
-              mdi:battery-alert
-            {% endif %}
+# automation:
+#   - alias: Update ZWave Battery Levels
+#     initial_state: true
+#     trigger:
+#       - platform: event
+#         event_type: state_changed
+#     condition:
+#       - condition: template
+#         value_template: "{{ trigger.event.data.entity_id is not none }}"
+#       - condition: template
+#         value_template: "{{ trigger.event.data.entity_id.split('.')[0] == 'zwave' }}"
+#       - condition: template
+#         value_template: "{{ trigger.event.data.new_state.attributes is not none }}"
+#       - condition: template
+#         value_template: "{{ trigger.event.data.new_state.attributes.battery_level | trim != '' }}"
+#       - condition: template
+#         value_template: "{{ trigger.event.data.new_state.attributes.battery_level | default(999) | int != 999 }}"
+#     action:
+#       - service: input_label.set_value
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
+#           value: "{{ trigger.event.data.new_state.attributes.battery_level }}"
+#       - service: input_label.set_name
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
+#           value: "{{ trigger.event.data.new_state.attributes.friendly_name }}'s Battery"
+#       - service: input_label.set_icon
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
+#           value: >
+#             {% set battery_level = trigger.event.data.new_state.attributes.battery_level | int %}
+#             {% set battery_round = (battery_level / 10)|int * 10 %}
+#             {% if battery_round >= 100 %}
+#               mdi:battery
+#             {% elif battery_round > 0 %}
+#               mdi:battery-{{ battery_round }}
+#             {% else %}
+#               mdi:battery-alert
+#             {% endif %}
 
-  # - alias: Update Phone Battery Levels
-  #   initial_state: true
-  #   trigger:
-  #     platform: mqtt
-  #     topic: "owntracks/+/+"
-  #   action:
-  #     - service: input_label.set_value
-  #       data_template:
-  #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
-  #         value: "{{ 'Yes' if trigger.payload_json.conn == 'w' else 'No' }}"
-  #     - service: input_label.set_icon
-  #       data_template:
-  #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
-  #         value: "{{ 'mdi:wifi' if trigger.payload_json.conn == 'w' else 'mdi:wifi-off' }}"
-  #     - service: input_label.set_name
-  #       data_template:
-  #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
-  #         value: "{{trigger.topic.split('/')[-1] | title }}'s phone wifi enabled?"
+#   # - alias: Update Phone Battery Levels
+#   #   initial_state: true
+#   #   trigger:
+#   #     platform: mqtt
+#   #     topic: "owntracks/+/+"
+#   #   action:
+#   #     - service: input_label.set_value
+#   #       data_template:
+#   #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
+#   #         value: "{{ 'Yes' if trigger.payload_json.conn == 'w' else 'No' }}"
+#   #     - service: input_label.set_icon
+#   #       data_template:
+#   #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
+#   #         value: "{{ 'mdi:wifi' if trigger.payload_json.conn == 'w' else 'mdi:wifi-off' }}"
+#   #     - service: input_label.set_name
+#   #       data_template:
+#   #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
+#   #         value: "{{trigger.topic.split('/')[-1] | title }}'s phone wifi enabled?"
 
-  #     - service: input_label.set_value
-  #       data_template:
-  #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
-  #         value: "{{ trigger.payload_json.batt | int }}"
-  #     - service: input_label.set_name
-  #       data_template:
-  #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
-  #         value: "{{trigger.topic.split('/')[-1] | title }}'s Battery"
-  #     - service: input_label.set_icon
-  #       data_template:
-  #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
-  #         value: >
-  #           {% set battery_level = trigger.payload_json.batt | int %}
-  #           {% set battery_round = (battery_level / 10)|int * 10 %}
-  #           {% if trigger.payload_json.charging == 1 %}
-  #             {% if battery_round >= 100 %}
-  #               mdi:battery-charging-100
-  #             {% elif battery_round > 0 %}
-  #               mdi:battery-charging-{{ battery_round }}
-  #             {% else %}
-  #               mdi:battery-alert
-  #             {% endif %}
-  #           {% else %}
-  #             {% if battery_round >= 100 %}
-  #               mdi:battery
-  #             {% elif battery_round > 0 %}
-  #               mdi:battery-{{ battery_round }}
-  #             {% else %}
-  #               mdi:battery-alert
-  #             {% endif %}
-  #           {% endif %}
+#   #     - service: input_label.set_value
+#   #       data_template:
+#   #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
+#   #         value: "{{ trigger.payload_json.batt | int }}"
+#   #     - service: input_label.set_name
+#   #       data_template:
+#   #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
+#   #         value: "{{trigger.topic.split('/')[-1] | title }}'s Battery"
+#   #     - service: input_label.set_icon
+#   #       data_template:
+#   #         entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
+#   #         value: >
+#   #           {% set battery_level = trigger.payload_json.batt | int %}
+#   #           {% set battery_round = (battery_level / 10)|int * 10 %}
+#   #           {% if trigger.payload_json.charging == 1 %}
+#   #             {% if battery_round >= 100 %}
+#   #               mdi:battery-charging-100
+#   #             {% elif battery_round > 0 %}
+#   #               mdi:battery-charging-{{ battery_round }}
+#   #             {% else %}
+#   #               mdi:battery-alert
+#   #             {% endif %}
+#   #           {% else %}
+#   #             {% if battery_round >= 100 %}
+#   #               mdi:battery
+#   #             {% elif battery_round > 0 %}
+#   #               mdi:battery-{{ battery_round }}
+#   #             {% else %}
+#   #               mdi:battery-alert
+#   #             {% endif %}
+#   #           {% endif %}
 
-  - alias: Update Phone Battery Levels From Life360
-    initial_state: true
-    trigger:
-      - platform: event
-        event_type: state_changed
-    condition:
-      - condition: template
-        value_template: "{{ trigger.event.data.entity_id is not none }}"
-      - condition: template
-        value_template: "{{ 'life360_' in trigger.event.data.entity_id }}"
-      - condition: template
-        value_template: "{{ trigger.event.data.new_state.attributes is not none }}"
-    action:
-      - service: input_label.set_name
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_battery"
-          value: "{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] |title -}}'s Battery"
-      - service: input_label.set_value
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_battery"
-          value: "{{ trigger.event.data.new_state.attributes.battery }}"
-      - service: input_label.set_icon
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_battery"
-          value: >
-            {% set battery_level = trigger.event.data.new_state.attributes.battery | int %}
-            {% set battery_round = (battery_level / 10)|int * 10 %}
-            {% if trigger.event.data.new_state.attributes.battery_charging == "true" %}
-              {% if battery_round >= 100 %}
-                mdi:battery-charging-100
-              {% elif battery_round > 0 %}
-                mdi:battery-charging-{{ battery_round }}
-              {% else %}
-                mdi:battery-alert
-              {% endif %}
-            {% else %}
-              {% if battery_round >= 100 %}
-                mdi:battery
-              {% elif battery_round > 0 %}
-                mdi:battery-{{ battery_round }}
-              {% else %}
-                mdi:battery-alert
-              {% endif %}
-            {% endif %}
-      - service: input_label.set_value
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_wifi"
-          value: "{{ 'WiFi' if trigger.event.data.new_state.attributes.wifi_on |string |lower == 'true' else 'LTE' }}"
-      - service: input_label.set_value
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_charging"
-          value: "{{ 'Charging' if trigger.event.data.new_state.attributes.battery_charging |string |lower == 'true' else 'Not Charging' }}"
-      - service: input_label.set_icon
-        data_template:
-          entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_charging"
-          value: >
-            {% set battery_level = trigger.event.data.new_state.attributes.battery | int %}
-            {% set battery_round = (battery_level / 10)|int * 10 %}
-            {% if trigger.event.data.new_state.attributes.battery_charging == "true" %}
-              {% if battery_round >= 100 %}
-                mdi:battery-charging-100
-              {% elif battery_round > 0 %}
-                mdi:battery-charging-{{ battery_round }}
-              {% else %}
-                mdi:battery-alert
-              {% endif %}
-            {% else %}
-              {% if battery_round >= 100 %}
-                mdi:battery
-              {% elif battery_round > 0 %}
-                mdi:battery-{{ battery_round }}
-              {% else %}
-                mdi:battery-alert
-              {% endif %}
-            {% endif %}
+#   - alias: Update Phone Battery Levels From Life360
+#     initial_state: true
+#     trigger:
+#       - platform: event
+#         event_type: state_changed
+#     condition:
+#       - condition: template
+#         value_template: "{{ trigger.event.data.entity_id is not none }}"
+#       - condition: template
+#         value_template: "{{ 'life360_' in trigger.event.data.entity_id }}"
+#       - condition: template
+#         value_template: "{{ trigger.event.data.new_state.attributes is not none }}"
+#     action:
+#       - service: input_label.set_name
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_battery"
+#           value: "{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] |title -}}'s Battery"
+#       - service: input_label.set_value
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_battery"
+#           value: "{{ trigger.event.data.new_state.attributes.battery }}"
+#       - service: input_label.set_icon
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_battery"
+#           value: >
+#             {% set battery_level = trigger.event.data.new_state.attributes.battery | int %}
+#             {% set battery_round = (battery_level / 10)|int * 10 %}
+#             {% if trigger.event.data.new_state.attributes.battery_charging == "true" %}
+#               {% if battery_round >= 100 %}
+#                 mdi:battery-charging-100
+#               {% elif battery_round > 0 %}
+#                 mdi:battery-charging-{{ battery_round }}
+#               {% else %}
+#                 mdi:battery-alert
+#               {% endif %}
+#             {% else %}
+#               {% if battery_round >= 100 %}
+#                 mdi:battery
+#               {% elif battery_round > 0 %}
+#                 mdi:battery-{{ battery_round }}
+#               {% else %}
+#                 mdi:battery-alert
+#               {% endif %}
+#             {% endif %}
+#       - service: input_label.set_value
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_wifi"
+#           value: "{{ 'WiFi' if trigger.event.data.new_state.attributes.wifi_on |string |lower == 'true' else 'LTE' }}"
+#       - service: input_label.set_value
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_charging"
+#           value: "{{ 'Charging' if trigger.event.data.new_state.attributes.battery_charging |string |lower == 'true' else 'Not Charging' }}"
+#       - service: input_label.set_icon
+#         data_template:
+#           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1].split('_')[1] -}}_charging"
+#           value: >
+#             {% set battery_level = trigger.event.data.new_state.attributes.battery | int %}
+#             {% set battery_round = (battery_level / 10)|int * 10 %}
+#             {% if trigger.event.data.new_state.attributes.battery_charging == "true" %}
+#               {% if battery_round >= 100 %}
+#                 mdi:battery-charging-100
+#               {% elif battery_round > 0 %}
+#                 mdi:battery-charging-{{ battery_round }}
+#               {% else %}
+#                 mdi:battery-alert
+#               {% endif %}
+#             {% else %}
+#               {% if battery_round >= 100 %}
+#                 mdi:battery
+#               {% elif battery_round > 0 %}
+#                 mdi:battery-{{ battery_round }}
+#               {% else %}
+#                 mdi:battery-alert
+#               {% endif %}
+#             {% endif %}

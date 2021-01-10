@@ -54,3 +54,4 @@ docs/_site
 private/*
 apps/__pycache__/*.pyc
 docker/streamer
+docker-compose.yml

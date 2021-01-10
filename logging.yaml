@@ -20,9 +20,9 @@ logs:
   homeassistant.components.wemo: critical
   homeassistant.components.sensor: critical
   homeassistant.components.cloud.iot: warning
-  homeassistant.components.http: warning
+  # homeassistant.components.http: warning
   homeassistant.components.camera: warning
-  homeassistant.components.zwave: warning
+  homeassistant.components.zwave: critical
   homeassistant.components.image_processing: warning
   homeassistant.components.homekit: warning
   custom_components.sensor.life360: warning

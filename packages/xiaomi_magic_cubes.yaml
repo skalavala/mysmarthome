@@ -31,6 +31,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d0002794cd6
         action_type: flip90
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service_template: light.toggle
         entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
@@ -44,6 +48,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d0002794cd6
         action_type: flip180
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_on
         entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
@@ -61,6 +69,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d0002794cd6
         action_type: move
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: switch.toggle
         entity_id: switch.kitchen
@@ -74,6 +86,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d0002794cd6
         action_type: tap_twice
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_on
         data_template:
@@ -92,13 +108,12 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d0002794cd6
         action_type: shake_air
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.toggle_do_not_disturb
-      - service: switch.turn_off
-        entity_id: switch.wemoswitch1
-      - delay: "00:00:02"
-      - service: switch.turn_on
-        entity_id: switch.wemoswitch1
 
   ################################################################################
   #   ______               _     _____
@@ -117,6 +132,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027c0276
         action_type: flip90
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service_template: switch.toggle
         entity_id: switch.front_room
@@ -130,6 +149,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027c0276
         action_type: move
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: switch.toggle
         entity_id: switch.office_room
@@ -143,6 +166,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027c0276
         action_type: shake_air
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.toggle_do_not_disturb
 
@@ -163,6 +190,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027cf60d
         action_type: flip90
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service_template: switch.toggle
         entity_id: switch.guest_bedroom
@@ -176,6 +207,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027cf60d
         action_type: shake_air
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.toggle_do_not_disturb
 
@@ -196,6 +231,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027ce15c
         action_type: flip90
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service_template: switch.toggle
         entity_id: switch.kids_bedroom
@@ -209,6 +248,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027ce15c
         action_type: shake_air
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.toggle_do_not_disturb
 
@@ -231,6 +274,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d000276e3e8
         action_type: flip90
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: switch.toggle
         entity_id: switch.prayer_room
@@ -244,6 +291,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d000276e3e8
         action_type: shake_air
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.toggle_do_not_disturb
 
@@ -264,6 +315,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d000278eb6a
         action_type: flip90
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: homeassistant.turn_off
         entity_id: group.downstairs_lights
@@ -279,6 +334,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d000278eb6a
         action_type: flip180
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.toggle
         entity_id: light.master_bedroom_1
@@ -294,6 +353,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d000278eb6a
         action_type: move
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_on
         entity_id: light.master_bedroom_1
@@ -309,6 +372,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d000278eb6a
         action_type: tap_twice
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_on
         data_template:
@@ -334,6 +401,10 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d000278eb6a
         action_type: shake_air
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: script.toggle_do_not_disturb
 

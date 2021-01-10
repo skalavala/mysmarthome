@@ -29,6 +29,27 @@ binary_sensor:
 #
 ###############################################################################
 automation:
+  # Restore Familyroom Lights
+  ###############################################################################
+  - alias: Restore Familyroom Lights
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: input_boolean.animate_downstairs_lights
+      to: "off"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: group.family_room_lights
+          transition: 5
+          rgb_color: [255, 251, 245]
+          brightness: 255
+          color_temp: 162
+
   # Dim Family Room Lights When TV is Turned ON
   ###############################################################################
   - alias: TV Dim Indoor Lights when TV is ON
@@ -61,77 +82,6 @@ automation:
           entity_id: light.hue_color_lamp_3
           brightness: 5
           color_temp: 154
-      - service: mqtt.publish
-        data:
-          topic: /home/tv/backlight
-          payload: "on"
-          retain: true
-
-  # Restore Family Room Lights to TV mode
-  ###############################################################################
-  - alias: TV Restore Family Room Lights To TV Mode
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: group.family_room_lights
-        from: "off"
-        to: "on"
-    condition:
-      - condition: state
-        entity_id: binary_sensor.sharp_tv
-        state: "on"
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
-    action:
-      - service: light.turn_on
-        data:
-          entity_id: light.hue_color_lamp_1
-          brightness: 5
-          color_temp: 154
-          transition: 5
-      - service: light.turn_on
-        data:
-          entity_id: light.hue_color_lamp_2
-          brightness: 5
-          color_temp: 154
-          transition: 5
-      - service: light.turn_on
-        data:
-          entity_id: light.hue_color_lamp_3
-          brightness: 5
-          color_temp: 154
-          transition: 5
-
-  # Turn Backlights Off when TV is turned OFF
-  ###############################################################################
-  - alias: TV Backlight OFF when TV is OFF
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.sharp_tv
-      to: "off"
-    action:
-      - service: mqtt.publish
-        data:
-          topic: /home/tv/backlight
-          payload: "off"
-          retain: true
-
-  # Turn TV backlights when TV is turned ON
-  ###############################################################################
-  - alias: TV Backlight is ON when TV is ON
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.sharp_tv
-      to: "on"
-    action:
-      - service: mqtt.publish
-        data:
-          topic: /home/tv/backlight
-          payload: "on"
-          retain: true
 
   # Turn back Family room lights when TV is switched OFF
   ###############################################################################
@@ -167,8 +117,3 @@ automation:
           brightness: 255
           color_temp: 154
           transition: 5
-      - service: mqtt.publish
-        data:
-          topic: /home/tv/backlight
-          payload: "off"
-          retain: true

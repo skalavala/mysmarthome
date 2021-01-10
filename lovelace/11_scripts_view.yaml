@@ -1,7 +1,6 @@
 title: Scripts
 icon: mdi:script
 cards:
-
   - type: horizontal-stack
     cards:
       - type: "custom:button-card"
@@ -31,9 +30,50 @@ cards:
           action: restart_hass
 
   - type: entities
-    title: Scripts
+    title: Notification Scripts
     show_header_toggle: false
     entities:
+      - entity: script.good_night_tts
+        name: Bedtime Report
+      - entity: script.home_status
+        name: Hourly Report
+      - entity: script.play_dog_sounds
+        name: Play Dog Sounds
+      - entity: script.play_fav_song
+        name: Play Fav Song
+      - entity: script.play_ringtone
+        name: Play Ringtone (Doorbell)
+      - entity: script.toggle_do_not_disturb
+        name: Toggle Do Not Disturb
+
+  - type: entities
+    title: Camera Scripts
+    show_header_toggle: false
+    entities:
+      - entity: script.driveway_cam
+        name: Show Driveway Camera on Stream
+      - entity: script.patio_cam
+        name: Show Patio Camera on Stream
+      - entity: script.frontdoor_cam
+        name: Show Front Door Camera on Stream
+      - entity: script.playarea_cam
+        name: Show Playarea Camera on Stream
+      - entity: script.frontdoor_camera_text_overlay
+        name: Frontdoor Camera Text Overlay
+      - entity: script.driveway_camera_text_overlay
+        name: Driveway Camera Text Overlay
+      - entity: script.patio_camera_text_overlay
+        name: Patio Camera Text Overlay
+      - entity: script.playarea_camera_text_overlay
+        name: Playarea Camera Text Overlay
+      - entity: script.stream2chromecast
+        name: Stream To Chromecast
+
+  - type: entities
+    title: Light Scripts
+    show_header_toggle: false
+    entities:
+      - script.all_indoor_lights_off
       - script.home_mode_away
       - entity: script.xiaomi_blue
         name: Xiaomi Gateway Blue Light
@@ -43,10 +83,52 @@ cards:
         name: Xiaomi Gateway Red Light
 
   - type: entities
-    title: Home Status/Report
+    title: Pill Scripts
     show_header_toggle: false
     entities:
-      - entity: script.good_night_tts
-        name: Bedtime Report
-      - entity: script.home_status
-        name: Hourly Report
+      - entity: script.pill_taken
+        name: Pill Taken
+      - entity: script.remind_pill
+        name: Remind Me To Take Pill
+
+  # - type: entities
+  #   title: All Scripts
+  #   show_header_toggle: false
+  #   entities:
+  #     - script.all_indoor_lights_off
+  #     - script.driveway_cam
+  #     - script.driveway_camera_text_overlay
+  #     - script.frontdoor_cam
+  #     - script.frontdoor_camera_text_overlay
+  #     - script.good_night_tts
+  #     - script.home_mode_away
+  #     - script.home_status
+  #     - script.led_message
+  #     - script.notify_me
+  #     - script.notify_me_with_picture
+  #     - script.patio_cam
+  #     - script.patio_camera_text_overlay
+  #     - script.pill_taken
+  #     - script.play_dog_sounds
+  #     - script.play_fav_song
+  #     - script.play_ringtone
+  #     - script.playarea_cam
+  #     - script.playarea_camera_text_overlay
+  #     - script.query_disk_info
+  #     - script.query_wifi_info
+  #     - script.remind_pill
+  #     - script.restart_all_raspberrypis
+  #     - script.restart_all_snapclients
+  #     - script.restart_hass
+  #     - script.shutdown_all_raspberrypis
+  #     - script.stop_hass
+  #     - script.stream2chromecast
+  #     - script.stream_driveway_camera_to_chromecast
+  #     - script.stream_frontdoor_camera_to_chromecast
+  #     - script.stream_patio_camera_to_chromecast
+  #     - script.stream_playarea_camera_to_chromecast
+  #     - script.toggle_climate
+  #     - script.toggle_do_not_disturb
+  #     - script.update_hass
+  #     - script.voice_greeting
+  #     - script.voice_notify

@@ -1089,3 +1089,12 @@
 #         data_template:
 #           entity_id: "input_label.file_2"
 #           value: "/tmp/{{- trigger.entity_id.split('.')[1] -}}_{{- states.input_boolean.dummy.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"
+
+
+# {% for x in states if 'sensor.illumination_' in x.entity_id %}
+# {{ x.name}} - {{ x.attributes.battery_level }}
+# {%- endfor %}
+
+# {% for x in states if 'sensor.battery_' in x.entity_id %}
+# {{ x.name}} - {{ x.state }}
+# {%- endfor %}

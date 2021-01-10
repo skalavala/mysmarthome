@@ -208,8 +208,30 @@ automation:
             {% endif %}
       - service: input_boolean.turn_on
         data_template:
-          entity_id: >
-            {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
+          entity_id: >-
+            {%- set windspeed = states.sensor.dark_sky_wind_speed.state | round -%}
+            {%- if ( windspeed > 7 and ( windspeed <= 15 ) ) -%}
+               input_boolean.nice_breeze_alert
+            {%- elif ( windspeed > 15 ) and ( windspeed <= 25 ) %}
+               input_boolean.moderate_wind_alert
+            {%- elif ( windspeed > 25 ) and ( windspeed <= 40 ) %}
+               input_boolean.heavy_wind_alert
+            {%- elif ( windspeed > 40 ) and ( windspeed <= 60 ) %}
+               input_boolean.super_heavy_wind_alert
+            {%- elif ( windspeed > 60 ) %}
+               input_boolean.hurricane_wind_alert
+            {%- endif %}
+
+  - alias: Set Wind Speed Input Booleans
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.dark_sky_wind_speed
+    action:
+      - service: input_boolean.turn_on
+        data_template:
+          entity_id: >-
+            {%- set windspeed = states.sensor.dark_sky_wind_speed.state | round -%}
             {%- if ( windspeed > 7 and ( windspeed <= 15 ) ) -%}
                input_boolean.nice_breeze_alert
             {%- elif ( windspeed > 15 ) and ( windspeed <= 25 ) %}

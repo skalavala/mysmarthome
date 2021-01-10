@@ -63,6 +63,22 @@ sensor:
       - drive_smart_status
       - drive_temp
 
+  - platform: qnap
+    host: !secret qnap_hostname2
+    username: !secret qnap_username
+    password: !secret qnap_password
+    monitored_conditions:
+      - status
+      - cpu_usage
+      - memory_percent_used
+      - network_tx
+      - volume_percentage_used
+      - system_temp
+      - cpu_temp
+      - drive_smart_status
+      - drive_temp
+
+
 # The following sensors are required, as the automations with trigger platform `numeric_state`, 
 # above a certain value using `above: x` AND `for: 00:05:00` combination is not supported.
 #

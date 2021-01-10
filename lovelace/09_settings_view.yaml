@@ -204,7 +204,6 @@ cards:
       - input_boolean.led_alerts
       - input_boolean.security_system_alerts
       - input_boolean.notify_camera_alerts
-      - input_boolean.alarm_clock
       - input_boolean.trash_reminders
       - automation.family_room_motion_timer
       - automation.family_room_timer_elapsed

@@ -88,22 +88,6 @@ script:
         data:
           message: >
             No one is at home. Cameras rolling, Indoor lights OFF, Thermostat is set to 'away' and your home is secured!
-      - service: camera.snapshot
-        data_template:
-          entity_id: "camera.kitchen_camera"
-          filename: "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/kitchen_away.jpg"
-      - service: camera.snapshot
-        data_template:
-          entity_id: "camera.frontroom_camera"
-          filename: "/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/frontroom_away.jpg"
-      - service: notify.notify_smtp
-        data_template:
-          title: 'Indoor Pictures {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
-          message: "No one seem to be home at the moment... Please see the images and make sure everything is okay."
-          data:
-            images:
-              - "/home/homeassistant/.homeassistant/www/downloads/camera/kitchen/kitchen_away.jpg"
-              - "/home/homeassistant/.homeassistant/www/downloads/camera/frontroom/frontroom_away.jpg"
 
   ###############################################################################
   # The following script runs when no one is home. It excludes some lights
@@ -113,26 +97,32 @@ script:
     sequence:
       - service: light.turn_off
         data_template:
-          entity_id: >
-            {%- for state in states.light if state.entity_id != 'light.gateway_light_34ce008ad65d' -%}
-            {{- "," if not loop.first-}}{{ state.entity_id }}{{-endif-}}
-            {%- endfor -%}
+          entity_id:
+            - light.family_room_lights
+            - light.hue_color_lamp_1
+            - light.hue_color_lamp_2
+            - light.hue_color_lamp_3
+            - light.master_bedroom_1
+            - light.master_bedroom_2
+            - light.master_bedroom_lights
+
       - service: switch.turn_off
         data_template:
-          entity_id: >
-            {%- for state in states.switch if
-                                state.entity_id != 'switch.3d_printer' and
-                                state.entity_id != 'switch.tesla_model_3_charger_switch' and
-                                state.entity_id != 'switch.tesla_model_3_maxrange_switch' and
-                                state.entity_id != 'switch.tesla_model_3_update_switch' and
-                                state.entity_id != 'switch.mahasri_tesla_sentry_mode_switch' and
-                                state.entity_id != 'switch.wemoswitch1' and
-                                state.entity_id != 'switch.wallmote_switch' and
-                                state.entity_id != 'switch.wemobackyardlightswitch' and
-                                state.entity_id != 'switch.frontyard_light' and
-                                not 'ecolink' in state.entity_id -%}
-            {{- "," if not loop.first-}}{{ state.entity_id }}{{-endif-}}
-            {%- endfor -%}
+          entity_id:
+            - switch.basement_left
+            - switch.basement_right
+            - switch.downstairs_fragrance
+            - switch.front_room
+            - switch.garage
+            - switch.garage_shop_lights
+            - switch.guest_bedroom
+            - switch.kids_bed_accent
+            - switch.kids_bedroom
+            - switch.kitchen
+            - switch.office_room
+            - switch.prayer_room
+            - switch.upstairs_fragrance
+            - switch.officeroom_accent_lights
 
   ###############################################################################
   #    _____                                  ____                 _

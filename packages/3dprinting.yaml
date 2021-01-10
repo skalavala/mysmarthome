@@ -85,10 +85,10 @@ sensor:
       print_completion:
         value_template: >
           {% set seconds = states('sensor.octoprint_time_remaining')|int %}
-          {% if now().strftime('%s')|int | timestamp_custom("%A %D") ==  (now().strftime('%s') |int + seconds) | timestamp_custom("%A %D")  %}
-            Today at {{- (now().strftime('%s')|int + seconds) | timestamp_custom("%l:%M %p") }}
+          {% if utcnow().strftime('%s')|int | timestamp_custom("%A %D") ==  (utcnow().strftime('%s') |int + seconds) | timestamp_custom("%A %D")  %}
+            Today at {{ (utcnow().strftime('%s')|int + seconds) | timestamp_custom("%I:%M %p") }}
           {% else %}
-            {{ (now().strftime('%s') |int + seconds) | timestamp_custom("%A %D %l:%M %p") }}
+            {{ (utcnow().strftime('%s') |int + seconds) | timestamp_custom("%A %D %I:%M %p") }}
           {% endif %}
 
   - platform: template
@@ -263,12 +263,12 @@ automation:
       - service: camera.snapshot
         data:
           entity_id: camera.3d_printer_camera
-          filename: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
+          filename: "/config/www/downloads/camera/3dprinter/print_latest.jpg"
       - service: notify.telegram
         data_template:
           title: "3D Printer"
           message: "Print Progress"
           data:
             photo:
-              - file: "/home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/print_latest.jpg"
+              - file: "/config/www/downloads/camera/3dprinter/print_latest.jpg"
                 caption: "3D Print Progress at {{ states('sensor.octoprint_job_percentage') }}%"

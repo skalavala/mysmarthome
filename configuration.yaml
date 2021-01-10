@@ -3,7 +3,7 @@
 # @Author   :   Mahasri Kalavala
 ###############################################################################
 homeassistant:
-  name: Home
+  name: MyHome
   temperature_unit: F
   latitude: !secret home_latitude
   longitude: !secret home_longitude
@@ -16,14 +16,14 @@ homeassistant:
   packages: !include_dir_named packages
 
   allowlist_external_dirs:
-    - /home/homeassistant/.homeassistant/www/downloads/camera/patio/
-    - /home/homeassistant/.homeassistant/www/downloads/camera/garage/
-    - /home/homeassistant/.homeassistant/www/downloads/camera/playarea/
-    - /home/homeassistant/.homeassistant/www/downloads/camera/driveway/
-    - /home/homeassistant/.homeassistant/www/downloads/camera/frontdoor/
-    - /home/homeassistant/.homeassistant/www/downloads/camera/kitchen/
-    - /home/homeassistant/.homeassistant/www/downloads/camera/frontroom/
-    - /home/homeassistant/.homeassistant/www/downloads/camera/3dprinter/
+    - /config/www/downloads/camera/patio/
+    - /config/www/downloads/camera/garage/
+    - /config/www/downloads/camera/playarea/
+    - /config/www/downloads/camera/driveway/
+    - /config/www/downloads/camera/frontdoor/
+    - /config/www/downloads/camera/kitchen/
+    - /config/www/downloads/camera/frontroom/
+    - /config/www/downloads/camera/3dprinter/
 
 sun:
 alexa:
@@ -31,6 +31,8 @@ config:
 discovery:
   ignore:
     - homekit
+
+frontend:
 
 octoprint:
   host: !secret octoprint_ip
@@ -50,9 +52,10 @@ homekit:
       - binary_sensor.door_window_sensor_158d000424a6d6 # Front Door
       - binary_sensor.door_window_sensor_158d0004248d5b # Single Car Garage
       - binary_sensor.door_window_sensor_158d0004231f7b # Double Car Garage
+      - binary_sensor.door_window_sensor_158d0004880f30 # Garage Entry Door
 
 mobile_app:
-
+# default_config:
 websocket_api:
 python_script:
 logger: !include logging.yaml
@@ -72,7 +75,7 @@ mqtt:
   username: !secret mqtt_username
   password: !secret mqtt_password
   keepalive: 60
-  client_id: pi_ha
+  client_id: HA_SERVER
 
 sonos:
   media_player:
@@ -94,13 +97,12 @@ lovelace:
 google:
   client_id: !secret google_client_id
   client_secret: !secret google_client_secret
-
-emulated_hue:
-  expose_by_default: false
-  host_ip: !secret ha_ip_address
-  listen_port: 8300
-  exposed_domains:
-    - light
-    - switch
-    - input_boolean
-    - group
+#emulated_hue:
+#  expose_by_default: false
+#  host_ip: !secret ha_ip_address
+#  listen_port: 8300
+#  exposed_domains:
+#    - light
+#    - switch
+#    - input_boolean
+#    - group

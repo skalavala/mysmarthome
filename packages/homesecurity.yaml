@@ -16,10 +16,10 @@ homeassistant:
       friendly_name: Home Security System
       icon: mdi:security
 
-simplisafe:
-  accounts:
-    - username: !secret simplisafe_username
-      password: !secret simplisafe_password
+# simplisafe:
+#   accounts:
+#     - username: !secret simplisafe_username
+#       password: !secret simplisafe_password
 
 ###############################################################################
 #                _                        _   _
@@ -36,7 +36,7 @@ automation:
   # Leeo light - color indication of Home Security System
   # BLUE for Secured (Home and Away), and RED for OFF or Trigerred
   ###############################################################################
-  - alias: Home Security Status Leeo Color
+  - alias: Home Security Status Xiaomi Color
     initial_state: true
     trigger:
       platform: state
@@ -59,6 +59,104 @@ automation:
           {% elif states('alarm_control_panel.home') == "disarmed" %}
             script.xiaomi_red
           {% endif %}
+
+#
+# This automation will trigger when the Home Security System is "Triggered"
+# This will send all relevant information - Door Statuses and Camera snapshots around the home
+# Meanwhile Home Security Company will be calling and/or dispatching Police over to the house.
+# This should give you enough information to have a good conversation with the Home Security System company when not at home
+
+  - alias: Home Security Triggered
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: alarm_control_panel.home
+      to: "triggered"
+    action:
+      - service: script.notify_me
+        data_template:
+          message: >
+            {% set ns = namespace(openDoorCount=0, doorNames="") %}
+            {%- set sensors = [
+              'binary_sensor.door_window_sensor_158d000424a6d6', 'binary_sensor.door_window_sensor_158d00040ad8fc', 'binary_sensor.door_window_sensor_158d0004880f30',
+              'binary_sensor.door_window_sensor_158d000424718f', 'binary_sensor.door_window_sensor_158d0004231f7b', 'binary_sensor.door_window_sensor_158d0004248d5b',
+              'binary_sensor.motion_sensor_158d00016c2d0e', 'binary_sensor.motion_sensor_158d00016db6d2', 'binary_sensor.motion_sensor_158d0001a25041',
+              'binary_sensor.motion_sensor_158d0001a662fe','binary_sensor.motion_sensor_158d00024e57d3','binary_sensor.motion_sensor_158d00024e57fb',
+              'binary_sensor.motion_sensor_158d00024e842c','binary_sensor.motion_sensor_158d00024ee084','binary_sensor.motion_sensor_158d000272bed1',
+              'binary_sensor.motion_sensor_158d000272bf48','binary_sensor.motion_sensor_158d000272bfd7','binary_sensor.motion_sensor_158d000464c25a',
+              'binary_sensor.motion_sensor_158d00047b6f69'
+             ] -%}
+            
+            {%- for item in sensors  if states(item) == "on" %}
+              {% set ns.doorNames = ns.doorNames + state_attr(item, "friendly_name") + (", " if not loop.last else " ")  %}
+              {% set ns.openDoorCount = ns.openDoorCount + 1 %}
+            {%- endfor %}
+            
+            Your Home Security System is triggered. {{ "But ALL Doors are CLOSED! Must be a spider on one of the sensor(s) triggered it!"  if ns.openDoorCount == 0 else 'Following sensors are ON currently:' }}
+            {{ ns.doorNames }}
+            
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.frontdoor_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.driveway_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/driveway/driveway_' ~
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.garage_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/garage/garage_' ~
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.patio_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/patio/patio_' ~
+            (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.playarea_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/playarea/playarea_' ~
+            (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+
+      - service: notify.telegram
+        data_template:
+          title: "Camera Snapshots"
+          message: "Please check the camera images just to be sure!"
+          data:
+            photo:
+              - file: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: "Front Door"
+              - file: "{{ '/config/www/downloads/camera/driveway/driveway_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: "Driveway"
+              - file: "{{ '/config/www/downloads/camera/garage/garage_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: "Garage"
+              - file: "{{ '/config/www/downloads/camera/patio/patio_' ~
+                (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: "Patio"
+              - file: "{{ '/config/www/downloads/camera/playarea/playarea_' ~
+                (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: "Playarea"
 
   ###############################################################################
   # Notify Security System State Change
@@ -229,7 +327,7 @@ automation:
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage_camera"
-          filename: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~  (state_attr('automation.home_security_system_and_garage_door_check','last_updated') ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          filename: "{{ '/config/www/downloads/camera/garage/garage_' ~  (state_attr('automation.home_security_system_and_garage_door_check','last_updated') ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
   
       - service: notify.telegram
         data_template:
@@ -237,7 +335,7 @@ automation:
           message: "Home Security System is ON, but Garage Doors are OPEN!"
           data:
             photo:
-              - file: "{{ '/home/homeassistant/.homeassistant/www/downloads/camera/garage/garage_' ~
+              - file: "{{ '/config/www/downloads/camera/garage/garage_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Garage"

@@ -23,22 +23,6 @@ cards:
       - automation.study_room_cube_event_flip90
       - automation.study_room_cube_event_shake
 
-  - type: conditional
-    conditions:
-      - entity: input_boolean.alarm_clock
-        state: "on"
-    card:
-      type: entities
-      title: Alarm Clock
-      show_header_toggle: false
-      entities:
-        - automation.alarm_clock
-        - automation.am_change_off
-        - automation.am_change_on
-        - automation.pm_change_off
-        - automation.pm_change_on
-        - automation.update_current_alarm_time
-
   - type: entities
     title: Zone Based Alerts
     show_header_toggle: false
@@ -50,7 +34,6 @@ cards:
       - automation.alert_when_someone_enters_a_zone
       - automation.alert_when_someone_leaves_a_zone
       - automation.send_a_message_as_i_get_closer_to_home
-      - automation.update_phone_battery_levels_from_life360
       - automation.welcome_family
 
   - type: entities
@@ -63,7 +46,6 @@ cards:
       - automation.notify_holiday_state_change
       - automation.notify_indian_holidays
       - automation.notify_low_battery
-      - automation.notify_of_new_external_ip
       - automation.notify_thermostat_state_change
       - automation.notify_usps_mail
       - automation.notify_usps_packages
@@ -73,9 +55,6 @@ cards:
     show_header_toggle: false
     entities:
       - automation.cancel_wfh_timer_when_suresh_leaves_home
-      - automation.downstairs_aroma_timer_elapsed
-      - automation.downstairs_aroma_timer_finish
-      - automation.downstairs_aroma_timer_start
       - automation.family_room_motion_timer
       - automation.family_room_timer_elapsed
       - automation.frontroom_motion_timer
@@ -128,7 +107,6 @@ cards:
     title: Home Security Automations
     show_header_toggle: false
     entities:
-      - automation.home_security_status_leeo_color
       - automation.home_security_system_watchdog_10_minutes
       - automation.home_security_system_watchdog_30_minutes
       - automation.notify_home_security_status_change
@@ -143,33 +121,19 @@ cards:
       title: Light Automations
       show_header_toggle: false
       entities:
-        - automation.animate_familyroom_lights
         - automation.restore_familyroom_lights
-        - automation.animate_master_bedroom_lights
-        - automation.restore_masterbedroom_lights
         - automation.evening_indoor_lights_on_before_sunset
         - automation.evening_outdoor_lights_on_at_sunset
         - automation.garage_lights_on_when_door_is_opened
-        - automation.long_flash_all_lights
         - automation.morning_indoor_lights_on
         - automation.morning_master_bedroom_lights_off_mallika
         - automation.morning_master_bedroom_lights_on_mallika
         - automation.morning_outdoor_lights_off
         - automation.night_dim_tv_lights
         - automation.night_turn_lights_off
-        - automation.short_flash_all_lights
         - automation.tv_dim_indoor_lights_when_tv_is_on
-        - automation.tv_restore_family_room_lights_to_tv_mode
         - automation.tv_turn_lights_on_when_tv_is_turned_off
-
-  - type: entities
-    title: Wallmote Automations
-    show_header_toggle: false
-    entities:
-      - automation.wallmote_button_1_pressed
-      - automation.wallmote_button_2_pressed
-      - automation.wallmote_button_3_pressed
-      - automation.wallmote_button_4_pressed
+        - automation.outdoor_light_watchdog
 
   - type: entities
     title: Trash & Recycle Automations
@@ -201,10 +165,7 @@ cards:
     show_header_toggle: false
     entities:
       - automation.night_dim_tv_lights
-      - automation.tv_backlight_is_on_when_tv_is_on
-      - automation.tv_backlight_off_when_tv_is_off
       - automation.tv_dim_indoor_lights_when_tv_is_on
-      - automation.tv_restore_family_room_lights_to_tv_mode
       - automation.tv_turn_lights_on_when_tv_is_turned_off
       - automation.reset_movie_time_after_3_hours
 
@@ -257,14 +218,8 @@ cards:
     title: Home Assistant Automations
     show_header_toggle: false
     entities:
-      - automation.random_darker_theme_at_sunset
-      - automation.random_lighter_theme_at_sunrise
-      - automation.random_theme_at_startup
-      - automation.remind_domain_renewal
       - automation.season_change_notification
       - automation.turn_off_ac_after_3_hours_of_cooling
-      - automation.update_available_notification
-      - automation.update_zwave_battery_levels
 
   - type: entities
     title: Misc Automations

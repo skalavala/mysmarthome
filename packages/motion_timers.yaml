@@ -20,6 +20,8 @@ homeassistant:
       hidden: true
     timer.timer_masterbedroom:
       hidden: true
+    timer.timer_masterbathroom:
+      hidden: true
     timer.timer_officeroom:
       hidden: true
 
@@ -33,6 +35,8 @@ timer:
   timer_garage:
     duration: "00:05:00"
   timer_masterbedroom:
+    duration: "00:05:00"
+  timer_masterbathroom:
     duration: "00:05:00"
   timer_officeroom:
     duration: "00:05:00"
@@ -48,6 +52,42 @@ timer:
 ###############################################################################
 
 automation:
+  # Master Bathroom:
+  # Motion Detected - Turn ON the light and extend timer
+  ###############################################################################
+  - alias: Master Bathroom Motion & Timer
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_sensor_158d000464c25a
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: timer.start
+        entity_id: timer.timer_masterbathroom
+      - service: light.turn_on
+        entity_id: light.master_bathroom_lights
+
+  - alias: Master Bathroom Timer Elapsed
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.timer_masterbathroom
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service_template: >
+          {{ 'light.turn_off' if states('binary_sensor.motion_sensor_158d000464c25a') != 'on' else 'timer.start' }}
+        data:
+          entity_id: "{{ 'light.master_bathroom_lights' if states('binary_sensor.motion_sensor_158d000464c25a') != 'on' else 'timer.timer_masterbathroom' }}"
+
   # Office Room:
   # Motion Detected - Turn ON the light and extend timer
   ###############################################################################
@@ -57,13 +97,15 @@ automation:
       - platform: state
         entity_id: binary_sensor.motion_sensor_158d000272bfd7
         to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_officeroom
       - service: switch.turn_on
         entity_id: switch.office_room
-      - condition: template
-        value_template: "{{ states('sun.sun') == 'below_horizon' }}"
 
   - alias: Officeroom Timer Elapsed
     initial_state: true
@@ -72,9 +114,15 @@ automation:
         event_type: timer.finished
         event_data:
           entity_id: timer.timer_officeroom
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
-      - service: switch.turn_off
-        entity_id: switch.office_room
+      - service_template: >
+          {{ 'switch.turn_off' if states('binary_sensor.motion_sensor_158d000272bfd7') != 'on' else 'timer.start' }}
+        data:
+          entity_id: "{{ 'switch.office_room' if states('binary_sensor.motion_sensor_158d000272bfd7') != 'on' else 'timer.timer_officeroom' }}"
 
   # # Front Room:
   # # Motion Detected - Turn ON the light and extend timer
@@ -86,6 +134,10 @@ automation:
         entity_id: binary_sensor.motion_sensor_158d00016db6d2
         from: "off"
         to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_frontroom
@@ -111,6 +163,9 @@ automation:
       - condition: state
         entity_id: sun.sun
         state: "below_horizon"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: switch.turn_on
         entity_id: switch.kitchen
@@ -130,6 +185,9 @@ automation:
       - condition: state
         entity_id: sun.sun
         state: "below_horizon"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service_template: >
           {% if now().hour|int >= states('sensor.bedtime_hour') |int and
@@ -147,7 +205,7 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - binary_sensor.tv_multi_sensor_sensor
+          # - binary_sensor.tv_multi_sensor_sensor
           - binary_sensor.motion_sensor_158d0001a25041
         from: "off"
         to: "on"
@@ -157,6 +215,9 @@ automation:
         state: "below_horizon"
       - condition: template
         value_template: "{{ states('input_boolean.movie_time') != 'on' }}"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_on
         entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
@@ -181,6 +242,10 @@ automation:
         entity_id: timer.timer_familyroom
         from: "active"
         to: "idle"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_off
         entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
@@ -201,6 +266,9 @@ automation:
       - condition: state
         entity_id: sun.sun
         state: "below_horizon"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_on
         data:
@@ -225,33 +293,15 @@ automation:
         entity_id: timer.timer_masterbedroom
         from: "active"
         to: "idle"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: light.turn_off
         entity_id: light.master_bedroom_1
       - service: light.turn_off
         entity_id: light.master_bedroom_2
-
-  # # Garage:
-  # # Motion Detected - Turn ON the light and extend timer
-  # #
-  # # Added a condition - if the lights were just turn off in the last 30 seconds,
-  # # do not turn ON the lights again
-  # ###############################################################################
-  # - alias: Garage Motion & Timer
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id: binary_sensor.garage_motion
-  #       from: "off"
-  #       to: "on"
-  #   condition:
-  #     - condition: template
-  #       value_template: "{{ states('input_boolean.working_in_garage') | lower == 'on' }}"
-  #     - condition: template
-  #       value_template: "{{ (as_timestamp(now()) - as_timestamp(states.switch.garage.last_updated))  | int > 30 }}"
-  #   action:
-  #     - service: switch.turn_on
-  #       entity_id: switch.garage
 
   # Start the timer when the lights are ON
   ###############################################################################
@@ -262,6 +312,10 @@ automation:
         entity_id: switch.garage
         from: "off"
         to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: timer.start
         entity_id: timer.timer_garage
@@ -280,6 +334,9 @@ automation:
       - condition: state
         entity_id: input_boolean.working_in_garage
         state: "off"
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
     action:
       - service: switch.turn_off
         entity_id: switch.garage
