@@ -27,7 +27,6 @@ speedtestdotnet:
 sensor:
   - platform: uptime
     name: Home Assistant Up Time
-    unit_of_measurement: hours
 
   - platform: rest
     resource: http://icanhazip.com

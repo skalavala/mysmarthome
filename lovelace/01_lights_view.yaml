@@ -82,4 +82,4 @@ cards:
     show_header_toggle: true
     entities:
       - switch.frontyard_light
-      - switch.wemobackyardlightswitch
+      - switch.backyard_light

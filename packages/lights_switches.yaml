@@ -6,7 +6,7 @@
 ###############################################################################
 homeassistant:
   customize:
-    switch.frontyard:
+    switch.frontyard_light:
       icon: mdi:lightbulb
       friendly_name: Front Porch Lights
       emulated_hue_name: Front Yard Lights
@@ -18,7 +18,7 @@ homeassistant:
       emulated_hue_name: Wemo Outlet
       homebridge_name: Wemo Outlet
 
-    switch.backyard:
+    switch.backyard_light:
       icon: mdi:lightbulb
       friendly_name: Backyard Lights
       emulated_hue_name: Backyard Lights

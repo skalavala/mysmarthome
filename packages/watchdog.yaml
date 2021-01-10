@@ -82,8 +82,8 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - switch.backyard
-          - switch.frontyard
+          - switch.backyard_light
+          - switch.frontyard_light
         to: "on"
         for:
           minutes: 5

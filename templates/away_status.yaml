@@ -94,7 +94,7 @@
                               "switch.kids_bedroom",
                               "switch.kitchen",
                               "switch.office_room",
-                              "switch.wemobackyardlightswitch"] %}
+                              "switch.backyard_light"] %}
     {% for item in lights_switches -%}
       {%- if states[item.split('.')[0]][item.split('.')[1]].state == "on" -%}
         {%- set friendly_name = states[item.split('.')[0]][item.split('.')[1]].attributes.friendly_name -%}

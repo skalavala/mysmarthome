@@ -242,6 +242,8 @@ automation:
                input_boolean.super_heavy_wind_alert
             {%- elif ( windspeed > 60 ) %}
                input_boolean.hurricane_wind_alert
+            {% else %}
+               input_boolean.dummy
             {%- endif %}
 
   # #Turn off those wind speed alert booleans automatically after 15 minutes.

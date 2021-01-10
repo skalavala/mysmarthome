@@ -17,13 +17,14 @@ homeassistant:
 
   allowlist_external_dirs:
     - /config/www/downloads/camera/patio/
+    - /config/www/downloads/camera/porch/
     - /config/www/downloads/camera/garage/
     - /config/www/downloads/camera/playarea/
     - /config/www/downloads/camera/driveway/
     - /config/www/downloads/camera/frontdoor/
     - /config/www/downloads/camera/kitchen/
     - /config/www/downloads/camera/frontroom/
-    - /config/www/downloads/camera/3dprinter/
+    - /config/www/downloads/camera/3d/
 
 sun:
 alexa:
