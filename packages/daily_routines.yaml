@@ -135,6 +135,8 @@ automation:
     action:
       - service: switch.turn_off
         entity_id: switch.kitchen
+      - service: switch.turn_off
+        entity_id: switch.front_room
 
   #  ÛÛÛÛÛÛÛÛÛÛ                                  ÛÛÛ
   # °°ÛÛÛ°°°°°Û                                 °°°
@@ -296,3 +298,34 @@ automation:
         value_template: "{{ states('input_boolean.nightly_report') == 'on' }}"
     action:
       - service: script.good_night_tts
+
+
+###############################################################################
+# TOGGLE WORKING IN OFFICE BOOLEAN
+###############################################################################
+
+  - alias: Suresh Working in Office Start 
+    initial_state: true
+    trigger:
+      platform: time
+      at: "08:00:00"
+    condition:
+      - condition: state
+        entity_id: "binary_sensor.workday_sensor"
+        state: "on"
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.working_in_office_room
+
+  - alias: Suresh Working in Office End
+    initial_state: true
+    trigger:
+      platform: time
+      at: "18:00:00"
+    condition:
+      - condition: state
+        entity_id: "binary_sensor.workday_sensor"
+        state: "on"
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.working_in_office_room

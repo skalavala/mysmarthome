@@ -40,8 +40,8 @@ cards:
           domain: script
           action: toggle_climate
 
-  - type: entity-filter
-    title: Device Trackers
+  - type: entities
+    title: Kalavala Family
     show_header_toggle: false
     entities:
       - entity: device_tracker.life360_suresh
@@ -54,8 +54,10 @@ cards:
         name: Hasika
       - entity: device_tracker.mahasri_tesla_location_tracker
         name: Tesla
-    state_filter:
-      - "home"
+      - entity: sensor.yo_mama_geocoded_location
+        name: Suresh
+      - entity: sensor.mallika_geocoded_location
+        name: Mallika
     card:
       type: glance
       title: Kalavala Family
@@ -247,7 +249,6 @@ cards:
     show_header_toggle: false
     entities:
       - sensor.plex_mahasri_nas
-      - media_player.plex_plex_web_chrome_windows
 
   - type: entities
     title: Luminance

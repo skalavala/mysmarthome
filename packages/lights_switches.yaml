@@ -93,9 +93,9 @@ tplink:
   discovery: false
   switch:
     # In-wall switches
-    - host: !secret tplink_kids_bedroom
-    - host: !secret tplink_guest_bedroom_1
-    - host: !secret tplink_guest_bedroom_2
+    - host: !secret tplink_hasika_bedroom
+    - host: !secret tplink_srinika_bedroom
+    - host: !secret tplink_guest_bedroom
     - host: !secret tplink_garage
     - host: !secret tplink_garage_shoplights
     - host: !secret tplink_basement_left
@@ -106,8 +106,6 @@ tplink:
     # Smart Outlets
     - host: !secret tplink_smart_outlet1
       #name: Downstairs Fragrance Outlet
-    - host: !secret tplink_smart_outlet2
-      #name: Downstairs 3d printer Outlet
     - host: !secret tplink_smart_outlet3
       #name: Upstairs Fragrance Outlet
     - host: !secret tplink_kids_bed_accent_light
@@ -116,6 +114,7 @@ tplink:
     - host: !secret tplink_bathroom_lights
   strip:
     - host: !secret tplink_smart_strip
+    - host: !secret tplink_outdoor_plug
 
 wemo:
   discovery: false
@@ -123,7 +122,6 @@ wemo:
     - !secret wemo_switch_1
     - !secret wemo_switch_2
     - !secret wemo_switch_3
-    - !secret wemo_sharp_tv
 
 input_boolean:
   animate_upstairs_lights:

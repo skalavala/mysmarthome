@@ -132,10 +132,6 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027c0276
         action_type: flip90
-    condition:
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
     action:
       - service_template: switch.toggle
         entity_id: switch.front_room
@@ -149,13 +145,11 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027c0276
         action_type: move
-    condition:
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
     action:
       - service: switch.toggle
         entity_id: switch.office_room
+      - service: switch.toggle
+        entity_id: switch.left
 
   # Shake: Toggle Do Not Disturb Mode
   - alias: Front Room Cube Event Shake
@@ -166,10 +160,6 @@ automation:
       event_data:
         entity_id: binary_sensor.cube_158d00027c0276
         action_type: shake_air
-    condition:
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
     action:
       - service: script.toggle_do_not_disturb
 

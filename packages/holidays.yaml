@@ -51,6 +51,8 @@ automation:
       - condition: template
         value_template: "{{ states('sensor.holiday') != 'unknown' }}"
       - condition: template
+        value_template: "{{ states('sensor.holiday') != 'unavailable' }}"
+      - condition: template
         value_template: "{{ states('sensor.holiday') | trim != '' }}"
     action:
       - service: persistent_notification.create

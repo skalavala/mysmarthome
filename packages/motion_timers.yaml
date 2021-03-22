@@ -118,6 +118,9 @@ automation:
       - condition: state
         entity_id: input_boolean.light_automations
         state: "on"
+      - condition: state
+        entity_id: input_boolean.working_in_office_room
+        state: "off"
     action:
       - service_template: >
           {{ 'switch.turn_off' if states('binary_sensor.motion_sensor_158d000272bfd7') != 'on' else 'timer.start' }}

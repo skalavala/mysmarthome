@@ -22,20 +22,36 @@ cards:
         name: Master Bathroom Lights
 
   - type: entities
-    title: Downstairs
+    title: Office Room
     show_header_toggle: true
     entities:
-      - switch.front_room
-      - switch.basement_left
-      - switch.basement_right
-      - switch.kitchen
       - switch.office_room
+      - entity: switch.wemoswitch1
+        name: Office Room Accent Lights
+
+  - type: entities
+    title: Family Room
+    show_header_toggle: true
+    entities:
+      - switch.kitchen
       - light.family_room_lights
       - light.hue_color_lamp_1
       - light.hue_color_lamp_2
       - light.hue_color_lamp_3
-      - entity: switch.wemoswitch1
-        name: Office Room Accent Lights
+
+  - type: entities
+    title: Basement
+    show_header_toggle: true
+    entities:
+      - switch.basement_left
+      - switch.basement_right
+
+  - type: entities
+    title: Front Room
+    show_header_toggle: true
+    entities:
+      - switch.front_room
+      - light.gateway_light_34ce008ad65d
 
   - type: entities
     title: TV Power Strip
@@ -49,7 +65,16 @@ cards:
         name: Bose Audio
 
   - type: entities
-    title: Tasmota Outlet
+    title: Outdoor Strip (Kasa)
+    show_header_toggle: true
+    entities:
+      - entity: switch.left
+        name: Left
+      - entity: switch.right
+        name: Right
+
+  - type: entities
+    title: Outdoor Strip (Tasmota)
     show_header_toggle: true
     entities:
       - entity: switch.tasmota_outlet_1
@@ -70,12 +95,6 @@ cards:
     entities:
       - switch.garage
       - switch.garage_shop_lights
-
-  - type: entities
-    title: Always On
-    show_header_toggle: false
-    entities:
-      - light.gateway_light_34ce008ad65d
 
   - type: entities
     title: Outdoor Lights
