@@ -52,8 +52,6 @@ cards:
         name: Srinika
       - entity: device_tracker.life360_hasika
         name: Hasika
-      - entity: device_tracker.mahasri_tesla_location_tracker
-        name: Tesla
       - entity: sensor.yo_mama_geocoded_location
         name: Suresh
       - entity: sensor.mallika_geocoded_location
@@ -77,7 +75,6 @@ cards:
     title: 3D Printer
     show_header_toggle: false
     entities:
-      - sensor.octoprint_file
       - binary_sensor.octoprint_printing
       - binary_sensor.octoprint_printing_error
       - sensor.octoprint_current_state

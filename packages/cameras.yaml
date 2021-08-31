@@ -717,6 +717,10 @@ automation:
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Garage"
+              - file: "{{ '/config/www/downloads/camera/porch/porch_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: Porch
 
       - service: notify.notify_smtp
         data_template:
@@ -731,6 +735,9 @@ automation:
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
               - "{{ '/config/www/downloads/camera/garage/garage_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+              - "{{ '/config/www/downloads/camera/porch/porch_' ~
                 (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 

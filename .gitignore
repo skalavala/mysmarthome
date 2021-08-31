@@ -55,3 +55,8 @@ private/*
 apps/__pycache__/*.pyc
 docker/streamer
 docker-compose.yml
+packages/telegram_commands.yaml
+custom_components/input_label/input_labelpy
+custom_components/input_label/services.yaml
+custom_components/input_label/__init__.py
+custom_components/input_label/manifest.json

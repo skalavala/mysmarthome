@@ -8,7 +8,7 @@ cards:
           - type: gauge
             name: Tesla Battery
             unit: "%"
-            entity: sensor.tesla_model_3_battery_sensor
+            entity: sensor.mahasri_tesla_battery_sensor
             severity:
               green: 75
               yellow: 40
@@ -16,7 +16,7 @@ cards:
           - type: gauge
             name: Battery Range
             unit: "miles"
-            entity: sensor.tesla_model_3_range_sensor
+            entity: sensor.mahasri_tesla_range_sensor
             max: 320
             min: 0
             severity:
@@ -24,15 +24,15 @@ cards:
               yellow: 100
               red: 75
       - type: thermostat
-        entity: climate.tesla_model_3_hvac_climate_system
+        entity: climate.mahasri_tesla_hvac_climate_system
       - type: horizontal-stack
         cards:
           - type: sensor
-            entity: sensor.tesla_model_3_temperature_sensor_inside
+            entity: sensor.mahasri_tesla_temperature_sensor_inside
             name: Temperature Inside
             graph: line
           - type: sensor
-            entity: sensor.tesla_model_3_temperature_sensor_outside
+            entity: sensor.mahasri_tesla_temperature_sensor_outside
             name: Temperature outside
             graph: line
 
@@ -42,22 +42,31 @@ cards:
     entities:
       - device_tracker.mahasri_tesla_location_tracker
       - binary_sensor.mahasri_tesla_online_sensor
-      - binary_sensor.tesla_model_3_parking_brake_sensor
-      - lock.tesla_model_3_door_lock
-      - sensor.tesla_model_3_mileage_sensor
-      - switch.tesla_model_3_update_switch
-      - lock.tesla_model_3_charger_door_lock
+      - binary_sensor.mahasri_tesla_parking_brake_sensor
+      - lock.mahasri_tesla_door_lock
+      - sensor.mahasri_tesla_mileage_sensor
+      - switch.mahasri_tesla_update_switch
+      - lock.mahasri_tesla_charger_door_lock
       - sensor.mahasri_tesla_charging_rate_sensor
-      - sensor.tesla_model_3_battery_sensor
-      - sensor.tesla_model_3_range_sensor
-      - sensor.tesla_model_3_temperature_sensor_inside
-      - sensor.tesla_model_3_temperature_sensor_outside
+      - sensor.mahasri_tesla_battery_sensor
+      - sensor.mahasri_tesla_range_sensor
+      - sensor.mahasri_tesla_temperature_sensor_inside
+      - sensor.mahasri_tesla_temperature_sensor_outside
       - switch.mahasri_tesla_sentry_mode_switch
 
   - type: entities
     title: Charging
     show_header_toggle: false
     entities:
-      - binary_sensor.tesla_model_3_charger_sensor
-      - switch.tesla_model_3_charger_switch
-      - switch.tesla_model_3_maxrange_switch
+      - binary_sensor.mahasri_tesla_charger_sensor
+      - switch.mahasri_tesla_charger_switch
+      - switch.mahasri_tesla_maxrange_switch
+
+  - type: entities
+    title: Locks
+    show_header_toggle: false
+    entities:
+      - lock.mahasri_tesla_trunk_lock
+      - lock.mahasri_tesla_frunk_lock
+      - lock.mahasri_tesla_door_lock
+      - lock.mahasri_tesla_charger_door_lock

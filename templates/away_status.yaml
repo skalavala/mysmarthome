@@ -34,12 +34,6 @@
     {%- endif -%}
   {%- endmacro -%}
 
-  {%- macro pollen_levels() -%}
-    {% if states('sensor.pollen_level') != 'unknown' %}
-      Pollen level is {{ states('sensor.pollen_level') }}.
-    {% endif %}
-  {%- endmacro -%}
-
   {%- macro humidity_status() -%}
     Home humidity is {{ states('sensor.dining_room_thermostat_humidity') }} percent.
   {%- endmacro -%}
@@ -83,21 +77,10 @@
     {% endfor %}
   {%- endmacro -%}
 
-  {%- macro light_status() -%}
-    {%- set lights_switches = ["switch.basement_left",
-                              "switch.basement_right",
-                              "switch.frontyard_light",
-                              "switch.garage",
-                              "switch.guest_bedroom",
-                              "switch.prayer_room",
-                              "switch.kids_bed_accent",
-                              "switch.kids_bedroom",
-                              "switch.kitchen",
-                              "switch.office_room",
-                              "switch.backyard_light"] %}
-    {% for item in lights_switches -%}
-      {%- if states[item.split('.')[0]][item.split('.')[1]].state == "on" -%}
-        {%- set friendly_name = states[item.split('.')[0]][item.split('.')[1]].attributes.friendly_name -%}
+  {%- macro light_switch_status() -%}
+    {% for item in states if item.domain =="light" or item.domain == "switch" -%}
+      {%- if item.state == "on" -%}
+        {%- set friendly_name = item.attributes.friendly_name -%}
         {{ friendly_name }} {{ 'are' if plural(friendly_name) == "true" else 'is' }} ON.
       {% endif %}
     {%- endfor -%}
@@ -106,14 +89,10 @@
   {%- macro mother_of_all_macros() -%}
     {{ alarm_status() }}
     {{ garage_status() }}
-    {{ USPS() }}
-    {{ tesla_status() }}
     {{ weather_update() }}
     {{ humidity_status() }}
     {{ uv_levels() }}
-    {{ pollen_levels() }}
-    {{ alert_battery_levels() }}
-    {{ light_status() }}
+    {{ light_switch_status() }}
   {%- endmacro -%}
 
   {{- cleanup(mother_of_all_macros()) -}}

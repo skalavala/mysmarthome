@@ -17,6 +17,7 @@ logs:
   homeassistant.exceptions: warning
   homeassistant.helpers.script: warning
   homeassistant.helpers.entity: warning
+  homeassistant.helpers.template: critical
   homeassistant.components.wemo: critical
   homeassistant.components.sensor: critical
   homeassistant.components.cloud.iot: warning
@@ -24,7 +25,7 @@ logs:
   homeassistant.components.camera: warning
   homeassistant.components.zwave: critical
   homeassistant.components.image_processing: warning
-  homeassistant.components.homekit: warning
+  homeassistant.components.homekit: error
   custom_components.sensor.life360: warning
   custom_components.sensor.paloalto: warning
   homeassistant.components.recorder: warning

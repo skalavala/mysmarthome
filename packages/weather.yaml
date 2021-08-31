@@ -148,7 +148,7 @@ sensor:
     value_template: "{{value_json.Location.periods[1].Index}}"
     scan_interval: 21600
     headers:
-      Referer: "https://www.pollen.com"
+      Referer: !secret weather_pollen_url
 
   - platform: rest
     name: cold_flu
@@ -156,7 +156,7 @@ sensor:
     value_template: "{{value_json.Location.periods[0].Index}}"
     scan_interval: 21600
     headers:
-      Referer: "https://www.pollen.com"
+      Referer: !secret weather_pollen_url
 
 ###############################################################################
 #                _                        _   _

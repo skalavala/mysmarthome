@@ -210,7 +210,6 @@ automation:
   # A gentle 10 minute reminder that the Home Security system is OFF
   ###############################################################################
   - alias: Home Security System WatchDog 10 minutes
-    initial_state: true
     trigger:
       - platform: state
         entity_id:
@@ -227,7 +226,6 @@ automation:
   # A gentle reminder that the home security is OFF for more than 30 minutes
   ###############################################################################
   - alias: Home Security System WatchDog 30 minutes
-    initial_state: true
     trigger:
       - platform: state
         entity_id:

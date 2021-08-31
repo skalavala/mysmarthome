@@ -25,7 +25,6 @@ cards:
     show_header_toggle: false
     entities:
       - climate.dining_room
-      - climate.tesla_model_3_hvac_climate_system
       - binary_sensor.dining_room_thermostat_fan
       - binary_sensor.dining_room_thermostat_has_leaf
       - binary_sensor.dining_room_thermostat_is_locked

@@ -110,6 +110,7 @@ tplink:
       #name: Upstairs Fragrance Outlet
     - host: !secret tplink_kids_bed_accent_light
       #name: Kids Bed Accent Light
+    - host: !secret tplink_3d_printer
   dimmer:
     - host: !secret tplink_bathroom_lights
   strip:

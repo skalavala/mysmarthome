@@ -26,7 +26,6 @@ cards:
     title: Octoprint
     show_header_toggle: false
     entities:
-      - sensor.octoprint_file
       - binary_sensor.octoprint_printing
       - sensor.octoprint_current_state
       - binary_sensor.octoprint_printing_error

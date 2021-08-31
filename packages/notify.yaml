@@ -65,5 +65,6 @@ telegram_bot:
   # Add Polling
   - platform: polling
     api_key: !secret telegram_apikey
+    parse_mode: html
     allowed_chat_ids:
       - !secret telegram_chatid
