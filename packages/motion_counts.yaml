@@ -6,17 +6,11 @@ homeassistant:
       unit_of_measurement: "count"
     input_label.basement_door_sensor_sensor:
       unit_of_measurement: "count"
-    input_label.downstairs_multi_sensor_sensor:
-      unit_of_measurement: "count"
-    input_label.front_room_multi_sensor_sensor:
-      unit_of_measurement: "count"
     input_label.front_room_window_sensor_sensor:
       unit_of_measurement: "count"
     input_label.garage_door_sensor_sensor:
       unit_of_measurement: "count"
     input_label.garage_motion:
-      unit_of_measurement: "count"
-    input_label.guest_bedroom_multi_sensor_sensor:
       unit_of_measurement: "count"
     input_label.kitchen_motion_sensor_sensor:
       unit_of_measurement: "count"
@@ -50,8 +44,6 @@ homeassistant:
       unit_of_measurement: "count"
     input_label.two_car_garage_door_tilt_sensor_sensor:
       unit_of_measurement: "count"
-    input_label.upstairs_multi_sensor_sensor:
-      unit_of_measurement: "count"
     input_label.door_window_sensor_158d0004231f7b:
       unit_of_measurement: "count"
     input_label.door_window_sensor_158d0004248d5b:
@@ -80,20 +72,11 @@ input_label:
     name: Garage Door
     icon: mdi:run-fast
 
-  downstairs_multi_sensor_sensor:
-    name: TV Room Multi Sensor
-    icon: mdi:run-fast
-  front_room_multi_sensor_sensor:
-    name: Front Room Multi Sensor
-    icon: mdi:run-fast
   front_room_window_sensor_sensor:
     name: Front Room Sensor
     icon: mdi:run-fast
   garage_motion:
     name: Garage Motion
-    icon: mdi:run-fast
-  guest_bedroom_multi_sensor_sensor:
-    name: Guest Bedroom Motion
     icon: mdi:run-fast
   kitchen_motion_sensor_sensor:
     name: Kitchen Motion
@@ -145,9 +128,6 @@ input_label:
   stairs_motion_sensor_sensor:
     name: Stairs Motion
     icon: mdi:run-fast
-  upstairs_multi_sensor_sensor:
-    name: Upstairs Motion Sensor
-    icon: mdi:run-fast
 
 automation:
   - alias: Count Motions
@@ -159,12 +139,9 @@ automation:
           - binary_sensor.door_window_sensor_158d00040ad8fc
           - binary_sensor.door_window_sensor_158d0004880f30 # garage entry door
           - binary_sensor.basement_door_sensor_sensor
-          - binary_sensor.downstairs_multi_sensor_sensor
-          - binary_sensor.front_room_multi_sensor_sensor
           - binary_sensor.front_room_window_sensor_sensor
           - binary_sensor.garage_door_sensor_sensor
           - binary_sensor.garage_motion
-          - binary_sensor.guest_bedroom_multi_sensor_sensor
           - binary_sensor.kitchen_motion_sensor_sensor
           - binary_sensor.motion_sensor_158d00016c2d0e
           - binary_sensor.motion_sensor_158d00016db6d2
@@ -181,7 +158,6 @@ automation:
           - binary_sensor.stairs_motion_sensor_sensor
           - binary_sensor.door_window_sensor_158d0004248d5b # Single Car Garage
           - binary_sensor.door_window_sensor_158d0004231f7b # Double Car Garage
-          - binary_sensor.upstairs_multi_sensor_sensor
     action:
       - service: input_label.set_value
         data_template:
@@ -200,12 +176,9 @@ automation:
           value: 0
           entity_id:
             - input_label.basement_door_sensor_sensor
-            - input_label.downstairs_multi_sensor_sensor
-            - input_label.front_room_multi_sensor_sensor
             - input_label.front_room_window_sensor_sensor
             - input_label.garage_door_sensor_sensor
             - input_label.garage_motion
-            - input_label.guest_bedroom_multi_sensor_sensor
             - input_label.kitchen_motion_sensor_sensor
             - input_label.motion_sensor_158d00016c2d0e
             - input_label.motion_sensor_158d00016db6d2

@@ -1,31 +1,37 @@
 title: My Home
 icon: mdi:home
 cards:
+  - type: alarm-panel
+    entity: alarm_control_panel.home
+    icon: mdi:security
+    color_type: card
+    show_state: true
+    name: Security
+    size: 20%
+    style:
+      - height: 75px
+      - font-weight: bold
+      - color: rgb(255, 255, 255)
+    state:
+      - value: "disarmed"
+        color: rgb(255,0,0)
+      - value: "armed_home"
+        color: rgb(0, 128, 0)
+      - value: "armed_away"
+        color: rgb(0, 0, 255)
+    action: more_info
+
   - type: horizontal-stack
     cards:
-      - type: "custom:button-card"
-        entity: alarm_control_panel.home
-        icon: mdi:security
-        color_type: card
-        show_state: true
-        style:
-          - font-weight: bold
-          - color: rgb(255, 255, 255)
-        state:
-          - value: "disarmed"
-            color: rgb(255,0,0)
-          - value: "armed_home"
-            color: rgb(0, 128, 0)
-          - value: "armed_away"
-            color: rgb(0, 0, 255)
-        action: more_info
-
-      - type: "custom:button-card"
+      - type: button
         entity: climate.dining_room
         icon: mdi:thermometer-lines
+        name: Nest
         color_type: card
-        show_state: true
+        show_state: "on"
+        size: 20%
         style:
+          - height: 75px
           - font-weight: bold
           - color: rgb(255, 255, 255)
         state:
@@ -40,66 +46,57 @@ cards:
           domain: script
           action: toggle_climate
 
+      - type: button
+        entity: binary_sensor.door_window_sensor_158d000424a6d6
+        icon: mdi:door
+        name: Front Door
+        color_type: card
+        show_state: "on"
+        size: 20%
+        style:
+          - height: 75px
+          - font-weight: bold
+          - color: rgb(255, 255, 255)
+        state:
+          - value: "on"
+            color: rgb(255,0,0)
+          - value: "off"
+            color: rgb(0, 128, 0)
+
+      - type: button
+        entity: binary_sensor.door_window_sensor_158d00040ad8fc
+        icon: mdi:door
+        name: Back Door
+        color_type: card
+        show_state: "on"
+        size: 20%
+        style:
+          - height: 75px
+          - font-weight: bold
+          - color: rgb(255, 255, 255)
+        state:
+          - value: "on"
+            color: rgb(255,0,0)
+          - value: "off"
+            color: rgb(0, 128, 0)
+
   - type: entities
     title: Kalavala Family
     show_header_toggle: false
     entities:
-      - entity: device_tracker.life360_suresh
-        name: Suresh
-      - entity: device_tracker.life360_mallika
-        name: Mallika
-      - entity: device_tracker.life360_srinika
-        name: Srinika
-      - entity: device_tracker.life360_hasika
-        name: Hasika
-      - entity: sensor.yo_mama_geocoded_location
-        name: Suresh
-      - entity: sensor.mallika_geocoded_location
-        name: Mallika
+      - entity: device_tracker.mallika
+        name: Mallika's Location
+      - entity: device_tracker.suresh
+        name: Suresh's Location
+      - entity: device_tracker.srinika
+        name: Srinika's Location
+      - entity: device_tracker.hasika
+        name: Hasika's Location
+      - entity: input_boolean.home_mode_away
+        name: Home Away Status
     card:
       type: glance
       title: Kalavala Family
-
-  - type: entities
-    title: Pill Reminder
-    show_header_toggle: false
-    entities:
-      - input_datetime.pill_reminder_time
-      - input_boolean.pill_on_vacation
-      - input_boolean.pill_taken
-      - input_boolean.pill_voice_notification
-      - binary_sensor.door_window_sensor_158d00040ad8ec
-      - input_label.pill_taken_at
-
-  - type: entities
-    title: 3D Printer
-    show_header_toggle: false
-    entities:
-      - binary_sensor.octoprint_printing
-      - binary_sensor.octoprint_printing_error
-      - sensor.octoprint_current_state
-      - sensor.octoprint_job_percentage
-      - sensor.octoprint_time_elapsed
-      - sensor.octoprint_time_remaining
-
-  - type: glance
-    show_icon: true
-    show_name: true
-    show_state: true
-    title: Fitness
-    entities:
-      - entity: sensor.yo_mama_steps
-        icon: "mdi:run"
-        name: Suresh Steps
-      - entity: sensor.yo_mama_floors_ascended
-        icon: "mdi:run"
-        name: Suresh Floors Ascended
-      - entity: sensor.mallika_steps
-        icon: "mdi:run"
-        name: Mallika Steps
-      - entity: sensor.mallika_floors_ascended
-        icon: "mdi:run"
-        name: Mallika Floors Ascended
 
   - type: entity-filter
     title: For Your Information
@@ -134,6 +131,35 @@ cards:
     card:
       type: glance
       title: FYI
+
+  - type: entities
+    title: Pill Reminder
+    show_header_toggle: false
+    entities:
+      - input_datetime.pill_reminder_time
+      - input_boolean.pill_taken
+      - input_boolean.pill_voice_notification
+      - binary_sensor.door_window_sensor_158d00040ad8ec
+      - input_label.pill_taken_at
+
+  - type: glance
+    show_icon: true
+    show_name: true
+    show_state: true
+    title: Fitness
+    entities:
+      - entity: sensor.yo_mama_steps
+        icon: "mdi:run"
+        name: Suresh Steps
+      - entity: sensor.yo_mama_floors_ascended
+        icon: "mdi:run"
+        name: Suresh Floors Ascended
+      - entity: sensor.mallika_steps
+        icon: "mdi:run"
+        name: Mallika Steps
+      - entity: sensor.mallika_floors_ascended
+        icon: "mdi:run"
+        name: Mallika Floors Ascended
 
   - type: conditional
     conditions:
@@ -180,6 +206,10 @@ cards:
         name: Single Car Garage Door
       - entity: binary_sensor.two_car_garage_door_tilt_sensor_sensor
         name: Double Car Garage Door
+      - entity: binary_sensor.door_window_sensor_158d00044e5cb3
+        name: Master Bathroom Toilet Door Sensor
+      - entity: binary_sensor.door_window_sensor_158d00045ab168
+        name: Guest Bathroom Door Sensor
     state_filter:
       - "on"
       - "opened"
@@ -188,22 +218,9 @@ cards:
       type: glance
       title: Doors
 
-  - type: weather-forecast
+  - type: tile
     entity: weather.dark_sky
 
-  - type: conditional
-    conditions:
-      - entity: sensor.usps_mail
-        state_not: "0"
-    card:
-      type: picture-entity
-      id: camera_usps_mail_pictures
-      title: USPS Mail Pictures
-      entity: camera.usps_mail_pictures
-      camera_image: camera.usps_mail_pictures
-      show_info: true
-      tap_action:
-        action: more-info
 
   - type: entities
     title: Xiaomi Motion Sensors
@@ -240,13 +257,17 @@ cards:
         name: Two Car Garage Door
       - entity: binary_sensor.door_window_sensor_158d0004248d5b
         name: Single Car Garage Door
+      - entity: binary_sensor.door_window_sensor_158d00044e5cb3 
+        name: Master Bathroom Toilet Door Sensor
+      - entity: binary_sensor.door_window_sensor_158d00045ab168
+        name: Guest Bathroom Door Sensor
 
   - type: entities
     title: Plex
     show_header_toggle: false
     entities:
       - sensor.plex_mahasri_nas
-
+      
   - type: entities
     title: Luminance
     show_header_toggle: false
@@ -312,18 +333,14 @@ cards:
       - binary_sensor.driveway_camera_motion
       - binary_sensor.audio_detector_sensor
       - binary_sensor.basement_door_sensor_sensor
-      - binary_sensor.downstairs_multi_sensor_sensor
-      - binary_sensor.front_room_multi_sensor_sensor
       - binary_sensor.door_window_sensor_158d000424a6d6
       - binary_sensor.garage_door_sensor_sensor
       - binary_sensor.kitchen_motion_sensor_sensor
       - binary_sensor.door_window_sensor_158d00040ad8fc # back door
       - binary_sensor.door_window_sensor_158d0004880f30 # Garage Entry Door
       - binary_sensor.stairs_motion_sensor_sensor
-      - binary_sensor.tv_multi_sensor_sensor
       - binary_sensor.door_window_sensor_158d0004248d5b
       - binary_sensor.two_car_garage_door_tilt_sensor_sensor
-      - binary_sensor.upstairs_multi_sensor_sensor
     state_filter:
       - "on"
       - "detected"
@@ -333,52 +350,6 @@ cards:
       type: entities
       title: Motion Sensors
       show_header_toggle: false
-
-  - type: conditional
-    conditions:
-      - entity: sensor.season
-        state: "spring"
-    card:
-      type: vertical-stack
-      cards:
-        - type: horizontal-stack
-          cards:
-            - type: gauge
-              name: Pollen Today
-              unit: "%"
-              entity: sensor.allergy_index_today
-              max: 12.0
-              severity:
-                green: 0
-                yellow: 4
-                red: 7
-            - type: gauge
-              name: Pollen Tomorrow
-              unit: "%"
-              entity: sensor.allergy_index_tomorrow
-              max: 12.0
-              severity:
-                green: 0
-                yellow: 4
-                red: 7
-        - type: horizontal-stack
-          cards:
-            - type: gauge
-              name: Asthma Today
-              unit: "%"
-              entity: sensor.asthma_index_forecasted_average
-              severity:
-                green: 0
-                yellow: 4
-                red: 7
-            - type: gauge
-              name: Asthma Tomorrow
-              unit: "%"
-              entity: sensor.asthma_index_tomorrow
-              severity:
-                green: 0
-                yellow: 4
-                red: 7
 
   - type: entities
     title: Motion Counters

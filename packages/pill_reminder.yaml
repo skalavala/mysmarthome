@@ -27,11 +27,6 @@ input_boolean:
     name: Pill Taken
     icon: mdi:pill
 
-  pill_on_vacation:
-    name: On Vacation
-    initial: off
-    icon: mdi:beach
-
   pill_voice_notification:
     name: Pill Voice Notification
     icon: mdi:speaker
@@ -91,20 +86,6 @@ automation:
         entity_id: input_boolean.pill_taken
 
   ###############################################################################
-  # Set the vacation mode automatically based on home security system state
-  # When travelling, make sure you add a reminder on your mobile phone
-  ###############################################################################
-  - alias: Set Vacation Mode For Pills
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id: alarm_control_panel.home
-    action:
-      - service_template: "input_boolean.turn_{{- 'on' if
-          states('alarm_control_panel.home') == 'armed_away' else 'off' }}"
-        entity_id: input_boolean.pill_on_vacation
-
-  ###############################################################################
   # Checks if the pills were taken - trigger on the pill reminder time
   # Also, only remind if not on vacation or away from home
   # Right after the notification, start the timer, and keep reminders going
@@ -120,7 +101,7 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.pill_taken') == 'off' }}"
       - condition: template
-        value_template: "{{ states('input_boolean.pill_on_vacation') == 'off' }}"
+        value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
     action:
       - service: script.remind_pill
 

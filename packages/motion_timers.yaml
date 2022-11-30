@@ -70,6 +70,16 @@ automation:
         entity_id: timer.timer_masterbathroom
       - service: light.turn_on
         entity_id: light.master_bathroom_lights
+        data:
+          brightness: 64 # 25% of brightness
+          transition: 5
+      - condition: template
+        value_template: '{{states("sun.sun") == "above_horizon"}}'
+      - service: light.turn_on
+        entity_id: light.master_bathroom_lights
+        data:
+          brightness: 254 # 100% of brightness
+          transition: 5
 
   - alias: Master Bathroom Timer Elapsed
     initial_state: true
@@ -171,7 +181,7 @@ automation:
         state: "on"
     action:
       - service: switch.turn_on
-        entity_id: switch.kitchen
+        entity_id: switch.kitchen_switch
       - service: timer.start
         entity_id: timer.timer_kitchen
   # Kitchen:
@@ -199,7 +209,7 @@ automation:
           {% else %}
             switch.turn_on
           {% endif %}
-        entity_id: switch.kitchen
+        entity_id: switch.kitchen_switch
   # Family Room:
   # Motion Detected - When TV is OFF, turn ON the light 100% and extend timer
   ###############################################################################

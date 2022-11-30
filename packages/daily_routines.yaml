@@ -40,7 +40,7 @@ automation:
     action:
       - service: switch.turn_on
         data:
-          entity_id: switch.kitchen
+          entity_id: switch.kitchen_switch
 
   ###############################################################################
   # Turn ON Master Bedroom lights ON in the morning
@@ -70,6 +70,9 @@ automation:
           transition: 15
           brightness: 25
           color_temp: 154
+      - service: switch.turn_on
+        data:
+          entity_id: switch.chromecast_monitor
 
   - alias: Morning Master Bedroom Lights OFF (Mallika)
     initial_state: true
@@ -134,7 +137,7 @@ automation:
         state: "on"
     action:
       - service: switch.turn_off
-        entity_id: switch.kitchen
+        entity_id: switch.kitchen_switch
       - service: switch.turn_off
         entity_id: switch.front_room
 
@@ -153,7 +156,7 @@ automation:
   # Turn outdoor lights on 15 minutes before sunset
   ###############################################################################
   - alias: Evening Outdoor Lights ON (At Sunset)
-    initial_state: true
+#    initial_state: true
     trigger:
       platform: sun
       event: sunset
@@ -187,23 +190,23 @@ automation:
     action:
       - service: switch.turn_on
         data:
-          entity_id: switch.kitchen
+          entity_id: switch.kitchen_switch
       - service: light.turn_on
         data:
           entity_id: light.hue_color_lamp_1
-          transition: 15
+          transition: 3000
           brightness: 255
           color_temp: 154
       - service: light.turn_on
         data:
           entity_id: light.hue_color_lamp_2
-          transition: 15
+          transition: 3000
           brightness: 255
           color_temp: 154
       - service: light.turn_on
         data:
           entity_id: light.hue_color_lamp_3
-          transition: 15
+          transition: 3000
           brightness: 255
           color_temp: 154
       - service: light.turn_on
@@ -217,7 +220,7 @@ automation:
           brightness: 25
           color_temp: 366
       - service: switch.turn_on
-        entity_id: switch.kids_bed_accent
+        entity_id: switch.hasika_bed_accent
       - service: switch.turn_on
         entity_id: switch.front_room
       - service: switch.turn_on
@@ -281,9 +284,9 @@ automation:
         state: "on"
     action:
       - service: script.all_indoor_lights_off
-      - service: script.notify_me
-        data:
-          message: "It is bed time, turned lights off!"
+      # - service: script.notify_me
+      #   data:
+      #     message: "It is bed time, turned lights off!"
 
   ###############################################################################
   # Provide Bed time Report via TTS

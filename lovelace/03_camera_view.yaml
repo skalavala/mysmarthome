@@ -1,110 +1,95 @@
 title: Camera Live
 icon: mdi:cctv
 cards:
-  - type: horizontal-stack
+  - type: vertical-stack
     cards:
-      - type: "custom:button-card"
-        name: Porch
+      - type: button
+        name: RESET CAMERA
         entity: input_label.current_stream
         icon: mdi:cctv
         color_type: card
+        show_state: false
+        size: 5%
         style:
           - font-weight: bold
           - color: rgb(0, 0, 5)
         state:
           - value: "frontyard"
             color: var(--primary-color)
-        action: service
-        service:
-          domain: script
-          action: stream_frontdoor_camera_to_chromecast
-
-      - type: "custom:button-card"
-        name: Driveway
-        entity: input_label.current_stream
-        icon: mdi:cctv
-        color_type: card
-        style:
-          - font-weight: bold
-          - color: rgb(0, 0, 5)
-        state:
-          - value: "driveway"
-            color: var(--primary-color)
-        action: service
-        service:
-          domain: script
-          action: stream_driveway_camera_to_chromecast
-
-      - type: "custom:button-card"
-        name: Patio
-        entity: input_label.current_stream
-        icon: mdi:cctv
-        color_type: card
-        style:
-          - font-weight: bold
-          - color: rgb(0, 0, 5)
-        state:
-          - value: "patio"
-            color: var(--primary-color)
-        action: service
-        service:
-          domain: script
-          action: stream_patio_camera_to_chromecast
-
-      - type: "custom:button-card"
+        tap_action:
+          action: call-service
+          service: script.reset_camera_stream   
+  - type: horizontal-stack
+    cards:
+      - type: button
         name: Porch
         entity: input_label.current_stream
         icon: mdi:cctv
         color_type: card
+        show_state: false
         style:
           - font-weight: bold
           - color: rgb(0, 0, 5)
         state:
           - value: "porch"
             color: var(--primary-color)
-        action: service
-        service:
-          domain: script
-          action: stream_porch_camera_to_chromecast
+        tap_action:
+          action: service
+          service: script.stream_porch_camera_to_chromecast
 
-      - type: "custom:button-card"
+      - type: button
+        name: Driveway
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        show_state: false
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: "driveway"
+            color: var(--primary-color)
+        tap_action:
+          action: call-service
+          service: script.stream_driveway_camera_to_chromecast
+
+      - type: button
+        name: Patio
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        show_state: false
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: "patio"
+            color: var(--primary-color)
+        tap_action:
+          action: call-service
+          service: script.stream_patio_camera_to_chromecast
+
+      - type: button
         name: Playarea
         entity: input_label.current_stream
         icon: mdi:cctv
         color_type: card
+        show_state: false
         style:
           - font-weight: bold
           - color: rgb(0, 0, 5)
         state:
           - value: "playarea"
             color: var(--primary-color)
-        action: service
-        service:
-          domain: script
-          action: stream_playarea_camera_to_chromecast
-
-  - type: "custom:button-card"
-    name: RESET CAMERA
-    entity: input_label.current_stream
-    icon: mdi:cctv
-    color_type: card
-    style:
-      - font-weight: bold
-      - color: rgb(0, 0, 5)
-    state:
-      - value: "frontyard"
-        color: var(--primary-color)
-    action: service
-    service:
-      domain: script
-      action: reset_camera_stream
+        tap_action:
+          action: call-service
+          service: script.stream_playarea_camera_to_chromecast
 
   - type: picture-glance
     id: camera_frontdoor_camera
     title: Frontdoor Camera
     entity: camera.frontdoor_camera
     camera_image: camera.frontdoor_camera
-    # camera_view: live
     show_info: true
     tap_action:
       action: more-info
@@ -148,28 +133,27 @@ cards:
       - switch.backyard_light
       - binary_sensor.playarea_camera_motion
 
-  - type: picture-glance
-    id: camera_garage_camera
-    title: Garage Camera
-    entity: camera.garage_camera
-    camera_image: camera.garage_camera
-    show_info: true
-    tap_action:
-      action: more-info
-    entities:
-      - switch.garage
+  # - type: picture-glance
+  #   id: camera_garage_camera
+  #   title: Garage Camera
+  #   entity: camera.garage_camera
+  #   camera_image: camera.garage_camera
+  #   show_info: true
+  #   tap_action:
+  #     action: more-info
+  #   entities:
+  #     - switch.garage
 
   - type: picture-glance
-    id: camera_3dprinter_camera
-    title: 3D Printer Camera
-    entity: camera.3d_printer_camera
-    camera_image: camera.3d_printer_camera
+    id: camera_front_camera
+    title: Front Camera
+    entity: camera.amcrest_camera
+    camera_image: camera.amcrest_camera
     show_info: true
     tap_action:
       action: more-info
     entities:
-      - binary_sensor.motion_sensor_158d00016c2d0e
-      - binary_sensor.octoprint_printing
+      - switch.basement_left
 
   - type: picture-glance
     id: porch_camera
@@ -182,3 +166,15 @@ cards:
     entities:
       - binary_sensor.porch_motion
       - switch.frontyard_light
+
+  - type: picture-glance
+    id: garage_camera
+    title: Garage Camera
+    entity: camera.garage
+    camera_image: camera.garage
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - switch.garage
+      - switch.garage_shop_lights

@@ -24,22 +24,6 @@ homeassistant:
       emulated_hue_name: Backyard Lights
       homebridge_name: Backyard Lights
 
-    switch.guest_bedroom:
-      icon: mdi:lightbulb
-      friendly_name: Guest Bedroom 1
-      emulated_hue_name: Guest Bedroom 1
-      homebridge_name: Guest Bedroom 1
-
-    switch.prayer_room:
-      icon: mdi:lightbulb
-      friendly_name: Guest Bedroom 2
-      emulated_hue_name: Guest Bedroom 2
-      homebridge_name: Guest Bedroom 2
-
-    switch.kids_bed_accent:
-      friendly_name: Hasika's Bed Accent Lights
-      assumed_state: false
-      icon: mdi:lightbulb
     switch.front_room:
       friendly_name: Front Room Light
       assumed_state: false
@@ -52,16 +36,13 @@ homeassistant:
       friendly_name: Basement Right Side Lights
       assumed_state: false
       icon: mdi:lightbulb
-    switch.kitchen:
+    switch.kitchen_switch:
       friendly_name: Kitchen Light
       assumed_state: false
       icon: mdi:lightbulb
     switch.office_room:
       friendly_name: Office Room Lights
       assumed_state: false
-      icon: mdi:lightbulb
-    switch.kids_bedroom:
-      friendly_name: Kids Bedroom
       icon: mdi:lightbulb
     switch.garage:
       friendly_name: Garage Lights
@@ -82,54 +63,13 @@ homeassistant:
     input_boolean.long_flash:
       icon: mdi:flash
       friendly_name: Long Flash
-    input_boolean.animate_downstairs_lights:
-      icon: mdi:flash-outline
-      friendly_name: Animate Family Room Lights
     input_boolean.animate_upstairs_lights:
       icon: mdi:flash-outline
       friendly_name: Animate Master Bedroom Lights
 
-tplink:
-  discovery: false
-  switch:
-    # In-wall switches
-    - host: !secret tplink_hasika_bedroom
-    - host: !secret tplink_srinika_bedroom
-    - host: !secret tplink_guest_bedroom
-    - host: !secret tplink_garage
-    - host: !secret tplink_garage_shoplights
-    - host: !secret tplink_basement_left
-    - host: !secret tplink_basement_right
-    - host: !secret tplink_kitchen
-    - host: !secret tplink_office_room
-    - host: !secret tplink_front_room
-    # Smart Outlets
-    - host: !secret tplink_smart_outlet1
-      #name: Downstairs Fragrance Outlet
-    - host: !secret tplink_smart_outlet3
-      #name: Upstairs Fragrance Outlet
-    - host: !secret tplink_kids_bed_accent_light
-      #name: Kids Bed Accent Light
-    - host: !secret tplink_3d_printer
-  dimmer:
-    - host: !secret tplink_bathroom_lights
-  strip:
-    - host: !secret tplink_smart_strip
-    - host: !secret tplink_outdoor_plug
-
-wemo:
-  discovery: false
-  static:
-    - !secret wemo_switch_1
-    - !secret wemo_switch_2
-    - !secret wemo_switch_3
-
 input_boolean:
   animate_upstairs_lights:
     name: Animate Master Bedroom Lights
-    initial: off
-  animate_downstairs_lights:
-    name: Animate Family Room Lights
     initial: off
   long_flash:
     name: Long Flash Lights

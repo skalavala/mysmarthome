@@ -6,28 +6,7 @@
 ###############################################################################
 homeassistant:
 
-shell_command:
-  stop_hass: >-
-    hassctl stop
-
-  restart_hass: >-
-    hassctl restart
-
-  update_hass: >-
-    hassctl update-hass && hassctl config && hassctl restart
-
-speedtestdotnet:
-  scan_interval:
-    hours: 1
-  monitored_conditions:
-    - ping
-    - download
-    - upload
-
 sensor:
-  - platform: uptime
-    name: Home Assistant Up Time
-
   - platform: rest
     resource: http://icanhazip.com
     name: external_ip
@@ -43,28 +22,3 @@ sensor:
       - type: ipv4_address
         arg: ens160
       - type: last_boot
-
-  - platform: mqtt
-    state_topic: "iotlink/domain/winsvr2016/lwt"
-    name: "Windows Server"
-    value_template: "{{ value }}"
-
-  - platform: mqtt
-    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/cpu/usage"
-    name: "Windows Server CPU Usage"
-    value_template: "{{ value }}"
-
-  - platform: mqtt
-    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/memory/used"
-    name: "Windows Server Memory Used"
-    value_template: "{{ value }}"
-
-  - platform: mqtt
-    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/memory/available"
-    name: "Windows Server Memory Available"
-    value_template: "{{ value }}"
-
-  - platform: mqtt
-    state_topic: "iotlink/domain/winsvr2016/windows-monitor/stats/system/idle-time"
-    name: "Windows Server Idle Time"
-    value_template: "{{ value }}"

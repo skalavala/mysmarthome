@@ -80,14 +80,13 @@ script:
       - service: script.all_indoor_lights_off
       - service: input_boolean.turn_on
         entity_id: input_boolean.notify_camera_alerts
-      - service: climate.set_away_mode
+      - service: alarm_control_panel.alarm_arm_away
         data:
-          entity_id: climate.dining_room
-          away_mode: "true"
+          entity_id: alarm_control_panel.home
       - service: script.notify_me
         data:
           message: >
-            No one is at home. Cameras rolling, Indoor lights OFF, Thermostat is set to 'away' and your home is secured!
+            No one is at home. Cameras rolling, Indoor lights are OFF. Your home security system is turned ON!
 
   ###############################################################################
   # The following script runs when no one is home. It excludes some lights
@@ -111,28 +110,18 @@ script:
           entity_id:
             - switch.basement_left
             - switch.basement_right
-            - switch.downstairs_fragrance
             - switch.front_room
             - switch.garage
             - switch.garage_shop_lights
-            - switch.guest_bedroom
-            - switch.kids_bed_accent
-            - switch.kids_bedroom
-            - switch.kitchen
+            - switch.srinika_bedroom
+            - switch.hasika_bed_accent
+            - switch.hasika_bedroom
+            - switch.kitchen_switch
             - switch.office_room
-            - switch.prayer_room
-            - switch.upstairs_fragrance
+            - switch.guest_room
             - switch.officeroom_accent_lights
-
-  stop_hass:
-    sequence:
-      - service: shell_command.stop_hass
-  update_hass:
-    sequence:
-      - service: shell_command.update_hass
-  restart_hass:
-    sequence:
-      - service: shell_command.restart_hass
+            - switch.chromecast_monitor
+            - switch.master_bathroom_lights
 
   xiaomi_red:
     sequence:
@@ -186,8 +175,8 @@ script:
         state: "on"
       - condition: template
         value_template: '{{- message | trim != "" -}}'
-      - service: notify.telegram
-        data_template:
+      - service: telegram_bot.send_message
+        data:
           title: "{{- title -}}"
           message: "{{- message -}}"
           data:
@@ -202,9 +191,15 @@ script:
         state: "on"
       - condition: template
         value_template: '{{ message | trim != "" }}'
-      - service: notify.telegram
-        data_template:
+      - service: telegram_bot.send_message
+        data:
           message: "{{ message }}"
+      - service: notify.android_tv_fire_tv
+        data:
+          message: "{{ message }}"
+          title: "Hello!"
+          data:
+            color: red
 
   good_night_tts:
     sequence:
@@ -363,8 +358,12 @@ script:
       - service: input_boolean.turn_on
         entity_id: input_boolean.pill_taken
       - service: script.notify_me
-        data:
-          message: "Thank you for taking tablets on time!"
+        data_template:
+          message: >
+            Thank you for taking tablets.
+            {%- if state_attr('sensor.allergy_index_today', 'rating') != None %}
+              {{- " Today's pollen level is : " ~ state_attr('sensor.allergy_index_today', 'rating') }}.
+            {%- endif -%}
       - condition: template
         value_template: "{{ states('input_boolean.pill_voice_notification') == 'on' }}"
       - service: script.voice_notify

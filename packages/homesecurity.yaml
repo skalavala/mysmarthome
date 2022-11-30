@@ -16,11 +16,6 @@ homeassistant:
       friendly_name: Home Security System
       icon: mdi:security
 
-# simplisafe:
-#   accounts:
-#     - username: !secret simplisafe_username
-#       password: !secret simplisafe_password
-
 ###############################################################################
 #                _                        _   _
 #     /\        | |                      | | (_)
@@ -111,7 +106,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
-          entity_id: "camera.garage_camera"
+          entity_id: "camera.garage"
           filename:
             "{{ '/config/www/downloads/camera/garage/garage_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
@@ -265,33 +260,33 @@ automation:
           entity_id: climate.dining_room
           away_mode: "false"
 
-  # ###############################################################################
-  # # TURN HOME SECURITY SYSTEM ON AT BED TIME
-  # ###############################################################################
-  # - alias: Night HomeSecurity On
-  #   initial_state: true
-  #   trigger:
-  #     platform: time_pattern
-  #     minutes: "/5"
-  #     seconds: 00
-  #   condition:
-  #     - condition: template
-  #       value_template: "{{ states('sensor.bedtime_hour')|int == now().hour|int }}"
-  #     - condition: template
-  #       value_template: "{{ states('sensor.bedtime_minute')|int == now().minute|int }}"
-  #     - condition: template
-  #       value_template: "{{ states('alarm_control_panel.home') != 'away' }}"
-  #     - condition: template
-  #       value_template: "{{ states('alarm_control_panel.home') == 'disarmed' }}"
-  #     - condition: template
-  #       value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
-  #   action:
-  #     - service: alarm_control_panel.alarm_arm_home
-  #       data:
-  #         entity_id: alarm_control_panel.home
-  #     - service: script.notify_me
-  #       data:
-  #         message: "It's bedtime, you forgot to turn ON Home Security System. Turned it ON for you."
+  ###############################################################################
+  # TURN HOME SECURITY SYSTEM ON AT BED TIME
+  ###############################################################################
+  - alias: Night HomeSecurity On
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: "/5"
+      seconds: 00
+    condition:
+      - condition: template
+        value_template: "{{ states('sensor.bedtime_hour')|int == now().hour|int }}"
+      - condition: template
+        value_template: "{{ states('sensor.bedtime_minute')|int == now().minute|int }}"
+      - condition: template
+        value_template: "{{ states('alarm_control_panel.home') != 'away' }}"
+      - condition: template
+        value_template: "{{ states('alarm_control_panel.home') == 'disarmed' }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
+    action:
+      - service: alarm_control_panel.alarm_arm_home
+        data:
+          entity_id: alarm_control_panel.home
+      - service: script.notify_me
+        data:
+          message: "It's bedtime, you forgot to turn ON Home Security System. Turned it ON for you."
 
 ###############################################################################
 # Check for Garage Door Status when Home Security System State changes
@@ -324,7 +319,7 @@ automation:
   
       - service: camera.snapshot
         data_template:
-          entity_id: "camera.garage_camera"
+          entity_id: "camera.garage"
           filename: "{{ '/config/www/downloads/camera/garage/garage_' ~  (state_attr('automation.home_security_system_and_garage_door_check','last_updated') ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
   
       - service: notify.telegram

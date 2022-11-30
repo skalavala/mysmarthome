@@ -10,17 +10,8 @@ homeassistant:
       friendly_name: Away Mode
     zone.home:
       friendly_name: Home
-    zone.work:
-      friendly_name: Office
     group.zone_alerts:
       order: 40
-
-zone:
-  - name: work
-    latitude: !secret work_latitude
-    longitude: !secret work_longitude
-    radius: 200
-    icon: mdi:briefcase
 
 input_boolean:
   home_mode_away:
@@ -29,11 +20,7 @@ input_boolean:
 
 proximity:
   home:
-    devices: device_tracker.life360_suresh
-    tolerance: 50
-    unit_of_measurement: mi
-  work:
-    devices: device_tracker.life360_suresh
+    devices: device_tracker.suresh
     tolerance: 50
     unit_of_measurement: mi
 
@@ -56,15 +43,11 @@ automation:
     trigger:
       - platform: zone
         entity_id:
-          - device_tracker.life360_hasika
-          - device_tracker.life360_mallika
-          - device_tracker.life360_srinika
-          - device_tracker.life360_suresh
+          - device_tracker.hasika
+          - device_tracker.mallika
+          - device_tracker.srinika
+          - device_tracker.suresh
         zone: zone.home
-        event: enter
-      - platform: zone
-        entity_id: device_tracker.life360_suresh
-        zone: zone.work
         event: enter
     condition:
       - condition: template
@@ -85,15 +68,11 @@ automation:
     trigger:
       - platform: zone
         entity_id:
-          - device_tracker.life360_hasika
-          - device_tracker.life360_mallika
-          - device_tracker.life360_srinika
-          - device_tracker.life360_suresh
+          - device_tracker.hasika
+          - device_tracker.mallika
+          - device_tracker.srinika
+          - device_tracker.suresh
         zone: zone.home
-        event: leave
-      - platform: zone
-        entity_id: device_tracker.life360_suresh
-        zone: zone.work
         event: leave
     condition:
       - condition: template
@@ -119,10 +98,10 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - device_tracker.life360_mallika
-          - device_tracker.life360_suresh
-          - device_tracker.life360_srinika
-          - device_tracker.life360_hasika
+          - device_tracker.mallika
+          - device_tracker.suresh
+          - device_tracker.srinika
+          - device_tracker.hasika
         from: "not_home"
         to: "home"
         for: "00:02:00"
@@ -142,32 +121,25 @@ automation:
           greeting: "no"
       - service: input_boolean.turn_off
         entity_id: input_boolean.home_mode_away
+      - service: switch.turn_on
+        entity_id: switch.chromecast_monitor
 
   ##############################################################################
   # Alert when every one is away
   ##############################################################################
-  - alias: Alert when everyone is AWAY
+  - alias: Poll Home Away Mode
     initial_state: true
     trigger:
       platform: time_pattern
       minutes: 00
       seconds: "/30"
-    condition:
-      - condition: template
-        value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
-      - condition: template
-        value_template: >
-          {% set suresh = states('device_tracker.life360_suresh') %}
-          {% set mallika = states('device_tracker.life360_mallika') %}
-          {% set srinika = states('device_tracker.life360_srinika') %}
-          {% set hasika = states('device_tracker.life360_hasika') %}
-          {% if suresh != "home" and mallika != "home" and srinika != "home" and hasika != "home" %}
-            True
-          {% else %}
-            False
-          {% endif %}
     action:
-      - service: input_boolean.turn_on
+      - service_template: >-
+          {%- set suresh = states('device_tracker.suresh') -%}
+          {%- set mallika = states('device_tracker.mallika') -%}
+          {%- set srinika = states('device_tracker.srinika') -%}
+          {%- set hasika = states('device_tracker.hasika') -%}
+          {{ 'input_boolean.turn_on' if suresh != "home" and mallika != "home" and srinika != "home" and hasika != "home" else 'input_boolean.turn_off' }}
         entity_id: input_boolean.home_mode_away
 
   - alias: Home Mode Away ON
@@ -196,21 +168,3 @@ automation:
       - service: script.notify_me
         data_template:
           message: "Suresh is on his way home, he is within the 5 miles range. Should be home soon!"
-      - condition: template
-        value_template: >
-          {% set suresh = states('device_tracker.life360_suresh') %}
-          {% set mallika = states('device_tracker.life360_mallika') %}
-          {% set srinika = states('device_tracker.life360_srinika') %}
-          {% set hasika = states('device_tracker.life360_hasika') %}
-          {% if suresh != "home" and mallika != "home" and srinika != "home" and hasika != "home" %}
-            True
-          {% else %}
-            False
-          {% endif %}
-      - service: climate.set_away_mode
-        data:
-          entity_id: climate.dining_room
-          away_mode: "false"
-      - service: script.notify_me
-        data_template:
-          message: "Your Nest thermostat is set to HOME mode. Thank you!"

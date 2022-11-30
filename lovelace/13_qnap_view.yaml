@@ -6,7 +6,7 @@ cards:
     cards:
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.kalavala_nas_smart_status_drive_0_1
             name: Drive 1
             color_type: card
@@ -20,7 +20,7 @@ cards:
               - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.kalavala_nas_smart_status_drive_0_2
             name: Drive 2
             color_type: card
@@ -34,7 +34,7 @@ cards:
               - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.kalavala_nas_smart_status_drive_0_3
             name: Drive 3
             color_type: card
@@ -48,7 +48,7 @@ cards:
               - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.kalavala_nas_smart_status_drive_0_4
             name: Drive 4
             color_type: card
@@ -115,7 +115,7 @@ cards:
     cards:
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.mahasri_nas_smart_status_drive_0_1
             name: Drive 1
             color_type: card
@@ -129,7 +129,7 @@ cards:
               - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.mahasri_nas_smart_status_drive_0_2
             name: Drive 2
             color_type: card
@@ -143,7 +143,7 @@ cards:
               - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.mahasri_nas_smart_status_drive_0_3
             name: Drive 3
             color_type: card
@@ -157,7 +157,7 @@ cards:
               - value: "FAIL"
                 color: rgb(255, 0, 0)
             action: more_info
-          - type: "custom:button-card"
+          - type: button
             entity: sensor.mahasri_nas_smart_status_drive_0_4
             name: Drive 4
             color_type: card

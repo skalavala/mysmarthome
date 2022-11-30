@@ -13,6 +13,7 @@ homeassistant:
 # frontdoor_camera_url: http://username:password@192.168.xxx.xxx/ISAPI/Streaming/channels/101/picture
 #
 camera:
+
   - platform: generic
     name: Frontdoor Camera
     still_image_url: !secret frontdoor_camera_url
@@ -58,9 +59,12 @@ camera:
   #   input: porch_camera_rtsp_url
   #   name: Porch Camera
 
-  - platform: mjpeg
-    mjpeg_url: !secret garage_camera_url
-    name: Garage Camera
+  # - platform: mjpeg
+  #   mjpeg_url: !secret garage_camera_url
+  #   name: Garage Camera
+
+# add amcrest cameras
+  - platform: amcrest
 
   - platform: local_file
     name: Frontdoor Latest Scan
@@ -86,6 +90,16 @@ camera:
 
 shell_command:
   reset_camera_stream: !secret camera_stream_restart_docker_url
+
+# Amcrest Camera Model IP8M-T2669EW-AI
+amcrest:
+  - host: !secret amcrest_front_camera_ip
+    username: !secret amcrest_front_camera_username
+    password: !secret amcrest_front_camera_password
+    binary_sensors:
+      - motion_detected
+      - crossline_detected
+      - online
 
 switch:
   - platform: rest
@@ -132,22 +146,46 @@ binary_sensor:
     payload_off: "OFF"
     value_template: "{{ value }}"
 
+# image_processing:
+#   - platform: tensorflow
+#     scan_interval: 10000
+#     source:
+#       - entity_id: camera.frontdoor_camera
+#       - entity_id: camera.driveway_camera
+#       - entity_id: camera.patio_camera
+#       - entity_id: camera.playarea_camera
+#       - entity_id: camera.garage_camera
+#       - entity_id: camera.3d_printer_camera
+#       - entity_id: camera.porch_camera
+#     file_out:
+#       - "/config/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_latest.jpg"
+#       - "/config/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
+#     model:
+#       graph: /config/tensorflow/models/efficientdet_d0_coco17_tpu-32/
+
 image_processing:
-  - platform: tensorflow
+  - platform: doods
     scan_interval: 10000
+    url: !secret doods_server_url
+    detector: tensorflow
     source:
       - entity_id: camera.frontdoor_camera
       - entity_id: camera.driveway_camera
       - entity_id: camera.patio_camera
       - entity_id: camera.playarea_camera
-      - entity_id: camera.garage_camera
+      - entity_id: camera.garage
       - entity_id: camera.3d_printer_camera
       - entity_id: camera.porch_camera
     file_out:
       - "/config/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_latest.jpg"
       - "/config/www/downloads/camera/{{- camera_entity.split('.')[1].split('_')[0] -}}/{{ camera_entity.split('.')[1].split('_')[0] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
-    model:
-      graph: /config/tensorflow/models/efficientdet_d0_coco17_tpu-32/
+    labels:
+      - name: person
+        confidence: 75
+      - name: car
+        confidence: 90
+      - name: truck
+        confidence: 90
 
 input_label:
   current_stream:
@@ -240,7 +278,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_porch_camera
+          entity_id: image_processing.doods_porch_camera
 
   #
   # Scan front door and driveway cameras when motion detected
@@ -261,14 +299,14 @@ automation:
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_frontdoor_camera
+          entity_id: image_processing.doods_frontdoor_camera
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_driveway_camera
+          entity_id: image_processing.doods_driveway_camera
       - condition: template
         value_template: >-
-          {% if state_attr('image_processing.tensorflow_frontdoor_camera', 'summary') != None %}
-            {% if state_attr('image_processing.tensorflow_frontdoor_camera', 'summary') |count > 0 %}
+          {% if state_attr('image_processing.doods_frontdoor_camera', 'summary') != None %}
+            {% if state_attr('image_processing.doods_frontdoor_camera', 'summary') |count > 0 %}
               true
             {% else %}
               false
@@ -280,7 +318,7 @@ automation:
       - service: script.voice_notify
         data_template:
           message: >-
-            {%- set e_id = "image_processing.tensorflow_frontdoor_camera" -%}
+            {%- set e_id = "image_processing.doods_frontdoor_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -295,7 +333,7 @@ automation:
         data_template:
           title: 'Front door motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
-            {%- set e_id = "image_processing.tensorflow_frontdoor_camera" -%}
+            {%- set e_id = "image_processing.doods_frontdoor_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -314,7 +352,7 @@ automation:
         data_template:
           title: "Front Door Motion"
           message: >
-            {%- set e_id = "image_processing.tensorflow_frontdoor_camera" -%}
+            {%- set e_id = "image_processing.doods_frontdoor_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -338,7 +376,7 @@ automation:
           {% endif %}
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_garage_camera
+          entity_id: image_processing.doods_garage
   #
   # Scan driveway and frontdoor cameras when motion detected
   # if the garage doors are open, scan garage cameras as well
@@ -361,14 +399,14 @@ automation:
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_driveway_camera
+          entity_id: image_processing.doods_driveway_camera
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_frontdoor_camera
+          entity_id: image_processing.doods_frontdoor_camera
       - condition: template
         value_template: >-
-          {% if state_attr('image_processing.tensorflow_driveway_camera', 'summary') != None %}
-            {% if state_attr('image_processing.tensorflow_driveway_camera', 'summary') |count > 0 %}
+          {% if state_attr('image_processing.doods_driveway_camera', 'summary') != None %}
+            {% if state_attr('image_processing.doods_driveway_camera', 'summary') |count > 0 %}
               true
             {% else %}
               false
@@ -380,7 +418,7 @@ automation:
       - service: script.voice_notify
         data_template:
           message: >-
-            {%- set e_id = "image_processing.tensorflow_driveway_camera" -%}
+            {%- set e_id = "image_processing.doods_driveway_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -394,7 +432,7 @@ automation:
         data_template:
           title: "Driveway Motion"
           message: >
-            {%- set e_id = "image_processing.tensorflow_driveway_camera" -%}
+            {%- set e_id = "image_processing.doods_driveway_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -412,7 +450,7 @@ automation:
         data_template:
           title: 'Driveway motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
-            {%- set e_id = "image_processing.tensorflow_driveway_camera" -%}
+            {%- set e_id = "image_processing.doods_driveway_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -438,7 +476,7 @@ automation:
 
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_garage_camera
+          entity_id: image_processing.doods_garage
 
   #
   # When motion detected in garage, scan garage camera
@@ -459,7 +497,7 @@ automation:
     action:
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_garage_camera
+          entity_id: image_processing.doods_garage
       - condition: template
         value_template: >
           {% if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" or
@@ -470,14 +508,14 @@ automation:
           {% endif %}
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_driveway_camera
+          entity_id: image_processing.doods_driveway_camera
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_frontdoor_camera
+          entity_id: image_processing.doods_frontdoor_camera
       - condition: template
         value_template: >-
-          {% if state_attr('image_processing.tensorflow_garage_camera', 'summary') != None %}
-            {% if state_attr('image_processing.tensorflow_garage_camera', 'summary') |count > 0 %}
+          {% if state_attr('image_processing.doods_garage', 'summary') != None %}
+            {% if state_attr('image_processing.doods_garage', 'summary') |count > 0 %}
               true
             {% else %}
               false
@@ -489,7 +527,7 @@ automation:
       - service: script.voice_notify
         data_template:
           message: >-
-            {%- set e_id = "image_processing.tensorflow_garage_camera" -%}
+            {%- set e_id = "image_processing.doods_garage" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -503,7 +541,7 @@ automation:
         data_template:
           title: "Garage Motion"
           message: >
-            {%- set e_id = "image_processing.tensorflow_garage_camera" -%}
+            {%- set e_id = "image_processing.doods_garage" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -521,7 +559,7 @@ automation:
         data_template:
           title: 'Garage motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
-            {%- set e_id = "image_processing.tensorflow_garage_camera" -%}
+            {%- set e_id = "image_processing.doods_garage" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -556,14 +594,14 @@ automation:
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_patio_camera
+          entity_id: image_processing.doods_patio_camera
       - service: image_processing.scan
         data_template:
-          entity_id: image_processing.tensorflow_playarea_camera
+          entity_id: image_processing.doods_playarea_camera
       - condition: template
         value_template: >-
-          {% if state_attr('image_processing.tensorflow_patio_camera', 'summary') != None %}
-            {% if state_attr('image_processing.tensorflow_patio_camera', 'summary') |count > 0 %}
+          {% if state_attr('image_processing.doods_patio_camera', 'summary') != None %}
+            {% if state_attr('image_processing.doods_patio_camera', 'summary') |count > 0 %}
               true
             {% else %}
               false
@@ -575,7 +613,7 @@ automation:
       - service: script.voice_notify
         data_template:
           message: >-
-            {%- set e_id = "image_processing.tensorflow_patio_camera" -%}
+            {%- set e_id = "image_processing.doods_patio_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -589,7 +627,7 @@ automation:
         data_template:
           title: "Backyardge Motion"
           message: >
-            {%- set e_id = "image_processing.tensorflow_patio_camera" -%}
+            {%- set e_id = "image_processing.doods_patio_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -607,7 +645,7 @@ automation:
         data_template:
           title: 'Backyard motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
-            {%- set e_id = "image_processing.tensorflow_patio_camera" -%}
+            {%- set e_id = "image_processing.doods_patio_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
               {%- set count = state_attr(e_id, 'summary') | count -%}
               {%- for x in state_attr(e_id, 'summary') | list -%}
@@ -693,7 +731,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
-          entity_id: "camera.garage_camera"
+          entity_id: "camera.garage"
           filename:
             "{{ '/config/www/downloads/camera/garage/garage_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
@@ -742,7 +780,7 @@ automation:
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - condition: template
-        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
+        value_template: "{{ states('device_tracker.suresh') == 'home' }}"
 
       - service: notify.ios_devices
         data_template:
@@ -792,7 +830,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
-          entity_id: "camera.garage_camera"
+          entity_id: "camera.garage"
           filename:
             "{{ '/config/www/downloads/camera/garage/garage_' ~
             (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
@@ -834,7 +872,7 @@ automation:
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - condition: template
-        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
+        value_template: "{{ states('device_tracker.suresh') == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Driveway camera!"
@@ -869,8 +907,8 @@ automation:
     action:
       - condition: template
         value_template: >-
-          {% if state_attr('image_processing.tensorflow_frontdoor_camera', 'summary') != None %}
-            {% if state_attr('image_processing.tensorflow_frontdoor_camera', 'summary') |count > 0 %}
+          {% if state_attr('image_processing.doods_frontdoor_camera', 'summary') != None %}
+            {% if state_attr('image_processing.doods_frontdoor_camera', 'summary') |count > 0 %}
               true
             {% else %}
               false
@@ -924,7 +962,7 @@ automation:
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - condition: template
-        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
+        value_template: "{{ states('device_tracker.suresh') == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Patio camera!"

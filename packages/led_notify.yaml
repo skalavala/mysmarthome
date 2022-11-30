@@ -60,10 +60,10 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - device_tracker.life360_mallika
-          - device_tracker.life360_suresh
-          - device_tracker.life360_srinika
-          - device_tracker.life360_hasika
+          - device_tracker.mallika
+          - device_tracker.suresh
+          - device_tracker.srinika
+          - device_tracker.hasika
         from: "not_home"
         to: "home"
         for: "00:02:00"
@@ -77,15 +77,11 @@ automation:
     trigger:
       - platform: zone
         entity_id:
-          - device_tracker.life360_hasika
-          - device_tracker.life360_mallika
-          - device_tracker.life360_srinika
-          - device_tracker.life360_suresh
+          - device_tracker.hasika
+          - device_tracker.mallika
+          - device_tracker.srinika
+          - device_tracker.suresh
         zone: zone.home
-        event: enter
-      - platform: zone
-        entity_id: device_tracker.life360_suresh
-        zone: zone.work
         event: enter
     condition:
       - condition: template

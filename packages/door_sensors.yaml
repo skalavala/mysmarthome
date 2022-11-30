@@ -157,7 +157,7 @@ automation:
       - delay: "00:00:05"
       - service: camera.snapshot
         data_template:
-          entity_id: "camera.garage_camera"
+          entity_id: "camera.garage"
           filename:
             "{{ '/config/www/downloads/camera/garage/garage_' ~
             ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
@@ -290,7 +290,7 @@ automation:
       - condition: template
         value_template: "{{ states('sun.sun') == 'below_horizon' }}"
       - service: switch.turn_on
-        entity_id: switch.kitchen
+        entity_id: switch.kitchen_switch
 
   ################################################################################
   #  When I open the garage door
@@ -324,6 +324,9 @@ automation:
       - service: timer.start
         entity_id: timer.timer_garage
 
+###############################################################################
+# MASTER BATHROOM AUTOMATIONS
+###############################################################################
 #
 # Only turn ON lights at 25% at night
 #
@@ -335,7 +338,7 @@ automation:
       to: "on"
     condition:
       - condition: template
-        value_template: '{{states.sun.sun.state == "below_horizon"}}'
+        value_template: '{{states("sun.sun") == "below_horizon"}}'
       - condition: state
         entity_id: input_boolean.light_automations
         state: "on"
@@ -354,7 +357,7 @@ automation:
       to: "on"
     condition:
       - condition: template
-        value_template: '{{states.sun.sun.state == "above_horizon"}}'
+        value_template: '{{states("sun.sun") == "above_horizon"}}'
       - condition: state
         entity_id: input_boolean.light_automations
         state: "on"
@@ -362,5 +365,54 @@ automation:
       - service: light.turn_on
         entity_id: light.master_bathroom_lights
         data:
-          brightness: 255 # 100% of brightness
-          transition: 10
+          brightness: 254 # 100% of brightness
+          transition: 5
+
+  - alias: Master Bathroom Toilet Door Opened
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.door_window_sensor_158d00044e5cb3
+      to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.master_bathroom_toilet_light
+
+  - alias: Turn off Master Bathroom Toilet if the door is open for too long
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.door_window_sensor_158d00044e5cb3
+        to: "on"
+        for:
+          minutes: 3
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: switch.turn_off
+        data_template:
+          entity_id: switch.master_bathroom_toilet_light
+
+###############################################################################
+# GUEST BATHROOM AUTOMATIONS
+###############################################################################
+
+  - alias: Guest Bathroom Door Opened
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.door_window_sensor_158d00045ab168
+      to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.guest_bathroom_lights

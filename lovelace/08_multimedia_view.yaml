@@ -1,21 +1,6 @@
 title: Multi Room Audio & TTS
 icon: mdi:television
 cards:
-  # - type: entities
-  #   title: Snapcast Server Commands
-  #   show_header_toggle: false
-  #   entities:
-  #     - entity: input_select.snapcast_server
-  #       name: Snapcast Server Command
-
-  - type: entities
-    title: Raspberry Pi Commands
-    show_header_toggle: false
-    entities:
-      - entity: input_select.raspberry_pis
-        name: Select a Raspberry Pi
-      - entity: input_select.rpi_commands
-        name: Select Command To Execute
 
   - type: entities
     title: Raspberry Pi Scripts
@@ -42,13 +27,10 @@ cards:
     title: Media Players
     show_header_toggle: false
     entities:
-      # - media_player.denon_avr_x2400h
-      # - media_player.gstreamer
-      # - media_player.mpd
       - media_player.attic_tv
-      - media_player.living_room
-      - media_player.upstairs
-      # - media_player.my_denon_receiver
+      - media_player.living_room # sonos
+      - media_player.upstairs # sonos
+      - media_player.smart_tv
 
   - type: vertical-stack
     cards:
@@ -56,26 +38,8 @@ cards:
         entity: media_player.living_room
       - type: media-control
         entity: media_player.upstairs
-
-      # - type: media-control
-      # entity: media_player.denon_avr_x2400h
-
-      # - type: media-control
-      #   entity: media_player.gstreamer
-
       - type: media-control
         entity: media_player.attic_tv
 
       - type: media-control
         entity: media_player.chromecastultra7021
-      # - type: media-control
-      #   entity: media_player.my_denon_receiver
-  # - type: entities
-  #   title: Snapcast Clients
-  #   show_header_toggle: false
-  #   entities:
-  #     - media_player.snapcast_client_b827eb011e00
-  #     - media_player.snapcast_client_b827eb4445b1
-  #     - media_player.snapcast_client_b827eb505e2d
-  #     - media_player.snapcast_client_b827eba8e7ef
-  #     - media_player.snapcast_client_b827ebaa08f7

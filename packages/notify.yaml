@@ -6,9 +6,6 @@
 ###############################################################################
 homeassistant:
 
-ifttt:
-  key: !secret ifttt_key
-
 notify:
   - name: ios_devices
     platform: group

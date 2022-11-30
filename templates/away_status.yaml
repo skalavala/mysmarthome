@@ -39,7 +39,8 @@
   {%- endmacro -%}
 
   {%- macro alarm_status() -%}
-    Your home is {{ "SECURED!" if states('alarm_control_panel.home') == "armed_away" or states('alarm_control_panel.home') == "armed_home" else "UNSECURED!" }}
+    Your home is {{ "SECURED!" if states('alarm_control_panel.home') == "armed_away" or states('alarm_control_panel.home') == "armed_home" else "UNSECURED!" -}}
+    . Your Home Away Status is set to {{ states('input_boolean.home_mode_away') |upper }}
   {%- endmacro -%}
 
   {%- macro single_car_garage_door_status() -%} 
@@ -79,9 +80,9 @@
 
   {%- macro light_switch_status() -%}
     {% for item in states if item.domain =="light" or item.domain == "switch" -%}
-      {%- if item.state == "on" -%}
+      {%- if item.state == "on" and not item.entity_id.endswith('led') and not item.attributes.friendly_name.endswith('LED') -%}
         {%- set friendly_name = item.attributes.friendly_name -%}
-        {{ friendly_name }} {{ 'are' if plural(friendly_name) == "true" else 'is' }} ON.
+        {{ item.domain }} {{ friendly_name }} {{ 'are' if plural(friendly_name) == "true" else 'is' }} ON.
       {% endif %}
     {%- endfor -%}
   {%- endmacro -%}

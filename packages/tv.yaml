@@ -12,13 +12,6 @@ binary_sensor:
     payload_off: "off"
     value_template: "{{ value }}"
 
-  - platform: mqtt
-    name: Sharp TV Command State
-    state_topic: "/home/sharp_tv_cmd"
-    payload_on: "on"
-    payload_off: "off"
-    value_template: "{{ value }}"
-
 ###############################################################################
 #                _                        _   _
 #     /\        | |                      | | (_)
@@ -29,26 +22,33 @@ binary_sensor:
 #
 ###############################################################################
 automation:
-  # Restore Familyroom Lights
-  ###############################################################################
-  - alias: Restore Familyroom Lights
+
+  - alias: TV Status ON
     initial_state: true
     trigger:
       platform: state
-      entity_id: input_boolean.animate_downstairs_lights
-      to: "off"
-    condition:
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
+      entity_id: remote.streaming_stick_4k
+      to: "on"
     action:
-      - service: light.turn_on
-        data:
-          entity_id: group.family_room_lights
-          transition: 5
-          rgb_color: [255, 251, 245]
-          brightness: 255
-          color_temp: 162
+      - service: mqtt.publish
+        data_template:
+          topic: "/home/sharptv"
+          payload: "on"
+          retain: true
+
+  - alias: TV Status OFF
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: remote.streaming_stick_4k
+      to: "unavailable"
+    action:
+      - service: mqtt.publish
+        data_template:
+          topic: "/home/sharptv"
+          payload: "off"
+          retain: true
+
 
   # Dim Family Room Lights When TV is Turned ON
   ###############################################################################

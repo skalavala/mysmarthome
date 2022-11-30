@@ -22,8 +22,6 @@ homeassistant:
     - /config/www/downloads/camera/playarea/
     - /config/www/downloads/camera/driveway/
     - /config/www/downloads/camera/frontdoor/
-    - /config/www/downloads/camera/kitchen/
-    - /config/www/downloads/camera/frontroom/
     - /config/www/downloads/camera/3d/
 
 sun:
@@ -35,9 +33,7 @@ discovery:
 
 frontend:
 
-octoprint:
-  host: !secret octoprint_ip
-  api_key: !secret octoprint_key
+media_source:
 
 homekit:
   autostart: true
@@ -63,47 +59,14 @@ logger: !include logging.yaml
 zeroconf:
 system_health:
 
-life360:
-  accounts:
-    - username: !secret life360_username
-      password: !secret life360_password
-  circles:
-    include: [Family]
-
-mqtt:
-  broker: !secret mqtt_server
-  port: !secret mqtt_port
-  username: !secret mqtt_username
-  password: !secret mqtt_password
-  keepalive: 60
-  client_id: HA_SERVER
-
-sonos:
-  media_player:
-    hosts:
-      - !secret sonos_living_room_ip
-      - !secret sonos_front_room_ip
-
 binary_sensor:
   - platform: workday
     country: US
 
 lovelace:
   mode: yaml
-  resources:
-    - url: /local/button-card.js
-      type: module
 
 # Google Calendar
-google:
-  client_id: !secret google_client_id
-  client_secret: !secret google_client_secret
-#emulated_hue:
-#  expose_by_default: false
-#  host_ip: !secret ha_ip_address
-#  listen_port: 8300
-#  exposed_domains:
-#    - light
-#    - switch
-#    - input_boolean
-#    - group
+# google:
+#   client_id: !secret google_client_id
+#   client_secret: !secret google_client_secret

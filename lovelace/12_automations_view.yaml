@@ -27,10 +27,7 @@ cards:
     title: Zone Based Alerts
     show_header_toggle: false
     entities:
-      - automation.alert_private_zone_enter
-      - automation.alert_private_zone_leaves
       - automation.alert_when_everyone_is_away
-      - automation.alert_when_moving
       - automation.alert_when_someone_enters_a_zone
       - automation.alert_when_someone_leaves_a_zone
       - automation.send_a_message_as_i_get_closer_to_home
@@ -40,21 +37,14 @@ cards:
     title: Misc. Notifications
     show_header_toggle: false
     entities:
-      - automation.notify_charger_switch_state
-      - automation.notify_charging_status
-      - automation.notify_door_status
       - automation.notify_holiday_state_change
       - automation.notify_indian_holidays
-      - automation.notify_low_battery
       - automation.notify_thermostat_state_change
-      - automation.notify_usps_mail
-      - automation.notify_usps_packages
 
   - type: entities
     title: Timer Automations
     show_header_toggle: false
     entities:
-      - automation.cancel_wfh_timer_when_suresh_leaves_home
       - automation.family_room_motion_timer
       - automation.family_room_timer_elapsed
       - automation.frontroom_motion_timer
@@ -64,22 +54,6 @@ cards:
       - automation.master_bedroom_timer_elapsed
       - automation.officeroom_motion_timer
       - automation.officeroom_timer_elapsed
-      - automation.timer_elapsed_take_a_walk
-      - automation.upstairs_aroma_timer_elapsed
-      - automation.upstairs_aroma_timer_finish
-      - automation.upstairs_aroma_timer_start
-      - automation.wfh_timer_start
-
-  - type: entities
-    title: 3D Printer Automations
-    show_header_toggle: false
-    entities:
-      - automation.3d_print_send_telegram_pictures
-      - automation.3d_print_job_finished
-      - automation.3d_print_progress_update
-      - automation.3d_print_state_changed
-      - automation.3d_print_notify_printer_state
-      - automation.3d_print_notify_printer_error
 
   - type: entities
     title: Garage Automations
@@ -121,7 +95,6 @@ cards:
       title: Light Automations
       show_header_toggle: false
       entities:
-        - automation.restore_familyroom_lights
         - automation.evening_indoor_lights_on_before_sunset
         - automation.evening_outdoor_lights_on_at_sunset
         - automation.garage_lights_on_when_door_is_opened
@@ -197,16 +170,7 @@ cards:
       - automation.notify_home_status_when_away
       - automation.home_mode_away_on
       - automation.hourly_report_during_day_time
-      - automation.check_wi_fi_status_of_iphones_at_home
       - automation.night_bedtime_report
-
-  - type: entities
-    title: Raspberry Pi Automations
-    show_header_toggle: false
-    entities:
-      - automation.query_rpi_disk_data
-      - automation.query_rpi_wifi_data
-      - automation.raspberry_pi_command
 
   - type: entities
     title: Media Player Automations

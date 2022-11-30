@@ -5,11 +5,13 @@ cards:
     cards:
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
+          - type: button
             name: Automatic Lights
             entity: input_boolean.light_automations
             icon: mdi:lightbulb-on
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -21,11 +23,13 @@ cards:
               domain: input_boolean
               action: light_automations
 
-          - type: "custom:button-card"
+          - type: button
             name: Do Not Disturb
             entity: input_boolean.do_not_disturb
-            icon: mdi:do-not-disturb
+            icon: mdi:minus-circle
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -37,11 +41,15 @@ cards:
               domain: input_boolean
               action: do_not_disturb
 
-          - type: "custom:button-card"
+      - type: horizontal-stack
+        cards:
+          - type: button
             name: Home Sounds
             entity: input_boolean.voice_notifications
             icon: mdi:volume-high
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -53,11 +61,13 @@ cards:
               domain: input_boolean
               action: voice_notifications
 
-          - type: "custom:button-card"
+          - type: button
             name: Location Alerts
             entity: input_boolean.zone_alerts
             icon: mdi:map-marker
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -71,11 +81,13 @@ cards:
 
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
+          - type: button
             name: Family Movie
             entity: input_boolean.movie_time
             icon: mdi:filmstrip
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -87,11 +99,13 @@ cards:
               domain: input_boolean
               action: movie_time
 
-          - type: "custom:button-card"
+          - type: button
             name: Hourly Report
             entity: input_boolean.hourly_report
             icon: mdi:timer-sand
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -103,11 +117,15 @@ cards:
               domain: input_boolean
               action: hourly_report
 
-          - type: "custom:button-card"
+      - type: horizontal-stack
+        cards:
+          - type: button
             name: Nightly Report
             entity: input_boolean.nightly_report
             icon: mdi:weather-night
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -119,11 +137,13 @@ cards:
               domain: input_boolean
               action: nightly_report
 
-          - type: "custom:button-card"
-            name: Good Weather
+          - type: button
+            name: Go Outside 
             entity: input_boolean.enjoyable_weather_reminders
             icon: mdi:weather-windy-variant
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -137,11 +157,13 @@ cards:
 
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
+          - type: button
             name: Working in Office
             entity: input_boolean.working_in_office_room
             icon: mdi:office-building
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -153,11 +175,13 @@ cards:
               domain: input_boolean
               action: working_in_office_room
 
-          - type: "custom:button-card"
+          - type: button
             name: Working in Garage
             entity: input_boolean.working_in_garage
             icon: mdi:garage-alert
             color_type: card
+            show_state: "on"
+            size: 10%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -171,11 +195,13 @@ cards:
 
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
+          - type: button
             name: Stream Cameras To Chromecast
             entity: input_boolean.stream_camera2chromecast
             icon: mdi:cctv
             color_type: card
+            show_state: "on"
+            size: 5%
             style:
               - font-weight: bold
               - color: rgb(0, 0, 5)
@@ -193,6 +219,36 @@ cards:
     entities:
       - input_number.calendar_remind_before_days
       - input_number.battery_alert_threshold
+
+  - type: entities
+    title: Garage Timers
+    show_header_toggle: false
+    entities:      
+      - input_number.garage_lights
+      - input_number.garage_shop_lights
+
+  - type: entities
+    title: Master Suite Timers
+    show_header_toggle: false
+    entities:
+      - input_number.master_bathroom_lights
+      - input_number.master_bathroom_toilet_lights
+      - input_number.master_bathroom_shower_exhaust_timer_duration
+      - input_number.master_bathroom_toilet_exhaust_timer_duration
+
+  - type: entities
+    title: Kids Bathroom Timers
+    show_header_toggle: false
+    entities:
+      - input_number.guest_bathroom_lights
+      - input_number.guest_bathroom_exhaust_timer_duration
+
+  - type: entities
+    title: Kids Bedroom Closet Timers
+    show_header_toggle: false
+    entities:
+      - input_number.srinika_bedroom_closet_lights
+      - input_number.hasika_bedroom_closet_lights
 
   - type: entities
     title: Alerts & Notifications

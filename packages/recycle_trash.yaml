@@ -282,7 +282,7 @@ automation:
       condition: and
       conditions:
         - condition: template
-          value_template: '{{ states.input_boolean.trash_reminders.state == "on" }}'
+          value_template: "{{ states('input_boolean.trash_reminders') == 'on' }}"
         - condition: or
           conditions:
             - condition: state

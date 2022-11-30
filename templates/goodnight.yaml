@@ -22,11 +22,11 @@
                             "switch.basement_right",
                             "switch.frontyard_light",
                             "switch.garage",
-                            "switch.guest_bedroom",
-                            "switch.prayer_room",
-                            "switch.kids_bed_accent",
-                            "switch.kids_bedroom",
-                            "switch.kitchen",
+                            "switch.srinika_bedroom",
+                            "switch.guest_room",
+                            "switch.hasika_bed_accent",
+                            "switch.hasika_bedroom",
+                            "switch.kitchen_switch",
                             "switch.office_room",
                             "switch.backyard_light"] %}
   {%- for item in lights_switches -%}

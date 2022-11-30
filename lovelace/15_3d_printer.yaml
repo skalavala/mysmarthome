@@ -42,12 +42,10 @@ cards:
     title: Print Times
     show_header_toggle: false
     entities:
-      - entity: sensor.time_elapsed
-        name: Elapsed
-      - entity: sensor.time_estimated
-        name: Estimated
-      - entity: sensor.print_completion
-        name: Print Completion
+      - entity: sensor.octoprint_print_start
+        name: Print Started
+      - entity: sensor.octoprint_print_end_eta
+        name: Completed ETA
 
   - type: entities
     title: 3D Printer Settings

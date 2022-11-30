@@ -2,25 +2,31 @@ title: Lights
 icon: mdi:lightbulb-on
 cards:
   - type: entities
-    title: Upstairs
+    title: Master Bedroom
     show_header_toggle: true
     entities:
-      - light.master_bedroom_lights
+      # - light.master_bedroom_lights
+      - switch.master_bedroom_fan
+      - switch.master_bedroom_lights
       - entity: light.master_bedroom_1
         name: Suresh's Bedside Light
       - entity: light.master_bedroom_2
         name: Mallika's Bedside Light
-      - entity: switch.kids_bedroom
-        name: Hasika's Bedroom
-      - entity: switch.kids_bed_accent
-        name: Hasika's Bed Accent Lights
-      - entity: switch.guest_bedroom
-        name: Srinika's Bedroom
-      - entity: switch.prayer_room
-        name: Study Room
+
+    # header:
+    #   type: picture
+    #   image: "https://www.home-assistant.io/images/lovelace/header-footer/balloons-header.png"
+
+  - type: entities
+    title: Master Bathroom
+    show_header_toggle: true
+    entities:
+      - switch.master_bathroom_toilet_light
+      - switch.master_bathroom_toilet_exhaust
+      - switch.master_bathroom_shower_exhaust
       - entity: light.master_bathroom_lights
         name: Master Bathroom Lights
-
+      
   - type: entities
     title: Office Room
     show_header_toggle: true
@@ -30,10 +36,48 @@ cards:
         name: Office Room Accent Lights
 
   - type: entities
+    title: Srinika Room
+    show_header_toggle: true
+    entities:
+      - switch.srinika_bedroom
+      - switch.srinika_bedroom_fan
+      - switch.srinika_bedroom_fan_light
+      - light.srinika_led_dimmer_switch
+      - switch.srinika_bedroom_closet
+      - switch.srinika_bedroom_accent_lights
+
+  - type: entities
+    title: Hasika Room
+    show_header_toggle: true
+    entities:
+      - switch.hasika_bedroom
+      - switch.hasika_bedroom_fan
+      - switch.hasika_bedroom_fan_light
+      - light.hasika_led_dimmer_switch
+      - switch.hasika_bedroom_closet
+      - switch.hasika_bed_accent
+
+  - type: entities
+    title: Guest Room
+    show_header_toggle: true
+    entities:
+      - switch.guest_room
+      - switch.guest_bedroom_fan
+      - switch.guest_bedroom_fan_light
+      - light.guest_bedroom_led_dimmer_switch
+
+  - type: entities
+    title: Guest/Kids Bathroom
+    show_header_toggle: true
+    entities:
+      - switch.guest_bathroom_exhaust
+      - switch.guest_bathroom_lights
+
+  - type: entities
     title: Family Room
     show_header_toggle: true
     entities:
-      - switch.kitchen
+      - switch.kitchen_switch
       - light.family_room_lights
       - light.hue_color_lamp_1
       - light.hue_color_lamp_2
@@ -57,11 +101,11 @@ cards:
     title: TV Power Strip
     show_header_toggle: true
     entities:
-      - entity: switch.plug_1
+      - entity: switch.chromecast_monitor
         name: Monitor
-      - entity: switch.plug_2
+      - entity: switch.sharp_tv
         name: Sharp TV
-      - entity: switch.plug_3
+      - entity: switch.bose_audio
         name: Bose Audio
 
   - type: entities
@@ -83,13 +127,6 @@ cards:
         name: Tasmota Outlet 2
 
   - type: entities
-    title: Fragrance Outlets
-    show_header_toggle: true
-    entities:
-      - switch.downstairs_fragrance
-      - switch.upstairs_fragrance
-
-  - type: entities
     title: Garage
     show_header_toggle: false
     entities:
@@ -102,3 +139,44 @@ cards:
     entities:
       - switch.frontyard_light
       - switch.backyard_light
+
+  # - type: entities
+  #   title: LED Indicators
+  #   show_header_toggle: false
+  #   entities:
+  #     - switch.3d_printer_led
+  #     - switch.basement_left_led
+  #     - switch.basement_right_led
+  #     - switch.front_room_led
+  #     - switch.garage_led
+  #     - switch.garage_shop_lights_led
+  #     - switch.guest_bathroom_exhaust_led
+  #     - switch.guest_bathroom_lights_led
+  #     - switch.guest_bedroom_fan_led
+  #     - switch.guest_bedroom_fan_light_led
+  #     - switch.guest_bedroom_lamp_led
+  #     - switch.guest_bedroom_led_dimmer_switch_led
+  #     - switch.hasika_bed_accent_lights_led
+  #     - switch.hasika_bedroom_closet_led
+  #     - switch.hasika_bedroom_fan_led
+  #     - switch.hasika_bedroom_fan_light_led
+  #     - switch.hasika_bedroom_lamp_led
+  #     - switch.hasika_led_dimmer_switch_led
+  #     - switch.kitchen_switch_led
+  #     - switch.master_bathroom_lights
+  #     - switch.master_bathroom_shower_exhaust_led
+  #     - switch.master_bathroom_toilet_exhaust_led
+  #     - switch.master_bathroom_toilet_light_led
+  #     - switch.master_bedroom_accent_lights_led
+  #     - switch.master_bedroom_fan_led
+  #     - switch.master_bedroom_lights_led
+  #     - switch.office_room_led
+  #     - switch.srinika_bed_accent_lights_led
+  #     - switch.srinika_bedroom_closet_led
+  #     - switch.srinika_bedroom_fan_led
+  #     - switch.srinika_bedroom_fan_light_led
+  #     - switch.srinika_bedroom_lamp_led
+  #     - switch.srinika_led_dimmer_switch_led
+  #     - switch.tp_link_power_strip_b5e2_led
+  #     - switch.tp_link_smart_plug_25ba_led
+  #     - switch.upstairs_fragrance_led

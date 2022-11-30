@@ -75,7 +75,7 @@ automation:
         state: "on"
     action:
       - service: switch.toggle
-        entity_id: switch.kitchen
+        entity_id: switch.kitchen_switch
 
   # Double Tap:  Turn OFF Downstairs Lights
   - alias: Family Room Cube Event Tap Twice
@@ -186,7 +186,7 @@ automation:
         state: "on"
     action:
       - service_template: switch.toggle
-        entity_id: switch.guest_bedroom
+        entity_id: switch.srinika_bedroom
 
   # Shake: Toggle Do Not Disturb Mode
   - alias: Srinika Room Cube Event Shake
@@ -227,7 +227,7 @@ automation:
         state: "on"
     action:
       - service_template: switch.toggle
-        entity_id: switch.kids_bedroom
+        entity_id: switch.hasika_bedroom
 
   # Shake: Toggle Do Not Disturb Mode
   - alias: Hasika Room Cube Event Shake
@@ -270,7 +270,7 @@ automation:
         state: "on"
     action:
       - service: switch.toggle
-        entity_id: switch.prayer_room
+        entity_id: switch.study_room
 
   # Shake: Toggle Do Not Disturb Mode
   - alias: Study Room Cube Event Shake
@@ -311,9 +311,11 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        entity_id: group.downstairs_lights
+        data:
+          entity_id: group.downstairs_lights
       - service: homeassistant.turn_off
-        entity_id: group.upstairs_lights
+        data:
+          entity_id: group.upstairs_lights
 
   # Flip 180: Toggle Lights
   - alias: Master Bedroom Cube Event Flip180
@@ -428,6 +430,7 @@ automation:
           {% else %}
             script.play_dog_sounds
           {% endif %}
+      - service: script.doorbell_camera_pics
 
   - alias: Doorbell Double Press
     initial_state: true
@@ -444,6 +447,7 @@ automation:
           {% else %}
             script.play_dog_sounds
           {% endif %}
+      - service: script.doorbell_camera_pics
 
   - alias: Doorbell Long Press
     initial_state: true
@@ -460,3 +464,43 @@ automation:
           {% else %}
             script.play_dog_sounds
           {% endif %}
+      - service: script.doorbell_camera_pics
+
+################################################################################
+# Script for sending camera snapshots when doorbell is pressed
+################################################################################
+script:
+
+  doorbell_camera_pics:
+    sequence:
+      - service: script.notify_me
+        data:
+          message: "ALERT! Someone is at the front door!"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.frontdoor_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
+            (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+      - service: camera.snapshot
+        data_template:
+          entity_id: "camera.driveway_camera"
+          filename:
+            "{{ '/config/www/downloads/camera/driveway/driveway_' ~
+            (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"            
+      - service: notify.telegram
+        data_template:
+          title: "Door Bell"
+          message: "Someone rang door bell!"
+          data:
+            photo:
+              - file: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
+                       (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
+                       .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: "Someone rang door bell!"
+              - file: "{{ '/config/www/downloads/camera/driveway/driveway_' ~
+                (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                caption: "Someone rang door bell!"

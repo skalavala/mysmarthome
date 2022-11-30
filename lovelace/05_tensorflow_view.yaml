@@ -68,17 +68,17 @@ cards:
     title: Image Processing
     show_header_toggle: false
     entities:
-      - entity: image_processing.tensorflow_frontdoor_camera
+      - entity: image_processing.doods_frontdoor_camera
         name: Front Door Camera
-      - entity: image_processing.tensorflow_driveway_camera
+      - entity: image_processing.doods_driveway_camera
         name: Driveway Camera
-      - entity: image_processing.tensorflow_garage_camera
+      - entity: image_processing.doods_garage
         name: Garage Camera
-      - entity: image_processing.tensorflow_patio_camera
+      - entity: image_processing.doods_patio_camera
         name: Patio Camera
-      - entity: image_processing.tensorflow_playarea_camera
+      - entity: image_processing.doods_playarea_camera
         name: Playarea Camera
-      - entity: image_processing.tensorflow_3d_printer_camera
+      - entity: image_processing.doods_3d_printer_camera
         name: 3D Printer Camera
-      - entity: image_processing.tensorflow_porch_camera
+      - entity: image_processing.doods_porch_camera
         name: Porch Camera

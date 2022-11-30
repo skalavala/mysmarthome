@@ -56,18 +56,79 @@ input_datetime:
 input_number:
   calendar_remind_before_days:
     name: Calendar Remind Before Days
-    initial: 2
     min: 1
     max: 15
     step: 1
     mode: box
   battery_alert_threshold:
     name: Notify Low Battery if goes below
-    initial: 4
     min: 1
     max: 100
     step: 1
     mode: box
+  guest_bathroom_exhaust_timer_duration:
+    name: Guest Bathroom Shower Exhaust Timer Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+  master_bathroom_shower_exhaust_timer_duration:
+    name: Master Bathroom Shower Exhaust Timer Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+  master_bathroom_toilet_exhaust_timer_duration:
+    name: Master Bathroom Toilet Exhaust Timer Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+  master_bathroom_toilet_lights:
+    name: Master Bathroom Toilet Lights Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+
+  guest_bathroom_lights:
+    name: Guest Bathroom Lights Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+  master_bathroom_lights:
+    name: Master Bathroom Lights Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+  garage_lights:
+    name: Garage Lights Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+  garage_shop_lights:
+    name: Garage Shop Lights Duration
+    min: 5
+    max: 240
+    step: 5
+    mode: box
+
+######################### CLOSET LIGHTS
+  hasika_bedroom_closet_lights:
+    name: Hasika Closet Lights Duration
+    min: 5
+    max: 120
+    step: 5
+    mode: box
+  srinika_bedroom_closet_lights:
+    name: Srinika Closet Lights Duration
+    min: 5
+    max: 120
+    step: 5
+    mode: box    
 
 sensor:
   - platform: template
@@ -201,11 +262,6 @@ input_boolean:
   battery_notifications:
     name: Battery Notifications
     icon: mdi:battery
-
-  sharp_tv:
-    name: TV
-    initial: on
-    icon: mdi:television-classic
 
   dummy:
     name: "Dummy Input Boolean!"

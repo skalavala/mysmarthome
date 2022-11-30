@@ -1,274 +1,274 @@
-###############################################################################
-#   @author         :   Mahasri Kalavala
-#   @date           :   09/04/2020
-#   @package        :   3D Printer
-#   @description    :   3D Printer Automations
-###############################################################################
-homeassistant:
-  customize:
-    automation.3d_print:
-      icon: mdi:printer
+# ###############################################################################
+# #   @author         :   Mahasri Kalavala
+# #   @date           :   09/04/2020
+# #   @package        :   3D Printer
+# #   @description    :   3D Printer Automations
+# ###############################################################################
+# homeassistant:
+#   customize:
+#     automation.3d_print:
+#       icon: mdi:printer
 
-input_boolean:
-  twenty_five_percent:
-    name: "25%"
-    icon: mdi:radiobox-blank
+# input_boolean:
+#   twenty_five_percent:
+#     name: "25%"
+#     icon: mdi:radiobox-blank
 
-  fifty_percent:
-    name: "50%"
-    icon: mdi:brightness-3
+#   fifty_percent:
+#     name: "50%"
+#     icon: mdi:brightness-3
 
-  seventy_five_percent:
-    name: "75%"
-    icon: mdi:brightness-2
+#   seventy_five_percent:
+#     name: "75%"
+#     icon: mdi:brightness-2
 
-  hundred_percent:
-    name: "100%"
-    icon: mdi:brightness-1
+#   hundred_percent:
+#     name: "100%"
+#     icon: mdi:brightness-1
 
-  power_off_when_complete:
-    name: Auto Shutoff When Done
-    icon: mdi:toggle-switch-off
+#   power_off_when_complete:
+#     name: Auto Shutoff When Done
+#     icon: mdi:toggle-switch-off
 
-  send_progress_pictures:
-    name: Send Telegram Pictures
-    icon: mdi:toggle-switch-off
+#   send_progress_pictures:
+#     name: Send Telegram Pictures
+#     icon: mdi:toggle-switch-off
 
-#
-# Octoprint Camera URL in the format
-#    still_image_url: "http://192.xxx.xxx.xxx/webcam/?action=snapshot"
-#    mjpeg_url: "http://192.xxx.xxx.xxx/webcam/?action=stream"
-#
-camera:
-  - platform: mjpeg
-    name: 3D Printer Camera
-    still_image_url: !secret octoprint_cam_snapshot
-    mjpeg_url: !secret octoprint_cam_stream
+# #
+# # Octoprint Camera URL in the format
+# #    still_image_url: "http://192.xxx.xxx.xxx/webcam/?action=snapshot"
+# #    mjpeg_url: "http://192.xxx.xxx.xxx/webcam/?action=stream"
+# #
+# camera:
+#   - platform: mjpeg
+#     name: 3D Printer Camera
+#     still_image_url: !secret octoprint_cam_snapshot
+#     mjpeg_url: !secret octoprint_cam_stream
 
-#
-# A couple of template sensors to show the elapsed and estimated time in readable format
-# instead of # of seconds (default)
-#
-sensor:
-  - platform: template
-    sensors:
-      time_elapsed:
-        value_template: >
-          {%- macro secondsToReadableString(seconds) %}
-          {%- set map = {'week': (seconds / 604800) % 604800,
-             'day': (seconds / 86400) % 7, 'hour': (seconds / 3600) % 24,
-             'minute': (seconds / 60) % 60} -%}
-          {%- for item in map if map[item] | int > 0 -%}
-            {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
-            {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
-          {%- endfor -%}
-          {% endmacro %}
-          {{ secondsToReadableString(states('sensor.octoprint_time_elapsed') |int) }}
+# #
+# # A couple of template sensors to show the elapsed and estimated time in readable format
+# # instead of # of seconds (default)
+# #
+# sensor:
+#   # - platform: template
+#   #   sensors:
+#   #     time_elapsed:
+#   #       value_template: >
+#   #         {%- macro secondsToReadableString(seconds) %}
+#   #         {%- set map = {'week': (seconds / 604800) % 604800,
+#   #            'day': (seconds / 86400) % 7, 'hour': (seconds / 3600) % 24,
+#   #            'minute': (seconds / 60) % 60} -%}
+#   #         {%- for item in map if map[item] | int > 0 -%}
+#   #           {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+#   #           {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
+#   #         {%- endfor -%}
+#   #         {% endmacro %}
+#   #         {{ secondsToReadableString(states('sensor.octoprint_time_elapsed') |int) }}
 
-  - platform: template
-    sensors:
-      time_estimated:
-        value_template: >
-          {%- macro secondsToReadableString(seconds) %}
-          {%- set map = {'week': (seconds / 604800) % 604800,
-             'day': (seconds / 86400) % 7, 'hour': (seconds / 3600) % 24,
-             'minute': (seconds / 60) % 60 } -%}
-          {%- for item in map if map[item] | int > 0 -%}
-            {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
-            {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
-          {%- endfor -%}
-          {% endmacro %}
-          {{ secondsToReadableString(states('sensor.octoprint_time_remaining') |int) }}
+#   # - platform: template
+#   #   sensors:
+#   #     time_estimated:
+#   #       value_template: >
+#   #         {%- macro secondsToReadableString(seconds) %}
+#   #         {%- set map = {'week': (seconds / 604800) % 604800,
+#   #            'day': (seconds / 86400) % 7, 'hour': (seconds / 3600) % 24,
+#   #            'minute': (seconds / 60) % 60 } -%}
+#   #         {%- for item in map if map[item] | int > 0 -%}
+#   #           {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
+#   #           {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
+#   #         {%- endfor -%}
+#   #         {% endmacro %}
+#   #         {{ secondsToReadableString(states('sensor.octoprint_time_remaining') |int) }}
 
-  - platform: template
-    sensors:
-      print_completion:
-        value_template: >
-          {% set seconds = states('sensor.octoprint_time_remaining')|int %}
-          {% if utcnow().strftime('%s')|int | timestamp_custom("%A %D") ==  (utcnow().strftime('%s') |int + seconds) | timestamp_custom("%A %D")  %}
-            Today at {{ (utcnow().strftime('%s')|int + seconds) | timestamp_custom("%I:%M %p") }}
-          {% else %}
-            {{ (utcnow().strftime('%s') |int + seconds) | timestamp_custom("%A %D %I:%M %p") }}
-          {% endif %}
+#   # - platform: template
+#   #   sensors:
+#   #     print_completion:
+#   #       value_template: >
+#   #         {% set seconds = states('sensor.octoprint_time_remaining')|int %}
+#   #         {% if utcnow().strftime('%s')|int | timestamp_custom("%A %D") ==  (utcnow().strftime('%s') |int + seconds) | timestamp_custom("%A %D")  %}
+#   #           Today at {{ (utcnow().strftime('%s')|int + seconds) | timestamp_custom("%I:%M %p") }}
+#   #         {% else %}
+#   #           {{ (utcnow().strftime('%s') |int + seconds) | timestamp_custom("%A %D %I:%M %p") }}
+#   #         {% endif %}
 
-  - platform: template
-    sensors:
-      octoprint_actual_bed_temp_c:
-        unit_of_measurement: "C"
-        value_template: >
-          {%- macro F2C(temperature) -%}
-          {% set tmp = (((temperature - 32) *5)/9) %}
-          {{- " %0.2f" % tmp }}
-          {%- endmacro -%}
-          {{ F2C(states('sensor.octoprint_actual_bed_temp') |int ) |int }}
+#   - platform: template
+#     sensors:
+#       octoprint_actual_bed_temp_c:
+#         unit_of_measurement: "C"
+#         value_template: >
+#           {%- macro F2C(temperature) -%}
+#           {% set tmp = (((temperature - 32) *5)/9) %}
+#           {{- " %0.2f" % tmp }}
+#           {%- endmacro -%}
+#           {{ F2C(states('sensor.octoprint_actual_bed_temp') |int ) |int }}
 
-  - platform: template
-    sensors:
-      octoprint_actual_tool0_temp_c:
-        unit_of_measurement: "C"
-        value_template: >
-          {%- macro F2C(temperature) -%}
-          {% set tmp = (((temperature - 32) *5)/9) %}
-          {{- " %0.2f" % tmp }}
-          {%- endmacro -%}
-          {{ F2C(states('sensor.octoprint_actual_tool0_temp') |int ) |int }}
+#   - platform: template
+#     sensors:
+#       octoprint_actual_tool0_temp_c:
+#         unit_of_measurement: "C"
+#         value_template: >
+#           {%- macro F2C(temperature) -%}
+#           {% set tmp = (((temperature - 32) *5)/9) %}
+#           {{- " %0.2f" % tmp }}
+#           {%- endmacro -%}
+#           {{ F2C(states('sensor.octoprint_actual_tool0_temp') |int ) |int }}
 
-  - platform: template
-    sensors:
-      octoprint_target_bed_temp_c:
-        unit_of_measurement: "C"
-        value_template: >
-          {%- macro F2C(temperature) -%}
-          {% set tmp = (((temperature - 32) *5)/9) %}
-          {{- " %0.2f" % tmp }}
-          {%- endmacro -%}
-          {{ F2C(states('sensor.octoprint_target_bed_temp') |int ) |int }}
+#   - platform: template
+#     sensors:
+#       octoprint_target_bed_temp_c:
+#         unit_of_measurement: "C"
+#         value_template: >
+#           {%- macro F2C(temperature) -%}
+#           {% set tmp = (((temperature - 32) *5)/9) %}
+#           {{- " %0.2f" % tmp }}
+#           {%- endmacro -%}
+#           {{ F2C(states('sensor.octoprint_target_bed_temp') |int ) |int }}
 
-  - platform: template
-    sensors:
-      octoprint_target_tool0_temp_c:
-        unit_of_measurement: "C"
-        value_template: >
-          {%- macro F2C(temperature) -%}
-          {% set tmp = (((temperature - 32) *5)/9) %}
-          {{- " %0.2f" % tmp }}
-          {%- endmacro -%}
-          {{ F2C(states('sensor.octoprint_target_tool0_temp') |int ) |int }}
+#   - platform: template
+#     sensors:
+#       octoprint_target_tool0_temp_c:
+#         unit_of_measurement: "C"
+#         value_template: >
+#           {%- macro F2C(temperature) -%}
+#           {% set tmp = (((temperature - 32) *5)/9) %}
+#           {{- " %0.2f" % tmp }}
+#           {%- endmacro -%}
+#           {{ F2C(states('sensor.octoprint_target_tool0_temp') |int ) |int }}
 
-automation:
-  #
-  # Notify when the printer status changed from "Prnting" to anything.
-  # Use this later to determine if you want to turn off printer or not
-  #
-  - alias: "3D Print State Changed"
-    trigger:
-      platform: state
-      entity_id: "sensor.octoprint_current_state"
-      from: "Printing"
-    action:
-      - service: script.notify_me
-        data_template:
-          message: "3D Printer Status Changed from 'Printing' to '{{ trigger.to_state.state }}'."
+#   - platform: template
+#     sensors:
+#       octoprint_print_start:
+#         value_template: "{{ as_timestamp(states('sensor.octoprint_start_time'))| timestamp_custom('%m/%d/%Y, %H:%M:%S %p') }}"
 
-  #
-  # Updates on the Printer Status
-  #
-  - alias: "3D Print Notify Printer State"
-    trigger:
-      platform: state
-      entity_id: "binary_sensor.octoprint_printing"
-    action:
-      - service: script.notify_me
-        data_template:
-          message: "3D Printer Status changed from '{{ trigger.from_state.state }}' to '{{ trigger.to_state.state }}'."
+#   - platform: template
+#     sensors:
+#       octoprint_print_end_eta:
+#         value_template: "{{ as_timestamp(states('sensor.octoprint_estimated_finish_time'))| timestamp_custom('%m/%d/%Y, %H:%M:%S %p') }}"
 
-  #
-  # Notifies when the printer errors out
-  #
-  - alias: "3D Print Notify Printer Error"
-    trigger:
-      platform: state
-      entity_id: binary_sensor.octoprint_printing_error
-      to: "on"
-    action:
-      - service: script.notify_me
-        data_template:
-          message: "3D Printer Status changed to 'ERROR'. Please check the printer!"
+# automation:
+#   #
+#   # Notify when the printer status changed from "Prnting" to anything.
+#   # Use this later to determine if you want to turn off printer or not
+#   #
+#   - alias: "3D Print State Changed"
+#     trigger:
+#       platform: state
+#       entity_id: "sensor.octoprint_current_state"
+#       from: "Printing"
+#     action:
+#       - service: script.notify_me
+#         data_template:
+#           message: "3D Printer Status Changed from 'Printing' to '{{ trigger.to_state.state }}'."
 
-  #
-  # Updates appropriate input booleans based on percentage complete
-  #
-  - alias: "3D Print Update Percentage Booleans"
-    trigger:
-      platform: state
-      entity_id: sensor.octoprint_job_percentage
-    action:
-      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 25 else 'off' }}"
-        entity_id: input_boolean.twenty_five_percent
-      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 50 else 'off' }}"
-        entity_id: input_boolean.fifty_percent
-      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 75 else 'off' }}"
-        entity_id: input_boolean.seventy_five_percent
-      - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int == 100 else 'off' }}"
-        entity_id: input_boolean.hundred_percent
+#   #
+#   # Updates on the Printer Status
+#   #
+#   - alias: "3D Print Notify Printer State"
+#     trigger:
+#       platform: state
+#       entity_id: "binary_sensor.octoprint_printing"
+#     action:
+#       - service: script.notify_me
+#         data_template:
+#           message: "3D Printer Status changed from '{{ trigger.from_state.state }}' to '{{ trigger.to_state.state }}'."
 
-  #
-  # Provides update at frequent intervals - 25%, 50%, 75%, and 100%!
-  #
-  - alias: "3D Print Progress Update"
-    trigger:
-      platform: state
-      entity_id: input_boolean.twenty_five_percent, input_boolean.fifty_percent, input_boolean.seventy_five_percent, input_boolean.hundred_percent
-      to: "on"
-      from: "off"
-    action:
-      - service: script.notify_me
-        data_template:
-          message: >-
-            {%- macro secondsToReadableString(seconds) %}
-            {%- set map = {'week': (seconds / 604800) % 604800,
-               'day': (seconds / 86400) % 7, 'hour': (seconds / 3600) % 24,
-               'minute': (seconds / 60) % 60 } -%}
-            {%- for item in map if map[item] | int > 0 -%}
-              {%- if loop.first %}{% elif loop.last %}, and {% else %}, {% endif -%}
-              {{- map[item]|int }} {{ item -}} {{- 's' if map[item]|int > 1 -}}
-            {%- endfor -%}
-            {% endmacro %}
-            3D Printer job is now {{ trigger.to_state.attributes.friendly_name }} complete. {% if trigger.entity_id != 'input_boolean.hundred_percent' %} Will be done in {{ secondsToReadableString(states('sensor.octoprint_time_remaining') |int) }}.
-            {%- endif -%}
+#   #
+#   # Notifies when the printer errors out
+#   #
+#   - alias: "3D Print Notify Printer Error"
+#     trigger:
+#       platform: state
+#       entity_id: binary_sensor.octoprint_printing_error
+#       to: "on"
+#     action:
+#       - service: script.notify_me
+#         data_template:
+#           message: "3D Printer Status changed to 'ERROR'. Please check the printer!"
 
-  #
-  # When the printing is complete (100%), it waits for 2 minutes and turns off the printer.
-  # It also resets all the input booleans, so that it starts fresh next time.
-  # Resetting input boleans is not necessary as they get updated automatically when
-  # octoprint job percentage value chaanges... but why not?
-  #
-  - alias: "3d Print Job Finished"
-    trigger:
-      platform: state
-      entity_id: input_boolean.hundred_percent
-      to: "on"
-    action:
-      - condition: template
-        value_template: "{{ states('input_boolean.power_off_when_complete') == 'on' }}"
-      - delay: "00:02:00"
-      - service: switch.turn_off
-        entity_id: switch.3d_printer
-      - service: script.notify_me
-        data_template:
-          message: "3D Printer is now switched off!"
-      - service_template: input_boolean.turn_off
-        entity_id: input_boolean.twenty_five_percent
-      - service_template: input_boolean.turn_off
-        entity_id: input_boolean.fifty_percent
-      - service_template: input_boolean.turn_off
-        entity_id: input_boolean.seventy_five_percent
-      - service_template: input_boolean.turn_off
-        entity_id: input_boolean.hundred_percent
+#   #
+#   # Updates appropriate input booleans based on percentage complete
+#   #
+#   - alias: "3D Print Update Percentage Booleans"
+#     trigger:
+#       platform: state
+#       entity_id: sensor.octoprint_job_percentage
+#     action:
+#       - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 25 else 'off' }}"
+#         entity_id: input_boolean.twenty_five_percent
+#       - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 50 else 'off' }}"
+#         entity_id: input_boolean.fifty_percent
+#       - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int >= 75 else 'off' }}"
+#         entity_id: input_boolean.seventy_five_percent
+#       - service_template: "input_boolean.turn_{{- 'on' if states('sensor.octoprint_job_percentage') | int == 100 else 'off' }}"
+#         entity_id: input_boolean.hundred_percent
 
-  #
-  # If the printer is ON and is "Printing", it will send a snapshot/picture every 30 minutes
-  #
-  - alias: "3D Print Send Telegram Pictures"
-    trigger:
-      platform: time_pattern
-      minutes: "/30"
-      seconds: 00
-    condition:
-      - condition: template
-        value_template: "{{ states('input_boolean.send_progress_pictures') == 'on' }}"
-      - condition: template
-        value_template: "{{ states('sensor.octoprint_current_state') | lower == 'printing' }}"
-    action:
-      - service: camera.snapshot
-        data:
-          entity_id: camera.3d_printer_camera
-          filename: "/config/www/downloads/camera/3dprinter/print_latest.jpg"
-      - service: notify.telegram
-        data_template:
-          title: "3D Printer"
-          message: "Print Progress"
-          data:
-            photo:
-              - file: "/config/www/downloads/camera/3dprinter/print_latest.jpg"
-                caption: "3D Print Progress at {{ states('sensor.octoprint_job_percentage') }}%"
+#   #
+#   # Provides update at frequent intervals - 25%, 50%, 75%, and 100%!
+#   #
+#   - alias: "3D Print Progress Update"
+#     trigger:
+#       platform: state
+#       entity_id: input_boolean.twenty_five_percent, input_boolean.fifty_percent, input_boolean.seventy_five_percent, input_boolean.hundred_percent
+#       to: "on"
+#       from: "off"
+#     action:
+#       - service: script.notify_me
+#         data_template:
+#           message: >-
+#             3D Printer job is now {{ trigger.to_state.attributes.friendly_name }} complete.
+
+#   #
+#   # When the printing is complete (100%), it waits for 2 minutes and turns off the printer.
+#   # It also resets all the input booleans, so that it starts fresh next time.
+#   # Resetting input boleans is not necessary as they get updated automatically when
+#   # octoprint job percentage value chaanges... but why not?
+#   #
+#   - alias: "3d Print Job Finished"
+#     trigger:
+#       platform: state
+#       entity_id: input_boolean.hundred_percent
+#       to: "on"
+#     action:
+#       - condition: template
+#         value_template: "{{ states('input_boolean.power_off_when_complete') == 'on' }}"
+#       - delay: "00:02:00"
+#       - service: switch.turn_off
+#         entity_id: switch.3d_printer
+#       - service: script.notify_me
+#         data_template:
+#           message: "3D Printer is now switched off!"
+#       - service_template: input_boolean.turn_off
+#         entity_id: input_boolean.twenty_five_percent
+#       - service_template: input_boolean.turn_off
+#         entity_id: input_boolean.fifty_percent
+#       - service_template: input_boolean.turn_off
+#         entity_id: input_boolean.seventy_five_percent
+#       - service_template: input_boolean.turn_off
+#         entity_id: input_boolean.hundred_percent
+
+#   #
+#   # If the printer is ON and is "Printing", it will send a snapshot/picture every 30 minutes
+#   #
+#   - alias: "3D Print Send Telegram Pictures"
+#     trigger:
+#       platform: time_pattern
+#       minutes: "/30"
+#       seconds: 00
+#     condition:
+#       - condition: template
+#         value_template: "{{ states('input_boolean.send_progress_pictures') == 'on' }}"
+#       - condition: template
+#         value_template: "{{ states('sensor.octoprint_current_state') | lower == 'printing' }}"
+#     action:
+#       - service: camera.snapshot
+#         data:
+#           entity_id: camera.3d_printer_camera
+#           filename: "/config/www/downloads/camera/3dprinter/print_latest.jpg"
+#       - service: notify.telegram
+#         data_template:
+#           title: "3D Printer"
+#           message: "Print Progress"
+#           data:
+#             photo:
+#               - file: "/config/www/downloads/camera/3dprinter/print_latest.jpg"
+#                 caption: "3D Print Progress at {{ states('sensor.octoprint_job_percentage') }}%"
