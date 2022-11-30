@@ -3,16 +3,6 @@ icon: mdi:television
 cards:
 
   - type: entities
-    title: Raspberry Pi Scripts
-    show_header_toggle: false
-    entities:
-      - script.query_disk_info
-      - script.query_wifi_info
-      - script.restart_all_raspberrypis
-      - script.restart_all_snapclients
-      - script.shutdown_all_raspberrypis
-
-  - type: entities
     title: Text To Speech
     show_header_toggle: false
     entities:
