@@ -780,7 +780,7 @@ automation:
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - condition: template
-        value_template: "{{ states('device_tracker.suresh') == 'home' }}"
+        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
 
       - service: notify.ios_devices
         data_template:
@@ -872,7 +872,7 @@ automation:
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - condition: template
-        value_template: "{{ states('device_tracker.suresh') == 'home' }}"
+        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Driveway camera!"
@@ -962,7 +962,7 @@ automation:
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - condition: template
-        value_template: "{{ states('device_tracker.suresh') == 'home' }}"
+        value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
       - service: notify.ios_devices
         data_template:
           message: "Check Patio camera!"

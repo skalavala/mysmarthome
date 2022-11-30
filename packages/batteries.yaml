@@ -387,10 +387,10 @@
 #     trigger:
 #       platform: numeric_state
 #       entity_id:
-#         - device_tracker.suresh
-#         - device_tracker.mallika
-#         - device_tracker.srinika
-#         - device_tracker.hasika
+#         - device_tracker.life360_suresh
+#         - device_tracker.life360_mallika
+#         - device_tracker.life360_srinika
+#         - device_tracker.life360_hasika
 #       value_template: "{{ state.attributes.battery }}"
 #       below: 25
 #     condition:
@@ -438,10 +438,10 @@
 #     trigger:
 #       - platform: state
 #         entity_id:
-#           - device_tracker.mallika
-#           - device_tracker.suresh
-#           - device_tracker.srinika
-#           - device_tracker.hasika
+#           - device_tracker.life360_mallika
+#           - device_tracker.life360_suresh
+#           - device_tracker.life360_srinika
+#           - device_tracker.life360_hasika
 #         from: "not_home"
 #         to: "home"
 #         for: "00:05:00"

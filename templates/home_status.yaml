@@ -164,7 +164,7 @@
   {# Drone Flying Weather #}
   {%- macro drone_weather() -%}
   {% if states('binary_sensor.good_weather_to_fly_drones')| lower == "on" and 
-        states('device_tracker.suresh') == "home" and 
+        states('device_tracker.life360_suresh') == "home" and 
         states('sun.sun') == "above_horizon" %}
     It is now a great weather to fly drone outside.
   {% endif %}

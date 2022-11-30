@@ -164,13 +164,13 @@ automation:
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
-      - condition: template
-        value_template: >
-          {%- if state_attr('automation.notify_home_security_status_change', 'last_triggered') -%}
-            {{ (as_timestamp(now()) - as_timestamp(state_attr('automation.notify_home_security_status_change', 'last_triggered'))) > 90 }}
-          {%- else -%}
-            true
-          {%- endif -%}
+      # - condition: template
+      #   value_template: >
+      #     {%- if state_attr('automation.notify_home_security_status_change', 'last_triggered') -%}
+      #       {{ (as_timestamp(now()) - as_timestamp(state_attr('automation.notify_home_security_status_change', 'last_triggered'))) > 90 }}
+      #     {%- else -%}
+      #       true
+      #     {%- endif -%}
     action:
       - service: script.notify_me
         data_template:

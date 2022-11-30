@@ -20,7 +20,7 @@ input_boolean:
 
 proximity:
   home:
-    devices: device_tracker.suresh
+    devices: device_tracker.life360_suresh
     tolerance: 50
     unit_of_measurement: mi
 
@@ -43,10 +43,10 @@ automation:
     trigger:
       - platform: zone
         entity_id:
-          - device_tracker.hasika
-          - device_tracker.mallika
-          - device_tracker.srinika
-          - device_tracker.suresh
+          - device_tracker.life360_hasika
+          - device_tracker.life360_mallika
+          - device_tracker.life360_srinika
+          - device_tracker.life360_suresh
         zone: zone.home
         event: enter
     condition:
@@ -68,10 +68,10 @@ automation:
     trigger:
       - platform: zone
         entity_id:
-          - device_tracker.hasika
-          - device_tracker.mallika
-          - device_tracker.srinika
-          - device_tracker.suresh
+          - device_tracker.life360_hasika
+          - device_tracker.life360_mallika
+          - device_tracker.life360_srinika
+          - device_tracker.life360_suresh
         zone: zone.home
         event: leave
     condition:
@@ -98,10 +98,10 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - device_tracker.mallika
-          - device_tracker.suresh
-          - device_tracker.srinika
-          - device_tracker.hasika
+          - device_tracker.life360_mallika
+          - device_tracker.life360_suresh
+          - device_tracker.life360_srinika
+          - device_tracker.life360_hasika
         from: "not_home"
         to: "home"
         for: "00:02:00"
@@ -135,10 +135,10 @@ automation:
       seconds: "/30"
     action:
       - service_template: >-
-          {%- set suresh = states('device_tracker.suresh') -%}
-          {%- set mallika = states('device_tracker.mallika') -%}
-          {%- set srinika = states('device_tracker.srinika') -%}
-          {%- set hasika = states('device_tracker.hasika') -%}
+          {%- set suresh = states('device_tracker.life360_suresh') -%}
+          {%- set mallika = states('device_tracker.life360_mallika') -%}
+          {%- set srinika = states('device_tracker.life360_srinika') -%}
+          {%- set hasika = states('device_tracker.life360_hasika') -%}
           {{ 'input_boolean.turn_on' if suresh != "home" and mallika != "home" and srinika != "home" and hasika != "home" else 'input_boolean.turn_off' }}
         entity_id: input_boolean.home_mode_away
 
@@ -168,3 +168,41 @@ automation:
       - service: script.notify_me
         data_template:
           message: "Suresh is on his way home, he is within the 5 miles range. Should be home soon!"
+
+####################################################################################
+  - alias: Srinika Left Home
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: device_tracker.life360_srinika
+        from: "home"
+        to: "not_home"
+        for: "00:02:00"
+    action:
+      - service: switch.turn_off
+        entity_id:
+          - switch.srinika_bedroom
+          - switch.srinika_bedroom_fan
+          - switch.srinika_bedroom_fan_light
+          - light.srinika_led_dimmer_switch
+          - switch.srinika_bedroom_closet
+          - switch.srinika_bedroom_accent_lights
+
+####################################################################################
+  - alias: Hasika Left Home
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: device_tracker.life360_hasika
+        from: "home"
+        to: "not_home"
+        for: "00:02:00"
+    action:
+      - service: switch.turn_off
+        entity_id:
+          - switch.hasika_bedroom
+          - switch.hasika_bedroom_fan
+          - switch.hasika_bedroom_fan_light
+          - light.hasika_led_dimmer_switch
+          - switch.hasika_bedroom_closet
+          - switch.hasika_bed_accent
