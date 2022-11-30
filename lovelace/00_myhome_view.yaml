@@ -84,14 +84,22 @@ cards:
     title: Kalavala Family
     show_header_toggle: false
     entities:
-      - entity: device_tracker.life360_mallika
-        name: Mallika's Location
-      - entity: device_tracker.life360_suresh
-        name: Suresh's Location
-      - entity: device_tracker.life360_srinika
-        name: Srinika's Location
-      - entity: device_tracker.life360_hasika
-        name: Hasika's Location
+      - type: attribute
+        entity: device_tracker.life360_suresh
+        name: Suresh
+        attribute: address        
+      - type: attribute
+        entity: device_tracker.life360_mallika
+        name: Mallika
+        attribute: address        
+      - type: attribute
+        entity: device_tracker.life360_srinika
+        name: Srinika
+        attribute: address        
+      - type: attribute
+        entity: device_tracker.life360_hasika
+        name: Hasika
+        attribute: address        
       - entity: input_boolean.home_mode_away
         name: Home Away Status
     card:
