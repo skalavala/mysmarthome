@@ -171,6 +171,37 @@ automation:
       - service: switch.turn_on
         entity_id: switch.backyard_light
 
+  - alias: Christmas Lights ON (At Sunset)
+    trigger:
+      platform: sun
+      event: sunset
+      offset: "+00:00:00"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.left
+      - service: switch.turn_on
+        entity_id: switch.backyard_light
+
+  - alias: Christmas Lights OFF (At Sunrise)
+    initial_state: true
+    trigger:
+      platform: sun
+      event: sunrise
+      offset: "00:15:00"
+    condition:
+      - condition: state
+        entity_id: input_boolean.light_automations
+        state: "on"
+    action:
+      - service: switch.turn_off
+        entity_id: switch.left
+      - service: switch.turn_off
+        entity_id: switch.backyard_light
+
   ###############################################################################
   # Turn indoor lights on 30 minutes before sunset
   ###############################################################################

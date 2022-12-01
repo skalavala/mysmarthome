@@ -240,25 +240,26 @@ automation:
   # When home security system is turned OFF or turned to Home mode from "away"
   # means, someone reached home from outside
   ###############################################################################
-  - alias: Turn ON Thermostat upon reaching home
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id: alarm_control_panel.home
-    condition:
-      - condition: template
-        value_template: >
-          {% if trigger.from_state.state == 'armed_away' and
-                (trigger.to_state.state == 'armed_home' or trigger.to_state.state == 'disarmed') %}
-            true
-          {% else %}
-            false
-          {% endif %}
-    action:
-      - service: climate.set_away_mode
-        data_template:
-          entity_id: climate.dining_room
-          away_mode: "false"
+  # - alias: Turn ON Thermostat upon reaching home
+  #   initial_state: true
+  #   trigger:
+  #     platform: state
+  #     entity_id: alarm_control_panel.home
+  #   condition:
+  #     - condition: template
+  #       value_template: >
+  #         {% if trigger.from_state.state == 'armed_away' and
+  #               (trigger.to_state.state == 'armed_home' or trigger.to_state.state == 'disarmed') %}
+  #           true
+  #         {% else %}
+  #           false
+  #         {% endif %}
+  #   action:
+  #     - service: climate.set_preset_mode
+  #       target:
+  #         entity_id: climate.dining_room
+  #       data:
+  #         preset_mode: "eco"
 
   ###############################################################################
   # TURN HOME SECURITY SYSTEM ON AT BED TIME

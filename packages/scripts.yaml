@@ -197,9 +197,13 @@ script:
       - service: notify.android_tv_fire_tv
         data:
           message: "{{ message }}"
-          title: "Hello!"
+          title: Mahasri Bot
           data:
             color: red
+            duration: 10
+            transparency: 1%
+            icon: 
+              path: /config/www/{{- [ "suresh.jpg", "srinika.jpg", "mallika.jpg", "hasika.jpg" ] | random  -}}
 
   good_night_tts:
     sequence:

@@ -156,10 +156,10 @@ cards:
     show_state: true
     title: Fitness
     entities:
-      - entity: sensor.yo_mama_steps
+      - entity: sensor.suresh_steps
         icon: "mdi:run"
         name: Suresh Steps
-      - entity: sensor.yo_mama_floors_ascended
+      - entity: sensor.suresh_floors_ascended
         icon: "mdi:run"
         name: Suresh Floors Ascended
       - entity: sensor.mallika_steps
