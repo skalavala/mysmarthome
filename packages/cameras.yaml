@@ -108,7 +108,7 @@ switch:
     body_on: '{"state": "start"}'
     body_off: '{"state": "stop"}'
     is_on_template: '{{ value_json is not none and value_json.state == "running" }}'
- 
+
 binary_sensor:
   - platform: hikvision
     name: Frontdoor Camera
@@ -348,7 +348,7 @@ automation:
             images:
               - "/config/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
 
-      - service: script.notify_me_with_picture
+      - service: script.notify_family
         data_template:
           title: "Front Door Motion"
           message: >
@@ -363,8 +363,10 @@ automation:
             {% else %}
               Motion detected at the front door on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif %}
-          file: "/config/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
-          caption: "Front Door Motion"
+          url: "/config/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
+          notify_options:
+            - telegram
+            - tv
 
       - condition: template
         value_template: >
@@ -428,7 +430,7 @@ automation:
             {{ " detected in the driveway"  }}
             {%- endif -%}
 
-      - service: script.notify_me_with_picture
+      - service: script.notify_family
         data_template:
           title: "Driveway Motion"
           message: >
@@ -443,8 +445,10 @@ automation:
             {% else %}
               Motion detected at the driveway on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif -%}
-          file: "/config/www/downloads/camera/driveway/driveway_latest.jpg"
-          caption: "Driveway Motion"
+          url: "/config/www/downloads/camera/driveway/driveway_latest.jpg"
+          notify_options:
+            - telegram
+            - tv
 
       - service: notify.notify_smtp
         data_template:
@@ -537,7 +541,7 @@ automation:
             {{ " detected in the garage."  }}
             {%- endif -%}
 
-      - service: script.notify_me_with_picture
+      - service: script.notify_family
         data_template:
           title: "Garage Motion"
           message: >
@@ -552,8 +556,10 @@ automation:
             {% else %}
               Motion detected in the garage on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif -%}
-          file: "/config/www/downloads/camera/garage/garage_latest.jpg"
-          caption: "Garage Motion"
+          url: "/config/www/downloads/camera/garage/garage_latest.jpg"
+          notify_options:
+            - telegram
+            - tv
 
       - service: notify.notify_smtp
         data_template:
@@ -623,9 +629,9 @@ automation:
             {{ " detected in the backyard."  }}
             {%- endif -%}
 
-      - service: script.notify_me_with_picture
+      - service: script.notify_family
         data_template:
-          title: "Backyardge Motion"
+          title: "Backyard Motion"
           message: >
             {%- set e_id = "image_processing.doods_patio_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
@@ -638,8 +644,10 @@ automation:
             {% else %}
               Motion detected in the backyard on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.
             {%- endif -%}
-          file: "/config/www/downloads/camera/patio/patio_latest.jpg"
-          caption: "Backyard Motion"
+          url: "/config/www/downloads/camera/patio/patio_latest.jpg"
+          notify_options:
+            - telegram
+            - tv
 
       - service: notify.notify_smtp
         data_template:
@@ -854,7 +862,7 @@ automation:
                 (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Garage"
-            
+
       - service: notify.notify_smtp
         data_template:
           title: 'Driveway motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'

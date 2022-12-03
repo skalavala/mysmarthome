@@ -101,11 +101,11 @@ binary_sensor:
       good_weather_to_fly_drones:
         friendly_name: Good Weather To Fly Drone?
         value_template: >-
-          {% if states.sensor.dark_sky_wind_speed.state | round(0) | int > 12 or 
-                states.sensor.dark_sky_precip.state |lower == "rain" or 
+          {% if states.sensor.dark_sky_wind_speed.state | round(0) | int > 12 or
+                states.sensor.dark_sky_precip.state |lower == "rain" or
                 states.sensor.dark_sky_precip.state |lower == "snow" or
-                states.sensor.dark_sky_visibility.state | round(0) | int < 2 or 
-                states.sensor.dark_sky_temperature.state | round(0) | int < 32 or 
+                states.sensor.dark_sky_visibility.state | round(0) | int < 2 or
+                states.sensor.dark_sky_temperature.state | round(0) | int < 32 or
                 states.sensor.dark_sky_cloud_coverage.state | round(0) | int > 30 %}
             false
           {% else %}
@@ -192,7 +192,7 @@ automation:
       - condition: template
         value_template: "{% if states.sensor.dark_sky_wind_speed.state | round < 8 %} false {% else %} true {% endif %}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
@@ -207,6 +207,10 @@ automation:
             {% elif ( windspeed > 60 ) and (states.input_boolean.hurricane_wind_alert.state == 'off') %}
                HURRICANE WINDS. FIND SHELTER, AND STAY INDOORS!
             {% endif %}
+          notify_options:
+            - telegram
+            - tv
+            - led
       - service: input_boolean.turn_on
         data_template:
           entity_id: >-
@@ -283,15 +287,19 @@ automation:
             true
           {%- endif -%}
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
             {% if ( windspeed > 40 ) and ( windspeed <= 60 ) and (states.input_boolean.super_heavy_wind_alert.state == 'off') %}
-               Warning! Wind speed is {{windspeed}} MPH. FIND SHELTER IMMEDIATELY!             
+               Warning! Wind speed is {{windspeed}} MPH. FIND SHELTER IMMEDIATELY!
             {% elif ( windspeed > 60 ) and ( windspeed <= 100 ) and (states.input_boolean.hurricane_wind_alert.state == 'off') %}
                HURRICANE WINDS. FIND SHELTER, AND STAY INDOORS! DO NOT GO OUT AND RISK YOUR LIFE!
             {% endif %}
+          notify_options:
+            - telegram
+            - tv
+            - led
 
   - alias: Rain Alerts
     initial_state: true
@@ -309,12 +317,13 @@ automation:
       - condition: template
         value_template: "{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "{{ trigger.to_state.state | title }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float }} inches per hour"
-      - service: script.voice_notify
-        data_template:
-          message: "{{ trigger.to_state.state }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float}} inches per hour"
+          notify_options:
+            - telegram
+            - tv
+            - led
       - service: input_boolean.turn_on
         data_template:
           entity_id: >
@@ -339,12 +348,14 @@ automation:
       - condition: template
         value_template: "{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "{{ trigger.to_state.state | title }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float }} inches per hour"
-      - service: script.voice_notify
-        data_template:
-          message: "{{ trigger.to_state.state }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float}} inches per hour"
+          notify_options:
+            - telegram
+            - voice
+            - tv
+            - led
       - service: input_boolean.turn_on
         data_template:
           entity_id: >

@@ -76,8 +76,6 @@ cards:
   #     - script.home_mode_away
   #     - script.home_status
   #     - script.led_message
-  #     - script.notify_me
-  #     - script.notify_me_with_picture
   #     - script.patio_cam
   #     - script.patio_camera_text_overlay
   #     - script.pill_taken

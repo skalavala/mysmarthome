@@ -53,15 +53,128 @@ tts:
 # Telegram Configuration
 #
 telegram_bot:
-  # Setup Broadcast for sending messages
   - platform: broadcast
     api_key: !secret telegram_apikey
     allowed_chat_ids:
       - !secret telegram_chatid
 
-  # Add Polling
   - platform: polling
     api_key: !secret telegram_apikey
     parse_mode: html
     allowed_chat_ids:
       - !secret telegram_chatid
+
+script:
+  notify_family:
+    sequence:
+      - condition: template
+        value_template: '{{ message | trim != "" }}'
+
+      - service: script.notify_on_led_screen
+        data_template:
+          message: "{{ message }}"
+          notify_options: "{{ notify_options }}"
+
+      - service: script.notify_firestick
+        data_template:
+          url: "{{ url }}"
+          title: "{{ title }}"
+          message: "{{ message }}"
+          notify_options: "{{ notify_options }}"
+
+      - service: script.notify_telegram
+        data_template:
+          file: "{{ url }}"
+          title: "{{ title }}"
+          message: "{{ message }}"
+          notify_options: "{{ notify_options }}"
+
+      - service: script.notify_email
+        data_template:
+          title: "{{ title }}"
+          message: "{{ message }}"
+          notify_options: "{{ notify_options }}"
+
+      - service: script.notify_voice
+        data_template:
+          message: "{{ message }}"
+          notify_options: "{{ notify_options }}"
+
+  ###############################################################################
+  # NOTIFY OPTIONS
+  #     1. tv
+  #     2. telegram
+  #     3. led
+  #     4. email
+  #     5. voice
+  ###############################################################################
+
+  notify_firestick:
+    sequence:
+      # - condition: state
+      #   entity_id: input_boolean.firetv_alerts
+      #   state: "on"
+      - condition: template
+        value_template: "{{ 'tv' in notify_options }}"
+      - service: notify.android_tv_fire_tv
+        data:
+          message: "{{ message }}"
+          title: Mahasri Bot
+          data:
+            color: red
+            duration: 7
+            image:
+              path: "{{ url }}" #/config/www/downloads/camera/driveway/driveway_20220604_185216.jpg
+            icon:
+              path: /config/www/{{- [ "suresh.jpg", "srinika.jpg", "mallika.jpg", "hasika.jpg" ] | random  -}}
+
+  notify_telegram:
+    sequence:
+      # - condition: state
+      #   entity_id: input_boolean.text_alerts
+      #   state: "on"
+      - condition: template
+        value_template: "{{ 'telegram' in notify_options }}"
+      - service: telegram_bot.send_message
+        data:
+          title: "{{- title -}}"
+          message: "{{- message -}}"
+          data:
+            photo:
+              - file: "{{- file -}}"
+                caption: "{{- title -}}"
+
+  notify_email:
+    sequence:
+      # - condition: state
+      #   entity_id: input_boolean.email_alerts
+      #   state: "on"
+      - condition: template
+        value_template: "{{ 'email' in notify_options }}"
+      - service: script.notify_smtp
+        data_template:
+          title: "{{ title }}"
+          message: "{{ message }}"
+
+  notify_voice:
+    sequence:
+      # - condition: state
+      #   entity_id: input_boolean.voice_alerts
+      #   state: "on"
+      - condition: template
+        value_template: "{{ 'voice' in notify_options }}"
+      - service: script.voice_notify
+        data_template:
+          message: "{{ message }}"
+
+  notify_on_led_screen:
+    sequence:
+      # - condition: state
+      #   entity_id: input_boolean.led_alerts
+      #   state: "on"
+      - condition: template
+        value_template: "{{ 'led' in notify_options }}"
+      - service: mqtt.publish
+        data_template:
+          topic: messageboard/messages
+          payload: "{{ message }}"

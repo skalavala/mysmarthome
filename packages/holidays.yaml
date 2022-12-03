@@ -59,9 +59,13 @@ automation:
         data:
           message: "Today is {{ states('sensor.holiday') }}."
           title: "{{ states('sensor.holiday') }}"
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "Today is: {{states('sensor.holiday') }}"
+          notify_options:
+            - telegram
+            - tv
+            - led
 
   - alias: Notify Indian Holidays
     initial_state: true
@@ -91,7 +95,7 @@ automation:
             false
           {%- endif -%}
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >-
             {%- set days2NextEvent = 0 -%}
@@ -109,3 +113,7 @@ automation:
                  {{ states.calendar.holidays_in_india.attributes.message | replace(".", "")  | title }}. is day after tomorrow.
               {%- endif -%}
             {%- endif -%}
+          notify_options:
+            - telegram
+            - tv
+            - led

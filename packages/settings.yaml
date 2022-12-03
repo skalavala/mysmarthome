@@ -116,7 +116,7 @@ input_number:
     step: 5
     mode: box
 
-######################### CLOSET LIGHTS
+  ######################### CLOSET LIGHTS
   hasika_bedroom_closet_lights:
     name: Hasika Closet Lights Duration
     min: 5
@@ -128,7 +128,7 @@ input_number:
     min: 5
     max: 120
     step: 5
-    mode: box    
+    mode: box
 
 sensor:
   - platform: template
@@ -331,9 +331,11 @@ automation:
       - platform: state
         entity_id: input_boolean.do_not_disturb
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "The Do Not Disturb Mode is {{ trigger.to_state.state |upper }}."
+          notify_options:
+            - led
 
   # Hourly Reports
   ######################################################

@@ -38,27 +38,6 @@ nest:
 
 automation:
   ###############################################################################
-  # Turn OFF AC after 3 hours of cooling
-  # Where we live, 3 hours is plenty to cool the house down!
-  ###############################################################################
-  - alias: Turn Off AC After 3 Hours of Cooling
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: climate.dining_room
-        to: "cool"
-        for: "03:00:00"
-    action:
-      - service: climate.set_away_mode
-        data:
-          entity_id: climate.dining_room
-          away_mode: "true"
-      - service: script.notify_me
-        data_template:
-          message: "Air Condition has been ON for 3 hours.
-            Turning it Off to save power."
-
-  ###############################################################################
   # Nest Thermostat automatically changes based on activity at home.
   # This automation is to keep an eye on what's going on with Nest
   ###############################################################################
@@ -68,23 +47,11 @@ automation:
       - platform: state
         entity_id: sensor.dining_room_thermostat_operation_mode
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "Nest Thermostat changed from '{{ trigger.from_state.state }}' to '{{ trigger.to_state.state }}'."
-      - service: script.voice_notify
-        data_template:
-          message: >
-            {% set state = trigger.to_state.state %}
-            {% if state == "off" %}
-              Your home's thermostat is switched off.
-            {% elif state == "eco" %}
-              Your home's thermostat  is set to eco or away mode.
-            {% elif state == "heat" %}
-              Your central heating is ON.
-            {% elif state == "cool" %}
-              Your central air condition is switched ON
-            {% elif state == "heat-cool" %}
-              Your home's thermostat is set to automatic mode.
-            {% else %}
-              Your home's thermostat is set to {{ state }} mode. 
-            {% endif %}
+          notify_options:
+            - telegram
+            - tv
+            - led
+            - voice

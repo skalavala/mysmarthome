@@ -37,7 +37,7 @@ homeassistant:
       friendly_name: Drive 3 Status
     sensor.kalavala_nas_smart_status_drive_0_4:
       friendly_name: Drive 4 Status
-    
+
     sensor.kalavala_nas_temperature_drive_0_1:
       friendly_name: Drive 1 Temperature
     sensor.kalavala_nas_temperature_drive_0_2:
@@ -78,16 +78,15 @@ sensor:
       - drive_smart_status
       - drive_temp
 
-
-# The following sensors are required, as the automations with trigger platform `numeric_state`, 
-# above a certain value using `above: x` AND `for: 00:05:00` combination is not supported.
-#
-# Apparently `for:` is ONLY supportd for trigger platform 'state' 
-#
-# By creating the folowing sensor, we can now have an automation with trigger platform as 'state'
-# with a combination of `to:` and `for:`
-#
-# See the automations 'Notify NAS Memory Usage' and 'Notify NAS CPU Usage' that uses these sensor values
+  # The following sensors are required, as the automations with trigger platform `numeric_state`,
+  # above a certain value using `above: x` AND `for: 00:05:00` combination is not supported.
+  #
+  # Apparently `for:` is ONLY supportd for trigger platform 'state'
+  #
+  # By creating the folowing sensor, we can now have an automation with trigger platform as 'state'
+  # with a combination of `to:` and `for:`
+  #
+  # See the automations 'Notify NAS Memory Usage' and 'Notify NAS CPU Usage' that uses these sensor values
 
   - platform: template
     sensors:
@@ -100,92 +99,106 @@ sensor:
         value_template: "{{ states('sensor.kalavala_nas_cpu_usage') | int > 80 }}"
 
 ###############################################################################
-#                _                        _   _                 
-#     /\        | |                      | | (_)                
-#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___ 
+#                _                        _   _
+#     /\        | |                      | | (_)
+#    /  \  _   _| |_ ___  _ __ ___   __ _| |_ _  ___  _ __  ___
 #   / /\ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
 #  / ____ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | \__ \
 # /_/    \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
-#                                                                              
+#
 ###############################################################################
 automation:
-
   - alias: Notify NAS Status Change
     initial_state: true
     trigger:
       platform: state
-      entity_id: 
-       - sensor.kalavala_nas_status
+      entity_id:
+        - sensor.kalavala_nas_status
     condition:
       - condition: template
         value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "NAS Status changed to: {{ trigger.to_state.state| upper }}"
+          notify_options:
+            - telegram
+            - tv
 
   - alias: Notify NAS Drive Status Change
     initial_state: true
     trigger:
       platform: state
-      entity_id: 
-       - sensor.kalavala_nas_smart_status_drive_01
-       - sensor.kalavala_nas_smart_status_drive_02
-       - sensor.kalavala_nas_smart_status_drive_03
-       - sensor.kalavala_nas_smart_status_drive_04
+      entity_id:
+        - sensor.kalavala_nas_smart_status_drive_01
+        - sensor.kalavala_nas_smart_status_drive_02
+        - sensor.kalavala_nas_smart_status_drive_03
+        - sensor.kalavala_nas_smart_status_drive_04
     condition:
       - condition: template
-        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"       
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
-          message: "NAS Drive state changed to: 
-          {{ trigger.to_state.state| upper }} from 
-          '{{ trigger.from_state.state| upper }}'"
+          message: "NAS Drive state changed to: {{ trigger.to_state.state| upper }} from  '{{ trigger.from_state.state| upper }}'"
+          notify_options:
+            - telegram
+            - tv
 
   - alias: Notify NAS CPU Temperature
     initial_state: true
     trigger:
       platform: numeric_state
-      entity_id:  sensor.kalavala_nas_cpu_temperature
+      entity_id: sensor.kalavala_nas_cpu_temperature
       above: 125
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
-          message: "NAS CPU temperature is going crazy hot, needs your attention!!! 
-          The current cpu temp is: {{ trigger.to_state.state }}"
+          message: "NAS CPU temperature is going crazy hot, needs your attention!!! Current cpu temp is: {{ trigger.to_state.state }}"
+          notify_options:
+            - telegram
+            - tv
 
   - alias: Notify NAS Disk Usage
     initial_state: true
     trigger:
       platform: numeric_state
-      entity_id:  sensor.kalavala_nas_volume_used_datavol1
+      entity_id: sensor.kalavala_nas_volume_used_datavol1
       above: 80
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "Attention! NAS disk usage is above 80 percent. Time to clean up?"
+          notify_options:
+            - telegram
+            - tv
 
   - alias: Notify NAS Memory Usage
     initial_state: true
     trigger:
       platform: state
       entity_id: sensor.nas_memory_usage_above_80
-      to: 'True'
-      for: '00:05:00'
+      to: "True"
+      for: "00:05:00"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "FYI - NAS Memory is above 80 percent for more than 5 minutes."
+          notify_options:
+            - telegram
+            - tv
 
   - alias: Notify NAS CPU Usage
     initial_state: true
     trigger:
       platform: state
-      entity_id:  sensor.nas_cpu_usage_above_80
-      to: 'True'
-      for: '00:05:00'
+      entity_id: sensor.nas_cpu_usage_above_80
+      to: "True"
+      for: "00:05:00"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "FYI - NAS CPU is above 80 percent for more than 5 minutes."
+          notify_options:
+            - telegram
+            - tv

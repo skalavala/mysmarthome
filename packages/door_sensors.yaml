@@ -77,7 +77,6 @@ binary_sensor:
     payload_off: "off"
     value_template: "{{ value }}"
 
-
 ###############################################################################
 #                _                        _   _
 #     /\        | |                      | | (_)
@@ -140,20 +139,10 @@ automation:
     action:
       - service: switch.turn_on
         entity_id: switch.garage
-      - service: script.notify_me
-        data_template:
-          message: >
-            {% if trigger.to_state.state | lower == "on" %}
-                {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
-            {% elif trigger.to_state.state | lower == "off" %}
-                {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
-            {% endif %}
-      - service: script.led_message
+      - service: script.notify_family
         data_template:
           <<: *door_notification_script
-      - service: script.voice_notify
-        data_template:
-          <<: *door_notification_script
+          notify_options: ["voice", "led", "tv"]
       - delay: "00:00:05"
       - service: camera.snapshot
         data_template:
@@ -163,9 +152,9 @@ automation:
             ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
 
-      - service: script.notify_me_with_picture
+      - service: script.notify_family
         data_template:
-          title: 'Garage Door Status {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
+          title: "{{ trigger.to_state.attributes.friendly_name }}: {{ 'OPEN' if trigger.to_state.state == 'on' else 'CLOSED' }}"
           message: >-
             {%- set doors = "" -%}
             {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
@@ -181,11 +170,12 @@ automation:
                             ('Closed' if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' else 'OPEN') %}
             {%- endif %}
             Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
-          file: >
+          url: >
             {{ '/config/www/downloads/camera/garage/garage_' ~
                 ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}
-          caption: "{{ trigger.to_state.attributes.friendly_name }}: {{ 'OPEN' if trigger.to_state.state == 'on' else 'CLOSED' }}"
+          notify_options:
+            - telegram
 
       - service: notify.notify_smtp
         data_template:
@@ -230,7 +220,7 @@ automation:
       - condition: template
         value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
-      - service: script.voice_notify
+      - service: script.notify_family
         data_template:
           message: >
             {% if trigger.to_state.state | lower == "on" %}
@@ -242,21 +232,11 @@ automation:
             {% elif trigger.to_state.state | lower == "off" %}
               Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is CLOSED!
             {% endif %}
-          greeting: "no"
-          only_at_night: >
-            {% if states('alarm_control_panel.home') == 'armed_home' %}
-              no
-            {% else %}
-              yes
-            {% endif %}
-      - service: script.led_message
-        data_template:
-          message: >
-            {% if trigger.to_state.state | lower == "on" %}
-              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') |lower -}} is open.
-            {% else %}
-              Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') |lower -}} is closed.
-            {% endif %}
+          notify_options:
+            - telegram
+            - tv
+            - led
+            - voice
 
   - alias: When Front Door Opens Turn Front Room Lights ON
     initial_state: true

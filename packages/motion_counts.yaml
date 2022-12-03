@@ -1,7 +1,5 @@
 homeassistant:
   customize:
-    input_label.aeotec_zw120_door_window_sensor_gen5_sensor:
-      unit_of_measurement: "count"
     input_label.back_door_sensor_sensor:
       unit_of_measurement: "count"
     input_label.basement_door_sensor_sensor:

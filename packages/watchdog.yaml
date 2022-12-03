@@ -32,9 +32,12 @@ automation:
         entity_id: input_boolean.light_automations
         state: "on"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data:
-          message: "It has been two hours, are you still working in the garage? Changing the status to 'Not working'!"
+          message: "It has been two hours, are you still working in the garage?"
+          notify_options:
+            - telegram
+            - tv
       - service: input_boolean.turn_off
         entity_id: input_boolean.working_in_garage
 
@@ -61,18 +64,15 @@ automation:
         entity_id: input_boolean.light_automations
         state: "on"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             Your {{ trigger.to_state.attributes.friendly_name }} is OPEN for more than 5 minutes!
-      - service: script.voice_notify
-        data_template:
-          message: >
-            Attention! Your {{ trigger.to_state.attributes.friendly_name }} is open for more than 5 minutes.
-      - service: script.led_message
-        data_template:
-          message: >
-            Your {{ trigger.to_state.attributes.friendly_name }} is OPEN for more than 5 minutes!
+          notify_options:
+            - telegram
+            - voice
+            - tv
+            - led
 
   # Outdoor Lights:
   # Keeps and eye on the patio and backyard lights...
@@ -98,10 +98,14 @@ automation:
       - service: switch.turn_off
         data_template:
           entity_id: "{{ trigger.entity_id }}"
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             {{ trigger.to_state.attributes.friendly_name }} is ON during the day time. Saving power by turning it off!
+          notify_options:
+            - telegram
+            - tv
+            - led
 
   # General Watch Dog automation:
   # Keeps and eye on the lights & switches, turns off after 10 PM if they are on.
@@ -265,10 +269,9 @@ automation:
         data_template:
           entity_id: "{{ trigger.entity_id }}"
 
-
-#############################################################################
-# CLOSET LIGHTS WATCH DOG
-#############################################################################
+  #############################################################################
+  # CLOSET LIGHTS WATCH DOG
+  #############################################################################
 
   - alias: Srinika Bedroom Closet WatchDog
     initial_state: true
@@ -305,114 +308,3 @@ automation:
       - service: homeassistant.turn_off
         data_template:
           entity_id: "{{ trigger.entity_id }}"
-
-  - alias: Notify Plex User Status
-    initial_state: true
-    trigger:
-      # - platform: numeric_state
-      #   entity_id: sensor.plex_mahasri_nas
-      #   above: 0
-      #   for:
-      #     minutes: 2
-      - platform: state
-        entity_id:
-          - media_player.plex_adi_bh_plex_for_roku_roku3
-          - media_player.plex_adi_bh_plex_for_roku_rokuultra
-          - media_player.plex_prade5_plex_for_roku_roku_express
-        to: 'playing'
-        for:
-          minutes: 2
-    action:
-      - service: script.notify_me
-        data_template:
-          message: >-
-            {%- set tag_map = {'adi.bh':'Adi', 'prade5':'Pradeep'} -%}
-            {% for item in states.media_player if item.state == 'playing' and state_attr(item.entity_id, 'media_title') != None 
-                                                              and state_attr(item.entity_id, 'username') != 'kalavala'
-                                                              and tag_map[state_attr(item.entity_id, 'username')] |trim != '' %}
-
-              {{ tag_map[state_attr(item.entity_id, 'username')] }} is watching {% if state_attr(item.entity_id, 'media_content_type') == "movie" -%}
-                {{ "a movie, " + state_attr(item.entity_id, 'media_title') |title }}
-              {% endif %}
-              {%- if state_attr(item.entity_id, 'media_content_type') == "tvshow" %}
-                TV Show - {{ state_attr(item.entity_id, 'media_series_title') }} 
-                Season: {{ state_attr(item.entity_id, 'media_season') }}, Episode: {{ state_attr(item.entity_id, 'media_episode') }} ({{ state_attr(item.entity_id, 'media_title') }})
-              {% endif %}
-            {% endfor %}
-
-  # - alias: Lights And Switches WatchDog 10 Min
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id:
-  #         - switch.guest_bathroom_exhaust
-  #         - switch.master_bathroom_toilet_exhaust
-  #       to: "on"
-  #       for:
-  #         minutes: 10
-  #   condition:
-  #     - condition: state
-  #       entity_id: input_boolean.light_automations
-  #       state: "on"
-  #   action:
-  #     - service: homeassistant.turn_off
-  #       data_template:
-  #         entity_id: "{{ trigger.entity_id }}"
-
-#
-# Main master Bathoom has more CFM to vent out... keep it for 20 minutes
-#
-  # - alias: Lights And Switches WatchDog 20 Min
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id:
-  #         - switch.master_bathroom_shower_exhaust
-  #       to: "on"
-  #       for:
-  #         minutes: 20
-  #   condition:
-  #     - condition: state
-  #       entity_id: input_boolean.light_automations
-  #       state: "on"
-  #   action:
-  #     - service: homeassistant.turn_off
-  #       data_template:
-  #         entity_id: "{{ trigger.entity_id }}"
-
-  # - alias: Lights And Switches WatchDog 30 Min
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id:
-  #         - switch.guest_bathroom_lights
-  #         - switch.master_bathroom_toilet_light
-  #       to: "on"
-  #       for:
-  #         minutes: 30
-  #   condition:
-  #     - condition: state
-  #       entity_id: input_boolean.light_automations
-  #       state: "on"
-  #   action:
-  #     - service: homeassistant.turn_off
-  #       data_template:
-  #         entity_id: "{{ trigger.entity_id }}"
-
-  # - alias: Lights And Switches WatchDog 45 Min
-  #   initial_state: true
-  #   trigger:
-  #     - platform: state
-  #       entity_id:
-  #         - switch.garage_shop_lights
-  #       to: "on"
-  #       for:
-  #         minutes: 45
-  #   condition:
-  #     - condition: state
-  #       entity_id: input_boolean.light_automations
-  #       state: "on"
-  #   action:
-  #     - service: homeassistant.turn_off
-  #       data_template:
-  #         entity_id: "{{ trigger.entity_id }}"

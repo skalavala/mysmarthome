@@ -2,7 +2,7 @@
 #   @author         :   Mahasri Kalavala
 #   @date           :   09/20/2018
 #   @package        :   scripts
-#   @description    :   All my scripts are here in one place!
+#   @description    :   All my scripts are here in one place. Well, not ALL!
 ################################################################################
 #    _____           _       _
 #   / ____|         (_)     | |
@@ -83,10 +83,12 @@ script:
       - service: alarm_control_panel.alarm_arm_away
         data:
           entity_id: alarm_control_panel.home
-      - service: script.notify_me
+      - service: script.notify_family
         data:
           message: >
             No one is at home. Cameras rolling, Indoor lights are OFF. Your home security system is turned ON!
+          notify_options:
+            - telegram
 
   ###############################################################################
   # The following script runs when no one is home. It excludes some lights
@@ -168,48 +170,6 @@ script:
   #                         |___/
   # Notify Related Scripts
   ###############################################################################
-  notify_me_with_picture:
-    sequence:
-      - condition: state
-        entity_id: input_boolean.text_alerts
-        state: "on"
-      - condition: template
-        value_template: '{{- message | trim != "" -}}'
-      - service: telegram_bot.send_message
-        data:
-          title: "{{- title -}}"
-          message: "{{- message -}}"
-          data:
-            photo:
-              - file: "{{- file -}}"
-                caption: "{{- caption -}}"
-
-  notify_tv:
-    sequence:
-      - service: notify.android_tv_fire_tv
-        data:
-          message: "{{ message }}"
-          title: Mahasri Bot
-          data:
-            color: red
-            duration: 7
-            transparency: 1%
-            icon:
-              path: /config/www/{{- [ "suresh.jpg", "srinika.jpg", "mallika.jpg", "hasika.jpg" ] | random  -}}
-
-  notify_me:
-    sequence:
-      - condition: state
-        entity_id: input_boolean.text_alerts
-        state: "on"
-      - condition: template
-        value_template: '{{ message | trim != "" }}'
-      - service: telegram_bot.send_message
-        data:
-          message: "{{ message }}"
-      - service: script.notify_tv
-        data:
-          message: "{{ message }}"
 
   good_night_tts:
     sequence:
@@ -338,44 +298,3 @@ script:
         data_template:
           topic: messageboard/messages
           payload: "{{ message }}"
-
-  ###############################################################################
-  # Notifies to take pills, starts timer again!
-  # Voice notifications at home - only if the option is selected.
-  ###############################################################################
-  remind_pill:
-    sequence:
-      - service: script.notify_me
-        data:
-          message: "ALERT: PLEASE TAKE YOUR TABLETS!"
-      - service: timer.start
-        entity_id: timer.timer_pill_reminder
-      - condition: template
-        value_template: "{{ states('input_boolean.pill_voice_notification') == 'on' }}"
-      - service: script.voice_notify
-        data_template:
-          message: >
-            Please take the tablets. It looks like you have forgotten to take today's 
-            dose of tablets... Once again, this is a reminder for you to take the tablets.
-
-  ###############################################################################
-  # Stops timer, Records that the pills are taken, and notifies!
-  ###############################################################################
-  pill_taken:
-    sequence:
-      - service: timer.cancel
-        entity_id: timer.timer_pill_reminder
-      - service: input_boolean.turn_on
-        entity_id: input_boolean.pill_taken
-      - service: script.notify_me
-        data_template:
-          message: >
-            Thank you for taking tablets.
-            {%- if state_attr('sensor.allergy_index_today', 'rating') != None %}
-              {{- " Today's pollen level is : " ~ state_attr('sensor.allergy_index_today', 'rating') }}.
-            {%- endif -%}
-      - condition: template
-        value_template: "{{ states('input_boolean.pill_voice_notification') == 'on' }}"
-      - service: script.voice_notify
-        data:
-          message: "Thank you for taking tablets on time!"

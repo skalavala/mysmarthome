@@ -473,9 +473,14 @@ script:
 
   doorbell_camera_pics:
     sequence:
-      - service: script.notify_me
+      - service: script.notify_family
         data:
           message: "ALERT! Someone is at the front door!"
+          notify_options:
+            - telegram
+            - voice
+            - tv
+            - led
       - service: camera.snapshot
         data_template:
           entity_id: "camera.frontdoor_camera"
@@ -489,7 +494,7 @@ script:
           filename:
             "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
-            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"            
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: notify.telegram
         data_template:
           title: "Door Bell"
@@ -504,3 +509,12 @@ script:
                 (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Someone rang door bell!"
+      - service: script.notify_family
+        data_template:
+          message: Someone rang door bell!
+          url: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
+                       (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
+                       .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          notify_options:
+            - tv
+            - led

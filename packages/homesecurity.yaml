@@ -68,7 +68,7 @@ automation:
       entity_id: alarm_control_panel.home
       to: "triggered"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             {% set ns = namespace(openDoorCount=0, doorNames="") %}
@@ -81,15 +81,21 @@ automation:
               'binary_sensor.motion_sensor_158d000272bf48','binary_sensor.motion_sensor_158d000272bfd7','binary_sensor.motion_sensor_158d000464c25a',
               'binary_sensor.motion_sensor_158d00047b6f69'
              ] -%}
-            
+
             {%- for item in sensors  if states(item) == "on" %}
               {% set ns.doorNames = ns.doorNames + state_attr(item, "friendly_name") + (", " if not loop.last else " ")  %}
               {% set ns.openDoorCount = ns.openDoorCount + 1 %}
             {%- endfor %}
-            
+
             Your Home Security System is triggered. {{ "But ALL Doors are CLOSED! Must be a spider on one of the sensor(s) triggered it!"  if ns.openDoorCount == 0 else 'Following sensors are ON currently:' }}
             {{ ns.doorNames }}
-            
+          notify_options:
+            - telegram
+            - tv
+            - led
+            - voice
+
+
       - service: camera.snapshot
         data_template:
           entity_id: "camera.frontdoor_camera"
@@ -164,15 +170,15 @@ automation:
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
-      # - condition: template
-      #   value_template: >
-      #     {%- if state_attr('automation.notify_home_security_status_change', 'last_triggered') -%}
-      #       {{ (as_timestamp(now()) - as_timestamp(state_attr('automation.notify_home_security_status_change', 'last_triggered'))) > 90 }}
-      #     {%- else -%}
-      #       true
-      #     {%- endif -%}
+      - condition: template
+        value_template: >
+          {%- if state_attr('automation.notify_home_security_status_change', 'last_triggered') -%}
+            {{ (as_timestamp(now()) - as_timestamp(state_attr('automation.notify_home_security_status_change', 'last_triggered'))) > 90 }}
+          {%- else -%}
+            true
+          {%- endif -%}
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             {% if states('alarm_control_panel.home') == "armed_home" %}
@@ -184,18 +190,12 @@ automation:
             {% elif states('alarm_control_panel.home') == "disarmed" %}
               Attention!: Your Home Security System is turned OFF.
             {% endif %}
-      - service: script.voice_notify
-        data_template:
-          message: >
-            {% if states('alarm_control_panel.home') == "armed_home" %}
-              Your home is now secured!
-            {% elif states('alarm_control_panel.home') == "armed_away" %}
-              Your Home Security System is now set to Away mode!
-            {% elif states('alarm_control_panel.home') == "triggered" %}
-              Attention!: Your Home Security System is triggered! It has been notified to the authorities.
-            {% elif states('alarm_control_panel.home') == "disarmed" %}
-              Attention!: Your Home Security System is turned OFF.
-            {% endif %}
+          notify_options:
+            - telegram
+            - tv
+            - led
+            - voice
+          
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') != 'disarmed' }}"
       - service: input_boolean.turn_on
@@ -213,9 +213,12 @@ automation:
         for:
           minutes: 10
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data:
           message: "Home Security System is OFF for more than 10 minutes!"
+          notify_options:
+            - tv
+            - led
 
   ###############################################################################
   # A gentle reminder that the home security is OFF for more than 30 minutes
@@ -232,34 +235,12 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data:
           message: "Home Security System is OFF for more than 30 minutes!"
-
-  ###############################################################################
-  # When home security system is turned OFF or turned to Home mode from "away"
-  # means, someone reached home from outside
-  ###############################################################################
-  # - alias: Turn ON Thermostat upon reaching home
-  #   initial_state: true
-  #   trigger:
-  #     platform: state
-  #     entity_id: alarm_control_panel.home
-  #   condition:
-  #     - condition: template
-  #       value_template: >
-  #         {% if trigger.from_state.state == 'armed_away' and
-  #               (trigger.to_state.state == 'armed_home' or trigger.to_state.state == 'disarmed') %}
-  #           true
-  #         {% else %}
-  #           false
-  #         {% endif %}
-  #   action:
-  #     - service: climate.set_preset_mode
-  #       target:
-  #         entity_id: climate.dining_room
-  #       data:
-  #         preset_mode: "eco"
+          notify_options:
+            - tv
+            - led
 
   ###############################################################################
   # TURN HOME SECURITY SYSTEM ON AT BED TIME
@@ -285,9 +266,13 @@ automation:
       - service: alarm_control_panel.alarm_arm_home
         data:
           entity_id: alarm_control_panel.home
-      - service: script.notify_me
+      - service: script.notify_family
         data:
           message: "It's bedtime, you forgot to turn ON Home Security System. Turned it ON for you."
+          notify_options:
+            - telegram
+            - tv
+            - led
 
 ###############################################################################
 # Check for Garage Door Status when Home Security System State changes
@@ -312,139 +297,20 @@ automation:
     action:
       - service: switch.turn_on
         entity_id: switch.garage
-  
-      - service: script.notify_me
-        data_template:
-          message: >
-            Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode. BUT THE {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
-  
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage"
           filename: "{{ '/config/www/downloads/camera/garage/garage_' ~  (state_attr('automation.home_security_system_and_garage_door_check','last_updated') ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-  
-      - service: notify.telegram
-        data_template:
-          title: "Garage"
-          message: "Home Security System is ON, but Garage Doors are OPEN!"
-          data:
-            photo:
-              - file: "{{ '/config/www/downloads/camera/garage/garage_' ~
-                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
-                caption: "Garage"
-  
-      - condition: template
-        value_template: "{{ states('alarm_control_panel.home') == 'armed_home' }}"
-  
-      - service: script.voice_notify
+      - service: script.notify_family
         data_template:
           message: >
-            {%- set doors = "" %}
-            {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
-              {%- set doors = "Both garage doors" %}
-              {%- elif states('binary_sensor.door_window_sensor_158d0004248d5b') == "on"%}
-                {%- set doors = state_attr('binary_sensor.door_window_sensor_158d0004248d5b', 'friendly_name') %}
-              {%- elif states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
-                {%- set doors = state_attr('binary_sensor.door_window_sensor_158d0004231f7b', 'friendly_name') %}
-              {%- endif %}
-            Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode.
-            BUT the {{ doors }} {{ 'are' if doors.endswith('s') else 'is' }} open.
+            Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode. BUT THE {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
+          url: "{{ '/config/www/downloads/camera/garage/garage_' ~
+                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+          notify_options:
+            - telegram
+            - tv
+            - led
+            - voice
 
-###############################################################################
-# Turn Home Security System ON at sunset time
-###############################################################################
-# - alias: Turn On Home Security System At Sunset
-#   initial_state: true
-#   trigger:
-#     platform: sun
-#     event: sunset
-#     offset: '+00:00:00'
-#   condition:
-#     - condition: state
-#       entity_id: alarm_control_panel.home
-#       state: 'disarmed'
-#   action:
-#     - service_template: >-
-#         {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
-#               states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
-#               states('binary_sensor.door_window_sensor_158d0004231f7b') == "off" and
-#               states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
-#           alarm_control_panel.alarm_arm_home
-#         {% else %}
-#           alarm_control_panel.disarm
-#         {% endif %}
-#       data:
-#         entity_id: alarm_control_panel.home
-#     - service: script.voice_notify
-#       data_template:
-#         message: >
-#           {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
-#                 states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
-#                 states('binary_sensor.door_window_sensor_158d0004231f7b') == "off" and
-#                 states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
-#             It's getting dark outside, and your home security system is now set to HOME mode.
-#           {% else %}
-#              It is getting dark outside.
-#              {%- if states('binary_sensor.back_door_sensor_sensor') == "on" -%}
-#                {%- set doors = doors ~ " Back Door" -%}
-#              {%- endif -%}
-#              {%- if states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "on" -%}
-#                {% if doors | trim != "" %}
-#                  {%- set doors = doors ~ " and Front Door" -%}
-#                {% else %}
-#                  {%- set doors = doors ~ " Front Door" -%}
-#                {% endif %}
-#              {%- endif -%}
-#              {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}
-#                {% if doors | trim != "" %}
-#                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
-#                {% else %}
-#                  {%- set doors = doors ~ " Two Car Garage Door" -%}
-#                {% endif %}
-#              {%- endif -%}
-#              {%- if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on"  -%}
-#                {% if doors | trim != "" %}
-#                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
-#                {% else %}
-#                  {%- set doors = doors ~ " Single Car Garage Door" -%}
-#                {% endif %}
-#              {%- endif -%}
-#              Your{{ doors }} {%- if 'and' in doors -%}s are {%- else %} is {%- endif %} open. Home Security System could not be turned on.
-#           {% endif %}
-#     - service: script.notify_me
-#       data_template:
-#         message: >
-#           {% if states('binary_sensor.back_door_sensor_sensor') == "off" and
-#                 states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "off" and
-#                 states('binary_sensor.door_window_sensor_158d0004231f7b') == "off" and
-#                 states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
-#             It's getting dark outside, and your home security system is now set to HOME mode.
-#           {% else %}
-#              It is getting dark outside.
-#              {%- if states('binary_sensor.back_door_sensor_sensor') == "on" -%}
-#                {%- set doors = doors ~ " Back Door" -%}
-#              {%- endif -%}
-#              {%- if states('binary_sensor.aeotec_zw120_door_window_sensor_gen5_sensor')  == "on" -%}
-#                {% if doors | trim != "" %}
-#                  {%- set doors = doors ~ " and Front Door" -%}
-#                {% else %}
-#                  {%- set doors = doors ~ " Front Door" -%}
-#                {% endif %}
-#              {%- endif -%}
-#              {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}
-#                {% if doors | trim != "" %}
-#                  {%- set doors = doors ~ " and Two Car Garage Door" -%}
-#                {% else %}
-#                  {%- set doors = doors ~ " Two Car Garage Door" -%}
-#                {% endif %}
-#              {%- endif -%}
-#              {%- if states('binary_sensor.door_window_sensor_158d0004248d5b') == "on"  -%}
-#                {% if doors | trim != "" %}
-#                  {%- set doors = doors ~ " and Single Car Garage Door" -%}
-#                {% else %}
-#                  {%- set doors = doors ~ " Single Car Garage Door" -%}
-#                {% endif %}
-#              {%- endif -%}
-#              Your {{ doors}} {%- if 'and' in doors -%}s are {%- else %} is {%- endif %} open. Home Security System could not be turned on.
-#           {% endif %}

@@ -76,9 +76,13 @@ automation:
       - condition: template
         value_template: "{{ trigger.to_state.state | int > 0 and trigger.to_state.state | int < 30 }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "{{ trigger.entity_id.split('.')[1].split('_')[0] | title }}'s Birthday is only {{ trigger.to_state.state }} days to go!"
+          notify_options:
+            - telegram
+            - tv
+            - led
 
   ###############################################################################
   # Celebrate Birthday!!!
@@ -95,9 +99,14 @@ automation:
       - condition: template
         value_template: "{{ trigger.to_state.state | int == 0 }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "Hurray! Today is {{ trigger.entity_id.split('.')[1].split('_')[0] | title }}'s Birthday!"
+          notify_options:
+            - telegram
+            - tv
+            - led
+            - voice
 
   ###############################################################################
   # Announce Happy Birthday message every hour starting 7 am until 9 PM
@@ -124,15 +133,13 @@ automation:
             - condition: template
               value_template: "{{ states('input_label.mallika_birthday_days2go') | int == 0 }}"
     action:
-      - service: script.voice_notify
+      - service: script.notify_family
         data_template:
           message: !include ../templates/birthday_wishes.yaml
-      - delay:
-          minutes: 1
-      - service: script.voice_notify
-        data_template:
-          message: "Alexa, Sing Happy Birthday Song."
-          greeting: "no"
+          notify_options:
+            - voice
+            - tv
+            - led
 
   - alias: Update Birthdays
     initial_state: true

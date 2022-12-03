@@ -53,15 +53,15 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.zone_alerts') == 'on' }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             {{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just entered {{ trigger.zone.attributes.friendly_name }}!
-      - service: script.voice_notify
-        data_template:
-          message: >
-            {{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just entered {{ trigger.zone.attributes.friendly_name }}!
-          greeting: "no"
+          notify_options:
+            - telegram
+            - voice
+            - tv
+            - led
 
   - alias: Alert When Someone Leaves a Zone
     initial_state: true
@@ -78,17 +78,14 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.zone_alerts') == 'on' }}"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "{{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just left {{ trigger.zone.attributes.friendly_name }}."
-      - service: script.voice_notify
-        data_template:
-          message: >-
-            {{ trigger.entity_id.split('.')[1].split('_')[1] | title }} just left {{ trigger.zone.attributes.friendly_name }}.
-            {% if trigger.entity_id.split('.')[1].split('_')[1] == "suresh" and trigger.zone.attributes.friendly_name | lower == "office" %}
-              and will be home in {{ (states('sensor.suresh2home') | int) + 5 }} minutes.
-            {% endif %}
-          greeting: "no"
+          notify_options:
+            - telegram
+            - voice
+            - tv
+            - led
 
   ###############################################################################
   # Welcome family members when they come home
@@ -110,15 +107,14 @@ automation:
         entity_id: input_boolean.zone_alerts
         state: "on"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             Welcome home, {{ trigger.entity_id.split('.')[1].split('_')[1] | title }}!
-      - service: script.voice_notify
-        data_template:
-          message: >
-            "Welcome home, {{ trigger.entity_id.split('.')[1].split('_')[1] | lower }}!"
-          greeting: "no"
+          notify_options:
+            - voice
+            - tv
+            - led
       - service: input_boolean.turn_off
         entity_id: input_boolean.home_mode_away
       - service: switch.turn_on
@@ -165,11 +161,16 @@ automation:
       - condition: template
         value_template: '{{ states.proximity.home.attributes.dir_of_travel == "towards" }}'
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: "Suresh is on his way home, he is within the 5 miles range. Should be home soon!"
+          notify_options:
+            - telegram
+            - voice
+            - tv
+            - led
 
-####################################################################################
+  ####################################################################################
   - alias: Srinika Left Home
     initial_state: true
     trigger:
@@ -188,7 +189,7 @@ automation:
           - switch.srinika_bedroom_closet
           - switch.srinika_bedroom_accent_lights
 
-####################################################################################
+  ####################################################################################
   - alias: Hasika Left Home
     initial_state: true
     trigger:

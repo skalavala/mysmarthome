@@ -156,7 +156,7 @@ automation:
   # Turn outdoor lights on 15 minutes before sunset
   ###############################################################################
   - alias: Evening Outdoor Lights ON (At Sunset)
-#    initial_state: true
+    #    initial_state: true
     trigger:
       platform: sun
       event: sunset
@@ -315,9 +315,6 @@ automation:
         state: "on"
     action:
       - service: script.all_indoor_lights_off
-      # - service: script.notify_me
-      #   data:
-      #     message: "It is bed time, turned lights off!"
 
   ###############################################################################
   # Provide Bed time Report via TTS
@@ -333,12 +330,11 @@ automation:
     action:
       - service: script.good_night_tts
 
+  ###############################################################################
+  # TOGGLE WORKING IN OFFICE BOOLEAN
+  ###############################################################################
 
-###############################################################################
-# TOGGLE WORKING IN OFFICE BOOLEAN
-###############################################################################
-
-  - alias: Suresh Working in Office Start 
+  - alias: Suresh Working in Office Start
     initial_state: true
     trigger:
       platform: time

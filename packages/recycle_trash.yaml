@@ -127,7 +127,7 @@ sensor:
           {% set month = states.sensor.date_time.state.split(',')[0].split('-')[1] %}
           {% set date = states.sensor.date_time.state.split(',')[0].split('-')[2] %}
           {% set today = strptime(year ~ '-' ~ month ~ '-' ~ date , '%Y-%m-%d') %}
-          {%- set pickupDay = states.sensor.trash_pickup_day.state | lower -%}      
+          {%- set pickupDay = states.sensor.trash_pickup_day.state | lower -%}
           {%- if as_timestamp(today)| timestamp_custom('%A', true) | lower == pickupDay -%}
             yes
           {%- else -%}
@@ -145,7 +145,7 @@ sensor:
           {% set year = states.sensor.date_time.state.split(',')[0].split('-')[0] %}
           {% set month = states.sensor.date_time.state.split(',')[0].split('-')[1] %}
           {% set date = states.sensor.date_time.state.split(',')[0].split('-')[2] %}
-          {% set today = strptime(year ~ '-' ~ month ~ '-' ~ date , '%Y-%m-%d') %}    
+          {% set today = strptime(year ~ '-' ~ month ~ '-' ~ date , '%Y-%m-%d') %}
           {%- set pickupDay = states.sensor.recycle_pickup_day.state | lower -%}
           {% if states.input_select.recycle_pickup_week.state | lower == "even weeks" %}
             {%- set evenWeekPickup = "true" %}
@@ -154,7 +154,7 @@ sensor:
           {% endif %}
           {%- macro day_of_week(timestamp) -%}
             {{ as_timestamp(timestamp)| timestamp_custom('%A', true) | lower }}
-          {%- endmacro %}      
+          {%- endmacro %}
           {%- macro week_number_of_year() -%}
             {{ as_timestamp(today) | timestamp_custom('%U', true) | int }}
           {%- endmacro %}
@@ -284,7 +284,7 @@ automation:
         - condition: template
           value_template: "{{ states('input_boolean.trash_reminders') == 'on' }}"
         - condition: template
-          value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"          
+          value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
         - condition: or
           conditions:
             - condition: state
@@ -294,7 +294,7 @@ automation:
               entity_id: sensor.recycle_day
               state: "yes"
     action:
-      - service: script.notify_me
+      - service: script.notify_family
         data_template:
           message: >
             {% if states.sensor.trash_day.state == "yes" and states.sensor.recycle_day.state == "yes" %}
@@ -304,18 +304,10 @@ automation:
             {% elif states.sensor.recycle_day.state == "yes" %}
               Attention!: Tomorrow is the Recycle Pickup day. Please don't forget to put the recycle bin outside tonight!
             {% endif %}
-
-      - service: script.voice_notify
-        data_template:
-          message: >
-            {% if states.sensor.trash_day.state == "yes" and states.sensor.recycle_day.state == "yes" %}
-              Attention!: Tomorrow is the Trash and Recycle Pickup day. 
-              Please don't forget to leave Trash bin and recycle bin outside tonight!
-            {% elif states.sensor.trash_day.state == "yes" %}
-              Attention!: Tomorrow is the Trash Pickup day. Please don't forget to put the Trash bin outside tonight!
-            {% elif states.sensor.recycle_day.state == "yes" %}
-              Attention!: Tomorrow is the Recycle Pickup day. Please don't forget to put the recycle bin outside tonight!
-            {% endif %}
+          notify_options:
+            - telegram
+            - tv
+            - led
 
   - alias: Reset Trash Reminders
     initial_state: true
