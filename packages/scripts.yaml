@@ -184,6 +184,19 @@ script:
               - file: "{{- file -}}"
                 caption: "{{- caption -}}"
 
+  notify_tv:
+    sequence:
+      - service: notify.android_tv_fire_tv
+        data:
+          message: "{{ message }}"
+          title: Mahasri Bot
+          data:
+            color: red
+            duration: 7
+            transparency: 1%
+            icon:
+              path: /config/www/{{- [ "suresh.jpg", "srinika.jpg", "mallika.jpg", "hasika.jpg" ] | random  -}}
+
   notify_me:
     sequence:
       - condition: state
@@ -194,16 +207,9 @@ script:
       - service: telegram_bot.send_message
         data:
           message: "{{ message }}"
-      - service: notify.android_tv_fire_tv
+      - service: script.notify_tv
         data:
           message: "{{ message }}"
-          title: Mahasri Bot
-          data:
-            color: red
-            duration: 10
-            transparency: 1%
-            icon: 
-              path: /config/www/{{- [ "suresh.jpg", "srinika.jpg", "mallika.jpg", "hasika.jpg" ] | random  -}}
 
   good_night_tts:
     sequence:

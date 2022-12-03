@@ -14,6 +14,10 @@ automation:
         data_template:
           message: >
             {{ states('sensor.dark_sky_apparent_temperature') |int }} degrees, {{ states('sensor.dark_sky_hourly_summary') }}
+      - service: script.notify_tv
+        data_template:
+          message: >
+            {{ states('sensor.dark_sky_apparent_temperature') |int }} degrees, {{ states('sensor.dark_sky_hourly_summary') }}
 
   ###############################################################################
   # Display Garage Door Status on LED Screen
@@ -51,6 +55,24 @@ automation:
                 {% endif %}
               {% endif %}
             {{ doors }}
+      - service: script.notify_tv
+        data_template:
+          message: >
+            {% set doors = "" %}
+              {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
+                {% set doors = "Attention! Both Garage Doors are OPEN" %}
+              {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+                      states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
+                {% set doors = "Both Garage Doors are now CLOSED" %}
+              {% else %}
+                {% if trigger.to_state.state | lower == "on" %}
+                  Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
+                {% elif trigger.to_state.state | lower == "off" %}
+                  Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
+                {% endif %}
+              {% endif %}
+            {{ doors }}
 
   ###############################################################################
   # Display Zone based Messages on LED Screen
@@ -69,6 +91,9 @@ automation:
         for: "00:02:00"
     action:
       - service: script.led_message
+        data_template:
+          message: "Welcome home, {{ trigger.entity_id.split('.')[1].split('_')[1] | title }}"
+      - service: script.notify_tv
         data_template:
           message: "Welcome home, {{ trigger.entity_id.split('.')[1].split('_')[1] | title }}"
 
