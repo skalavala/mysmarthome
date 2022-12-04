@@ -97,7 +97,9 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.zone_alerts') == 'on' }}"
     action:
-      - service: script.led_message
+      - service: script.notify_family
         data_template:
           message: >
             {{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just entered {{ trigger.zone.attributes.friendly_name }}!
+          notify_options:
+            - led

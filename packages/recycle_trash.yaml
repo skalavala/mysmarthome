@@ -282,7 +282,7 @@ automation:
       condition: and
       conditions:
         - condition: template
-          value_template: "{{ states('input_boolean.trash_reminders') == 'on' }}"
+          value_template: "{{ states('input_boolean.trash_alerts') == 'on' }}"
         - condition: template
           value_template: "{{ states('input_boolean.home_mode_away') == 'off' }}"
         - condition: or
@@ -309,14 +309,14 @@ automation:
             - tv
             - led
 
-  - alias: Reset Trash Reminders
+  - alias: Reset Trash Alerts
     initial_state: true
     trigger:
       - platform: time
         at: "09:00:00"
     action:
       - service: input_boolean.turn_on
-        entity_id: input_boolean.trash_reminders
+        entity_id: input_boolean.trash_alerts
       - service: input_select.select_option
         data_template:
           entity_id: input_select.trash_pickup_day

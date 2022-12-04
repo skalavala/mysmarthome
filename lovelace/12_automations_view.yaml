@@ -27,7 +27,6 @@ cards:
     title: Zone Based Alerts
     show_header_toggle: false
     entities:
-      - automation.alert_when_everyone_is_away
       - automation.alert_when_someone_enters_a_zone
       - automation.alert_when_someone_leaves_a_zone
       - automation.send_a_message_as_i_get_closer_to_home
@@ -84,7 +83,6 @@ cards:
       - automation.home_security_system_watchdog_10_minutes
       - automation.home_security_system_watchdog_30_minutes
       - automation.notify_home_security_status_change
-      - automation.turn_on_thermostat_upon_reaching_home
 
   - type: conditional
     conditions:
@@ -112,7 +110,7 @@ cards:
     title: Trash & Recycle Automations
     show_header_toggle: false
     entities:
-      - automation.reset_trash_reminders
+      - automation.reset_trash_alerts
       - automation.restore_trash_recycle_settings_on_startup
       - automation.trash_and_recycle_pickup_reminder
       - automation.trash_pickup_day_changed
@@ -183,11 +181,3 @@ cards:
     show_header_toggle: false
     entities:
       - automation.season_change_notification
-      - automation.turn_off_ac_after_3_hours_of_cooling
-
-  - type: entities
-    title: Misc Automations
-    show_header_toggle: false
-    entities:
-      - automation.count_motions
-      - automation.reset_motion_counters_at_midnight

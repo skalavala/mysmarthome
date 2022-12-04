@@ -1,24 +1,6 @@
 homeassistant:
   customize:
     package.door_sensors:
-      door_notification_script: &door_notification_script
-        message: >
-          {% set doors = "" %}
-            {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
-                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
-              {% set doors = "Attention! Both Garage Doors are OPEN" %}
-            {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
-                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
-              {% set doors = "Both Garage Doors are now CLOSED" %}
-            {% else %}
-              {% if trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "on" %}
-                Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
-              {% elif trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "off" %}
-                Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
-              {% endif %}
-            {% endif %}
-          {{ doors }}
-
 sensor:
   - platform: template
     sensors:
@@ -125,85 +107,72 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.door_window_sensor_158d0004231f7b # 2 Car Garage
         - binary_sensor.door_window_sensor_158d0004248d5b # Single car garage
-    condition:
-      - condition: template
-        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
-      - condition: template
-        value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
-      - condition: template
-        value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
-      - condition: template
-        value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
+        - binary_sensor.door_window_sensor_158d0004231f7b # 2 Car Garage
     action:
       - service: switch.turn_on
         entity_id: switch.garage
       - service: script.notify_family
         data_template:
-          <<: *door_notification_script
-          notify_options: ["voice", "led", "tv"]
+          message: >
+            {% set doors = "" %}
+            {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
+              {% set doors = "Attention! Both Garage Doors are OPEN" %}
+            {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
+              {% set doors = "Both Garage Doors are now CLOSED" %}
+            {% else %}
+              {% if trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "on" %}
+                {% set doors = "Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!" %}
+              {% elif trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "off" %}
+                {% set doors = "Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!" %}
+              {% endif %}
+            {% endif %}
+            {{ doors }} - {{ trigger.to_state.attributes.friendly_name }}: from '{{trigger.from_state.state}}'', to: '{{ trigger.to_state.state }}'
+          notify_options:
+            - voice
+            - led
+            - tv
+            - email
+            - telegram
       - delay: "00:00:05"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage"
-          filename:
-            "{{ '/config/www/downloads/camera/garage/garage_' ~
+          filename: "{{ '/config/www/downloads/camera/garage/garage_' ~
             ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
-
-      - service: script.notify_family
-        data_template:
-          title: "{{ trigger.to_state.attributes.friendly_name }}: {{ 'OPEN' if trigger.to_state.state == 'on' else 'CLOSED' }}"
-          message: >-
-            {%- set doors = "" -%}
-            {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
-                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" -%}
-              {% set doors = "Both Garage Doors are OPEN" -%}
-            {%- elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
-                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" -%}
-              {% set doors = "Both Garage Doors are CLOSED" -%}
-            {%- else -%}
-            {% set doors = states.binary_sensor.door_window_sensor_158d0004248d5b.name ~ " is " ~
-                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' else 'OPEN')
-                             ~ " and " ~ state_attr('binary_sensor.door_window_sensor_158d0004231f7b', 'friendly_name') ~ " is " ~
-                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' else 'OPEN') %}
-            {%- endif %}
-            Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
-          url: >
-            {{ '/config/www/downloads/camera/garage/garage_' ~
-                ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}
-          notify_options:
-            - telegram
-
-      - service: notify.notify_smtp
-        data_template:
-          title: 'Garage Door Status {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
-          message: >-
-            {%- set doors = "" -%}
-            {%- if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
-                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" -%}
-              {%- set doors = "Both Garage Doors are OPEN" -%}
-            {%- elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
-                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" -%}
-              {%- set doors = "Both Garage Doors are CLOSED" -%}
-            {%- else -%}
-              {%- set doors = states.binary_sensor.door_window_sensor_158d0004248d5b.name ~ " is " ~
-                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004248d5b') == 'off' else 'OPEN')
-                             ~ " and " ~ state_attr('binary_sensor.door_window_sensor_158d0004231f7b', 'friendly_name') ~ " is " ~
-                            ('Closed' if states('binary_sensor.door_window_sensor_158d0004231f7b') == 'off' else 'OPEN') -%}
-            {%- endif -%}
-            Your {{doors}} on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please check the garage snapshot below.
-          data:
-            images:
-              - "{{ '/config/www/downloads/camera/garage/garage_' ~
-                ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
-            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
-
-      - service_template: "switch.turn_{{- trigger.to_state.state }}"
+      # - service: script.notify_family
+      #   data_template:
+      #     message: >
+      #       {% set doors = "" %}
+      #       {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+      #             states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
+      #         {% set doors = "Attention! Both Garage Doors are OPEN" %}
+      #       {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+      #               states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
+      #         {% set doors = "Both Garage Doors are now CLOSED" %}
+      #       {% else %}
+      #         {% if trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "on" %}
+      #           {% set doors = "Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!" %}
+      #         {% elif trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "off" %}
+      #           {% set doors = "Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!" %}
+      #         {% endif %}
+      #       {% endif %}
+      #       {{ doors }}
+      #     url: >
+      #       {{ '/config/www/downloads/camera/garage/garage_' ~
+      #           ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
+      #           .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}
+      #     notify_options:
+      #       - telegram
+      #       - email
+      #       - tv
+      - service: switch.turn_off
         entity_id: switch.garage
 
+  ###############################################################################
   # Notify Entry Door Status
   ###############################################################################
   - alias: Voice Notify Entry Door Status
@@ -233,10 +202,13 @@ automation:
               Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is CLOSED!
             {% endif %}
           notify_options:
-            - telegram
+            # - telegram
             - tv
             - led
-            - voice
+
+  ###############################################################################
+  # Light automations when doors are opened
+  ###############################################################################
 
   - alias: When Front Door Opens Turn Front Room Lights ON
     initial_state: true
@@ -304,12 +276,12 @@ automation:
       - service: timer.start
         entity_id: timer.timer_garage
 
-###############################################################################
-# MASTER BATHROOM AUTOMATIONS
-###############################################################################
-#
-# Only turn ON lights at 25% at night
-#
+  ###############################################################################
+  # MASTER BATHROOM AUTOMATIONS
+  ###############################################################################
+  #
+  # Only turn ON lights at 25% at night
+  #
   - alias: Master Bathroom Door Opened After Dark
     initial_state: true
     trigger:
@@ -379,9 +351,9 @@ automation:
         data_template:
           entity_id: switch.master_bathroom_toilet_light
 
-###############################################################################
-# GUEST BATHROOM AUTOMATIONS
-###############################################################################
+  ###############################################################################
+  # GUEST BATHROOM AUTOMATIONS
+  ###############################################################################
 
   - alias: Guest Bathroom Door Opened
     initial_state: true

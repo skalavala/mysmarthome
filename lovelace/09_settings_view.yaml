@@ -138,7 +138,7 @@ cards:
               action: nightly_report
 
           - type: button
-            name: Go Outside 
+            name: Go Outside
             entity: input_boolean.enjoyable_weather_reminders
             icon: mdi:weather-windy-variant
             color_type: card
@@ -223,7 +223,7 @@ cards:
   - type: entities
     title: Garage Timers
     show_header_toggle: false
-    entities:      
+    entities:
       - input_number.garage_lights
       - input_number.garage_shop_lights
 
@@ -251,18 +251,26 @@ cards:
       - input_number.hasika_bedroom_closet_lights
 
   - type: entities
-    title: Alerts & Notifications
+    title: Notifications
+    show_header_toggle: false
+    entities:
+      - input_boolean.telegram_notifications
+      - input_boolean.led_notifications
+      - input_boolean.voice_notifications
+      - input_boolean.email_notifications
+      - input_boolean.firetv_notifications
+
+  - type: entities
+    title: Alerts
     show_header_toggle: false
     entities:
       - input_boolean.garage_door_notifications
-      - input_boolean.battery_notifications
-      - input_boolean.text_alerts
-      - input_boolean.led_alerts
+      - input_boolean.battery_alerts
+      - input_boolean.zone_alerts
       - input_boolean.security_system_alerts
-      - input_boolean.notify_camera_alerts
-      - input_boolean.trash_reminders
-      - automation.family_room_motion_timer
-      - automation.family_room_timer_elapsed
+      - input_boolean.camera_alerts
+      - input_boolean.zone_alerts
+      - input_boolean.trash_alerts
 
   - type: entities
     title: Bed & Wakeup Times

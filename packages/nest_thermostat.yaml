@@ -55,3 +55,14 @@ automation:
             - tv
             - led
             - voice
+
+script:
+  ###############################################################################
+  # A script that toggles Nest Thermostat between eco/away & non-eco/away modes
+  ###############################################################################
+  toggle_climate:
+    sequence:
+      - service: climate.set_away_mode
+        data_template:
+          entity_id: climate.dining_room
+          away_mode: "{{ false if state_attr('climate.dining_room', 'away_mode') == 'on' else true }}"

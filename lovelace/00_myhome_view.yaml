@@ -87,19 +87,19 @@ cards:
       - type: attribute
         entity: device_tracker.life360_suresh
         name: Suresh
-        attribute: address        
+        attribute: address
       - type: attribute
         entity: device_tracker.life360_mallika
         name: Mallika
-        attribute: address        
+        attribute: address
       - type: attribute
         entity: device_tracker.life360_srinika
         name: Srinika
-        attribute: address        
+        attribute: address
       - type: attribute
         entity: device_tracker.life360_hasika
         name: Hasika
-        attribute: address        
+        attribute: address
       - entity: input_boolean.home_mode_away
         name: Home Away Status
     card:
@@ -229,7 +229,6 @@ cards:
   - type: tile
     entity: weather.dark_sky
 
-
   - type: entities
     title: Xiaomi Motion Sensors
     show_header_toggle: false
@@ -265,7 +264,7 @@ cards:
         name: Two Car Garage Door
       - entity: binary_sensor.door_window_sensor_158d0004248d5b
         name: Single Car Garage Door
-      - entity: binary_sensor.door_window_sensor_158d00044e5cb3 
+      - entity: binary_sensor.door_window_sensor_158d00044e5cb3
         name: Master Bathroom Toilet Door Sensor
       - entity: binary_sensor.door_window_sensor_158d00045ab168
         name: Guest Bathroom Door Sensor
@@ -275,7 +274,7 @@ cards:
     show_header_toggle: false
     entities:
       - sensor.plex_mahasri_nas
-      
+
   - type: entities
     title: Luminance
     show_header_toggle: false
@@ -358,26 +357,3 @@ cards:
       type: entities
       title: Motion Sensors
       show_header_toggle: false
-
-  - type: entities
-    title: Motion Counters
-    show_header_toggle: false
-    entities:
-      - input_label.motion_sensor_158d00016c2d0e
-      - input_label.motion_sensor_158d00016db6d2
-      - input_label.motion_sensor_158d0001a25041
-      - input_label.motion_sensor_158d0001a662fe
-      - input_label.motion_sensor_158d00024e57d3
-      - input_label.motion_sensor_158d00024e57fb
-      - input_label.motion_sensor_158d00024e842c
-      - input_label.motion_sensor_158d00024ee084
-      - input_label.motion_sensor_158d000272bed1
-      - input_label.motion_sensor_158d00047b6f69
-      - input_label.motion_sensor_158d000272bf48
-      - input_label.motion_sensor_158d000272bfd7
-      - input_label.garage_motion
-      - input_label.door_window_sensor_158d0004231f7b
-      - input_label.door_window_sensor_158d0004248d5b
-      - input_label.door_window_sensor_158d00040ad8fc
-      - input_label.door_window_sensor_158d0004880f30 # garage entry door
-      - input_label.door_window_sensor_158d000424a6d6

@@ -55,11 +55,11 @@ automation:
             script.xiaomi_red
           {% endif %}
 
-#
-# This automation will trigger when the Home Security System is "Triggered"
-# This will send all relevant information - Door Statuses and Camera snapshots around the home
-# Meanwhile Home Security Company will be calling and/or dispatching Police over to the house.
-# This should give you enough information to have a good conversation with the Home Security System company when not at home
+  #
+  # This automation will trigger when the Home Security System is "Triggered"
+  # This will send all relevant information - Door Statuses and Camera snapshots around the home
+  # Meanwhile Home Security Company will be calling and/or dispatching Police over to the house.
+  # This should give you enough information to have a good conversation with the Home Security System company when not at home
 
   - alias: Home Security Triggered
     initial_state: true
@@ -67,6 +67,9 @@ automation:
       platform: state
       entity_id: alarm_control_panel.home
       to: "triggered"
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
     action:
       - service: script.notify_family
         data_template:
@@ -95,40 +98,34 @@ automation:
             - led
             - voice
 
-
       - service: camera.snapshot
         data_template:
           entity_id: "camera.frontdoor_camera"
-          filename:
-            "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
+          filename: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.driveway_camera"
-          filename:
-            "{{ '/config/www/downloads/camera/driveway/driveway_' ~
+          filename: "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.garage"
-          filename:
-            "{{ '/config/www/downloads/camera/garage/garage_' ~
+          filename: "{{ '/config/www/downloads/camera/garage/garage_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.patio_camera"
-          filename:
-            "{{ '/config/www/downloads/camera/patio/patio_' ~
+          filename: "{{ '/config/www/downloads/camera/patio/patio_' ~
             (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
         data_template:
           entity_id: "camera.playarea_camera"
-          filename:
-            "{{ '/config/www/downloads/camera/playarea/playarea_' ~
+          filename: "{{ '/config/www/downloads/camera/playarea/playarea_' ~
             (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
@@ -139,24 +136,24 @@ automation:
           data:
             photo:
               - file: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
-                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                  (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                  .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Front Door"
               - file: "{{ '/config/www/downloads/camera/driveway/driveway_' ~
-                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                  (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                  .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Driveway"
               - file: "{{ '/config/www/downloads/camera/garage/garage_' ~
-                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                  (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+                  .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Garage"
               - file: "{{ '/config/www/downloads/camera/patio/patio_' ~
-                (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                  (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+                  .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Patio"
               - file: "{{ '/config/www/downloads/camera/playarea/playarea_' ~
-                (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+                  (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
+                  .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Playarea"
 
   ###############################################################################
@@ -195,11 +192,11 @@ automation:
             - tv
             - led
             - voice
-          
+
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') != 'disarmed' }}"
       - service: input_boolean.turn_on
-        entity_id: input_boolean.notify_camera_alerts
+        entity_id: input_boolean.camera_alerts
 
   ###############################################################################
   # A gentle 10 minute reminder that the Home Security system is OFF
@@ -212,6 +209,9 @@ automation:
         to: "disarmed"
         for:
           minutes: 10
+    condition:
+      - condition: template
+        value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
     action:
       - service: script.notify_family
         data:
@@ -274,18 +274,20 @@ automation:
             - tv
             - led
 
-###############################################################################
-# Check for Garage Door Status when Home Security System State changes
-###############################################################################
+  ###############################################################################
+  # Check for Garage Door Status when Home Security System State changes
+  ###############################################################################
   - alias: Home Security System And Garage Door Check
     initial_state: true
     trigger:
       - platform: time_pattern
-        minutes: '/15'
+        minutes: "/15"
         seconds: 00
     condition:
       condition: and
       conditions:
+        - condition: template
+          value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
         - condition: template
           value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
         - condition: or
@@ -306,11 +308,10 @@ automation:
           message: >
             Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode. BUT THE {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
           url: "{{ '/config/www/downloads/camera/garage/garage_' ~
-                (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
+            (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
+            .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
           notify_options:
             - telegram
             - tv
             - led
             - voice
-

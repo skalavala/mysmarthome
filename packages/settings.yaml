@@ -194,18 +194,10 @@ sensor:
 ###############################################################################
 
 input_boolean:
-  voice_notifications:
-    name: Home Assistant Announcements
-    icon: mdi:volume-off
-
   do_not_disturb:
     name: Do Not Disturb
     initial: off
     icon: mdi:do-not-disturb
-
-  led_alerts:
-    name: LED Messages
-    icon: mdi:led-strip
 
   movie_time:
     name: "Movie Time"
@@ -239,29 +231,33 @@ input_boolean:
     name: Nightly Report
     icon: mdi:file-chart
 
-  notify_camera_alerts:
-    name: Notify Camera Alerts
-    icon: mdi:camera
-
-  trash_reminders:
-    name: Remind Trash Notifications
-    icon: mdi:recycle
-
   enjoyable_weather_reminders:
     name: Remind me to enjoy Good Weather
     icon: mdi:weather-sunny
 
   security_system_alerts:
-    name: Notify Security System Status Change
-    icon: mdi:verified
+    name: Security System Alerts
+    icon: mdi:security
+
+  trash_alerts:
+    name: Trash Alerts
+    icon: mdi:recycle
+
+  garage_door_notifications:
+    name: Garage Door Alerts
+    icon: mdi:garage
 
   zone_alerts:
     name: Zone Alerts
     icon: mdi:map-marker
 
-  battery_notifications:
-    name: Battery Notifications
+  battery_alerts:
+    name: Battery Alerts
     icon: mdi:battery
+
+  camera_alerts:
+    name: Camera Alerts
+    icon: mdi:camera
 
   dummy:
     name: "Dummy Input Boolean!"
@@ -272,13 +268,26 @@ input_boolean:
     name: Light Automations
     icon: mdi:lightbulb-on
 
-  text_alerts:
-    name: Text Alerts
-    icon: mdi:map-marker
+  # Notifications
+  telegram_notifications:
+    name: Telegram Notifications
+    icon: mdi:message
 
-  garage_door_notifications:
-    name: Garage Door Notifications
-    icon: mdi:garage
+  firetv_notifications:
+    name: FireTV Notifications
+    icon: mdi:television
+
+  email_notifications:
+    name: Email Notifications
+    icon: mdi:email
+
+  voice_notifications:
+    name: Voice Notifications
+    icon: mdi:volume-off
+
+  led_notifications:
+    name: LED Notifications
+    icon: mdi:led-strip
 
 ###############################################################################
 #                _                        _   _
