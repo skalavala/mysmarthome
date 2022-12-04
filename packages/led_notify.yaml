@@ -82,7 +82,7 @@ automation:
             - tv
             - led
 
-  - alias: Alert When Someone Enters a Zone on LED Screen
+  - alias: Alert When Someone Enters Home
     initial_state: true
     trigger:
       - platform: zone

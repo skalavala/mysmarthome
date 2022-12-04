@@ -136,6 +136,7 @@ automation:
             - tv
             - email
             - telegram
+
       - delay: "00:00:05"
       - service: camera.snapshot
         data_template:
@@ -143,6 +144,7 @@ automation:
           filename: "{{ '/config/www/downloads/camera/garage/garage_' ~
             ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
+
       # - service: script.notify_family
       #   data_template:
       #     message: >

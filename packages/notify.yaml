@@ -146,7 +146,7 @@ script:
   notify_telegram:
     sequence:
       - condition: state
-        entity_id: input_boolean.telegram_alerts
+        entity_id: input_boolean.telegram_notifications
         state: "on"
       - condition: template
         value_template: "{{ 'telegram' in notify_options }}"
@@ -162,7 +162,7 @@ script:
   notify_email:
     sequence:
       - condition: state
-        entity_id: input_boolean.email_alerts
+        entity_id: input_boolean.email_notifications
         state: "on"
       - condition: template
         value_template: "{{ 'email' in notify_options }}"
@@ -174,7 +174,7 @@ script:
   notify_voice:
     sequence:
       - condition: state
-        entity_id: input_boolean.voice_alerts
+        entity_id: input_boolean.voice_notifications
         state: "on"
       - condition: template
         value_template: "{{ 'voice' in notify_options }}"
