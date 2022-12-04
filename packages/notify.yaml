@@ -123,7 +123,7 @@ script:
   notify_firestick:
     sequence:
       - condition: state
-        entity_id: input_boolean.firetv_alerts
+        entity_id: input_boolean.firetv_notifications
         state: "on"
       - condition: template
         value_template: "{{ 'tv' in notify_options }}"
