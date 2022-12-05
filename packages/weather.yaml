@@ -193,7 +193,7 @@ automation:
         value_template: "{% if states.sensor.dark_sky_wind_speed.state | round < 8 %} false {% else %} true {% endif %}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
             {% if ( windspeed > 7 and ( windspeed <= 15 ) and (states.input_boolean.nice_breeze_alert.state == 'off')) %}
@@ -212,7 +212,7 @@ automation:
             - tv
             - led
       - service: input_boolean.turn_on
-        data_template:
+        data:
           entity_id: >-
             {%- set windspeed = states.sensor.dark_sky_wind_speed.state | round -%}
             {%- if ( windspeed > 7 and ( windspeed <= 15 ) ) -%}
@@ -234,7 +234,7 @@ automation:
       entity_id: sensor.dark_sky_wind_speed
     action:
       - service: input_boolean.turn_on
-        data_template:
+        data:
           entity_id: >-
             {%- set windspeed = states.sensor.dark_sky_wind_speed.state | round -%}
             {%- if ( windspeed > 7 and ( windspeed <= 15 ) ) -%}
@@ -270,7 +270,7 @@ automation:
           minutes: 15
     action:
       - service: input_boolean.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Alert Super Heavy Winds
@@ -288,7 +288,7 @@ automation:
           {%- endif -%}
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {% set windspeed = states.sensor.dark_sky_wind_speed.state | round %}
             {% if ( windspeed > 40 ) and ( windspeed <= 60 ) and (states.input_boolean.super_heavy_wind_alert.state == 'off') %}
@@ -318,14 +318,14 @@ automation:
         value_template: "{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "{{ trigger.to_state.state | title }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float }} inches per hour"
           notify_options:
             - telegram
             - tv
             - led
       - service: input_boolean.turn_on
-        data_template:
+        data:
           entity_id: >
             {% set curState = trigger.to_state.state | lower %}
             {%- if curState == "rain" -%}
@@ -349,7 +349,7 @@ automation:
         value_template: "{{ states.sensor.dark_sky_precip_probability.state | int == 1 }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "{{ trigger.to_state.state | title }} with intensity {{ states.sensor.dark_sky_precip_intensity.state | float }} inches per hour"
           notify_options:
             - telegram
@@ -357,7 +357,7 @@ automation:
             - tv
             - led
       - service: input_boolean.turn_on
-        data_template:
+        data:
           entity_id: >
             {% set curState = trigger.to_state.state | lower %}
             {%- if curState == "snow" %}

@@ -54,7 +54,7 @@ automation:
         value_template: "{{ states('input_boolean.zone_alerts') == 'on' }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just entered {{ trigger.zone.attributes.friendly_name }}!
           notify_options:
@@ -79,7 +79,7 @@ automation:
         value_template: "{{ states('input_boolean.zone_alerts') == 'on' }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "{{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just left {{ trigger.zone.attributes.friendly_name }}."
           notify_options:
             - telegram
@@ -108,7 +108,7 @@ automation:
         state: "on"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             Welcome home, {{ trigger.entity_id.split('.')[1].split('_')[1] | title }}!
           notify_options:
@@ -162,7 +162,7 @@ automation:
         value_template: '{{ states.proximity.home.attributes.dir_of_travel == "towards" }}'
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "Suresh is on his way home, he is within the 5 miles range. Should be home soon!"
           notify_options:
             - telegram

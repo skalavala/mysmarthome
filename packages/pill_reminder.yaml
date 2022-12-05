@@ -65,7 +65,7 @@ automation:
       from: "off"
     action:
       - service: input_label.set_value
-        data_template:
+        data:
           entity_id: input_label.pill_taken_at
           value: "{{ as_timestamp(now()) | timestamp_custom('%m/%d/%Y %I:%M %p') }}"
       - delay:
@@ -143,7 +143,7 @@ script:
       - service: input_boolean.turn_on
         entity_id: input_boolean.pill_taken
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             Thank you for taking tablets.
             {%- if state_attr('sensor.allergy_index_today', 'rating') != None %}

@@ -157,7 +157,7 @@
 #       from: "Printing"
 #     action:
 #       - service: script.notify_me
-#         data_template:
+#         data:
 #           message: "3D Printer Status Changed from 'Printing' to '{{ trigger.to_state.state }}'."
 
 #   #
@@ -169,7 +169,7 @@
 #       entity_id: "binary_sensor.octoprint_printing"
 #     action:
 #       - service: script.notify_me
-#         data_template:
+#         data:
 #           message: "3D Printer Status changed from '{{ trigger.from_state.state }}' to '{{ trigger.to_state.state }}'."
 
 #   #
@@ -182,7 +182,7 @@
 #       to: "on"
 #     action:
 #       - service: script.notify_me
-#         data_template:
+#         data:
 #           message: "3D Printer Status changed to 'ERROR'. Please check the printer!"
 
 #   #
@@ -213,7 +213,7 @@
 #       from: "off"
 #     action:
 #       - service: script.notify_me
-#         data_template:
+#         data:
 #           message: >-
 #             3D Printer job is now {{ trigger.to_state.attributes.friendly_name }} complete.
 
@@ -235,7 +235,7 @@
 #       - service: switch.turn_off
 #         entity_id: switch.3d_printer
 #       - service: script.notify_me
-#         data_template:
+#         data:
 #           message: "3D Printer is now switched off!"
 #       - service_template: input_boolean.turn_off
 #         entity_id: input_boolean.twenty_five_percent
@@ -265,7 +265,7 @@
 #           entity_id: camera.3d_printer_camera
 #           filename: "/config/www/downloads/camera/3dprinter/print_latest.jpg"
 #       - service: notify.telegram
-#         data_template:
+#         data:
 #           title: "3D Printer"
 #           message: "Print Progress"
 #           data:

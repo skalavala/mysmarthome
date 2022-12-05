@@ -44,6 +44,6 @@ automation:
         entity_id: input_text.tts
     action:
       - service: script.voice_notify
-        data_template:
+        data:
           message: "{{ trigger.to_state.state }}"
           greeting: "{{ 'yes' if states('input_boolean.greeting') == 'on' else 'no' }}"

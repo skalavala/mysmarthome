@@ -1,23 +1,23 @@
 homeassistant:
-  
+
 automation:
-# this automation runs every day at 9:00 AM, 12 PM, 5PM, and at 10:00 PM
-# and sends an email - only when we are away from the house.
+  # this automation runs every day at 9:00 AM, 12 PM, 5PM, and at 10:00 PM
+  # and sends an email - only when we are away from the house.
   - alias: Notify Home Status When Away
     trigger:
       - platform: time
-        at: '09:00:00'
+        at: "09:00:00"
       - platform: time
-        at: '12:00:00'
+        at: "12:00:00"
       - platform: time
-        at: '17:00:00'
+        at: "17:00:00"
       - platform: time
-        at: '10:00:00'
+        at: "10:00:00"
     condition:
       - condition: template
         value_template: "{{ states('input_boolean.home_mode_away') == 'on' }}"
     action:
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Home Status {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: !include ../templates/away_status.yaml

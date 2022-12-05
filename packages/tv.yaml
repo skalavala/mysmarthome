@@ -22,7 +22,6 @@ binary_sensor:
 #
 ###############################################################################
 automation:
-
   - alias: TV Status ON
     initial_state: true
     trigger:
@@ -31,7 +30,7 @@ automation:
       to: "on"
     action:
       - service: mqtt.publish
-        data_template:
+        data:
           topic: "/home/sharptv"
           payload: "on"
           retain: true
@@ -44,11 +43,10 @@ automation:
       to: "unavailable"
     action:
       - service: mqtt.publish
-        data_template:
+        data:
           topic: "/home/sharptv"
           payload: "off"
           retain: true
-
 
   # Dim Family Room Lights When TV is Turned ON
   ###############################################################################

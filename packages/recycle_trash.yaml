@@ -209,7 +209,7 @@ automation:
       entity_id: input_select.trash_pickup_day
     action:
       - service: mqtt.publish
-        data_template:
+        data:
           topic: "/home/trashpickupday"
           retain: true
           payload: "{{ states.input_select.trash_pickup_day.state }}"
@@ -221,7 +221,7 @@ automation:
       entity_id: input_select.recycle_pickup_day
     action:
       - service: mqtt.publish
-        data_template:
+        data:
           topic: "/home/recyclepickupday"
           retain: true
           payload: "{{ states.input_select.recycle_pickup_day.state }}"
@@ -233,7 +233,7 @@ automation:
       entity_id: input_select.recycle_pickup_week
     action:
       - service: mqtt.publish
-        data_template:
+        data:
           topic: "/home/recyclepickupweek"
           retain: true
           payload: "{{ states.input_select.recycle_pickup_week.state }}"
@@ -247,15 +247,15 @@ automation:
       - delay:
           minutes: 1
       - service: input_select.select_option
-        data_template:
+        data:
           entity_id: input_select.trash_pickup_day
           option: "{{states.sensor.trash_pickup_day.state}}"
       - service: input_select.select_option
-        data_template:
+        data:
           entity_id: input_select.recycle_pickup_day
           option: "{{states.sensor.recycle_pickup_day.state}}"
       - service: input_select.select_option
-        data_template:
+        data:
           entity_id: input_select.recycle_pickup_week
           option: "{{states.sensor.recycle_pickup_week.state}}"
 
@@ -295,7 +295,7 @@ automation:
               state: "yes"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {% if states.sensor.trash_day.state == "yes" and states.sensor.recycle_day.state == "yes" %}
               Tomorrow is the Trash AND Recycle Pickup day!
@@ -318,14 +318,14 @@ automation:
       - service: input_boolean.turn_on
         entity_id: input_boolean.trash_alerts
       - service: input_select.select_option
-        data_template:
+        data:
           entity_id: input_select.trash_pickup_day
           option: "{{states.sensor.trash_pickup_day.state}}"
       - service: input_select.select_option
-        data_template:
+        data:
           entity_id: input_select.recycle_pickup_day
           option: "{{states.sensor.recycle_pickup_day.state}}"
       - service: input_select.select_option
-        data_template:
+        data:
           entity_id: input_select.recycle_pickup_week
           option: "{{states.sensor.recycle_pickup_week.state}}"

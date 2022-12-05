@@ -360,7 +360,7 @@ Hope you find it useful!
       entity_id: light.dinette
     action:
       - service: mqtt.publish
-        data_template:
+        data:
           topic: '/dump/{{ trigger.platform }}'
           retain: false
           payload: >-

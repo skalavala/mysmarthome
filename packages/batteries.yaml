@@ -36,7 +36,7 @@ automation:
         value_template: "{{ states('input_boolean.battery_alerts') == 'on' }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "{{ trigger.to_state.attributes.friendly_name | title }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
           notify_options:
             - telegram
@@ -59,7 +59,7 @@ automation:
         value_template: "{{ states('input_boolean.battery_alerts') == 'on' }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             Sensors with low batteries (<25):
             {% set ns = namespace(lowBattery="") -%}

@@ -48,7 +48,7 @@ automation:
         entity_id: sensor.dining_room_thermostat_operation_mode
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "Nest Thermostat changed from '{{ trigger.from_state.state }}' to '{{ trigger.to_state.state }}'."
           notify_options:
             - telegram
@@ -63,6 +63,6 @@ script:
   toggle_climate:
     sequence:
       - service: climate.set_away_mode
-        data_template:
+        data:
           entity_id: climate.dining_room
           away_mode: "{{ false if state_attr('climate.dining_room', 'away_mode') == 'on' else true }}"

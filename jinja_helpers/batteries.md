@@ -63,15 +63,15 @@ automation:
         value_template: "{{ trigger.event.data.new_state.attributes.battery_level | default(999) | int != 999 }}"
     action:
       - service: input_label.set_value
-        data_template:
+        data:
           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
           value: "{{ trigger.event.data.new_state.attributes.battery_level }}"
       - service: input_label.set_name
-        data_template:
+        data:
           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
           value: "{{ trigger.event.data.new_state.attributes.friendly_name }}'s Battery"
       - service: input_label.set_icon
-        data_template:
+        data:
           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
           value: >
             {% set battery_level = trigger.event.data.new_state.attributes.battery_level | int %}
@@ -91,28 +91,28 @@ automation:
       topic: "owntracks/+/+"
     action:
       - service: input_label.set_value
-        data_template:
+        data:
           entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
           value: "{{ 'Yes' if trigger.payload_json.conn == 'w' else 'No' }}"
       - service: input_label.set_icon
-        data_template:
+        data:
           entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
           value: "{{ 'mdi:wifi' if trigger.payload_json.conn == 'w' else 'mdi:wifi-off' }}"
       - service: input_label.set_name
-        data_template:
+        data:
           entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_wifi"
           value: "{{trigger.topic.split('/')[-1] | title }}'s phone wifi enabled?"
           
       - service: input_label.set_value
-        data_template:
+        data:
           entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
           value: '{{ trigger.payload_json.batt | int }}'
       - service: input_label.set_name
-        data_template:
+        data:
           entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
           value: "{{trigger.topic.split('/')[-1] | title }}'s Battery"
       - service: input_label.set_icon
-        data_template:
+        data:
           entity_id: "input_label.{{trigger.topic.split('/')[-1]}}_battery"
           value: >
               {% set battery_level = trigger.payload_json.batt | int %}

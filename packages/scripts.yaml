@@ -97,7 +97,7 @@ script:
   all_indoor_lights_off:
     sequence:
       - service: light.turn_off
-        data_template:
+        data:
           entity_id:
             - light.family_room_lights
             - light.hue_color_lamp_1
@@ -108,7 +108,7 @@ script:
             - light.master_bedroom_lights
 
       - service: switch.turn_off
-        data_template:
+        data:
           entity_id:
             - switch.basement_left
             - switch.basement_right
@@ -155,7 +155,7 @@ script:
   home_status:
     sequence:
       - service: script.notify_family
-        data_template:
+        data:
           message: !include ../templates/home_status.yaml
           notify_options:
             - voice
@@ -163,7 +163,7 @@ script:
   good_night_tts:
     sequence:
       - service: script.notify_family
-        data_template:
+        data:
           message: !include ../templates/goodnight.yaml
           notify_options:
             - voice

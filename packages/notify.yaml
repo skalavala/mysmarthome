@@ -82,32 +82,33 @@ script:
         value_template: '{{ message | trim != "" }}'
 
       - service: script.notify_on_led_screen
-        data_template:
+        data:
           message: "{{ message }}"
           notify_options: "{{ notify_options }}"
 
       - service: script.notify_firestick
-        data_template:
-          url: "{{ url }}"
+        data:
+          url: "{{ url }}" # local url
+          path: "{{ file }}" # local path
           title: "{{ title }}"
           message: "{{ message }}"
           notify_options: "{{ notify_options }}"
 
       - service: script.notify_telegram
-        data_template:
+        data:
           file: "{{ url }}"
           title: "{{ title }}"
           message: "{{ message }}"
           notify_options: "{{ notify_options }}"
 
       - service: script.notify_email
-        data_template:
+        data:
           title: "{{ title }}"
           message: "{{ message }}"
           notify_options: "{{ notify_options }}"
 
       - service: script.notify_voice
-        data_template:
+        data:
           message: "{{ message }}"
           notify_options: "{{ notify_options }}"
 
@@ -134,7 +135,9 @@ script:
           data:
             color: red
             duration: 7
-            image:
+            url:
+              path: "{{ url }}" #/config/www/downloads/camera/driveway/driveway_20220604_185216.jpg
+            file:
               path: "{{ url }}" #/config/www/downloads/camera/driveway/driveway_20220604_185216.jpg
             icon:
               path: >
@@ -150,14 +153,10 @@ script:
         state: "on"
       - condition: template
         value_template: "{{ 'telegram' in notify_options }}"
-      - service: telegram_bot.send_message
+      - service: notify.telegram
         data:
-          title: "{{- title -}}"
-          message: "{{- message -}}"
-          data:
-            photo:
-              - file: "{{- file -}}"
-                caption: "{{- title -}}"
+          message: "{{ message }}"
+          title: "{{ title }}"
 
   notify_email:
     sequence:
@@ -167,9 +166,12 @@ script:
       - condition: template
         value_template: "{{ 'email' in notify_options }}"
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: "{{ title }}"
           message: "{{ message }}"
+          data:
+            images:
+              - "{{- path -}}"
 
   notify_voice:
     sequence:
@@ -179,7 +181,7 @@ script:
       - condition: template
         value_template: "{{ 'voice' in notify_options }}"
       - service: script.voice_notify
-        data_template:
+        data:
           message: "{{ message }}"
 
   notify_on_led_screen:
@@ -190,7 +192,7 @@ script:
       - condition: template
         value_template: "{{ 'led' in notify_options }}"
       - service: mqtt.publish
-        data_template:
+        data:
           topic: messageboard/messages
           payload: "{{ message }}"
 
@@ -223,7 +225,7 @@ script:
           {% endif %}
       - service: media_player.volume_set
         entity_id: media_player.living_room, media_player.upstairs
-        data_template:
+        data:
           volume_level: >
             {% if states('input_boolean.emergency_mode') == "on" %}
               {{ states('input_number.tts_volume_level_alert') }}
@@ -238,7 +240,7 @@ script:
             {% endif %}
       - service: tts.amazon_polly_say
         entity_id: media_player.living_room, media_player.upstairs
-        data_template:
+        data:
           cache: true
           message: >
             {% set msg = "" %}
@@ -273,7 +275,7 @@ script:
     sequence:
       - service: tts.amazon_polly_say
         entity_id: media_player.living_room, media_player.upstairs
-        data_template:
+        data:
           cache: true
           message: >
             {% set msg = "" %}

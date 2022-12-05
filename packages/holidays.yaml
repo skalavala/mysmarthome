@@ -60,7 +60,7 @@ automation:
           message: "Today is {{ states('sensor.holiday') }}."
           title: "{{ states('sensor.holiday') }}"
       - service: script.notify_family
-        data_template:
+        data:
           message: "Today is: {{states('sensor.holiday') }}"
           notify_options:
             - telegram
@@ -96,7 +96,7 @@ automation:
           {%- endif -%}
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >-
             {%- set days2NextEvent = 0 -%}
             {%- if now().year == strptime(states.calendar.holidays_in_india.attributes.start_time, '%Y-%m-%d %H:%M:%S').year -%}

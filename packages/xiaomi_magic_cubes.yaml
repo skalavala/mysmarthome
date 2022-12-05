@@ -92,7 +92,7 @@ automation:
         state: "on"
     action:
       - service: light.turn_on
-        data_template:
+        data:
           entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
           rgb_color:
             - "{{ range(0,255) |random }}"
@@ -370,14 +370,14 @@ automation:
         state: "on"
     action:
       - service: light.turn_on
-        data_template:
+        data:
           entity_id: light.master_bedroom_1
           rgb_color:
             - "{{ range(0,255) |random }}"
             - "{{ range(0,255) |random }}"
             - "{{ range(0,255) |random }}"
       - service: light.turn_on
-        data_template:
+        data:
           entity_id: light.master_bedroom_2
           rgb_color:
             - "{{ range(0,255) |random }}"
@@ -482,21 +482,21 @@ script:
             - tv
             - led
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.frontdoor_camera"
           filename:
             "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
             (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.driveway_camera"
           filename:
             "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: notify.telegram
-        data_template:
+        data:
           title: "Door Bell"
           message: "Someone rang door bell!"
           data:
@@ -510,7 +510,7 @@ script:
                 .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
                 caption: "Someone rang door bell!"
       - service: script.notify_family
-        data_template:
+        data:
           message: Someone rang door bell!
           url: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
                        (state_attr('script.doorbell_camera_pics', 'last_triggered') ~ '').replace('-','_')

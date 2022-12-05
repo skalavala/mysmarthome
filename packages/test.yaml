@@ -47,7 +47,7 @@
 #             {% endif %}
 #       - delay: '00:00:01'
 #       - service: script.light_set_color
-#         data_template:
+#         data:
 #           entity_id: >-
 #             {%- macro get_next_entity_id() -%}
 #               {%- for item in states.group.input_labels.attributes.entity_id if is_state(item, "no") -%}
@@ -72,12 +72,12 @@
 #       - condition: template
 #         value_template: '{{ brightness | trim != "" }}'
 #       - service: light.turn_on
-#         data_template:
+#         data:
 #           entity_id: '{{ entity_id }}'
 #           brightness: '{{ brightness }}'
 #           rgb_color: ['{{"{0:d}".format(range(210, 238)|random)|int}}', '{{"{0:d}".format(range(210, 238)|random)|int}}', '{{"{0:d}".format(range(210, 238)|random)|int}}']
 #       - service: input_label.set_value
-#         data_template:
+#         data:
 #           entity_id: "input_label.{{- entity_id.split('.')[1] -}}_random_color"
 #           value: 'yes'
 #       - delay: '00:00:01'
@@ -102,7 +102,7 @@
 #       event_type: my_test_event
 #     action:
 #       - service: script.notify_me
-#         data_template:
+#         data:
 #           message: "Test Event Captured with data foo: {{ trigger.event.data.foo }}"
 
 #########################################################################################################
@@ -122,7 +122,7 @@
 #           - binary_sensor.den_motion
 #     action:
 #       - service_template: 'switch.turn_{{ trigger.to_state.state }}'
-#         data_template:
+#         data:
 #             entity_id: '{{ trigger.entity_id.replace("binary_sensor", "group") }}'
 
 #########################################################################################################
@@ -142,7 +142,7 @@
 #         before: '02:00:00'
 #     action:
 #       - service_template: scene.turn_on
-#         data_template:
+#         data:
 #           entity_id: >-
 #             {%set elevation = states.sun.sun.attributes.elevation | int %}
 #             {% if elevation > -10 and elevation | int < 5 %}
@@ -194,7 +194,7 @@
 #           seconds: 30
 #     action:
 #       - service: mqtt.publish
-#         data_template:
+#         data:
 #           payload: '{"state": "open"}'
 #           topic: >-
 #             {% set mapping = '{ "hallway": "985335", "livingroom": "854267", "kitchen": "699555" }' %}
@@ -220,7 +220,7 @@
 #   test_script:
 #     sequence:
 #       - service_template: light.turn_on
-#         data_template:
+#         data:
 #           entity_id: >
 #             {% for e in entities_list %}
 #             {%- if loop.first %}{% elif loop.last %}, {% else %}, {% endif -%}
@@ -295,7 +295,7 @@
 #     alias: Text to Enter on Remote
 #     sequence:
 #       - service_template: script.text_loop
-#         data_template:
+#         data:
 #           text: "Netflix"
 
 #   text_loop:
@@ -304,7 +304,7 @@
 #       - condition: template
 #         value_template: "{{ 'true' if (states.input_number.text_index.state |int < text|length | int) else 'false' }}"
 #       - service_template: script.key_input
-#         data_template:
+#         data:
 #           command: >-
 #             {%- set index = states.input_number.text_index.state | int -%}
 #             {{ text[index:index+1] }}
@@ -314,16 +314,16 @@
 #     alias: Send Key Input
 #     sequence:
 #       - service: media_player.firetv_adb_shell
-#         data_template:
+#         data:
 #           entity_id: media_player.televisione_camera
 #           cmd: "input keyevent {{ command | upper }}"
 #       - delay: '00:00:01'
 #       - service: input_number.set_value
-#         data_template:
+#         data:
 #           entity_id: input_number.text_index
 #           value: "{{ (states.input_number.text_index.state | int + 1) }}"
 #       - service: script.text_loop
-#         data_template:
+#         data:
 #           text: "{{ text }}"
 
 #########################################################################################################
@@ -341,7 +341,7 @@
 #           {{ ns.lowBattery }}
 #     action:
 #       - service: script.voice_notify
-#         data_template:
+#         data:
 #           message: >
 #             {% set ns = namespace(lowBattery) %}
 #             {%- for x in states if x.attributes and x.attributes.battery_level and x.attributes.battery_level |int <= 24 %}
@@ -367,11 +367,11 @@
 #     alias: Run X Times
 #     sequence:
 #       - service: input_number.set_value
-#         data_template:
+#         data:
 #           entity_id: input_number.loop_index
 #           value: 0
 #       - service_template: script.loop_one
-#         data_template:
+#         data:
 #           count: "{{ count }}"
 
 #   loop_one:
@@ -380,13 +380,13 @@
 #       - condition: template
 #         value_template: "{{ 'true' if (states.input_number.loop_index.state |int < count | int) else 'false' }}"
 #       - service: mqtt.publish
-#         data_template:
+#         data:
 #           topic: "/loop/test"
 #           payload: "{{ states.input_number.loop_index.state | int }}"
 #           retain: false
 #       - delay: '00:00:00'
 #       - service: script.loop_two
-#         data_template:
+#         data:
 #           count: "{{ count |int}}"
 
 #   loop_two:
@@ -394,11 +394,11 @@
 #     sequence:
 #       - delay: '00:00:00'
 #       - service: input_number.set_value
-#         data_template:
+#         data:
 #           entity_id: input_number.loop_index
 #           value: "{{ (states.input_number.loop_index.state | int + 1) |int }}"
 #       - service: script.loop_one
-#         data_template:
+#         data:
 #           count: "{{ count|int }}"
 
 #######################################################################
@@ -781,7 +781,7 @@
 #         # topic: "robotic_mower/control/mode"
 #     # action:
 #       # - service: input_select.select_option
-#         # data_template:
+#         # data:
 #           # entity_id: input_select.bob_command
 #           # option: "{{ trigger.payload }}"
 
@@ -794,7 +794,7 @@
 #         to: 'Front Collision'
 #     action:
 #       - service: notify.leandro
-#         data_template:
+#         data:
 #          message: "Robotgräsklippare har kolliderat"
 #          data:
 #           priority: '1'
@@ -807,7 +807,7 @@
 #         data:
 #           volume_level: '0.7'
 #       - service: notify.alexa_media
-#         data_template:
+#         data:
 #           data:
 #             type: announce
 #             method: speak
@@ -1003,7 +1003,7 @@
 #     alias: Push Ecobee target temp to the other thermostats
 #     sequence:
 #       - service: climate.set_temperature
-#         data_template:
+#         data:
 #           entity_id: climate.cooler_fan
 #           temperature: "{{ states.climate.main_floor.temperature |float }}"
 
@@ -1045,14 +1045,14 @@
 #     - service: input_boolean.toggle
 #       entity_id: input_boolean.dummy
 #     - service: camera.record
-#       data_template:
+#       data:
 #         entity_id: camera.fremme
 #         filename: "/tmp/{{- trigger.entity_id.split('.')[1].split('_')[1] -}}_{{- states.input_boolean.dummy_fremme.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"
 #         duration: 20
 #         lookback: 10
 #     - delay: "00:00:20"
 #     - service: notify.eirikz_telegram
-#       data_template:
+#       data:
 #         title: "Doods"
 #         message: "fremme"
 #         data:
@@ -1081,15 +1081,14 @@
 #       - service: input_boolean.toggle
 #         entity_id: input_boolean.dummy
 #       - service: input_label.set_value
-#         data_template:
+#         data:
 #           entity_id: "input_label.file_1"
 #           value: "/tmp/{{- trigger.entity_id.split('.')[1] -}}_{{- states.input_boolean.dummy.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"
 #       - delay: "00:00:05"
 #       - service: input_label.set_value
-#         data_template:
+#         data:
 #           entity_id: "input_label.file_2"
 #           value: "/tmp/{{- trigger.entity_id.split('.')[1] -}}_{{- states.input_boolean.dummy.last_updated.strftime('%Y%m%d-%H%M%S') -}}.mp4"
-
 
 # {% for x in states if 'sensor.illumination_' in x.entity_id %}
 # {{ x.name}} - {{ x.attributes.battery_level }}

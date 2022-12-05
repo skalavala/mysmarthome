@@ -109,44 +109,26 @@ automation:
       entity_id:
         - binary_sensor.door_window_sensor_158d0004248d5b # Single car garage
         - binary_sensor.door_window_sensor_158d0004231f7b # 2 Car Garage
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
+      - condition: template
+        value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
+      - condition: template
+        value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
     action:
       - service: switch.turn_on
         entity_id: switch.garage
-      - service: script.notify_family
-        data_template:
-          message: >
-            {% set doors = "" %}
-            {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
-                  states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
-              {% set doors = "Attention! Both Garage Doors are OPEN" %}
-            {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
-                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
-              {% set doors = "Both Garage Doors are now CLOSED" %}
-            {% else %}
-              {% if trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "on" %}
-                {% set doors = "Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!" %}
-              {% elif trigger.from_state.state != trigger.to_state.state and trigger.to_state.state | lower == "off" %}
-                {% set doors = "Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!" %}
-              {% endif %}
-            {% endif %}
-            {{ doors }} - {{ trigger.to_state.attributes.friendly_name }}: from '{{trigger.from_state.state}}'', to: '{{ trigger.to_state.state }}'
-          notify_options:
-            - voice
-            - led
-            - tv
-            - email
-            - telegram
-
-      - delay: "00:00:05"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.garage"
           filename: "{{ '/config/www/downloads/camera/garage/garage_' ~
             ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
-
+      - delay: "00:00:05"
       - service: script.notify_family
         data_template:
+          title: "Garage Door Status"
           message: >
             {% set doors = "" %}
             {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
@@ -163,21 +145,29 @@ automation:
               {% endif %}
             {% endif %}
             {{ doors }}
-          url: >
-            {{ '/config/www/downloads/camera/garage/garage_' ~
-                ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
-                .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}
+          url: !secret garage_camera_snapshot_url
+          path: >
+            "{{ '/config/www/downloads/camera/garage/garage_' ~
+              ((state_attr('automation.notify_garage_door_status', 'last_triggered') |string).replace('-','_')
+              .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg') }}"
           notify_options:
-            - telegram
-            - email
             - tv
+            - led
+      - service: notify.telegram
+        data_template:
+          title: "Camera Images"
+          message: "Check the garage photo below:"
+          data:
+            photo:
+              - url: !secret garage_camera_snapshot_url
+                caption: "Garage"
       - service: switch.turn_off
         entity_id: switch.garage
 
   ###############################################################################
   # Notify Entry Door Status
   ###############################################################################
-  - alias: Voice Notify Entry Door Status
+  - alias: Notify Entry Door Status
     initial_state: true
     trigger:
       platform: state
@@ -192,7 +182,7 @@ automation:
         value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {% if trigger.to_state.state | lower == "on" %}
               Your {{ trigger.to_state.attributes.friendly_name.replace('Sensor', '') }} is OPEN,
@@ -350,7 +340,7 @@ automation:
         state: "on"
     action:
       - service: switch.turn_off
-        data_template:
+        data:
           entity_id: switch.master_bathroom_toilet_light
 
   ###############################################################################

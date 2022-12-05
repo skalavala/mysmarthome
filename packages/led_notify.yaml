@@ -11,53 +11,53 @@ automation:
         entity_id: sensor.dark_sky_apparent_temperature, sensor.dark_sky_hourly_summary
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {{ states('sensor.dark_sky_apparent_temperature') |int }} degrees, {{ states('sensor.dark_sky_hourly_summary') }}
           notify_options:
             - tv
             - led
 
-  ###############################################################################
-  # Display Garage Door Status on LED Screen
-  ###############################################################################
-  - alias: Notify Garage Door Status on LED Screen
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id:
-        - binary_sensor.door_window_sensor_158d0004231f7b
-        - binary_sensor.door_window_sensor_158d0004248d5b
-    condition:
-      - condition: template
-        value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
-      - condition: template
-        value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
-      - condition: template
-        value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
-    action:
-      - service: script.notify_family
-        data_template:
-          message: >
-            {% set doors = "" %}
-              {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
-                    states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
-                {% set doors = "Attention! Both Garage Doors are OPEN" %}
-              {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
-                      states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
-                {% set doors = "Both Garage Doors are now CLOSED" %}
-              {% else %}
-                {% if trigger.to_state.state | lower == "on" %}
-                  Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
-                {% elif trigger.to_state.state | lower == "off" %}
-                  Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
-                {% endif %}
-              {% endif %}
-            {{ doors }}
-          notify_options:
-            - telegram
-            - tv
-            - led
+  # ###############################################################################
+  # # Display Garage Door Status on LED Screen
+  # ###############################################################################
+  # - alias: Notify Garage Door Status on LED Screen
+  #   initial_state: true
+  #   trigger:
+  #     platform: state
+  #     entity_id:
+  #       - binary_sensor.door_window_sensor_158d0004231f7b
+  #       - binary_sensor.door_window_sensor_158d0004248d5b
+  #   condition:
+  #     - condition: template
+  #       value_template: "{{ trigger.from_state.state not in ['unavailable', 'unknown'] }}"
+  #     - condition: template
+  #       value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
+  #     - condition: template
+  #       value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
+  #   action:
+  #     - service: script.notify_family
+  #       data:
+  #         message: >
+  #           {% set doors = "" %}
+  #             {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on"  and
+  #                   states('binary_sensor.door_window_sensor_158d0004248d5b') == "on" %}
+  #               {% set doors = "Attention! Both Garage Doors are OPEN" %}
+  #             {% elif states('binary_sensor.door_window_sensor_158d0004231f7b') == "off"  and
+  #                     states('binary_sensor.door_window_sensor_158d0004248d5b') == "off" %}
+  #               {% set doors = "Both Garage Doors are now CLOSED" %}
+  #             {% else %}
+  #               {% if trigger.to_state.state | lower == "on" %}
+  #                 Attention! Your {{ trigger.to_state.attributes.friendly_name }} is now OPENED!
+  #               {% elif trigger.to_state.state | lower == "off" %}
+  #                 Your {{ trigger.to_state.attributes.friendly_name }} is now CLOSED!
+  #               {% endif %}
+  #             {% endif %}
+  #           {{ doors }}
+  #         notify_options:
+  #           - telegram
+  #           - tv
+  #           - led
 
   ###############################################################################
   # Display Zone based Messages on LED Screen
@@ -76,7 +76,7 @@ automation:
         for: "00:02:00"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "Welcome home, {{ trigger.entity_id.split('.')[1].split('_')[1] | title }}"
           notify_options:
             - tv
@@ -98,7 +98,7 @@ automation:
         value_template: "{{ states('input_boolean.zone_alerts') == 'on' }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {{ trigger.entity_id.split('.')[1].split('_')[1] | title}} just entered {{ trigger.zone.attributes.friendly_name }}!
           notify_options:

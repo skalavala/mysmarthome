@@ -270,14 +270,14 @@ automation:
         to: "on"
     action:
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.porch_camera"
           filename:
             "{{ '/config/www/downloads/camera/porch/porch_' ~
             (states.binary_sensor.porch_motion.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_porch_camera
 
   #
@@ -298,10 +298,10 @@ automation:
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_frontdoor_camera
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_driveway_camera
       - condition: template
         value_template: >-
@@ -316,7 +316,7 @@ automation:
           {% endif %}
 
       - service: script.voice_notify
-        data_template:
+        data:
           message: >-
             {%- set e_id = "image_processing.doods_frontdoor_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
@@ -330,7 +330,7 @@ automation:
           greeting: "no"
 
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Front door motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
             {%- set e_id = "image_processing.doods_frontdoor_camera" -%}
@@ -349,7 +349,7 @@ automation:
               - "/config/www/downloads/camera/frontdoor/frontdoor_latest.jpg"
 
       - service: script.notify_family
-        data_template:
+        data:
           title: "Front Door Motion"
           message: >
             {%- set e_id = "image_processing.doods_frontdoor_camera" -%}
@@ -377,7 +377,7 @@ automation:
             False
           {% endif %}
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_garage
   #
   # Scan driveway and frontdoor cameras when motion detected
@@ -394,16 +394,16 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.camera_alerts') == 'on' }}"
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret driveway_camera_stream_url
           name: "driveway"
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_driveway_camera
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_frontdoor_camera
       - condition: template
         value_template: >-
@@ -418,7 +418,7 @@ automation:
           {% endif %}
 
       - service: script.voice_notify
-        data_template:
+        data:
           message: >-
             {%- set e_id = "image_processing.doods_driveway_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
@@ -431,7 +431,7 @@ automation:
             {%- endif -%}
 
       - service: script.notify_family
-        data_template:
+        data:
           title: "Driveway Motion"
           message: >
             {%- set e_id = "image_processing.doods_driveway_camera" -%}
@@ -451,7 +451,7 @@ automation:
             - tv
 
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Driveway motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
             {%- set e_id = "image_processing.doods_driveway_camera" -%}
@@ -479,7 +479,7 @@ automation:
           {% endif %}
 
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_garage
 
   #
@@ -500,7 +500,7 @@ automation:
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
     action:
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_garage
       - condition: template
         value_template: >
@@ -511,10 +511,10 @@ automation:
             False
           {% endif %}
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_driveway_camera
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_frontdoor_camera
       - condition: template
         value_template: >-
@@ -529,7 +529,7 @@ automation:
           {% endif %}
 
       - service: script.voice_notify
-        data_template:
+        data:
           message: >-
             {%- set e_id = "image_processing.doods_garage" -%}
             {%- if state_attr(e_id, 'summary') -%}
@@ -542,7 +542,7 @@ automation:
             {%- endif -%}
 
       - service: script.notify_family
-        data_template:
+        data:
           title: "Garage Motion"
           message: >
             {%- set e_id = "image_processing.doods_garage" -%}
@@ -562,7 +562,7 @@ automation:
             - tv
 
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Garage motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
             {%- set e_id = "image_processing.doods_garage" -%}
@@ -593,16 +593,16 @@ automation:
       - condition: template
         value_template: "{{ states('input_boolean.camera_alerts') == 'on' }}"
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret playarea_camera_stream_url
           name: "backyard"
       - condition: template
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_patio_camera
       - service: image_processing.scan
-        data_template:
+        data:
           entity_id: image_processing.doods_playarea_camera
       - condition: template
         value_template: >-
@@ -617,7 +617,7 @@ automation:
           {% endif %}
 
       - service: script.voice_notify
-        data_template:
+        data:
           message: >-
             {%- set e_id = "image_processing.doods_patio_camera" -%}
             {%- if state_attr(e_id, 'summary') -%}
@@ -630,7 +630,7 @@ automation:
             {%- endif -%}
 
       - service: script.notify_family
-        data_template:
+        data:
           title: "Backyard Motion"
           message: >
             {%- set e_id = "image_processing.doods_patio_camera" -%}
@@ -650,7 +650,7 @@ automation:
             - tv
 
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Backyard motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: >
             {%- set e_id = "image_processing.doods_patio_camera" -%}
@@ -717,28 +717,28 @@ automation:
     action:
       - delay: "{{ '00:00:08' if states('binary_sensor.door_window_sensor_158d000424a6d6') == 'on' else '0:0:0' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.frontdoor_camera"
           filename:
             "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.porch_camera"
           filename:
             "{{ '/config/www/downloads/camera/porch/porch_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.driveway_camera"
           filename:
             "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.garage"
           filename:
             "{{ '/config/www/downloads/camera/garage/garage_' ~
@@ -746,7 +746,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - service: notify.telegram
-        data_template:
+        data:
           title: "Front Door Motion"
           message: "Motion Detected At Front Door, Check images:"
           data:
@@ -769,7 +769,7 @@ automation:
                 caption: Porch
 
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Front door motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: 'Motion detected at the front door on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") -}}. Please see the images below.'
           data:
@@ -791,7 +791,7 @@ automation:
         value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
 
       - service: notify.ios_devices
-        data_template:
+        data:
           message: "Check Front Door camera!"
           data:
             push:
@@ -823,21 +823,21 @@ automation:
         value_template: "{{ states('alarm_control_panel.home') == 'armed_home' or states('alarm_control_panel.home') == 'armed_away' }}"
     action:
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.frontdoor_camera"
           filename:
             "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
             (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.driveway_camera"
           filename:
             "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (states.binary_sensor.motion_sensor_158d00024e57fb.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.garage"
           filename:
             "{{ '/config/www/downloads/camera/garage/garage_' ~
@@ -845,7 +845,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - service: notify.telegram
-        data_template:
+        data:
           title: "Driveway Motion"
           message: "Motion Detected At Driveway, Check images:"
           data:
@@ -864,7 +864,7 @@ automation:
                 caption: "Garage"
 
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Driveway motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: 'Motion detected at the Driveway on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
           data:
@@ -882,7 +882,7 @@ automation:
       - condition: template
         value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
       - service: notify.ios_devices
-        data_template:
+        data:
           message: "Check Driveway camera!"
           data:
             push:
@@ -926,7 +926,7 @@ automation:
           {% endif %}
 
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.patio_camera"
           filename:
             "{{ '/config/www/downloads/camera/patio/patio_' ~
@@ -934,7 +934,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.playarea_camera"
           filename:
             "{{ '/config/www/downloads/camera/playarea/playarea_' ~
@@ -942,7 +942,7 @@ automation:
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - service: notify.telegram
-        data_template:
+        data:
           title: "Backyard Motion"
           message: "Motion Detected in the Backyard, Check images:"
           data:
@@ -957,7 +957,7 @@ automation:
                 caption: "Playarea"
 
       - service: notify.notify_smtp
-        data_template:
+        data:
           title: 'Backyard motion {{ now().strftime("%d %h %Y, %I:%M:%S %p") }}'
           message: 'Motion detected in the Backyard on {{ now().strftime("%d %h %Y, at %I:%M:%S %p") }}. Please see the images below.'
           data:
@@ -972,7 +972,7 @@ automation:
       - condition: template
         value_template: "{{ states('device_tracker.life360_suresh') == 'home' }}"
       - service: notify.ios_devices
-        data_template:
+        data:
           message: "Check Patio camera!"
           data:
             push:
@@ -1012,28 +1012,28 @@ automation:
           {% endif %}
     action:
       - service: script.frontdoor_camera_text_overlay
-        data_template:
+        data:
           text: >
             {{ '* ' if states('alarm_control_panel.home') == 'armed_home' or
                        states('alarm_control_panel.home') == 'armed_away' -}}
             {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like
             {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
       - service: script.driveway_camera_text_overlay
-        data_template:
+        data:
           text: >
             {{ '* ' if states('alarm_control_panel.home') == 'armed_home' or
                        states('alarm_control_panel.home') == 'armed_away' -}}
             {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like
             {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
       - service: script.playarea_camera_text_overlay
-        data_template:
+        data:
           text: >
             {{ '* ' if states('alarm_control_panel.home') == 'armed_home' or
                        states('alarm_control_panel.home') == 'armed_away' -}}
             {{- states('sensor.dark_sky_temperature')|int}} °F, Feels like
             {{- ' ' ~ states('sensor.dark_sky_apparent_temperature') |int -}}
       - service: script.patio_camera_text_overlay
-        data_template:
+        data:
           text: >
             {{ '* ' if states('alarm_control_panel.home') == 'armed_home' or
                        states('alarm_control_panel.home') == 'armed_away' -}}
@@ -1073,7 +1073,7 @@ automation:
           media_content_id: !secret frontdoor_camera_stream_url
           media_content_type: video
       - service: input_label.set_value
-        data_template:
+        data:
           entity_id: input_label.current_stream
           value: "frontyard"
 
@@ -1110,31 +1110,31 @@ script:
   frontdoor_cam:
     sequence:
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret frontdoor_camera_stream_url
           name: "frontyard"
   driveway_cam:
     sequence:
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret driveway_camera_stream_url
           name: "driveway"
   patio_cam:
     sequence:
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret patio_camera_stream_url
           name: "patio"
   playarea_cam:
     sequence:
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret playarea_camera_stream_url
           name: "playarea"
   porch_cam:
     sequence:
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret porch_camera_stream_url
           name: "porch"
 
@@ -1152,7 +1152,7 @@ script:
       - condition: template
         value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret frontdoor_camera_stream_url
           name: "frontyard"
 
@@ -1161,7 +1161,7 @@ script:
       - condition: template
         value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret driveway_camera_stream_url
           name: "driveway"
 
@@ -1170,7 +1170,7 @@ script:
       - condition: template
         value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret patio_camera_stream_url
           name: "patio"
 
@@ -1179,7 +1179,7 @@ script:
       - condition: template
         value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret playarea_camera_stream_url
           name: "playarea"
 
@@ -1188,7 +1188,7 @@ script:
       - condition: template
         value_template: "{{ states('input_boolean.stream_camera2chromecast') == 'on' }}"
       - service: script.stream2chromecast
-        data_template:
+        data:
           url: !secret porch_camera_stream_url
           name: "porch"
 
@@ -1207,25 +1207,25 @@ script:
   frontdoor_camera_text_overlay:
     sequence:
       - service: rest_command.set_frontdoor_camera_text_left_bottom
-        data_template:
+        data:
           message: "{{text}}"
 
   driveway_camera_text_overlay:
     sequence:
       - service: rest_command.set_driveway_camera_text_left_bottom
-        data_template:
+        data:
           message: "{{text}}"
 
   patio_camera_text_overlay:
     sequence:
       - service: rest_command.set_patio_camera_text_left_bottom
-        data_template:
+        data:
           message: "{{text}}"
 
   playarea_camera_text_overlay:
     sequence:
       - service: rest_command.set_playarea_camera_text_left_bottom
-        data_template:
+        data:
           message: "{{text}}"
 
   ###############################################################################
@@ -1239,11 +1239,11 @@ script:
       - condition: template
         value_template: "{{ states('input_label.current_stream') != name  }}"
       - service: media_player.play_media
-        data_template:
+        data:
           entity_id: media_player.attic_tv
           media_content_id: "{{ url }}"
           media_content_type: "video"
       - service: input_label.set_value
-        data_template:
+        data:
           entity_id: input_label.current_stream
           value: "{{ name }}"

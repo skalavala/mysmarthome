@@ -60,12 +60,12 @@ automation:
         state: "off"
       - condition: template
         value_template: "{{ states('input_boolean.garage_door_notifications') == 'on' }}"
-      - condition: state
-        entity_id: input_boolean.light_automations
-        state: "on"
+      # - condition: state
+      #   entity_id: input_boolean.light_automations
+      #   state: "on"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             Your {{ trigger.to_state.attributes.friendly_name }} is OPEN for more than 5 minutes!
           notify_options:
@@ -96,10 +96,10 @@ automation:
         state: "on"
     action:
       - service: switch.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {{ trigger.to_state.attributes.friendly_name }} is ON during the day time. Saving power by turning it off!
           notify_options:
@@ -140,7 +140,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Guest Bathroom Lights WatchDog
@@ -158,7 +158,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Master Bathroom Lights WatchDog
@@ -176,7 +176,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Garage Lights WatchDog
@@ -194,7 +194,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Garage Shop Lights WatchDog
@@ -212,7 +212,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Guest Bathroom Exhaust WatchDog
@@ -230,7 +230,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Master Bathroom Shower Exhaust WatchDog
@@ -248,7 +248,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Master Bathroom Toilet Exhaust WatchDog
@@ -266,7 +266,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   #############################################################################
@@ -288,7 +288,7 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"
 
   - alias: Hasika Bedroom Closet WatchDog
@@ -306,5 +306,5 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{{ trigger.entity_id }}"

@@ -47,7 +47,7 @@ except Exception as ex:
         value_template: "{{ trigger.event.data.new_state.attributes.battery_level | default(999) | int != 999 }}"
     action:
       - service: python_script.batteries
-        data_template:
+        data:
           entity_id: "input_label.{{- trigger.event.data.entity_id.split('.')[1] -}}"
           battery_value: '{{ trigger.event.data.new_state.attributes.battery_level }}'
 """    

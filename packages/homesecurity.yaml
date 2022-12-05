@@ -72,7 +72,7 @@ automation:
         value_template: "{{ states('input_boolean.security_system_alerts') == 'on' }}"
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {% set ns = namespace(openDoorCount=0, doorNames="") %}
             {%- set sensors = [
@@ -99,38 +99,38 @@ automation:
             - voice
 
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.frontdoor_camera"
           filename: "{{ '/config/www/downloads/camera/frontdoor/frontdoor_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.driveway_camera"
           filename: "{{ '/config/www/downloads/camera/driveway/driveway_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.garage"
           filename: "{{ '/config/www/downloads/camera/garage/garage_' ~
             (states.binary_sensor.motion_sensor_158d00024ee084.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.patio_camera"
           filename: "{{ '/config/www/downloads/camera/patio/patio_' ~
             (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.playarea_camera"
           filename: "{{ '/config/www/downloads/camera/playarea/playarea_' ~
             (states.binary_sensor.motion_sensor_158d00024e842c.last_updated ~ '').replace('-','_')
             .replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
 
       - service: notify.telegram
-        data_template:
+        data:
           title: "Camera Snapshots"
           message: "Please check the camera images just to be sure!"
           data:
@@ -176,7 +176,7 @@ automation:
           {%- endif -%}
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             {% if states('alarm_control_panel.home') == "armed_home" %}
               Your home is now secured!
@@ -300,11 +300,11 @@ automation:
       - service: switch.turn_on
         entity_id: switch.garage
       - service: camera.snapshot
-        data_template:
+        data:
           entity_id: "camera.garage"
           filename: "{{ '/config/www/downloads/camera/garage/garage_' ~  (state_attr('automation.home_security_system_and_garage_door_check','last_updated') ~ '').replace('-','_').replace(' ', '_').replace(':','_').replace('.','_').replace('+','_') ~ '.jpg' }}"
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             Attention! Your home Security system is set to {{ states('alarm_control_panel.home').split('_')[1] | upper }} mode. BUT THE {% if states('binary_sensor.door_window_sensor_158d0004231f7b') == "on" -%}DOUBLE CAR {%- else  %}SINGLE CAR {% endif %}GARAGE DOOR IS STILL OPEN!
           url: "{{ '/config/www/downloads/camera/garage/garage_' ~

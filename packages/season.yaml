@@ -30,7 +30,7 @@ automation:
         value_template: '{{ trigger.from_state.state | lower != "unknown" }}'
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: >
             Good bye {{ trigger.from_state.state }}, and Say Hello to {{ trigger.to_state.state }}!
           notify_options:

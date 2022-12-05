@@ -234,7 +234,7 @@ automation:
     action:
       - service: light.turn_on
         entity_id: light.hue_color_lamp_1, light.hue_color_lamp_2, light.hue_color_lamp_3
-        data_template:
+        data:
           brightness: >
             {% if states('binary_sensor.sharp_tv') == "on" %}
               25

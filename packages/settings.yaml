@@ -341,7 +341,7 @@ automation:
         entity_id: input_boolean.do_not_disturb
     action:
       - service: script.notify_family
-        data_template:
+        data:
           message: "The Do Not Disturb Mode is {{ trigger.to_state.state |upper }}."
           notify_options:
             - led

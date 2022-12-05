@@ -34,7 +34,7 @@ automation:
 {%- endfor %}
     action:
       service: group.set_visibility
-      data_template:
+      data:
         entity_id: '{{- '{{' }} "group_" ~ trigger.entity_id.split(".")[1] {{ '}}' }}'
         visible: '{{- '{{' }} trigger.to_state.state | lower == "on" {{ '}}' }}'
 ```
