@@ -76,6 +76,24 @@ telegram_bot:
   # Notify Related Scripts
   ###############################################################################
 script:
+  notify_family_with_picture:
+    sequence:
+      - condition: template
+        value_template: '{{ message | trim != "" }}'
+      - service: script.notify_telegram_with_picture
+        data:
+          url: "{{ url }}"
+          path: "{{ path }}" # local path
+          title: "{{ title }}"
+          message: "{{ message }}"
+          notify_options: "{{ notify_options }}"
+      - service: script.notify_email_with_picture
+        data:
+          title: "{{ title }}"
+          message: "{{ message }}"
+          path: "{{ path }}" # local path
+          notify_options: "{{ notify_options }}"
+
   notify_family:
     sequence:
       - condition: template
@@ -96,7 +114,6 @@ script:
 
       - service: script.notify_telegram
         data:
-          file: "{{ url }}"
           title: "{{ title }}"
           message: "{{ message }}"
           notify_options: "{{ notify_options }}"
@@ -137,8 +154,8 @@ script:
             duration: 7
             url:
               path: "{{ url }}" #/config/www/downloads/camera/driveway/driveway_20220604_185216.jpg
-            file:
-              path: "{{ url }}" #/config/www/downloads/camera/driveway/driveway_20220604_185216.jpg
+            image:
+              url: "{{ url }}" #/config/www/downloads/camera/driveway/driveway_20220604_185216.jpg
             icon:
               path: >
                 /config/www/{{- [ "suresh.jpg", "srinika.jpg", "mallika.jpg", "hasika.jpg", 
@@ -169,9 +186,6 @@ script:
         data:
           title: "{{ title }}"
           message: "{{ message }}"
-          data:
-            images:
-              - "{{- path -}}"
 
   notify_voice:
     sequence:
@@ -195,6 +209,38 @@ script:
         data:
           topic: messageboard/messages
           payload: "{{ message }}"
+
+  notify_telegram_with_picture:
+    sequence:
+      - condition: state
+        entity_id: input_boolean.telegram_notifications
+        state: "on"
+      - condition: template
+        value_template: "{{ 'telegram' in notify_options }}"
+      - service: notify.telegram
+        data:
+          message: "{{ message }}"
+          title: "{{ title }}"
+          data:
+            photo:
+              - url: "{{ url }}"
+                caption: "{{ title }}"
+
+  notify_email_with_picture:
+    sequence:
+      - condition: state
+        entity_id: input_boolean.email_notifications
+        state: "on"
+      - condition: template
+        value_template: "{{ 'email' in notify_options }}"
+      - delay: "00:00:20"
+      - service: notify.notify_smtp
+        data:
+          title: "{{ title }}"
+          message: "{{ message }}"
+          data:
+            images:
+              - "{{- path -}}"
 
   ###############################################################################
   # Voice Notify

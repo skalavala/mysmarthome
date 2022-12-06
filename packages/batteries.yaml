@@ -37,7 +37,7 @@ automation:
     action:
       - service: script.notify_family
         data:
-          message: "{{ trigger.to_state.attributes.friendly_name | title }}'s phone battery is : {{ trigger.to_state.attributes.battery }}%."
+          message: "{{ trigger.to_state.attributes.friendly_name | title }}'s phone battery is : {{ trigger.to_state.attributes.battery_level }}%."
           notify_options:
             - telegram
             - led

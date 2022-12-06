@@ -1055,21 +1055,21 @@ automation:
   - alias: Keep Chromecast On
     trigger:
       - platform: state
-        entity_id: media_player.attic_tv
+        entity_id: media_player.chromecast_monitor
         to: "off"
         for:
           seconds: 30
       - platform: state
-        entity_id: media_player.attic_tv
+        entity_id: media_player.chromecast_monitor
         to: "idle"
         for:
           seconds: 30
     action:
       - service: media_player.turn_on
-        entity_id: media_player.attic_tv
+        entity_id: media_player.chromecast_monitor
       - service: media_player.play_media
         data:
-          entity_id: media_player.attic_tv
+          entity_id: media_player.chromecast_monitor
           media_content_id: !secret frontdoor_camera_stream_url
           media_content_type: video
       - service: input_label.set_value
@@ -1240,7 +1240,7 @@ script:
         value_template: "{{ states('input_label.current_stream') != name  }}"
       - service: media_player.play_media
         data:
-          entity_id: media_player.attic_tv
+          entity_id: media_player.chromecast_monitor
           media_content_id: "{{ url }}"
           media_content_type: "video"
       - service: input_label.set_value
