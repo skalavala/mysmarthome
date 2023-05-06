@@ -1,84 +1,467 @@
-version: '2'
-services:
-  mqtt:
-    image: eclipse-mosquitto:latest
-    container_name: "MQTT"
-    restart: always
-    network_mode: "host"
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-    volumes:
-      - /home/suresh/docker/mqtt/data:/mosquitto/data
-      - /home/suresh/docker/mqtt/config:/mosquitto/config
-      - /home/suresh/docker/mqtt/log:/mosquitto/log
+##################################################################################
+#       _            _                                                        
+#      | |          | |                                                       
+#    __| | ___   ___| | _____ _ __    ___ ___  _ __ ___  _ __   ___  ___  ___ 
+#   / _` |/ _ \ / __| |/ / _ \ '__|  / __/ _ \| '_ ` _ \| '_ \ / _ \/ __|/ _ \
+#  | (_| | (_) | (__|   <  __/ |    | (_| (_) | | | | | | |_) | (_) \__ \  __/
+#   \__,_|\___/ \___|_|\_\___|_|     \___\___/|_| |_| |_| .__/ \___/|___/\___|
+#                                                       | |                   
+#                                                       |_|                  
+##################################################################################
+version: "3.0"
 
-  home-assistant:
-    image: homeassistant/home-assistant:latest
-    container_name: "home_assistant"
+services:
+
+  ##################################################################################
+  # Cloudflare Tunnel
+  ##################################################################################
+  cloudflare:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-tunnel
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+    restart: unless-stopped
+
+  ##################################################################################
+  # MQTT Server
+  ##################################################################################
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto:latest
     restart: always
-    network_mode: "host"
+    volumes:
+      - ${VOL_MOSQUITTO_CONFIG_PATH}:/mosquitto/config
+      - ${VOL_MOSQUITTO_LOG_PATH}:/mosquitto/log
+      - ${VOL_MOSQUITTO_DATA_PATH}:/mosquitto/data
+    ports:
+      - 1883:1883
+      - 9001:9001
+      - 8585:8585
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mosquitto_sub",
+          "-u",
+          "${MQTT_USERNAME}",
+          "-P",
+          "${MQTT_PASSWORD}",
+          "-h",
+          "${SERVER_IP}",
+          "-t",
+          "$$SYS/broker/uptime",
+          "-C",
+          "1",
+          "-i",
+          "healthcheck",
+          "-W",
+          "3"
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  ##################################################################################
+  # Home Assistant
+  ##################################################################################
+  homeassistant:
+    container_name: home-assistant
+    image: homeassistant/home-assistant:stable
+    restart: unless-stopped
+    network_mode: host
     devices:
-      - /dev/ttyACM0
+      - /dev/ttyUSB0
+    volumes:
+      - ${VOL_HOME_ASSISTANT_CONFIG_PATH}:/config
+      - ${VOL_HOME_ASSISTANT_CUSTOM_COMP_PATH}:/config/custom_components:ro
+    environment:
+      - TZ=${ENV_TIMEZONE}
     depends_on:
       - mqtt
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://${SERVER_IP}:${PORT_HOME_ASSISTANT}"
+        ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  ##################################################################################
+  # DockerMon
+  ##################################################################################
+  docker_mon:
+    container_name: ha_dockermon
+    image: philhawthorne/ha-dockermon
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "8123:8123"
-    volumes:
-      - /home/homeassistant/.homeassistant/:/config
+      - ${PORT_DOCKER_MON}:${PORT_DOCKER_MON}
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://${SERVER_IP}:${PORT_DOCKER_MON}/container/ha_dockermon/ || exit 1
+      interval: 1m
+      timeout: 10s
+      start_period: 20s
+      retries: 3
 
-  homebridge:
-    image: oznu/homebridge:latest
-    container_name: "homebridge_docker"
-    restart: always
-    network_mode: host
+  ##################################################################################
+  # Camera Streamer (RTSP to HLS Streaming for Chromecasts)
+  ##################################################################################
+  streamer:
+    container_name: streamer
+    image: skalavala/streamer
+    restart: unless-stopped
     environment:
-      - TZ=America/New_York
-      - PGID=1000
-      - PUID=1000
+      - PARAMETERS=${STREAMER_PARAMETERS}
     volumes:
-      - /home/suresh/docker/homebridge:/homebridge
+      - ${VOL_STREAMER_TEMP_STREAM_PATH}:/tmp/stream
+    ports:
+      - ${PORT_STREAMER}:80
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://${SERVER_IP}:${PORT_STREAMER}/frontyard.m3u8"
+        ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
     depends_on:
-      - home-assistant
+      - go2rtc
 
+  ##################################################################################
+  # Portainer
+  ##################################################################################
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "${PORT_PORTAINER}:${PORT_PORTAINER}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${VOL_PORTAINER_DATA}:/data"
+
+  ##################################################################################
+  # Glances - https://glances.readthedocs.io/en/latest/docker.html
+  ##################################################################################
+  glances:
+    container_name: glances
+    image: nicolargo/glances:latest
+    restart: unless-stopped
+    pid: host
+    secrets:
+      - source: glances_password
+        target: /root/.config/glances/glances.pwd
+    ports:
+      - ${PORT_GLANCES}:${PORT_GLANCES}
+    environment:
+      - TZ=${ENV_TIMEZONE}
+      - GLANCES_OPT=--webserver
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/docker/glances:/glances/conf
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://${SERVER_IP}:${PORT_GLANCES}"
+        ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  ##################################################################################
+  # Pi-Hole
+  ##################################################################################
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    hostname: pihole-container
+    ports:
+      - "${PORT_PIHOLE}:${PORT_PIHOLE}/tcp"
+    environment:
+      TZ: ${ENV_TIMEZONE}
+      WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
+    volumes:
+      - '${VOL_PIHOLE_CONFIG_PATH}:/etc/pihole'
+      - '${VOL_PIHOLE_DNSMASQ_CONFIG_PATH}:/etc/dnsmasq.d'
+
+  ##################################################################################
+  # heimdall
+  ##################################################################################
+  heimdall:
+    container_name: heimdall
+    image: linuxserver/heimdall:latest
+    ports:
+      - '${PORT_HEIMDALL}:80'
+      - '${PORT_HEIMDALL_SECURE}:443'
+    volumes:
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'
+      - '${VOL_HEIMDALL_CONFIG_PATH}:/config'
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: 1g
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/usr/bin/wget",
+          "-q",
+          "-O -",
+          "http://${SERVER_IP}:${PORT_HEIMDALL}"
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  ##################################################################################
+  # Dozzle for logs
+  ##################################################################################
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - ${PORT_DOZZLE}:8080
+
+  ##################################################################################
+  # Netbootxyz - PXE Server in Docker
+  ##################################################################################
+  netbootxyz:
+    image: lscr.io/linuxserver/netbootxyz:latest
+    container_name: netbootxyz
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${ENV_TIMEZONE}
+      - MENU_VERSION=1.9.9 #optional
+      - PORT_RANGE=30000:30010 #optional
+      - SUBFOLDER=/ #optional
+    volumes:
+      - ${VOL_NETBOOT_CONFIG_PATH}:/config
+      - ${VOL_NETBOOT_ASSETS_PATH}:/assets #optional
+    ports:
+      - ${PORT_NETBOOTXYZ}:3000
+      - ${PORT_TFTP}:69/udp
+      - ${PORT_NETBOOTXYZ_GUI}:80 #optional
+    restart: unless-stopped
+
+  ##################################################################################
+  # rclone web gui
+  ##################################################################################
+  rclone_rclone:
+    image: rclone/rclone
+    container_name: rclone_rclone
+    restart: always
+    command: rcd --rc-web-gui --rc-addr :${PORT_RCLONE_GUI} --rc-user ${RCLONE_USERNAME} --rc-pass ${RCLONE_PASSWORD}
+    ports:
+      - "${PORT_RCLONE_GUI}:${PORT_RCLONE_GUI}"
+    volumes:
+      - ${VOL_RCLONE_CONFIG_PATH}:/config/rclone
+      - ${VOL_RCLONE_CONFIG_PATH}:/logs
+    environment:
+      - PHP_TZ=${ENV_TIMEZONE}
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PUID}
+
+  ##################################################################################
+  # dashy - Homelab Dashboard GUI
+  ##################################################################################
+  dashy:
+    image: lissy93/dashy:latest
+    container_name: dashy
+    volumes:
+      - ${VOL_DASHY_CONFIG_PATH}:/app/public/conf.yml
+    environment:
+      - UID=${ENV_PUID}
+      - GID=${ENV_PGID}
+    restart: unless-stopped
+    ports:
+      - ${PORT_DASHY}:80
+    healthcheck:
+      test: [ 'CMD', 'node', '/app/services/healthcheck' ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - default
+
+  ##################################################################################
+  # Frigate
+  ##################################################################################
+  frigate:
+    container_name: frigate
+    restart: always
+    privileged: true
+    shm_size: "1g" # should work for 8 cameras
+    image: blakeblackshear/frigate:stable
+    # devices:
+    # - /dev/bus/usb:/dev/bus/usb # passes the USB Coral
+    # - /dev/apex_0:/dev/apex_0 # passes a PCIe Coral
+    # - /dev/dri/renderD128 # for intel hwaccel, needs to be updated for your hardware
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${VOL_HOME_ASSISTANT_CONFIG_PATH}:/config
+      - ${VOL_FRIGATE_MEDIA_PATH}:/media/frigate
+      - ${VOL_FRIGATE_CONFIG_YAML_PATH}:/config/config.yml
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "5000:5000" # Console
+      - "1935:1935" # RTMP feeds
+      # - "8554:8554" # RTSP feeds
+      # - "8555:8555/tcp" # WebRTC over tcp
+      # - "8555:8555/udp" # WebRTC over udp
+    environment:
+      FRIGATE_RTSP_PASSWORD: ${FRIGATE_RTSP_PASSWORD}
+      LIBVA_DRIVER_NAME: i965
+    depends_on:
+      - go2rtc
+
+  ##################################################################################
+  # go2rtc
+  ##################################################################################
+  go2rtc:
+    container_name: go2rtc
+    image: alexxit/go2rtc:latest
+    network_mode: host # important for WebRTC, HomeKit, UDP cameras
+    privileged: true # only for FFmpeg hardware transcoding
+    restart: unless-stopped # autorestart on fail or config change from WebUI
+    environment:
+      - TZ=${ENV_TIMEZONE} # timezone in logs
+    volumes:
+      - "${VOL_GO2RTC_PATH}:/config" # folder for go2rtc.yaml file (edit from WebUI)
+
+  ##################################################################################
+  # Influxdb
+  ##################################################################################
   influxdb:
     image: influxdb:latest
     container_name: influxdb
     restart: always
-    network_mode: host
+    environment:
+      - INFLUXDB_DB=influx
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+    stdin_open: true
+    tty: true
     ports:
-      - 8086:8086
-      - 8083:8083
+      - '8086:8086'
     volumes:
-      - /home/suresh/docker/influxdb/:/var/lib/influxdb
+      - influxdb_data:/var/lib/influxdb
 
+  ##################################################################################
+  # Grafana
+  ##################################################################################
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana
     container_name: grafana
-    network_mode: host
-    ports:
-      - 3000:3000
-    volumes:
-      - /home/suresh/docker/grafana/:/var/lib/grafana
+    restart: always
     depends_on:
       - influxdb
-    restart: always
-
-  docker_mon:
-    image: philhawthorne/ha-dockermon
-    container_name: ha_dockermon
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /path/to/config:/config
-    ports:
-      - 8126:8126
-
-  docker_machinebox:
-    image: machinebox/tagbox
-    container_name: machine_box
-    restart: always
-    ports:
-      - 8080:8080
     environment:
-      MB_KEY: !secret MB_KEY
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=
+    links:
+      - influxdb
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+  ##################################################################################
+  # Traefik
+  ##################################################################################
+  traefik:
+    image: traefik:latest
+    container_name: "traefik"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.traefik.address=8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.rule=Host(`subdomain.domain.com`)"
+    ports:
+      - "80:80"
+      - "8082:8080"
+    networks:
+      - web
+    volumes:
+      - "/home/suresh/traefik/config:/config:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/home/suresh/traefik/config/traefik.yml:/etc/traefik/traefik.yaml:ro"
+      - "/home/suresh/traefik/config/dynamic.yaml:/etc/traefik/dynamic.yaml:ro"
+
+  ##################################################################################
+  # Airsonic Audio Server
+  ##################################################################################
+  airsonic:
+    container_name: airsonic
+    image: lscr.io/linuxserver/airsonic
+    environment:
+      - PUID=${ENV_PUID}
+      - PGID=${ENV_PGID}
+      - TZ=${ENV_TIMEZONE}
+    volumes:
+      - ${VOL_AIRSONIC_MUSIC}:/music
+      - ${VOL_AIRSONIC_CONFIG}:/config
+      - ${VOL_AIRSONIC_PODCASTS}:/podcasts
+      - ${VOL_AIRSONIC_PLAYLISTS}:/playlists
+    ports:
+      - 4040:4040
+    labels:
+      - "traefik.http.routers.airsonic.entrypoints=web"
+      - "traefik.http.routers.airsonic.rule=Host(`subdomain.domain.com`)"
+    devices:
+      - /dev/snd:/dev/snd #optional
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
+##########################################################################
+# Secrets
+##########################################################################
+secrets:
+  glances_password:
+    file: ./secrets/glances_password
+
+##########################################################################
+# Volumes
+##########################################################################
+volumes:
+  influxdb_data: {}
+  grafana_data: {}
+
+##########################################################################
+# Networks
+#
+# Create networks by using following command:
+# $ docker network create web
+##########################################################################
+networks:
+  default:
+  web:
+    external: true
