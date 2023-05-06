@@ -1,0 +1,69 @@
+http:
+  routers:
+    catchall:
+      # attached only to web entryPoint
+      entryPoints:
+        - "web"
+
+      # catchall rule
+      rule: "PathPrefix(`/`)"
+      service: unavailable
+      # lowest possible priority
+      # evaluated when no other router is matched
+      priority: 1
+
+    to-dashboard:
+      rule: "Host(`subdomain.domain.com`)"
+      service: api@internal
+
+    to-music:
+      rule: "Host(`subdomain.domain.com`)"
+      entrypoints: web
+      service: airsonic
+
+    to-frigate:
+      rule: "Host(`subdomain.domain.com`)"
+      entrypoints: web
+      service: frigate
+
+    to-portainer:
+      rule: "Host(`subdomain.domain.com`)"
+      entrypoints: web
+      service: portainer
+
+    to-plex:
+      rule: "Host(`subdomain.domain.com`)"
+      entrypoints: web
+      service: plex
+
+
+  # middlewares:
+  #   https-redirect:
+  #     redirectScheme:
+  #       scheme: https
+
+  services:
+    # Service that will always answer a 503 Service Unavailable response
+    unavailable:
+      loadBalancer:
+        servers: {}
+    airsonic:
+      loadBalancer:
+        servers:
+          - url: http://192.168.x.x:xxx
+    frigate:
+      loadBalancer:
+        servers:
+          - url: http://192.168.x.x:xxx
+    portainer:
+      loadBalancer:
+        servers:
+          - url: http://192.168.x.x:xxx
+    plex:
+      loadBalancer:
+        servers:
+          - url: http://192.168.x.x:xxx
+
+providers:
+  docker:
+    exposedByDefault: false
