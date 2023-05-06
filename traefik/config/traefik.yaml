@@ -1,0 +1,22 @@
+global:
+  # Send anonymous usage data
+  sendAnonymousUsage: false
+
+api:
+  dashboard: false
+  insecure: true
+
+# ping: {}
+
+entryPoints:
+  web:
+    address: :80
+  traefik:
+    address: :8080
+
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    directory: /config
+    watch: true
