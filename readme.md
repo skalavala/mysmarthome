@@ -1,6 +1,3 @@
-Certainly, here's a README template for your "My-Smart-Home" repository:
-
-```markdown
 # My Smart Home
 
 Welcome to the "My Smart Home" repository! This project is designed to turn your home into a smart and connected environment using the Internet of Things (IoT) technologies. Whether you're interested in automating your home, controlling devices remotely, or experimenting with IoT, this project provides a foundation to get started.
